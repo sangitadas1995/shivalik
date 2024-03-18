@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CustomersController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
@@ -37,6 +38,11 @@ Route::middleware('auth')->group(function () {
     Route::get('customers/add', function () {
         return view('static.add-customer');
     })->name('customers.add');
+
+    Route::prefix('customers')->name('customers.')->group(function() {
+        Route::get('/', [CustomersController::class, 'index'])->name('index');
+        Route::post('store', [CustomersController::class, 'store'])->name('store');
+    });
 });
 
 require __DIR__.'/auth.php';
