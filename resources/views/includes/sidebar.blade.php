@@ -23,10 +23,10 @@
               >
             </li>
             <li>
-              <a href="#">
+              <a href="{{ route('customers') }}">
                 <span class="w-100"
                   ><img src="{{ asset('images/customer.png') }}" /> <br />
-                  Customer</span
+                  Customers</span
                 ></a
               >
             </li>
