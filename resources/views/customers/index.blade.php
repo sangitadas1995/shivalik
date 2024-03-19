@@ -12,10 +12,10 @@
       <div class="col-md-6">
         <div class="text-end mb-4">
           <a href="{{ route('customers.add') }}" class="btn primary-btn"
-            ><img src="images/add-accoun-1t.png" /> Add Customer</a
+            ><img src="{{ asset('images/add-accoun-1t.png') }}" /> Add Customer</a
           >
           <a href="#" class="btn primary-btn">
-            <img src="images/upload-1.png" />Bulk upload CSV
+            <img src="{{ asset('images/upload-1.png') }}" />Bulk upload CSV
           </a>
         </div>
       </div>
@@ -46,8 +46,8 @@
             <td style="text-align: center">24</td>
             <td style="text-align: center">2%</td>
             <td style="text-align: center">
-                <a href="#"><img src="images/lucide_view.png" /></a>
-                <a href="#"><img src="images/akar-icons_edit.png" /></a>
+                <a href="#"><img src="{{ asset('images/lucide_view.png') }}" /></a>
+                <a href="#"><img src="{{ asset('images/akar-icons_edit.png') }}" /></a>
             </td>
             </tr>
             <tr>
@@ -59,8 +59,8 @@
             <td style="text-align: center">24</td>
             <td style="text-align: center">2%</td>
             <td style="text-align: center">
-                <a href="#"><img src="images/lucide_view.png" /></a>
-                <a href="#"><img src="images/akar-icons_edit.png" /></a>
+                <a href="#"><img src="{{ asset('images/lucide_view.png') }}" /></a>
+                <a href="#"><img src="{{ asset('images/akar-icons_edit.png') }}" /></a>
             </td>
             </tr>
             <tr>
@@ -72,8 +72,8 @@
             <td style="text-align: center">24</td>
             <td style="text-align: center">2%</td>
             <td style="text-align: center">
-                <a href="#"><img src="images/lucide_view.png" /></a>
-                <a href="#"><img src="images/akar-icons_edit.png" /></a>
+                <a href="#"><img src="{{ asset('images/lucide_view.png') }}" /></a>
+                <a href="#"><img src="{{ asset('images/akar-icons_edit.png') }}" /></a>
             </td>
             </tr>
         </tbody>

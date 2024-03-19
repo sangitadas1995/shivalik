@@ -4,6 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@yield('title')</title>
+    <base href="{{ \URL::to('/') }}">
     <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet" />
     <link rel="stylesheet" href="{{ asset('css/remixicon.css') }}" />
     <link rel="stylesheet" href="{{ asset('css/intlTelInput.css') }}" />
