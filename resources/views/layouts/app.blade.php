@@ -6,6 +6,7 @@
     <title>@yield('title')</title>
     <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet" />
     <link rel="stylesheet" href="{{ asset('css/remixicon.css') }}" />
+    <link rel="stylesheet" href="{{ asset('css/intlTelInput.css') }}" />
     <link rel="stylesheet" href="{{ asset('css/side-menu.css') }}" />
     <link rel="stylesheet" href="{{ asset('css/css-pro-layout.css') }}" />
     <link rel="stylesheet" href="{{ asset('css/style.css')}}" />
@@ -31,7 +32,8 @@
     <script src="{{ asset('js/Chart.min.js') }}"></script>
     <script src="{{ asset('js/chart.js') }}"></script>
     <script src="{{ asset('js/side-menu.js') }}"></script>
-    <script src="{{ asset('js/off-canvas.js') }}"></script>
+    <script src="{{ asset('js/intlTelInput-jquery.min.js') }}"></script>
+
     @yield('scripts')
   </body>
 </html>

@@ -23,7 +23,7 @@
               >
             </li>
             <li>
-              <a href="{{ route('customers') }}">
+              <a href="{{ route('customers.index') }}">
                 <span class="w-100"
                   ><img src="{{ asset('images/customer.png') }}" /> <br />
                   Customers</span
