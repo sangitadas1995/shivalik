@@ -4,12 +4,14 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@yield('title')</title>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <base href="{{ \URL::to('/') }}">
     <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet" />
     <link rel="stylesheet" href="{{ asset('css/remixicon.css') }}" />
     <link rel="stylesheet" href="{{ asset('css/intlTelInput.css') }}" />
     <link rel="stylesheet" href="{{ asset('css/side-menu.css') }}" />
     <link rel="stylesheet" href="{{ asset('css/css-pro-layout.css') }}" />
+    <link rel="stylesheet" href="{{ asset('css/sweetalert2.min.css')}}" />
     <link rel="stylesheet" href="{{ asset('css/style.css')}}" />
     @stack('extra_css')
   </head>
@@ -34,6 +36,7 @@
     <script src="{{ asset('js/chart.js') }}"></script>
     <script src="{{ asset('js/side-menu.js') }}"></script>
     <script src="{{ asset('js/intlTelInput-jquery.min.js') }}"></script>
+    <script src="{{ asset('js/sweetalert2.js') }}"></script>
 
     @yield('scripts')
   </body>

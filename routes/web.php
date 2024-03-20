@@ -30,6 +30,8 @@ Route::middleware('auth')->group(function () {
         Route::get('/', [CustomersController::class, 'index'])->name('index');
         Route::get('add', [CustomersController::class, 'create'])->name('add');
         Route::post('store', [CustomersController::class, 'store'])->name('store');
+        Route::post('states', [CustomersController::class, 'getStates'])->name('states');
+        Route::post('cities', [CustomersController::class, 'getCities'])->name('cities');
     });
 });
 

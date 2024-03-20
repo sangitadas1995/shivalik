@@ -22,6 +22,11 @@
     </div>
 </div>
 <div class="row">
+  <div class="col-md-12">
+    @include('utils.alert')
+  </div>
+</div>
+<div class="row">
     <div class="table-responsive table-sec mb-4">
         <table class="table table-striped">
         <thead>
