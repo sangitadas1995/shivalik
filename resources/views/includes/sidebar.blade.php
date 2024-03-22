@@ -15,7 +15,7 @@
         <div class="ul-box mb-3">
           <ul class="row">
             <li>
-              <a href="#"
+              <a href="{{ route('users.index') }}"
                 ><span class="w-100"
                   ><img src="{{ asset('images/mi_user.png') }}" /> <br />User
                   Management</span

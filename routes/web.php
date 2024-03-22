@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CustomersController;
+use App\Http\Controllers\UsersController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
@@ -32,6 +33,18 @@ Route::middleware('auth')->group(function () {
         Route::post('store', [CustomersController::class, 'store'])->name('store');
         Route::post('states', [CustomersController::class, 'getStates'])->name('states');
         Route::post('cities', [CustomersController::class, 'getCities'])->name('cities');
+    });
+
+
+    Route::prefix('users')->name('users.')->group(function () {
+        Route::get('/', [UsersController::class, 'index'])->name('index');
+        Route::get('add', [UsersController::class, 'create'])->name('add');
+        Route::post('store', [UsersController::class, 'store'])->name('store');
+        Route::post('states', [UsersController::class, 'getStates'])->name('states');
+        Route::post('cities', [UsersController::class, 'getCities'])->name('cities');
+
+        //Route::get('edit/{user_id?}', [UsersController::class, 'edit'])->name('user_edit');
+        Route::get('/users/edit/{id}', 'UsersController@edit');
     });
 });
 
