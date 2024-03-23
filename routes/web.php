@@ -43,6 +43,8 @@ Route::middleware('auth')->group(function () {
         Route::post('states', [UsersController::class, 'getStates'])->name('states');
         Route::post('cities', [UsersController::class, 'getCities'])->name('cities');
 
+        Route::post('add_functional_area', [UsersController::class,'add_functional_area'])->name('add_functional_area');
+
         //Route::get('edit/{user_id?}', [UsersController::class, 'edit'])->name('user_edit');
         Route::get('/users/edit/{id}', 'UsersController@edit');
     });
