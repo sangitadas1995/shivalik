@@ -33,6 +33,10 @@ Route::middleware('auth')->group(function () {
         Route::post('store', [CustomersController::class, 'store'])->name('store');
         Route::post('states', [CustomersController::class, 'getStates'])->name('states');
         Route::post('cities', [CustomersController::class, 'getCities'])->name('cities');
+        Route::post('list-data', [CustomersController::class, 'list_data'])->name('data');
+        Route::get('edit/{id}', [CustomersController::class, 'edit'])->name('edit');
+        Route::post('update/{id}', [CustomersController::class, 'update'])->name('update');
+        Route::post('view', [CustomersController::class, 'view'])->name('view');
     });
 
 

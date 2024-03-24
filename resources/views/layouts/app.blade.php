@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="{{ asset('css/side-menu.css') }}" />
     <link rel="stylesheet" href="{{ asset('css/css-pro-layout.css') }}" />
     <link rel="stylesheet" href="{{ asset('css/sweetalert2.min.css')}}" />
+    <link rel="stylesheet" href="{{ asset('css/dataTables.dataTables.min.css')}}" />
     <link rel="stylesheet" href="{{ asset('css/style.css')}}" />
     @stack('extra_css')
   </head>
@@ -37,6 +38,11 @@
     <script src="{{ asset('js/side-menu.js') }}"></script>
     <script src="{{ asset('js/intlTelInput-jquery.min.js') }}"></script>
     <script src="{{ asset('js/sweetalert2.js') }}"></script>
+    <script src="{{ asset('js/sweetalert2.js') }}"></script>
+    <script src="{{ asset('js/pdfmake.min.js') }}"></script>
+    <script src="{{ asset('js/vfs_fonts.js') }}"></script>
+    <script src="{{ asset('js/dataTables.min.js') }}"></script>
+    <script src="{{ asset('js/validation.js') }}"></script>
 
     @yield('scripts')
   </body>

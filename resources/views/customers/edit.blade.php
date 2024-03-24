@@ -8,13 +8,14 @@
     <div class="row justify-content-between align-items-center">
         <div class="col-md-4">
         <h2>
-          <a href="{{ route('customers.index') }}"><i class="ri-arrow-left-line"></i></a> Add Customer</h2>
+          <a href="{{ route('customers.index') }}"><i class="ri-arrow-left-line"></i></a> Edit Customer</h2>
         </div>
     </div>
 </div>
+
   <div class="card add-new-location mt-2">
     <div class="card-body">
-      <form action="{{ route('customers.store') }}" method="POST" id="customer-add-form">
+      <form action="{{ route('customers.update', encrypt($customer->id)) }}" method="POST" id="customer-edit-form">
         @csrf
         <div class="row">
             <div class="col-md-12">
@@ -23,28 +24,28 @@
           <div class="col-md-6">
             <div class="mb-3">
               <label class="form-label">Company Name<span class="text-danger">*</span> :</label>
-              <input type="text" class="form-control" name="company_name" id="company_name" value="{{ old('company_name') }}" />
+              <input type="text" class="form-control" name="company_name" id="company_name" value="{{ $customer->company_name }}" />
               <small class="text-danger error_company_name"></small>
             </div>
           </div>
           <div class="col-md-6">
             <div class="mb-3">
               <label class="form-label">GST No. :</label>
-              <input type="text" class="form-control alphaNumericChar uppercaseChar" name="gst_no" id="gst_no" value="{{ old('gst_no') }}" />
+              <input type="text" class="form-control alphaNumericChar uppercaseChar" name="gst_no" id="gst_no" value="{{ $customer->gst_no }}" />
               <small class="text-danger error_gst_no"></small>
             </div>
           </div>
           <div class="col-md-6">
             <div class="mb-3">
               <label class="form-label">Contact Person<span class="text-danger">*</span> :</label>
-              <input type="text" class="form-control" name="contact_person" id="contact_person" value="{{ old('contact_person') }}" />
+              <input type="text" class="form-control" name="contact_person" id="contact_person" value="{{ $customer->contact_person }}" />
               <small class="text-danger error_contact_person"></small>
             </div>
           </div>
           <div class="col-md-6">
             <div class="mb-3">
               <label class="form-label">Contact Person Designation :</label>
-              <input type="text" class="form-control" name="contact_person_designation" id="contact_person_designation" value="{{ old('contact_person_designation') }}" />
+              <input type="text" class="form-control" name="contact_person_designation" id="contact_person_designation" value="{{ $customer->contact_person_designation }}" />
               <small class="text-danger error_contact_person_designation"></small>
             </div>
           </div>
@@ -53,7 +54,7 @@
               <div class="col-md-6">
                 <div class="mb-3  d-flex flex-column">
                   <label class="form-label">Mobile No<span class="text-danger">*</span> :</label>
-                  <input type="text" id="mobile_code-1" class="form-control mobileNumber" name="mobile_no" value="{{ old('mobile_no') }}" />
+                  <input type="text" id="mobile_code-1" class="form-control mobileNumber" name="mobile_no" value="{{  $customer->mobile_no }}" />
                   <small class="text-danger error_mobile_no"></small>
                 </div>
               </div>
@@ -61,7 +62,7 @@
                 <div class="mb-3 d-flex flex-column">
                   <label class="form-label">Alternative Mobile No.
                     :</label>
-                  <input type="text" id="mobile_code-2" class="form-control mobileNumber" name="alter_mobile_no" value="{{ old('alter_mobile_no') }}" />
+                  <input type="text" id="mobile_code-2" class="form-control mobileNumber" name="alter_mobile_no" value="{{  $customer->alter_mobile_no }}" />
                   <small class="text-danger error_alter_mobile_no"></small>
                 </div>
               </div>
@@ -72,14 +73,14 @@
               <div class="col-md-6">
                 <div class="mb-3  d-flex flex-column">
                   <label class="form-label">Email Id<span class="text-danger">*</span> :</label>
-                  <input type="text" id="email" class="form-control" name ="email" value="{{ old('email') }}" />
+                  <input type="text" id="email" class="form-control" name ="email" value="{{  $customer->email }}" />
                   <small class="text-danger error_email"></small>
                 </div>
               </div>
               <div class="col-md-6">
                 <div class="mb-3 d-flex flex-column">
                   <label class="form-label">Alternative Email Id :</label>
-                  <input type="text" id="alternative_email_id" class="form-control" name="alternative_email_id" value="{{ old('alternative_email_id') }}" />
+                  <input type="text" id="alternative_email_id" class="form-control" name="alternative_email_id" value="{{  $customer->alternative_email_id }}" />
                   <small class="text-danger error_alternative_email_id"></small>
                 </div>
               </div>
@@ -90,14 +91,14 @@
               <div class="col-md-6">
                 <div class="mb-3  d-flex flex-column">
                   <label class="form-label">Phone No<span class="text-danger">*</span> :</label>
-                  <input type="text" id="mobile_code-3" class="form-control onlyNumber" name="phone_no" value="{{ old('phone_no') }}" />
+                  <input type="text" id="mobile_code-3" class="form-control onlyNumber" name="phone_no" value="{{  $customer->phone_no }}" />
                   <small class="text-danger error_phone_no"></small>
                 </div>
               </div>
               <div class="col-md-6">
                 <div class="mb-3 d-flex flex-column">
                   <label class="form-label">Alternative Phone No. :</label>
-                  <input type="text" id="mobile_code-4" class="form-control onlyNumber" name="alternative_phone_no" value="{{ old('alternative_phone_no') }}" />
+                  <input type="text" id="mobile_code-4" class="form-control onlyNumber" name="alternative_phone_no" value="{{  $customer->alternative_phone_no }}" />
                   <small class="text-danger error_alternative_phone_no"></small>
                 </div>
               </div>
@@ -106,14 +107,14 @@
           <div class="col-md-6">
             <div class="mb-3">
               <label class="form-label">Customer Website :</label>
-              <input type="text" class="form-control" name="customer_website" id="customer_website" value="{{ old('customer_website') }}" />
+              <input type="text" class="form-control" name="customer_website" id="customer_website" value="{{  $customer->customer_website }}" />
               <small class="text-danger error_customer_website"></small>
             </div>
           </div>
         </div>
         <div class="mb-3">
           <label class="form-label">Address<span class="text-danger">*</span> :</label>
-          <input type="text" class="form-control" name="address" id="address" value="{{ old('address') }}" />
+          <input type="text" class="form-control" name="address" id="address" value="{{  $customer->address }}" />
           <small class="text-danger error_address"></small>
         </div>
         <div class="row">
@@ -124,7 +125,7 @@
                 <option value="">Select Country</option>
                 @if ($countries->isNotEmpty())
                     @foreach ($countries as $country)
-                        <option value="{{ $country->id }}">{{ $country->country_name }}</option>
+                        <option value="{{ $country->id }}" {{ $country->id == $customer->country_id ? 'selected' : null }}>{{ $country->country_name }}</option>
                     @endforeach
                 @endif
               </select>
@@ -136,6 +137,11 @@
               <label class="form-label">State<span class="text-danger">*</span> :</label>
               <select class="form-select" aria-label="Default select example" id="state" name="state_id">
                 <option value="">Select State</option>
+                @if ($states->isNotEmpty())
+                    @foreach ($states as $state)
+                        <option value="{{ $state->id }}" {{ $state->id == $customer->state_id ? 'selected' : null }}>{{ $state->state_name }}</option>
+                    @endforeach
+                @endif
               </select>
               <small class="text-danger error_state"></small>
             </div>
@@ -145,6 +151,11 @@
               <label class="form-label">City<span class="text-danger">*</span> :</label>
               <select class="form-select" aria-label="Default select example" id="city" name="city_id">
                 <option value="">Select City</option>
+                @if ($cities->isNotEmpty())
+                    @foreach ($cities as $city)
+                        <option value="{{ $city->id }}" {{ $city->id == $customer->city_id ? 'selected' : null }}>{{ $city->city_name }}</option>
+                    @endforeach
+                @endif
               </select>
               <small class="text-danger error_city"></small>
             </div>
@@ -152,14 +163,14 @@
           <div class="col-md-6">
             <div class="mb-3">
               <label class="form-label">Pincode<span class="text-danger">*</span> :</label>
-              <input type="text" class="form-control" name="pincode" id="pincode" value="{{ old('pincode') }}" />
+              <input type="text" class="form-control" name="pincode" id="pincode" value="{{  $customer->pincode }}" />
               <small class="text-danger error_pincode"></small>
             </div>
           </div>
           <div class="col-md-6">
             <div class="mb-3">
               <label class="form-label">Print Margin<span class="text-danger">*</span> :</label>
-              <input type="text" class="form-control onlyNumber" name="print_margin" id="print_margin" value="{{ old('print_margin') }}" />
+              <input type="text" class="form-control onlyNumber" name="print_margin" id="print_margin" value="{{  $customer->print_margin }}" />
               <small class="text-danger error_print_margin"></small>
             </div>
           </div>
@@ -258,7 +269,7 @@
       }
     });
 
-    $(document).on('submit','#customer-add-form',function(e){
+    $(document).on('submit','#customer-edit-form',function(e){
       e.preventDefault();
       var __e = $(this);
       var company_name                  = $('#company_name').val();
