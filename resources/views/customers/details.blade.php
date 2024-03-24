@@ -1,247 +1,258 @@
-<div class="popup-content ">
-    <h4>
-        Customer ID: {{ $customer->id }}
-    </h4>
+
+<div class="customer-details-popup">
+   
+    <div class="popup-content ">
+        <h4>
+            Customer ID: {{ $customer->id }}
+        </h4>
+        <button class="close-popup-btn">
+            <svg width="9" height="9" viewBox="0 0 9 9" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M8.01562 0.984375L0.984375 8.01562M0.984375 0.984375L8.01562 8.01562" stroke="#18202B"
+                    stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
     
-    <div class="container">
-        <div class="parent-table">
-            <div class="child-table">
-                <div class="container">
-
-                    <div class="row border-gray">
-                        <div class="col-12 child-table-row">
-                            <div>
-                                <p class="title">
-                                    Company Profile Details
-                                </p>
+        </button>
+        <div class="container">
+            <div class="parent-table">
+                <div class="child-table">
+                    <div class="container">
+    
+                        <div class="row border-gray">
+                            <div class="col-12 child-table-row">
+                                <div>
+                                    <p class="title">
+                                        Company Profile Details
+                                    </p>
+                                </div>
                             </div>
-                        </div>
-
-                        <!-- table row -->
-                        <div class="col-5 child-table-row">
-                            <div>
-                                Company Name
+    
+                            <!-- table row -->
+                            <div class="col-5 child-table-row">
+                                <div>
+                                    Company Name
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-7 child-table-row">
-                            <div>
-                                {{ $customer->company_name }}
-
+                            <div class="col-7 child-table-row">
+                                <div>
+                                    {{ $customer->company_name }}
+    
+                                </div>
                             </div>
-                        </div>
-                        <!-- table row end -->
-                        <!-- table row -->
-                        <div class="col-5 child-table-row">
-                            <div>
-                                GST No.
+                            <!-- table row end -->
+                            <!-- table row -->
+                            <div class="col-5 child-table-row">
+                                <div>
+                                    GST No.
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-7 child-table-row">
-                            <div>
-                                {{ $customer->gst_no }}
+                            <div class="col-7 child-table-row">
+                                <div>
+                                    {{ $customer->gst_no }}
+                                </div>
                             </div>
-                        </div>
-                        <!-- table row end -->
-                        <!-- table row -->
-                        <div class="col-5 child-table-row">
-                            <div>
-                                Contact Person
+                            <!-- table row end -->
+                            <!-- table row -->
+                            <div class="col-5 child-table-row">
+                                <div>
+                                    Contact Person
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-7 child-table-row">
-                            <div>
-                                {{ $customer->contact_person }}
-
+                            <div class="col-7 child-table-row">
+                                <div>
+                                    {{ $customer->contact_person }}
+    
+                                </div>
                             </div>
-                        </div>
-                        <!-- table row end -->
-                        <!-- table row -->
-                        <div class="col-5 child-table-row">
-                            <div>
-                                Contact Person Designation
+                            <!-- table row end -->
+                            <!-- table row -->
+                            <div class="col-5 child-table-row">
+                                <div>
+                                    Contact Person Designation
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-7 child-table-row">
-                            <div>
-                                {{ $customer->contact_person_designation }}
-
+                            <div class="col-7 child-table-row">
+                                <div>
+                                    {{ $customer->contact_person_designation }}
+    
+                                </div>
                             </div>
-                        </div>
-                        <!-- table row end -->
-
-                        <!-- table row -->
-                        <div class="col-5 child-table-row">
-                            <div>
-                                Customer Website
+                            <!-- table row end -->
+    
+                            <!-- table row -->
+                            <div class="col-5 child-table-row">
+                                <div>
+                                    Customer Website
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-7 child-table-row">
-                            <div>
-                                {{ $customer->customer_website }}
-
+                            <div class="col-7 child-table-row">
+                                <div>
+                                    {{ $customer->customer_website }}
+    
+                                </div>
                             </div>
+                            <!-- table row end -->
                         </div>
-                        <!-- table row end -->
                     </div>
                 </div>
-            </div>
-            <div class="child-table">
-                <div class="container">
-
-                    <div class="row border-gray">
-                        <div class="col-12 child-table-row">
-                            <div>
-                                <p class="title">
-                                    Personal Details
-                                </p>
+                <div class="child-table">
+                    <div class="container">
+    
+                        <div class="row border-gray">
+                            <div class="col-12 child-table-row">
+                                <div>
+                                    <p class="title">
+                                        Personal Details
+                                    </p>
+                                </div>
                             </div>
-                        </div>
-
-                        <!-- table row -->
-                        <div class="col-5 child-table-row">
-                            <div>
-                                Mobile No.
+    
+                            <!-- table row -->
+                            <div class="col-5 child-table-row">
+                                <div>
+                                    Mobile No.
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-7 child-table-row">
-                            <div>
-                                +91 {{ $customer->mobile_no }}
-
+                            <div class="col-7 child-table-row">
+                                <div>
+                                    +91 {{ $customer->mobile_no }}
+    
+                                </div>
                             </div>
-                        </div>
-                        <!-- table row end -->
-                        <!-- table row -->
-                        <div class="col-5 child-table-row">
-                            <div>
-                                Alternative Mobile No.
+                            <!-- table row end -->
+                            <!-- table row -->
+                            <div class="col-5 child-table-row">
+                                <div>
+                                    Alternative Mobile No.
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-7 child-table-row">
-                            <div>
-                                +91 {{ $customer->alter_mobile_no }}
+                            <div class="col-7 child-table-row">
+                                <div>
+                                    +91 {{ $customer->alter_mobile_no }}
+                                </div>
                             </div>
-                        </div>
-                        <!-- table row end -->
-                        <!-- table row -->
-                        <div class="col-5 child-table-row">
-                            <div>
-                                Email Id.
+                            <!-- table row end -->
+                            <!-- table row -->
+                            <div class="col-5 child-table-row">
+                                <div>
+                                    Email Id.
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-7 child-table-row">
-                            <div>
-                                {{ $customer->email }}
-
+                            <div class="col-7 child-table-row">
+                                <div>
+                                    {{ $customer->email }}
+    
+                                </div>
                             </div>
-                        </div>
-                        <!-- table row end -->
-                        <!-- table row -->
-                        <div class="col-5 child-table-row">
-                            <div>
-                                Alternative Email Id.
+                            <!-- table row end -->
+                            <!-- table row -->
+                            <div class="col-5 child-table-row">
+                                <div>
+                                    Alternative Email Id.
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-7 child-table-row">
-                            <div>
-                                {{ $customer->alternative_email_id }}
+                            <div class="col-7 child-table-row">
+                                <div>
+                                    {{ $customer->alternative_email_id }}
+                                </div>
                             </div>
-                        </div>
-                        <!-- table row end -->
-
-                        <!-- table row -->
-                        <div class="col-5 child-table-row">
-                            <div>
-                                Phone No.
+                            <!-- table row end -->
+    
+                            <!-- table row -->
+                            <div class="col-5 child-table-row">
+                                <div>
+                                    Phone No.
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-7 child-table-row">
-                            <div>
-                               +91 {{ $customer->phone_no }}
-
+                            <div class="col-7 child-table-row">
+                                <div>
+                                   +91 {{ $customer->phone_no }}
+    
+                                </div>
                             </div>
-                        </div>
-                        <!-- table row end -->
-                        <!-- table row -->
-                        <div class="col-5 child-table-row">
-                            <div>
-                                Alternative Phone No.
+                            <!-- table row end -->
+                            <!-- table row -->
+                            <div class="col-5 child-table-row">
+                                <div>
+                                    Alternative Phone No.
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-7 child-table-row">
-                            <div>
-                               +91 {{ $customer->alternative_phone_no }}
-
+                            <div class="col-7 child-table-row">
+                                <div>
+                                   +91 {{ $customer->alternative_phone_no }}
+    
+                                </div>
                             </div>
-                        </div>
-                        <!-- table row end -->
-                        <!-- table row -->
-                        <div class="col-5 child-table-row">
-                            <div>
-                                Address
+                            <!-- table row end -->
+                            <!-- table row -->
+                            <div class="col-5 child-table-row">
+                                <div>
+                                    Address
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-7 child-table-row">
-                            <div>
-                                {{ $customer->address }}
-
+                            <div class="col-7 child-table-row">
+                                <div>
+                                    {{ $customer->address }}
+    
+                                </div>
                             </div>
-                        </div>
-                        <!-- table row end -->
-                        <!-- table row -->
-                        <div class="col-5 child-table-row">
-                            <div>
-                                Country
+                            <!-- table row end -->
+                            <!-- table row -->
+                            <div class="col-5 child-table-row">
+                                <div>
+                                    Country
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-7 child-table-row">
-                            <div>
-                                {{ $customer->country?->country_name ?? null }}
-
+                            <div class="col-7 child-table-row">
+                                <div>
+                                    {{ $customer->country?->country_name ?? null }}
+    
+                                </div>
                             </div>
-                        </div>
-                        <!-- table row end -->
-                        <!-- table row -->
-                        <div class="col-5 child-table-row">
-                            <div>
-                                State
+                            <!-- table row end -->
+                            <!-- table row -->
+                            <div class="col-5 child-table-row">
+                                <div>
+                                    State
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-7 child-table-row">
-                            <div>
-                                {{ $customer->state?->state_name ?? null }}
-
+                            <div class="col-7 child-table-row">
+                                <div>
+                                    {{ $customer->state?->state_name ?? null }}
+    
+                                </div>
                             </div>
-                        </div>
-                        <!-- table row end -->
-                        <!-- table row -->
-                        <div class="col-5 child-table-row">
-                            <div>
-                                City
+                            <!-- table row end -->
+                            <!-- table row -->
+                            <div class="col-5 child-table-row">
+                                <div>
+                                    City
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-7 child-table-row">
-                            <div>
-                                {{ $customer->city?->city_name ?? null }}
+                            <div class="col-7 child-table-row">
+                                <div>
+                                    {{ $customer->city?->city_name ?? null }}
+                                </div>
                             </div>
-                        </div>
-                        <!-- table row end -->
-                        <!-- table row -->
-                        <div class="col-5 child-table-row">
-                            <div>
-                                Pincode
+                            <!-- table row end -->
+                            <!-- table row -->
+                            <div class="col-5 child-table-row">
+                                <div>
+                                    Pincode
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-7 child-table-row">
-                            <div>
-                                {{ $customer->pincode }}
-
+                            <div class="col-7 child-table-row">
+                                <div>
+                                    {{ $customer->pincode }}
+    
+                                </div>
                             </div>
+                            <!-- table row end -->
                         </div>
-                        <!-- table row end -->
                     </div>
                 </div>
-            </div>
-{{--             <div class="child-table">
+    {{--             <div class="child-table">
+</div>
+
                 <div class="container">
 
                     <div class="row border-gray">

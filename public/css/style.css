@@ -1332,4 +1332,8 @@ input[type=date]::-webkit-calendar-picker-indicator {
   font-weight: 400;
   line-height: 16.8px;
   text-align: left;
+}
+
+.modal-backdrop.show {
+  display: none !important;
 }/*# sourceMappingURL=style.css.map */

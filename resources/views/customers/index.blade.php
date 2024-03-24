@@ -90,16 +90,8 @@
   Cutomer view details modal
 -->
 <div class="modal fade" id="customarDetailsModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="render_customer_details"></div>
   <div class="modal-dialog modal-dialog-scrollable  modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="staticBackdropLabel">Customer Details</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <div class="render_customer_details"></div>
-      </div>
-    </div>
   </div>
 </div>
 @endsection
