@@ -5,7 +5,7 @@
         <h4>
             Customer ID: {{ $customer->id }}
         </h4>
-        <button class="close-popup-btn">
+        <button class="close-popup-btn" data-bs-dismiss="modal" aria-label="Close">
             <svg width="9" height="9" viewBox="0 0 9 9" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M8.01562 0.984375L0.984375 8.01562M0.984375 0.984375L8.01562 8.01562" stroke="#18202B"
                     stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />

@@ -108,10 +108,10 @@ class CustomersController extends Controller
 
         try {
             $customer = new Customer();
-            $customer->company_name = $request->company_name;
+            $customer->company_name = ucwords(strtolower($request->company_name));
             $customer->gst_no = $request->gst_no;
-            $customer->contact_person = $request->contact_person;
-            $customer->contact_person_designation = $request->contact_person_designation;
+            $customer->contact_person = ucwords(strtolower($request->contact_person));
+            $customer->contact_person_designation = ucwords(strtolower($request->contact_person_designation));
             $customer->mobile_no = $request->mobile_no;
             $customer->alter_mobile_no = $request->alter_mobile_no;
             $customer->email = $request->email;
@@ -298,10 +298,10 @@ class CustomersController extends Controller
         try {
 
             $customer = Customer::find($id);
-            $customer->company_name = $request->company_name;
+            $customer->company_name = ucwords(strtolower($request->company_name));
             $customer->gst_no = $request->gst_no;
-            $customer->contact_person = $request->contact_person;
-            $customer->contact_person_designation = $request->contact_person_designation;
+            $customer->contact_person = ucwords(strtolower($request->contact_person));
+            $customer->contact_person_designation = ucwords(strtolower($request->contact_person_designation));
             $customer->mobile_no = $request->mobile_no;
             $customer->alter_mobile_no = $request->alter_mobile_no;
             $customer->email = $request->email;
