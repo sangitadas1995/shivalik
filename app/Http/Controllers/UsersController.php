@@ -130,7 +130,21 @@ class UsersController extends Controller
             'conf_password' => ['required'],
         ]);
 
-        try {
+        if(User::where('email', '=', $request->email)->count() > 0) 
+        {
+            return redirect()->route('users.add')->with('fail', 'Email is already exist');
+        }
+        else if(User::where('mobile', '=', $request->mobile)->count() > 0) 
+        {
+            return redirect()->route('users.add')->with('fail', 'Mobile is already exist');
+        }
+        else if($request->password!=$request->conf_password) 
+        {
+            return redirect()->route('users.add')->with('fail', 'Password and Confirm Password are not same');
+        }
+        else
+        {
+            try {
             $user = new User();
             $user->name = $request->name;
             $user->manager_id = $request->manager_id;
@@ -151,8 +165,38 @@ class UsersController extends Controller
             } else {
                 return redirect()->back()->with('fail', 'Failed to create the user.');
             }
-        } catch (Exception $th) {
-            return redirect()->back()->with('fail', trans('messages.server_error'));
+            } catch (Exception $th) {
+                return redirect()->back()->with('fail', trans('messages.server_error'));
+            }
         }
+    }
+
+
+    public function add_functional_area(Request $request)
+    {
+        $data = $request->all();
+        try 
+        {
+            $functionalArea = new FunctionalArea();
+            $functionalArea->name = $data['functional_area_name'];
+            $save = $functionalArea->save();
+
+            if ($save) {
+               $res = array(
+                'status'=>'success'
+                );
+            } else {
+                $res = array(
+                'status'=>'fail'
+                );
+            }
+        } 
+        catch (Exception $th) 
+        {
+            $res = array(
+                'status'=>'fail'
+            );
+        }
+        echo json_encode($res);
     }
 }

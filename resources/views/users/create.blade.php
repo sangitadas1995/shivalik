@@ -4,6 +4,7 @@
     
 @endpush
 @section('content')
+
 <div class="page-name">
     <div class="row justify-content-between align-items-center">
         <div class="col-md-4">
@@ -53,7 +54,7 @@
           </div>
           <div class="col-md-6">
             <div class="mb-3">
-              <label class="form-label">Functional Area :</label>
+              <label class="form-label">Functional Area <i class="fas fa-plus-circle blue-text" data-toggle="modal" data-target="#exampleModal"></i>:</label>
               <select class="form-select" aria-label="Default select example" id="func_area_id" name="func_area_id">
               <option value="">Select</option>
               @if ($functional_area->isNotEmpty())
@@ -74,7 +75,7 @@
           </div>
 
           <div class="col-md-6">
-            <div class="mb-3">
+            <div class="mb-3  d-flex flex-column">
               <label class="form-label">Mobile :</label>
               <input type="text" class="form-control" name="mobile" id="mobile"/>
             </div>
@@ -148,10 +149,80 @@
   </div>
 @endsection
 
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Add New Functional Area</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+          <div class="form-group">
+            <label for="recipient-name" class="col-form-label">Functional Area:</label>
+            <input type="text" class="form-control" id="functional_area_name" name="functional_area_name">
+            <div class="text-danger" id="functional_area_error">
+            @if ($errors->has('paying_amount'))
+            <span class="text-danger">{{ $errors->first('paying_amount') }}</span>
+            @endif
+            </div>
+          </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary" id='addNewFuncArea'>Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 @section('scripts')
 <script>
+var token = "{{ csrf_token() }}";
+
+$(document).on("click","#addNewFuncArea",function(){
+  var functional_area_name = $("#functional_area_name").val().trim();
+  var status = 0;
+  if(functional_area_name == '')
+  {
+    $('#functional_area_error').html('Please enter name');
+    $("#functional_area_name").focus();
+    status = 0;
+    return false;
+  }
+  else
+  {
+    $('#functional_area_error').html('');
+    status = 1;
+  }
+
+  if(status == "1")
+  {
+    $.ajax({
+        url: "{{ route('users.add_functional_area') }}",
+        data: {_token: token,"functional_area_name":functional_area_name},
+        type: "post",
+        dataType: 'json',
+        success:function(response){
+            var rest = response.status;
+            if(rest == "success")
+            {
+                window.location = "{{ route('users.add') }}";
+            }
+        }
+    });
+  }
+});
+
+
+
+$(document).ready(function(){
+   $("#myModal").modal();
+});
+
   $(document).ready(function() {
-    $("#mobile_code-1").intlTelInput({
+    $("#mobile").intlTelInput({
       initialCountry: "in",
       separateDialCode: true,
       // utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/11.0.4/js/utils.js"
