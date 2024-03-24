@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="{{ asset('css/css-pro-layout.css') }}" />
     <link rel="stylesheet" href="{{ asset('css/sweetalert2.min.css')}}" />
     <link rel="stylesheet" href="{{ asset('css/dataTables.dataTables.min.css')}}" />
-    <link rel="stylesheet" href="{{ asset('css/style.css')}}" />
+    <link rel="stylesheet" href="{{ asset('css/style.css')}}?v={{ time() }}" />
     <link rel="stylesheet" href="{{ asset('css/font-awesome.min.css')}}" />
     @stack('extra_css')
   </head>
@@ -34,11 +34,6 @@
     <script src="{{ asset('js/jquery-3.6.3.min.js')}}"></script>
     <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
 
-
-<!-- <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script> -->
-{{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script> --}}
-
     <script src="{{ asset('js/popper.min.js') }}"></script>
     <script src="{{ asset('js/Chart.min.js') }}"></script>
     <script src="{{ asset('js/chart.js') }}"></script>
@@ -49,7 +44,7 @@
     <script src="{{ asset('js/pdfmake.min.js') }}"></script>
     <script src="{{ asset('js/vfs_fonts.js') }}"></script>
     <script src="{{ asset('js/dataTables.min.js') }}"></script>
-    <script src="{{ asset('js/validation.js') }}"></script>
+    <script src="{{ asset('js/validation.js') }}?v={{ time() }}"></script>
 
     @yield('scripts')
   </body>
