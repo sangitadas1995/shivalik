@@ -333,6 +333,7 @@
       }
 
       if (alter_mobile_no && (alter_mobile_no.length > 10 || alter_mobile_no.length < 10)) {
+        $('#mobile_code-2').focus();
         return $('.error_alter_mobile_no').html('Alternate mobile number must be 10 digits');
       } else {
         $('.error_alter_mobile_no').html('');
@@ -365,7 +366,7 @@
       }
 
       if (email === alternative_email_id) {
-        $('#mobile_code-2').focus();
+        $('#alternative_email_id').focus();
         return $('.error_alternative_email_id').html('Alternate email should not be the same as email');
       } else {
         $('.error_alternative_email_id').html('');
