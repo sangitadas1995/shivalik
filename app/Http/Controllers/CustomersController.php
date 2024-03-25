@@ -3,18 +3,23 @@
 namespace App\Http\Controllers;
 
 use Exception;
+use Carbon\Carbon;
 use App\Models\City;
 use App\Models\State;
 use App\Models\Country;
 use App\Models\Customer;
-use App\Rules\UniqueEmailAddress;
+use App\Traits\Validate;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use App\Rules\UniqueEmailAddress;
 use App\Rules\UniqueMobileNumber;
-use Carbon\Carbon;
+use App\Models\Failed_customer_csv;
+use App\Models\FailedCustomer;
+use Illuminate\Support\Facades\Validator;
 
 class CustomersController extends Controller
 {
+    use Validate;
     public function index()
     {
         return view('customers.index');
@@ -125,6 +130,7 @@ class CustomersController extends Controller
             $customer->city_id = $request->city_id;
             $customer->pincode = $request->pincode;
             $customer->print_margin = $request->print_margin;
+            $customer->collected_from = 'customer form';
             $save = $customer->save();
 
             if ($save) {
@@ -329,5 +335,185 @@ class CustomersController extends Controller
 
         $html = view('customers.details', ['customer' => $customer])->render();
         return response()->json($html);
+    }
+
+    public function bulk_upload(Request $request)
+    {
+
+        if ($request->hasFile('csv_file')) {
+            $file = $request->file('csv_file');
+            $fileName = time() . '_' . $file->getClientOriginalName();
+            $filePath = $file->storeAs('csv', $fileName);
+
+            // Parse CSV file
+            $csvData = array_map('str_getcsv', file(storage_path('app/' . $filePath)));
+            $failed_counter = $success_counter = 0;
+            // Save CSV data to database
+            foreach ($csvData as $key => $row) {
+                if ($key > 0) {
+                    $errors = [];
+                    $company_name = $this->company_name($row[0]);
+                    if ($company_name['status'] == false) {
+                        $errors[] = $company_name['message'];
+                    }
+
+                    $gst_number = $this->gst_number($row[1]);
+                    if ($gst_number['status'] == false) {
+                        $errors[] = $gst_number['message'];
+                    }
+
+                    $contact_person = $this->contact_person($row[2]);
+                    if ($contact_person['status'] == false) {
+                        $errors[] = $contact_person['message'];
+                    }
+
+                    $designation = $this->contact_person_designation($row[3]);
+                    if ($designation['status'] == false) {
+                        $errors[] = $designation['message'];
+                    }
+
+                    $mobile_no = $this->mobile_number($row[4]);
+                    if ($mobile_no['status'] == false) {
+                        $errors[] = $mobile_no['message'];
+                    }
+
+                    $amobile_no = $this->alternate_mobile_number($row[5], $row[4]);
+                    if ($amobile_no['status'] == false) {
+                        $errors[] = $amobile_no['message'];
+                    }
+
+                    $valid_email = $this->valid_email($row[6]);
+                    if ($valid_email['status'] == false) {
+                        $errors[] = $valid_email['message'];
+                    }
+
+                    $avalid_email = $this->valid_email($row[7], $row[6]);
+                    if ($avalid_email['status'] == false) {
+                        $errors[] = $avalid_email['message'];
+                    }
+
+                    $phone_no = $this->phone_no($row[8], $row[4], $row[5]);
+                    if ($phone_no['status'] == false) {
+                        $errors[] = $phone_no['message'];
+                    }
+
+                    $aphone_no = $this->phone_no($row[9], $row[4], $row[5], $row[8]);
+                    if ($aphone_no['status'] == false) {
+                        $errors[] = $aphone_no['message'];
+                    }
+
+                    $customer_website = $this->customer_website($row[10]);
+                    if ($customer_website['status'] == false) {
+                        $errors[] = $customer_website['message'];
+                    }
+
+                    $address = $this->address($row[11]);
+                    if ($address['status'] == false) {
+                        $errors[] = $address['message'];
+                    }
+
+                    $country = $this->country($row[12]);
+                    if ($country['status'] == false) {
+                        $errors[] = $country['message'];
+                    }
+
+                    $state = $this->state($row[13]);
+                    if ($state['status'] == false) {
+                        $errors[] = $state['message'];
+                    }
+
+                    $city = $this->city($row[14]);
+                    if ($city['status'] == false) {
+                        $errors[] = $city['message'];
+                    }
+
+                    $pincode = $this->pincode($row[15]);
+                    if ($pincode['status'] == false) {
+                        $errors[] = $pincode['message'];
+                    }
+
+                    $print_margin = $this->print_margin($row[16]);
+                    if ($print_margin['status'] == false) {
+                        $errors[] = $print_margin['message'];
+                    }
+
+                    $states = State::where([
+                        'state_name' => $row[13],
+                        'status' => 'A',
+                    ])->orderBy('id', 'ASC')->first();
+
+                    $country = Country::where([
+                        'country_name' => $row[12],
+                        'status' => 'A',
+                    ])->orderBy('id', 'ASC')->first();
+
+                    $city = City::where([
+                        'city_name' => $row[14],
+                        'status' => 'A',
+                    ])->orderBy('id', 'ASC')->first();
+
+                    if (!empty($errors)) {
+                        $errorMessage = json_encode($errors);
+                        $customer = new FailedCustomer();
+                        $customer->company_name = !empty($row[0]) ? $row[0] : null;
+                        $customer->gst_no       = !empty($row[1]) ? $row[1] : null;
+                        $customer->contact_person = !empty($row[2]) ? $row[2] : null;
+                        $customer->contact_person_designation = !empty($row[3]) ? $row[3] : null;
+                        $customer->mobile_no = !empty($row[4]) ? $row[4] : null;
+                        $customer->alter_mobile_no = !empty($row[5]) ? $row[5] : null;
+                        $customer->email = !empty($row[6]) ? $row[6] : null;
+                        $customer->alternative_email_id = !empty($row[7]) ? $row[7] : null;
+                        $customer->phone_no =  !empty($row[8]) ? $row[8] : null;
+                        $customer->alternative_phone_no = !empty($row[9]) ? $row[9] : null;
+                        $customer->customer_website = !empty($row[10]) ? $row[10] : null;
+                        $customer->address = !empty($row[11]) ? $row[11] : null;
+                        $customer->country_id = !empty($country) ?  $country->id : 101;
+                        $customer->state_id =  !empty($states) ? $states->id : null;
+                        $customer->city_id = !empty($city) ? $city->id : null;
+                        $customer->pincode = !empty($row[15]) ? $row[15] : null;
+                        $customer->print_margin =  !empty($row[16]) ? $row[16] : null;
+                        $customer->row_id =  $key;
+                        $customer->reason =  $errorMessage;
+                        $customer->save();
+
+                        $failed_counter++;
+                    } else {
+                        $customer = new Customer();
+                        $customer->company_name = !empty($row[0]) ? ucwords(strtolower($row[0])) : null;
+                        $customer->gst_no       = !empty($row[1]) ? $row[1] : null;
+                        $customer->contact_person = !empty($row[2]) ? ucwords(strtolower($row[2])) : null;
+                        $customer->contact_person_designation = !empty($row[3]) ? ucwords(strtolower($row[3])) : null;
+                        $customer->mobile_no = !empty($row[4]) ? $row[4] : null;
+                        $customer->alter_mobile_no = !empty($row[5]) ? $row[5] : null;
+                        $customer->email = !empty($row[6]) ? $row[6] : null;
+                        $customer->alternative_email_id = !empty($row[7]) ? $row[7] : null;
+                        $customer->phone_no =  !empty($row[8]) ? $row[8] : null;
+                        $customer->alternative_phone_no = !empty($row[9]) ? $row[9] : null;
+                        $customer->customer_website = !empty($row[10]) ? $row[10] : null;
+                        $customer->address = !empty($row[11]) ? $row[11] : null;
+                        $customer->country_id = !empty($country) ?  $country->id : 101;
+                        $customer->state_id =  !empty($states) ? $states->id : null;
+                        $customer->city_id = !empty($city) ? $city->id : null;
+                        $customer->pincode = !empty($row[15]) ? $row[15] : null;
+                        $customer->print_margin =  !empty($row[16]) ? $row[16] : null;
+                        $customer->collected_from = 'csv';
+                        $customer->save();
+
+                        $success_counter++;
+                    }
+                }
+
+                if ($key == 501) {
+                    break;
+                }
+            }
+
+            $f_msg = $failed_counter > 1 ? ' rows ' : ' row ';
+            $s_msg = $success_counter > 1 ? ' rows ' : ' row ';
+
+            return response()->json(['message' => $success_counter . $s_msg . 'successfully imported and ' . $failed_counter . $f_msg . 'failed to import.']);
+        }
+
+        return response()->json(['message' => 'No CSV file uploaded'], 422);
     }
 }

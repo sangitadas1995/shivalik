@@ -37,6 +37,7 @@ Route::middleware('auth')->group(function () {
         Route::get('edit/{id}', [CustomersController::class, 'edit'])->name('edit');
         Route::post('update/{id}', [CustomersController::class, 'update'])->name('update');
         Route::post('view', [CustomersController::class, 'view'])->name('view');
+        Route::post('upload', [CustomersController::class, 'bulk_upload'])->name('upload');
     });
 
 
@@ -47,7 +48,7 @@ Route::middleware('auth')->group(function () {
         Route::post('states', [UsersController::class, 'getStates'])->name('states');
         Route::post('cities', [UsersController::class, 'getCities'])->name('cities');
 
-        Route::post('add_functional_area', [UsersController::class,'add_functional_area'])->name('add_functional_area');
+        Route::post('add_functional_area', [UsersController::class, 'add_functional_area'])->name('add_functional_area');
 
         //Route::get('edit/{user_id?}', [UsersController::class, 'edit'])->name('user_edit');
         Route::get('/users/edit/{id}', 'UsersController@edit');
