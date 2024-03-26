@@ -71,12 +71,12 @@ class CustomersController extends Controller
             'contact_person_designation' => ['sometimes', 'string'],
             'mobile_no' => [
                 'required',
-                'regex:/^[6-9]\d{9}$/',
+                
                 new UniqueMobileNumber('mobile_no', 'alter_mobile_no', 'phone_no', 'alternative_phone_no', '', 'The mobile number :input has already been taken.'),
             ],
             'alter_mobile_no' => [
                 'sometimes',
-                'regex:/^[6-9]\d{9}$/',
+               
                 'different:mobile_no',
                 new UniqueMobileNumber('mobile_no', 'alter_mobile_no', 'phone_no', 'alternative_phone_no', '', 'The alternate mobile number :input has already been taken.'),
             ],
@@ -93,12 +93,12 @@ class CustomersController extends Controller
             ],
             'phone_no' => [
                 'required',
-                'regex:/^[0-9]\d{9}$/',
+                
                 new UniqueMobileNumber('phone_no', 'alternative_phone_no', 'mobile_no', 'alter_mobile_no', '', 'The phone number :input has already been taken.'),
             ],
             'alternative_phone_no' => [
                 'sometimes',
-                'regex:/^[0-9]\d{9}$/',
+                
                 'different:phone_no',
                 new UniqueMobileNumber('phone_no', 'alternative_phone_no', 'mobile_no', 'alter_mobile_no', '', 'The alternate phone number :input has already been taken.'),
             ],
