@@ -9,7 +9,7 @@ trait Validate
     public function company_name($str)
     {
         if (!empty($str)) {
-            $valid = preg_match('/^[a-zA-Z]+$/', $str);
+            $valid = preg_match('/^[a-zA-Z ]+$/', $str);
             if ($valid) {
                 return ['status' => true];
             } else {
@@ -45,7 +45,7 @@ trait Validate
     public function contact_person($str)
     {
         if (!empty($str)) {
-            $valid = preg_match('/^[a-zA-Z]+$/', $str);
+            $valid = preg_match('/^[a-zA-Z ]+$/', $str);
             if ($valid) {
                 return ['status' => true];
             } else {
@@ -59,7 +59,7 @@ trait Validate
     public function contact_person_designation($str)
     {
         if (!empty($str)) {
-            $valid = preg_match('/^[a-zA-Z]+$/', $str);
+            $valid = preg_match('/^[a-zA-Z ]+$/', $str);
             if ($valid) {
                 return ['status' => true];
             } else {
