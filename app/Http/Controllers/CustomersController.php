@@ -66,17 +66,18 @@ class CustomersController extends Controller
     {
         $request->validate([
             'company_name' => ['required', 'string'],
-            'gst_no' => ['sometimes', 'regex:/^([0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}[Z]{1}[0-9A-Z]{1})$/', 'unique:customers,gst_no'],
+            'gst_no' => ['required', 'regex:/^([0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}[Z]{1}[0-9A-Z]{1})$/', 'unique:customers,gst_no'],
             'contact_person' => ['required', 'string'],
-            'contact_person_designation' => ['sometimes', 'string'],
+            'contact_person_designation' => ['sometimes', 'nullable', 'string'],
             'mobile_no' => [
                 'required',
-                
+                'regex:/^[6-9]\d{9}$/',
                 new UniqueMobileNumber('mobile_no', 'alter_mobile_no', 'phone_no', 'alternative_phone_no', '', 'The mobile number :input has already been taken.'),
             ],
             'alter_mobile_no' => [
                 'sometimes',
-               
+                'nullable',
+                'regex:/^[6-9]\d{9}$/',
                 'different:mobile_no',
                 new UniqueMobileNumber('mobile_no', 'alter_mobile_no', 'phone_no', 'alternative_phone_no', '', 'The alternate mobile number :input has already been taken.'),
             ],
@@ -87,22 +88,25 @@ class CustomersController extends Controller
             ],
             'alternative_email_id' => [
                 'sometimes',
+                'nullable',
                 'email',
                 'different:email',
                 new UniqueEmailAddress('email', 'alternative_email_id', '', 'The alternate email address :input has already been taken.'),
             ],
             'phone_no' => [
-                'required',
-                
+                'sometimes',
+                'nullable',
+                'regex:/^[0-9]\d{10}$/',
                 new UniqueMobileNumber('phone_no', 'alternative_phone_no', 'mobile_no', 'alter_mobile_no', '', 'The phone number :input has already been taken.'),
             ],
             'alternative_phone_no' => [
                 'sometimes',
-                
+                'nullable',
+                'regex:/^[0-9]\d{10}$/',
                 'different:phone_no',
                 new UniqueMobileNumber('phone_no', 'alternative_phone_no', 'mobile_no', 'alter_mobile_no', '', 'The alternate phone number :input has already been taken.'),
             ],
-            'customer_website' => ['sometimes', 'url', 'unique:customers,customer_website'],
+            'customer_website' => ['sometimes', 'nullable', 'url', 'unique:customers,customer_website'],
             'address' => ['required'],
             'country_id' => ['required', 'numeric'],
             'state_id' => ['required', 'numeric'],
@@ -256,9 +260,9 @@ class CustomersController extends Controller
         $id = decrypt($id);
         $request->validate([
             'company_name' => ['required', 'string'],
-            'gst_no' => ['sometimes', 'regex:/^([0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}[Z]{1}[0-9A-Z]{1})$/', Rule::unique('customers')->ignore($id)],
+            'gst_no' => ['required', 'regex:/^([0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}[Z]{1}[0-9A-Z]{1})$/', Rule::unique('customers')->ignore($id)],
             'contact_person' => ['required', 'string'],
-            'contact_person_designation' => ['sometimes', 'string'],
+            'contact_person_designation' => ['sometimes', 'nullable', 'string'],
             'mobile_no' => [
                 'required',
                 'regex:/^[6-9]\d{9}$/',
@@ -266,6 +270,7 @@ class CustomersController extends Controller
             ],
             'alter_mobile_no' => [
                 'sometimes',
+                'nullable',
                 'regex:/^[6-9]\d{9}$/',
                 'different:mobile_no',
                 new UniqueMobileNumber('mobile_no', 'alter_mobile_no', 'phone_no', 'alternative_phone_no', $id, 'The alternate mobile number :input has already been taken.'),
@@ -277,22 +282,25 @@ class CustomersController extends Controller
             ],
             'alternative_email_id' => [
                 'sometimes',
+                'nullable',
                 'email',
                 'different:email',
                 new UniqueEmailAddress('email', 'alternative_email_id', $id, 'The alternate email address :input has already been taken.'),
             ],
             'phone_no' => [
-                'required',
-                'regex:/^[0-9]\d{9}$/',
+                'sometimes',
+                'nullable',
+                'regex:/^[0-9]\d{10}$/',
                 new UniqueMobileNumber('phone_no', 'alternative_phone_no', 'mobile_no', 'alter_mobile_no', $id, 'The phone number :input has already been taken.'),
             ],
             'alternative_phone_no' => [
                 'sometimes',
-                'regex:/^[0-9]\d{9}$/',
+                'nullable',
+                'regex:/^[0-9]\d{10}$/',
                 'different:phone_no',
                 new UniqueMobileNumber('phone_no', 'alternative_phone_no', 'mobile_no', 'alter_mobile_no', $id, 'The alternate phone number :input has already been taken.'),
             ],
-            'customer_website' => ['sometimes', 'url', Rule::unique('customers')->ignore($id)],
+            'customer_website' => ['sometimes', 'nullable', 'url', Rule::unique('customers')->ignore($id)],
             'address' => ['required'],
             'country_id' => ['required', 'numeric'],
             'state_id' => ['required', 'numeric'],

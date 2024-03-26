@@ -25,16 +25,18 @@ class UniqueEmailAddress implements ValidationRule
 
     public function validate(string $attribute, mixed $value, Closure $fail): void
     {
-        $query = Customer::where(function ($query) use ($value) {
-            $query->where($this->column1, $value)
-                ->orWhere($this->column2, $value);
-        });
-        if (!empty($this->ignoreId)) {
-            $query->where('id', '!=', $this->ignoreId);
-        }
-        $result = $query->first();
-        if (!empty($result)) {
-            $fail($this->message ?: 'The email has already been taken.');
+        if (!empty($value)) {
+            $query = Customer::where(function ($query) use ($value) {
+                $query->where($this->column1, $value)
+                    ->orWhere($this->column2, $value);
+            });
+            if (!empty($this->ignoreId)) {
+                $query->where('id', '!=', $this->ignoreId);
+            }
+            $result = $query->first();
+            if (!empty($result)) {
+                $fail($this->message ?: 'The email has already been taken.');
+            }
         }
     }
 }
