@@ -10,4 +10,9 @@ class Manager extends Model
     use HasFactory;
 
     protected $guarded = ['id'];
+
+    public function users(): HasMany
+    {
+        return $this->hasMany(User::class, 'manager_id', 'id');
+    }
 }
