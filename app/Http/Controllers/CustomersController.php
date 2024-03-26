@@ -71,12 +71,12 @@ class CustomersController extends Controller
             'contact_person_designation' => ['sometimes', 'string'],
             'mobile_no' => [
                 'required',
-                
+
                 new UniqueMobileNumber('mobile_no', 'alter_mobile_no', 'phone_no', 'alternative_phone_no', '', 'The mobile number :input has already been taken.'),
             ],
             'alter_mobile_no' => [
                 'sometimes',
-               
+
                 'different:mobile_no',
                 new UniqueMobileNumber('mobile_no', 'alter_mobile_no', 'phone_no', 'alternative_phone_no', '', 'The alternate mobile number :input has already been taken.'),
             ],
@@ -93,12 +93,12 @@ class CustomersController extends Controller
             ],
             'phone_no' => [
                 'required',
-                
+
                 new UniqueMobileNumber('phone_no', 'alternative_phone_no', 'mobile_no', 'alter_mobile_no', '', 'The phone number :input has already been taken.'),
             ],
             'alternative_phone_no' => [
                 'sometimes',
-                
+
                 'different:phone_no',
                 new UniqueMobileNumber('phone_no', 'alternative_phone_no', 'mobile_no', 'alter_mobile_no', '', 'The alternate phone number :input has already been taken.'),
             ],
@@ -111,7 +111,8 @@ class CustomersController extends Controller
             'print_margin' => ['required', 'numeric'],
         ]);
 
-        try {
+        try
+        {
             $customer = new Customer();
             $customer->company_name = ucwords(strtolower($request->company_name));
             $customer->gst_no = $request->gst_no;
@@ -133,12 +134,15 @@ class CustomersController extends Controller
             $customer->collected_from = 'customer form';
             $save = $customer->save();
 
-            if ($save) {
+            if ($save)
+            {
                 return redirect()->route('customers.index')->with('success', 'The customer has been created successfully.');
-            } else {
+            } else
+            {
                 return redirect()->back()->with('fail', 'Failed to create the customer.');
             }
-        } catch (Exception $th) {
+        } catch (Exception $th)
+        {
             return redirect()->back()->with('fail', trans('messages.server_error'));
         }
     }
@@ -158,7 +162,8 @@ class CustomersController extends Controller
 
         $query = Customer::with('city');
 
-        if (isset($request->search['value'])) {
+        if (isset ($request->search['value']))
+        {
             $query->where(function ($q) use ($request) {
                 $q->where('company_name', 'LIKE', "%" . $request->search['value'] . "%")
                     ->orWhere('contact_person', 'LIKE', "%" . $request->search['value'] . "%")
@@ -170,27 +175,33 @@ class CustomersController extends Controller
         }
 
 
-        if (isset($request->order['0']['dir']) && ($request->order['0']['column'] != 0) && ($request->order['0']['column'] != 5)) {
+        if (isset ($request->order['0']['dir']) && ($request->order['0']['column'] != 0) && ($request->order['0']['column'] != 5))
+        {
             $query->orderBy($column[$request->order['0']['column']], $request->order['0']['dir']);
         }
-        if (isset($request->order['0']['dir']) && ($request->order['0']['column'] != 0) && ($request->order['0']['column'] == 5)) {
+        if (isset ($request->order['0']['dir']) && ($request->order['0']['column'] != 0) && ($request->order['0']['column'] == 5))
+        {
             $query->whereHas('city', function ($q) use ($request) {
                 return $q->orderBy('city_name', $request->order['0']['dir']);
             });
-        } else {
+        } else
+        {
             $query->orderBy('created_at', 'desc');
         }
 
         $number_filtered_row = $query->count();
 
-        if ($request->length != -1) {
+        if ($request->length != -1)
+        {
             $query->limit($request->length)->offset($request->start);
         }
 
         $result = $query->get();
         $data = [];
-        if ($result->isNotEmpty()) {
-            foreach ($result as $key => $value) {
+        if ($result->isNotEmpty())
+        {
+            foreach ($result as $key => $value)
+            {
                 $view_icon = asset('images/lucide_view.png');
                 $edit_icon = asset('images/akar-icons_edit.png');
                 $editLink = route('customers.edit', encrypt($value->id));
@@ -203,8 +214,8 @@ class CustomersController extends Controller
                 $subarray[] = $value->city?->city_name ?? null;
                 $subarray[] = 0;
                 $subarray[] = $value->print_margin . '%';
-                $subarray[] = '<a href="#" class="view_details" data-id ="' . $value->id . '"><img src="' . $view_icon . '" /></a>
-                                <a href="' . $editLink . '"><img src="' . $edit_icon . '" /></a>';
+                $subarray[] = '<a href="#" class="view_details" title="View Details" data-id ="' . $value->id . '"><img src="' . $view_icon . '" /></a>
+                                <a href="' . $editLink . '" title="Edit"><img src="' . $edit_icon . '" /></a>';
 
                 $data[] = $subarray;
             }
@@ -227,13 +238,14 @@ class CustomersController extends Controller
         $id = decrypt($id);
         $states = null;
         $cities = null;
-        $customer  = Customer::findOrFail($id);
+        $customer = Customer::findOrFail($id);
         $countries = Country::where([
             'status' => 'A'
         ])
             ->orderBy('country_name', 'asc')
             ->get();
-        if (!empty($customer)) {
+        if (!empty ($customer))
+        {
             $states = State::where([
                 'country_id' => $customer->country_id,
                 'status' => 'A',
@@ -301,7 +313,8 @@ class CustomersController extends Controller
             'print_margin' => ['required', 'numeric'],
         ]);
 
-        try {
+        try
+        {
 
             $customer = Customer::find($id);
             $customer->company_name = ucwords(strtolower($request->company_name));
@@ -324,7 +337,8 @@ class CustomersController extends Controller
             $customer->update();
 
             return redirect()->route('customers.index')->with('success', 'The customer has been updated successfully.');
-        } catch (Exception $th) {
+        } catch (Exception $th)
+        {
             return redirect()->back()->with('fail', trans('messages.server_error'));
         }
     }
@@ -340,7 +354,8 @@ class CustomersController extends Controller
     public function bulk_upload(Request $request)
     {
 
-        if ($request->hasFile('csv_file')) {
+        if ($request->hasFile('csv_file'))
+        {
             $file = $request->file('csv_file');
             $fileName = time() . '_' . $file->getClientOriginalName();
             $filePath = $file->storeAs('csv', $fileName);
@@ -349,91 +364,110 @@ class CustomersController extends Controller
             $csvData = array_map('str_getcsv', file(storage_path('app/' . $filePath)));
             $failed_counter = $success_counter = 0;
             // Save CSV data to database
-            foreach ($csvData as $key => $row) {
-                if ($key > 0) {
+            foreach ($csvData as $key => $row)
+            {
+                if ($key > 0)
+                {
                     $errors = [];
                     $company_name = $this->company_name($row[0]);
-                    if ($company_name['status'] == false) {
+                    if ($company_name['status'] == false)
+                    {
                         $errors[] = $company_name['message'];
                     }
 
                     $gst_number = $this->gst_number($row[1]);
-                    if ($gst_number['status'] == false) {
+                    if ($gst_number['status'] == false)
+                    {
                         $errors[] = $gst_number['message'];
                     }
 
                     $contact_person = $this->contact_person($row[2]);
-                    if ($contact_person['status'] == false) {
+                    if ($contact_person['status'] == false)
+                    {
                         $errors[] = $contact_person['message'];
                     }
 
                     $designation = $this->contact_person_designation($row[3]);
-                    if ($designation['status'] == false) {
+                    if ($designation['status'] == false)
+                    {
                         $errors[] = $designation['message'];
                     }
 
                     $mobile_no = $this->mobile_number($row[4]);
-                    if ($mobile_no['status'] == false) {
+                    if ($mobile_no['status'] == false)
+                    {
                         $errors[] = $mobile_no['message'];
                     }
 
                     $amobile_no = $this->alternate_mobile_number($row[5], $row[4]);
-                    if ($amobile_no['status'] == false) {
+                    if ($amobile_no['status'] == false)
+                    {
                         $errors[] = $amobile_no['message'];
                     }
 
                     $valid_email = $this->valid_email($row[6]);
-                    if ($valid_email['status'] == false) {
+                    if ($valid_email['status'] == false)
+                    {
                         $errors[] = $valid_email['message'];
                     }
 
                     $avalid_email = $this->valid_email($row[7], $row[6]);
-                    if ($avalid_email['status'] == false) {
+                    if ($avalid_email['status'] == false)
+                    {
                         $errors[] = $avalid_email['message'];
                     }
 
                     $phone_no = $this->phone_no($row[8], $row[4], $row[5]);
-                    if ($phone_no['status'] == false) {
+                    if ($phone_no['status'] == false)
+                    {
                         $errors[] = $phone_no['message'];
                     }
 
                     $aphone_no = $this->phone_no($row[9], $row[4], $row[5], $row[8]);
-                    if ($aphone_no['status'] == false) {
+                    if ($aphone_no['status'] == false)
+                    {
                         $errors[] = $aphone_no['message'];
                     }
 
                     $customer_website = $this->customer_website($row[10]);
-                    if ($customer_website['status'] == false) {
+                    if ($customer_website['status'] == false)
+                    {
                         $errors[] = $customer_website['message'];
                     }
 
                     $address = $this->address($row[11]);
-                    if ($address['status'] == false) {
+                    if ($address['status'] == false)
+                    {
                         $errors[] = $address['message'];
                     }
 
                     $country = $this->country($row[12]);
-                    if ($country['status'] == false) {
+                    if ($country['status'] == false)
+                    {
                         $errors[] = $country['message'];
                     }
 
                     $state = $this->state($row[13]);
-                    if ($state['status'] == false) {
+                    if ($state['status'] == false)
+                    {
                         $errors[] = $state['message'];
                     }
 
                     $city = $this->city($row[14]);
-                    if ($city['status'] == false) {
+                    if ($city['status'] == false)
+                    {
                         $errors[] = $city['message'];
                     }
 
                     $pincode = $this->pincode($row[15]);
-                    if ($pincode['status'] == false) {
+                    if ($pincode['status'] == false)
+                    {
                         $errors[] = $pincode['message'];
                     }
 
                     $print_margin = $this->print_margin($row[16]);
-                    if ($print_margin['status'] == false) {
+                    if ($print_margin['status'] == false)
+                    {
                         $errors[] = $print_margin['message'];
                     }
 
@@ -452,50 +486,52 @@ class CustomersController extends Controller
                         'status' => 'A',
                     ])->orderBy('id', 'ASC')->first();
 
-                    if (!empty($errors)) {
+                    if (!empty ($errors))
+                    {
                         $errorMessage = json_encode($errors);
                         $customer = new FailedCustomer();
-                        $customer->company_name = !empty($row[0]) ? $row[0] : null;
-                        $customer->gst_no       = !empty($row[1]) ? $row[1] : null;
-                        $customer->contact_person = !empty($row[2]) ? $row[2] : null;
-                        $customer->contact_person_designation = !empty($row[3]) ? $row[3] : null;
-                        $customer->mobile_no = !empty($row[4]) ? $row[4] : null;
-                        $customer->alter_mobile_no = !empty($row[5]) ? $row[5] : null;
-                        $customer->email = !empty($row[6]) ? $row[6] : null;
-                        $customer->alternative_email_id = !empty($row[7]) ? $row[7] : null;
-                        $customer->phone_no =  !empty($row[8]) ? $row[8] : null;
-                        $customer->alternative_phone_no = !empty($row[9]) ? $row[9] : null;
-                        $customer->customer_website = !empty($row[10]) ? $row[10] : null;
-                        $customer->address = !empty($row[11]) ? $row[11] : null;
-                        $customer->country_id = !empty($country) ?  $country->id : 101;
-                        $customer->state_id =  !empty($states) ? $states->id : null;
-                        $customer->city_id = !empty($city) ? $city->id : null;
-                        $customer->pincode = !empty($row[15]) ? $row[15] : null;
-                        $customer->print_margin =  !empty($row[16]) ? $row[16] : null;
-                        $customer->row_id =  $key;
-                        $customer->reason =  $errorMessage;
+                        $customer->company_name = !empty ($row[0]) ? $row[0] : null;
+                        $customer->gst_no = !empty ($row[1]) ? $row[1] : null;
+                        $customer->contact_person = !empty ($row[2]) ? $row[2] : null;
+                        $customer->contact_person_designation = !empty ($row[3]) ? $row[3] : null;
+                        $customer->mobile_no = !empty ($row[4]) ? $row[4] : null;
+                        $customer->alter_mobile_no = !empty ($row[5]) ? $row[5] : null;
+                        $customer->email = !empty ($row[6]) ? $row[6] : null;
+                        $customer->alternative_email_id = !empty ($row[7]) ? $row[7] : null;
+                        $customer->phone_no = !empty ($row[8]) ? $row[8] : null;
+                        $customer->alternative_phone_no = !empty ($row[9]) ? $row[9] : null;
+                        $customer->customer_website = !empty ($row[10]) ? $row[10] : null;
+                        $customer->address = !empty ($row[11]) ? $row[11] : null;
+                        $customer->country_id = !empty ($country) ? $country->id : 101;
+                        $customer->state_id = !empty ($states) ? $states->id : null;
+                        $customer->city_id = !empty ($city) ? $city->id : null;
+                        $customer->pincode = !empty ($row[15]) ? $row[15] : null;
+                        $customer->print_margin = !empty ($row[16]) ? $row[16] : null;
+                        $customer->row_id = $key;
+                        $customer->reason = $errorMessage;
                         $customer->save();
 
                         $failed_counter++;
-                    } else {
+                    } else
+                    {
                         $customer = new Customer();
-                        $customer->company_name = !empty($row[0]) ? ucwords(strtolower($row[0])) : null;
-                        $customer->gst_no       = !empty($row[1]) ? $row[1] : null;
-                        $customer->contact_person = !empty($row[2]) ? ucwords(strtolower($row[2])) : null;
-                        $customer->contact_person_designation = !empty($row[3]) ? ucwords(strtolower($row[3])) : null;
-                        $customer->mobile_no = !empty($row[4]) ? $row[4] : null;
-                        $customer->alter_mobile_no = !empty($row[5]) ? $row[5] : null;
-                        $customer->email = !empty($row[6]) ? $row[6] : null;
-                        $customer->alternative_email_id = !empty($row[7]) ? $row[7] : null;
-                        $customer->phone_no =  !empty($row[8]) ? $row[8] : null;
-                        $customer->alternative_phone_no = !empty($row[9]) ? $row[9] : null;
-                        $customer->customer_website = !empty($row[10]) ? $row[10] : null;
-                        $customer->address = !empty($row[11]) ? $row[11] : null;
-                        $customer->country_id = !empty($country) ?  $country->id : 101;
-                        $customer->state_id =  !empty($states) ? $states->id : null;
-                        $customer->city_id = !empty($city) ? $city->id : null;
-                        $customer->pincode = !empty($row[15]) ? $row[15] : null;
-                        $customer->print_margin =  !empty($row[16]) ? $row[16] : null;
+                        $customer->company_name = !empty ($row[0]) ? ucwords(strtolower($row[0])) : null;
+                        $customer->gst_no = !empty ($row[1]) ? $row[1] : null;
+                        $customer->contact_person = !empty ($row[2]) ? ucwords(strtolower($row[2])) : null;
+                        $customer->contact_person_designation = !empty ($row[3]) ? ucwords(strtolower($row[3])) : null;
+                        $customer->mobile_no = !empty ($row[4]) ? $row[4] : null;
+                        $customer->alter_mobile_no = !empty ($row[5]) ? $row[5] : null;
+                        $customer->email = !empty ($row[6]) ? $row[6] : null;
+                        $customer->alternative_email_id = !empty ($row[7]) ? $row[7] : null;
+                        $customer->phone_no = !empty ($row[8]) ? $row[8] : null;
+                        $customer->alternative_phone_no = !empty ($row[9]) ? $row[9] : null;
+                        $customer->customer_website = !empty ($row[10]) ? $row[10] : null;
+                        $customer->address = !empty ($row[11]) ? $row[11] : null;
+                        $customer->country_id = !empty ($country) ? $country->id : 101;
+                        $customer->state_id = !empty ($states) ? $states->id : null;
+                        $customer->city_id = !empty ($city) ? $city->id : null;
+                        $customer->pincode = !empty ($row[15]) ? $row[15] : null;
+                        $customer->print_margin = !empty ($row[16]) ? $row[16] : null;
                         $customer->collected_from = 'csv';
                         $customer->save();
 
@@ -503,7 +539,8 @@ class CustomersController extends Controller
                     }
                 }
 
-                if ($key == 501) {
+                if ($key == 501)
+                {
                     break;
                 }
             }
