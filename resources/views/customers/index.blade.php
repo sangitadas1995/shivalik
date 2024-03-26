@@ -71,7 +71,7 @@
             <div class="col-md-12 mb-3">
               <label class="form-label d-flex justify-content-between">
                 <span>Customer Csv Upload</span>
-                <a href="{{ asset('downloadable/customers-sample-csv.csv') }}" download>Download Sample</a>
+                <a href="{{ asset('downloadable/customers-sample-csv.csv') }}" download="customers-sample-csv.csv">Download Sample</a>
               </label>
               <input type="file" class="form-control" name="csv_upload" id="csv_upload" accept=".csv" />
               <small class="text-danger error_file"></small>

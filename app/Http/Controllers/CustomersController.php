@@ -395,9 +395,9 @@ class CustomersController extends Controller
                         $errors[] = $valid_email['message'];
                     }
 
-                    $avalid_email = $this->valid_email($row[7], $row[6]);
-                    if ($avalid_email['status'] == false) {
-                        $errors[] = $avalid_email['message'];
+                    $alternate_email = $this->alternate_email($row[7], $row[6]);
+                    if ($alternate_email['status'] == false) {
+                        $errors[] = $alternate_email['message'];
                     }
 
                     $phone_no = $this->phone_no($row[8], $row[4], $row[5]);
@@ -405,7 +405,7 @@ class CustomersController extends Controller
                         $errors[] = $phone_no['message'];
                     }
 
-                    $aphone_no = $this->phone_no($row[9], $row[4], $row[5], $row[8]);
+                    $aphone_no = $this->alternate_phone_no($row[9], $row[4], $row[5], $row[8]);
                     if ($aphone_no['status'] == false) {
                         $errors[] = $aphone_no['message'];
                     }
