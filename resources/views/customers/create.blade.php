@@ -269,7 +269,7 @@
       var alter_mobile_no               = $('#mobile_code-2').val().trim();
       var email                         = $('#email').val().trim();
       var alternative_email_id          = $('#alternative_email_id').val().trim();
-      var phone_no                      = $('#mobile_code-3').val();
+      var phone_no                      = $('#mobile_code-3').val().trim();
       var alternative_phone_no          = $('#mobile_code-4').val();
       var customer_website              = $('#customer_website').val().trim();
       var address                       = $('#address').val();
@@ -367,12 +367,12 @@
         $('.error_alternative_email_id').html('');
       }
 
-      // if (!phone_no.trim()) {
-      //   $('#mobile_code-3').focus();
-      //   return $('.error_phone_no').html('Phone number field is required');
-      // } else {
-      //     $('.error_phone_no').html('');
-      // }
+      if (phone_no && (phone_no.length > 11 || phone_no.length < 11)) {
+        $('#mobile_code-3').focus();
+        return $('.error_phone_no').html('Phone number must be 11 digits');
+      } else {
+          $('.error_phone_no').html('');
+      }
 
       if (phone_no === mobile_no) {
         $('#mobile_code-3').focus();
@@ -386,6 +386,13 @@
         return $('.error_phone_no').html('Phone number should not be the same as alternate mobile number');
       } else {
         $('.error_phone_no').html('');
+      }
+
+      if (alternative_phone_no && (alternative_phone_no.length > 11 || alternative_phone_no.length < 11)) {
+        $('#mobile_code-4').focus();
+        return $('.error_alternative_phone_no').html('Alternate phone number must be 11 digits');
+      } else {
+          $('.error_alternative_phone_no').html('');
       }
 
       if (mobile_no === alternative_phone_no) {
