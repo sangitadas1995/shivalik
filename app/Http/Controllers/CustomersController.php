@@ -71,21 +71,13 @@ class CustomersController extends Controller
             'contact_person_designation' => ['sometimes', 'nullable', 'string'],
             'mobile_no' => [
                 'required',
-<<<<<<< HEAD
-
-=======
                 'regex:/^[6-9]\d{9}$/',
->>>>>>> 92af5ef9a14886e21a86f7aa9630d068bf62f4d9
                 new UniqueMobileNumber('mobile_no', 'alter_mobile_no', 'phone_no', 'alternative_phone_no', '', 'The mobile number :input has already been taken.'),
             ],
             'alter_mobile_no' => [
                 'sometimes',
-<<<<<<< HEAD
-
-=======
                 'nullable',
                 'regex:/^[6-9]\d{9}$/',
->>>>>>> 92af5ef9a14886e21a86f7aa9630d068bf62f4d9
                 'different:mobile_no',
                 new UniqueMobileNumber('mobile_no', 'alter_mobile_no', 'phone_no', 'alternative_phone_no', '', 'The alternate mobile number :input has already been taken.'),
             ],
@@ -102,24 +94,15 @@ class CustomersController extends Controller
                 new UniqueEmailAddress('email', 'alternative_email_id', '', 'The alternate email address :input has already been taken.'),
             ],
             'phone_no' => [
-<<<<<<< HEAD
-                'required',
-
-=======
                 'sometimes',
                 'nullable',
                 'regex:/^[0-9]\d{10}$/',
->>>>>>> 92af5ef9a14886e21a86f7aa9630d068bf62f4d9
                 new UniqueMobileNumber('phone_no', 'alternative_phone_no', 'mobile_no', 'alter_mobile_no', '', 'The phone number :input has already been taken.'),
             ],
             'alternative_phone_no' => [
                 'sometimes',
-<<<<<<< HEAD
-
-=======
                 'nullable',
                 'regex:/^[0-9]\d{10}$/',
->>>>>>> 92af5ef9a14886e21a86f7aa9630d068bf62f4d9
                 'different:phone_no',
                 new UniqueMobileNumber('phone_no', 'alternative_phone_no', 'mobile_no', 'alter_mobile_no', '', 'The alternate phone number :input has already been taken.'),
             ],
@@ -436,16 +419,10 @@ class CustomersController extends Controller
                         $errors[] = $valid_email['message'];
                     }
 
-<<<<<<< HEAD
-                    $avalid_email = $this->valid_email($row[7], $row[6]);
-                    if ($avalid_email['status'] == false)
-                    {
-                        $errors[] = $avalid_email['message'];
-=======
                     $alternate_email = $this->alternate_email($row[7], $row[6]);
-                    if ($alternate_email['status'] == false) {
+                    if ($alternate_email['status'] == false)
+                    {
                         $errors[] = $alternate_email['message'];
->>>>>>> 92af5ef9a14886e21a86f7aa9630d068bf62f4d9
                     }
 
                     $phone_no = $this->phone_no($row[8], $row[4], $row[5]);
@@ -454,14 +431,9 @@ class CustomersController extends Controller
                         $errors[] = $phone_no['message'];
                     }
 
-<<<<<<< HEAD
-                    $aphone_no = $this->phone_no($row[9], $row[4], $row[5], $row[8]);
+                    $aphone_no = $this->alternate_phone_no($row[9], $row[4], $row[5], $row[8]);
                     if ($aphone_no['status'] == false)
                     {
-=======
-                    $aphone_no = $this->alternate_phone_no($row[9], $row[4], $row[5], $row[8]);
-                    if ($aphone_no['status'] == false) {
->>>>>>> 92af5ef9a14886e21a86f7aa9630d068bf62f4d9
                         $errors[] = $aphone_no['message'];
                     }
 

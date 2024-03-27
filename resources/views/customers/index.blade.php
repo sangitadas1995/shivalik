@@ -60,7 +60,6 @@
 
 {{-- CSV BULK UPLOAD MODAL --}}
 <div class="modal" tabindex="-1" id="bulk_upload_modal">
-<<<<<<< HEAD
   <div class="modal-background-blur">
 
     <div class="modal-dialog">
@@ -86,28 +85,6 @@
                 <div class="text-end">
                   <button type="button" class="btn primary-btn bulk_upload_btn">Upload</button>
                 </div>
-=======
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Modal title</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <form action="{{ route('customers.upload') }}" method="POST" id="customer_bulkUpload" enctype="multipart/form-data">
-          <div class="row">
-            <div class="col-md-12 mb-3">
-              <label class="form-label d-flex justify-content-between">
-                <span>Customer Csv Upload</span>
-                <a href="{{ asset('downloadable/customers-sample-csv.csv') }}" download="customers-sample-csv.csv">Download Sample</a>
-              </label>
-              <input type="file" class="form-control" name="csv_upload" id="csv_upload" accept=".csv" />
-              <small class="text-danger error_file"></small>
-            </div>
-            <div class="col-md-12">
-              <div class="text-end">
-                <button type="button" class="btn primary-btn bulk_upload_btn">Upload</button>
->>>>>>> 92af5ef9a14886e21a86f7aa9630d068bf62f4d9
               </div>
             </div>
           </form>
