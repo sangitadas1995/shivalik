@@ -13,7 +13,6 @@ return new class extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             $table->integer('manager_id')->nullable()->after('id');
-            $table->integer('designation')->nullable()->after('manager_id');
             $table->integer('func_area_id')->nullable()->after('designation');
             $table->string('mobile')->unique()->after('email');
             $table->string('address')->nullable()->after('mobile');

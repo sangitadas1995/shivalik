@@ -33,7 +33,6 @@
 
     <script src="{{ asset('js/jquery-3.6.3.min.js')}}"></script>
     <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
-
     <script src="{{ asset('js/popper.min.js') }}"></script>
     <script src="{{ asset('js/Chart.min.js') }}"></script>
     <script src="{{ asset('js/chart.js') }}"></script>

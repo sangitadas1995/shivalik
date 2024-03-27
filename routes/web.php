@@ -52,6 +52,12 @@ Route::middleware('auth')->group(function () {
 
         //Route::get('edit/{user_id?}', [UsersController::class, 'edit'])->name('user_edit');
         Route::get('/users/edit/{id}', 'UsersController@edit');
+
+        Route::post('getfunctionalarea', [UsersController::class, 'getfunctionalarea'])->name('getfunctionalarea');
+        Route::post('list-data', [UsersController::class, 'list_data'])->name('data');
+        Route::post('view', [UsersController::class, 'view'])->name('view');
+        Route::get('edit/{id}', [UsersController::class, 'edit'])->name('edit');
+        Route::post('update/{id}', [UsersController::class, 'update'])->name('update');
     });
 });
 

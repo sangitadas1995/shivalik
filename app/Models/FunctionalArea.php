@@ -10,4 +10,9 @@ class FunctionalArea extends Model
     use HasFactory;
 
     protected $guarded = ['id'];
+
+    public function users(): HasMany
+    {
+        return $this->hasMany(User::class, 'func_area_id', 'id');
+    }
 }

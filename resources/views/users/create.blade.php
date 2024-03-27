@@ -14,7 +14,7 @@
 </div>
   <div class="card add-new-location mt-2">
     <div class="card-body">
-      <form action="{{ route('users.store') }}" method="POST">
+      <form action="{{ route('users.store') }}" method="POST" id="user-add-form">
         @csrf
         <div class="row">
             <div class="col-md-12">
@@ -22,8 +22,9 @@
             </div>
           <div class="col-md-6">
             <div class="mb-3">
-              <label class="form-label">Name :</label>
+              <label class="form-label">Name <span class="text-danger">*</span>:</label>
               <input type="text" class="form-control" name="name" id="name"/>
+              <small class="text-danger error_name"></small>
             </div>
           </div>
           <div class="col-md-6">
@@ -69,15 +70,17 @@
 
           <div class="col-md-6">
             <div class="mb-3">
-              <label class="form-label">Email :</label>
+              <label class="form-label">Email <span class="text-danger">*</span>:</label>
               <input type="email" class="form-control" name="email" id="email"/>
+              <small class="text-danger error_email"></small>
             </div>
           </div>
 
           <div class="col-md-6">
             <div class="mb-3  d-flex flex-column">
-              <label class="form-label">Mobile :</label>
+              <label class="form-label">Mobile <span class="text-danger">*</span>:</label>
               <input type="text" class="form-control" name="mobile" id="mobile"/>
+              <small class="text-danger error_mobile"></small>
             </div>
           </div>
         </div>
@@ -90,7 +93,7 @@
         <div class="row">
           <div class="col-md-6">
             <div class="mb-3">
-              <label class="form-label">Country :</label>
+              <label class="form-label">Country <span class="text-danger">*</span>:</label>
               <select class="form-select" aria-label="Default select example" id="country" name="country_id">
                 <option value="">Select Country</option>
                 @if ($countries->isNotEmpty())
@@ -99,42 +102,48 @@
                     @endforeach
                 @endif
               </select>
+              <small class="text-danger error_country"></small>
             </div>
           </div>
           <div class="col-md-6">
             <div class="mb-3">
-              <label class="form-label">State :</label>
+              <label class="form-label">State <span class="text-danger">*</span>:</label>
               <select class="form-select" aria-label="Default select example" id="state" name="state_id">
                 <option value="">Select State</option>
               </select>
+              <small class="text-danger error_state"></small>
             </div>
           </div>
           <div class="col-md-6">
             <div class="mb-3">
-              <label class="form-label">City :</label>
+              <label class="form-label">City <span class="text-danger">*</span>:</label>
               <select class="form-select" aria-label="Default select example" id="city" name="city_id">
                 <option value="">Select City</option>
               </select>
+              <small class="text-danger error_city"></small>
             </div>
           </div>
           <div class="col-md-6">
             <div class="mb-3">
-              <label class="form-label">Pincode :</label>
+              <label class="form-label">Pincode <span class="text-danger">*</span>:</label>
               <input type="text" class="form-control" name="pincode" id="pincode"/>
+              <small class="text-danger error_pincode"></small>
             </div>
           </div>
 
 
           <div class="col-md-6">
             <div class="mb-3">
-              <label class="form-label">Password :</label>
+              <label class="form-label">Password <span class="text-danger">*</span>:</label>
               <input type="password" class="form-control" name="password" id="password"/>
+              <small class="text-danger error_password"></small>
             </div>
           </div>
           <div class="col-md-6">
             <div class="mb-3">
-              <label class="form-label">Confirm Password :</label>
+              <label class="form-label">Confirm Password <span class="text-danger">*</span>:</label>
               <input type="password" class="form-control" name="conf_password" id="conf_password"/>
+              <small class="text-danger error_conf_password"></small>
             </div>
           </div>
 
@@ -186,7 +195,7 @@ $(document).on("click","#addNewFuncArea",function(){
   var status = 0;
   if(functional_area_name == '')
   {
-    $('#functional_area_error').html('Please enter name');
+    $('#functional_area_error').html('Please enter new functional area');
     $("#functional_area_name").focus();
     status = 0;
     return false;
@@ -208,12 +217,41 @@ $(document).on("click","#addNewFuncArea",function(){
             var rest = response.status;
             if(rest == "success")
             {
-                window.location = "{{ route('users.add') }}";
+              //window.location = "{{ route('users.add') }}";
+              getFunctionalAreaName();
             }
         }
     });
   }
 });
+
+getFunctionalAreaName();
+
+function getFunctionalAreaName()
+{
+  $.ajax({
+    url: "{{ route('users.getfunctionalarea') }}",
+    type: 'post',
+    dataType: "json",
+    data: { _token: token },
+    beforeSend: function () {
+      $('select#state').find("option:eq(0)").html("Please wait..");
+    },
+    success: function (response) {
+      //console.log(response)
+      var options = '';
+      options += '<option value="">Select</option>';
+      for (var i = 0; i < response.gfa.length; i++) {
+        options += '<option value="' + response.gfa[i].id + '">' + response.gfa[i].name + '</option>';
+      }
+      $("#func_area_id").html(options);
+
+    },
+    error: function (xhr, ajaxOptions, thrownError) {
+      return Swal.fire('Error!', 'Something went wrong, Plese try again.', 'error');
+    }
+  });
+}
 
 
 
@@ -303,6 +341,119 @@ $(document).ready(function(){
         });
       }
     });
-  });
+
+
+$(document).on('submit','#user-add-form',function(e){
+  e.preventDefault();
+  var __e = $(this);
+  var name  = $('#name').val();
+  var email = $('#email').val().trim();
+  var mobile = $('#mobile').val().trim();
+  var country = $('#country').val();
+  var state   = $('#state').val();
+  var city   = $('#city').val();
+  var pincode  = $('#pincode').val().trim();
+  var password = $('#password').val();
+  var conf_password = $('#conf_password').val();
+  
+  if (!name.trim()) {
+    $('#name').focus();
+    return $('.error_name').html('Name field is required');
+  } else {
+      $('.error_name').html('');
+  }
+
+  if (!email.trim()) {
+    $('#email').focus();
+    return $('.error_email').html('Email field is required');
+  } else {
+    if(!IsEmail(email)) {
+      $('#email').focus();
+      return $('.error_email').html('Please enter a valid email');
+    } else {
+      $('.error_email').html('');
+    }
+  }
+
+  if (!mobile.trim()) {
+    $('#mobile').focus();
+    return $('.error_mobile').html('Mobile number field is required');
+  } else {
+      if (mobile.length > 10 || mobile.length < 10) {
+        $('#mobile-1').focus();
+        return $('.error_mobile').html('Mobile number must be 10 digits');
+      } else {
+        $('.error_mobile').html('');
+      }
+  }
+
+  if (!country.trim()) {
+    $('#country').focus();
+    return $('.error_country').html('Country field is required');
+  } else {
+      $('.error_country').html('');
+  }
+
+  if (!state.trim()) {
+    $('#state').focus();
+    return $('.error_state').html('State field is required');
+  } else {
+      $('.error_state').html('');
+  }
+
+  if (!city.trim()) {
+    $('#city').focus();
+    return $('.error_city').html('City field is required');
+  } else {
+      $('.error_city').html('');
+  }
+
+  if (!pincode.trim()) {
+    $('#pincode').focus();
+    return $('.error_pincode').html('Pincode field is required');
+  } else {
+    if (pincode.length > 6 || pincode.length < 6) {
+      $('#pincode').focus();
+      return $('.error_pincode').html('Pincode must be 6 digits');
+    } else {
+      $('.error_pincode').html('');
+    }
+  }
+
+  if (!password.trim()) {
+    $('#password').focus();
+    return $('.error_password').html('Password field is required');
+  } else {
+      $('.error_password').html('');
+  }
+
+  if (!conf_password.trim()) {
+    $('#conf_password').focus();
+    return $('.error_conf_password').html('Confirm password field is required');
+  } else {
+      $('.error_conf_password').html('');
+  }
+
+  if (password.trim()!=conf_password.trim()) {
+    $('#conf_password').focus();
+    return $('.error_conf_password').html('Password and Confirm password does not match');
+  } else {
+    $('.error_conf_password').html('');
+  }
+
+  __e[0].submit();
+});
+
+
+function IsEmail(email) {
+    var regex = /^([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+    if(!regex.test(email)) {
+        return false;
+    } else {
+        return true;
+    }
+} 
+
+  }); 
 </script>
 @endsection
