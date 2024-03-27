@@ -12,22 +12,16 @@ use App\Models\Designation;
 use App\Models\FunctionalArea;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
+use App\Rules\UserUniqueEmailAddress;
+use App\Rules\UserUniqueMobileNumber;
+use App\Rules\UserUniquePasswordCheck;
 use Hash;
 
 class UsersController extends Controller
 {
     public function index()
     {
-        // $user_list = User::select('users.id AS user_id','users.name','users.email','users.mobile','users.status AS user_status','countries.country_name','states.state_name','cities.city_name')
-        // ->leftJoin('countries', 'users.country_id', '=', 'countries.id')
-        // ->leftJoin('states', 'users.state_id', '=', 'states.id')
-        // ->leftJoin('cities', 'users.city_id', '=', 'cities.id')
-        // ->orderBy('users.name', 'ASC')->paginate(25)->withQueryString();
-        // //->get();
-
-        // return view('users.index', [
-        //     'user_list' => $user_list
-        // ]);
         return view('users.index');
     }
 
@@ -107,10 +101,6 @@ class UsersController extends Controller
             ])->orderBy('city_name', 'ASC')->get();
         }
 
-        //$countries = json_encode($countries);
-        //$countries = json_decode($countries,true);
-
-        //echo "<PRE>";print_r($countries);echo "</PRE>";exit;
         return view('users.edit', [
             'countries' => $countries,
             'user' => $user,
@@ -126,83 +116,57 @@ class UsersController extends Controller
     public function update(Request $request, $id)
     {
         $id = decrypt($id);
+
         $request->validate([
-            'company_name' => ['required', 'string'],
-            'gst_no' => ['sometimes', 'regex:/^([0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}[Z]{1}[0-9A-Z]{1})$/', Rule::unique('customers')->ignore($id)],
-            'contact_person' => ['required', 'string'],
-            'contact_person_designation' => ['sometimes', 'string'],
-            'mobile_no' => [
-                'required',
-                'regex:/^[6-9]\d{9}$/',
-                new UniqueMobileNumber('mobile_no', 'alter_mobile_no', 'phone_no', 'alternative_phone_no', $id, 'The mobile number :input has already been taken.'),
-            ],
-            'alter_mobile_no' => [
-                'sometimes',
-                'regex:/^[6-9]\d{9}$/',
-                'different:mobile_no',
-                new UniqueMobileNumber('mobile_no', 'alter_mobile_no', 'phone_no', 'alternative_phone_no', $id, 'The alternate mobile number :input has already been taken.'),
-            ],
+            'name' => ['required', 'string'],
             'email' => [
                 'required',
                 'email',
-                new UniqueEmailAddress('email', 'alternative_email_id', $id, 'The email address :input has already been taken.'),
+                new UserUniqueEmailAddress('email', $id, 'The email address :input has already been taken.'),
             ],
-            'alternative_email_id' => [
-                'sometimes',
-                'email',
-                'different:email',
-                new UniqueEmailAddress('email', 'alternative_email_id', $id, 'The alternate email address :input has already been taken.'),
-            ],
-            'phone_no' => [
+            'mobile' => [
                 'required',
-                'regex:/^[0-9]\d{9}$/',
-                new UniqueMobileNumber('phone_no', 'alternative_phone_no', 'mobile_no', 'alter_mobile_no', $id, 'The phone number :input has already been taken.'),
+                'regex:/^[6-9]\d{9}$/',
+                new UserUniqueMobileNumber('mobile', $id, 'The mobile number :input has already been taken.')
             ],
-            'alternative_phone_no' => [
-                'sometimes',
-                'regex:/^[0-9]\d{9}$/',
-                'different:phone_no',
-                new UniqueMobileNumber('phone_no', 'alternative_phone_no', 'mobile_no', 'alter_mobile_no', $id, 'The alternate phone number :input has already been taken.'),
-            ],
-            'customer_website' => ['sometimes', 'url', Rule::unique('customers')->ignore($id)],
-            'address' => ['required'],
             'country_id' => ['required', 'numeric'],
             'state_id' => ['required', 'numeric'],
             'city_id' => ['required', 'numeric'],
             'pincode' => ['required', 'regex:/^[1-9][0-9]{5}$/'],
-            'print_margin' => ['required', 'numeric'],
+            'password' => [
+                new UserUniquePasswordCheck($request->password, $request->conf_password, 'Password and Confirm Password does not match.')
+            ],
         ]);
 
         try {
+        $user = User::find($id);
+        $user->name = $request->name;
+        $user->manager_id = $request->manager_id;
+        $user->designation_id = $request->designation;
+        $user->func_area_id = $request->func_area_id;
+        $user->email = $request->email;
+        $user->mobile = $request->mobile;
+        $user->address = $request->address;
+        $user->country_id = $request->country_id;
+        $user->state_id = $request->state_id;
+        $user->city_id = $request->city_id;
+        $user->pincode = $request->pincode;
+        if($request->password!="")
+        {
+            $user->password = Hash::make($request->password);
+        }
 
-            $customer = Customer::find($id);
-            $customer->company_name = ucwords(strtolower($request->company_name));
-            $customer->gst_no = $request->gst_no;
-            $customer->contact_person = ucwords(strtolower($request->contact_person));
-            $customer->contact_person_designation = ucwords(strtolower($request->contact_person_designation));
-            $customer->mobile_no = $request->mobile_no;
-            $customer->alter_mobile_no = $request->alter_mobile_no;
-            $customer->email = $request->email;
-            $customer->alternative_email_id = $request->alternative_email_id;
-            $customer->phone_no = $request->phone_no;
-            $customer->alternative_phone_no = $request->alternative_phone_no;
-            $customer->customer_website = $request->customer_website;
-            $customer->address = $request->address;
-            $customer->country_id = $request->country_id;
-            $customer->state_id = $request->state_id;
-            $customer->city_id = $request->city_id;
-            $customer->pincode = $request->pincode;
-            $customer->print_margin = $request->print_margin;
-            $customer->update();
+        $update = $user->update();
 
-            return redirect()->route('customers.index')->with('success', 'The customer has been updated successfully.');
+        if ($update) {
+            return redirect()->route('users.index')->with('success', 'The user has been updated successfully.');
+        } else {
+            return redirect()->back()->with('fail', 'Failed to updated the user.');
+        }
         } catch (Exception $th) {
             return redirect()->back()->with('fail', trans('messages.server_error'));
         }
     }
-
-
-
 
     public function getStates(Request $request)
     {
@@ -230,57 +194,52 @@ class UsersController extends Controller
 
     public function store(Request $request)
     {
-        //echo "<PRE>";print_r($request->all());echo "</PRE>";exit;
         $request->validate([
             'name' => ['required', 'string'],
-            'email' => ['required', 'email'],
-            'mobile' => ['required', 'regex:/^[6-9]\d{9}$/'],
+            'email' => [
+                'required',
+                'email',
+                new UserUniqueEmailAddress('email', '', 'The email address :input has already been taken.'),
+            ],
+            'mobile' => [
+                'required',
+                'regex:/^[6-9]\d{9}$/',
+                new UserUniqueMobileNumber('mobile', '', 'The mobile number :input has already been taken.')
+            ],
             'country_id' => ['required', 'numeric'],
             'state_id' => ['required', 'numeric'],
             'city_id' => ['required', 'numeric'],
             'pincode' => ['required', 'regex:/^[1-9][0-9]{5}$/'],
             'password' => ['required'],
-            'conf_password' => ['required'],
+            'conf_password' => [
+                'required',
+                new UserUniquePasswordCheck($request->password, $request->conf_password, 'Password and Confirm Password does not match.')
+            ],
         ]);
 
-        if(User::where('email', '=', $request->email)->count() > 0) 
-        {
-            return redirect()->route('users.add')->with('fail', 'Email is already exist');
-        }
-        else if(User::where('mobile', '=', $request->mobile)->count() > 0) 
-        {
-            return redirect()->route('users.add')->with('fail', 'Mobile is already exist');
-        }
-        else if($request->password!=$request->conf_password) 
-        {
-            return redirect()->route('users.add')->with('fail', 'Password and Confirm Password are not same');
-        }
-        else
-        {
-            try {
-            $user = new User();
-            $user->name = $request->name;
-            $user->manager_id = $request->manager_id;
-            $user->designation_id = $request->designation;
-            $user->func_area_id = $request->func_area_id;
-            $user->email = $request->email;
-            $user->mobile = $request->mobile;
-            $user->address = $request->address;
-            $user->country_id = $request->country_id;
-            $user->state_id = $request->state_id;
-            $user->city_id = $request->city_id;
-            $user->pincode = $request->pincode;
-            $user->password = Hash::make($request->password);
-            $save = $user->save();
+        try {
+        $user = new User();
+        $user->name = $request->name;
+        $user->manager_id = $request->manager_id;
+        $user->designation_id = $request->designation;
+        $user->func_area_id = $request->func_area_id;
+        $user->email = $request->email;
+        $user->mobile = $request->mobile;
+        $user->address = $request->address;
+        $user->country_id = $request->country_id;
+        $user->state_id = $request->state_id;
+        $user->city_id = $request->city_id;
+        $user->pincode = $request->pincode;
+        $user->password = Hash::make($request->password);
+        $save = $user->save();
 
-            if ($save) {
-                return redirect()->route('users.index')->with('success', 'The user has been created successfully.');
-            } else {
-                return redirect()->back()->with('fail', 'Failed to create the user.');
-            }
-            } catch (Exception $th) {
-                return redirect()->back()->with('fail', trans('messages.server_error'));
-            }
+        if ($save) {
+            return redirect()->route('users.index')->with('success', 'The user has been created successfully.');
+        } else {
+            return redirect()->back()->with('fail', 'Failed to create the user.');
+        }
+        } catch (Exception $th) {
+            return redirect()->back()->with('fail', trans('messages.server_error'));
         }
     }
 
@@ -350,14 +309,27 @@ class UsersController extends Controller
         }
 
 
-        if (isset($request->order['0']['dir']) && ($request->order['0']['column'] != 0) && ($request->order['0']['column'] != 3)) {
-            $query->orderBy($column[$request->order['0']['column']], $request->order['0']['dir']);
+        // if (isset($request->order['0']['dir']) && ($request->order['0']['column'] != 0) && ($request->order['0']['column'] != 3)) {
+        //     $query->orderBy($column[$request->order['0']['column']], $request->order['0']['dir']);
+        // }
+        if (isset($request->order['0']['dir']) && ($request->order['0']['column'] != 0) && ($request->order['0']['column'] == 2)) {
+            $query->orderBy('name', $request->order['0']['dir']);
         }
-        if (isset($request->order['0']['dir']) && ($request->order['0']['column'] != 0) && ($request->order['0']['column'] == 3)) {
+        else if (isset($request->order['0']['dir']) && ($request->order['0']['column'] != 0) && ($request->order['0']['column'] == 3)) {
             $query->whereHas('manager', function ($q) use ($request) {
                 return $q->orderBy('name', $request->order['0']['dir']);
             });
-        } else {
+        }
+        else if (isset($request->order['0']['dir']) && ($request->order['0']['column'] != 0) && ($request->order['0']['column'] == 4)) {
+            $query->whereHas('designation', function ($q) use ($request) {
+                return $q->orderBy('name', $request->order['0']['dir']);
+            });
+        } 
+        else if (isset($request->order['0']['dir']) && ($request->order['0']['column'] != 0) && ($request->order['0']['column'] == 5)) {
+            $query->whereHas('functionalareas', function ($q) use ($request) {
+                return $q->orderBy('name', $request->order['0']['dir']);
+            });
+        }else {
             $query->orderBy('created_at', 'desc');
         }
 
@@ -368,9 +340,6 @@ class UsersController extends Controller
         }
 
         $result = $query->get();
-
-
-        //dd($result);
 
         $data = [];
         if ($result->isNotEmpty()) {
