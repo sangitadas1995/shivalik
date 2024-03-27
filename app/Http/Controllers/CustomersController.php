@@ -9,6 +9,7 @@ use App\Models\State;
 use App\Models\Country;
 use App\Models\Customer;
 use App\Traits\Validate;
+use App\Traits\Helper;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use App\Rules\UniqueEmailAddress;
@@ -19,7 +20,7 @@ use Illuminate\Support\Facades\Validator;
 
 class CustomersController extends Controller
 {
-    use Validate;
+    use Validate, Helper;
     public function index()
     {
         return view('customers.index');
@@ -33,8 +34,11 @@ class CustomersController extends Controller
             ->orderBy('country_name', 'asc')
             ->get();
 
+        $states = $this->getAllStates(101);
+
         return view('customers.create', [
-            'countries' => $countries
+            'countries' => $countries,
+            'states' => $states
         ]);
     }
 

@@ -108,6 +108,7 @@
               <label class="form-label">Customer Website :</label>
               <input type="text" class="form-control" name="customer_website" id="customer_website" value="{{ old('customer_website') }}" />
               <small class="text-danger error_customer_website"></small>
+              <small class="text-danger">e.g : (http://) OR https://www.code.com</small>
             </div>
           </div>
         </div>
@@ -121,7 +122,7 @@
             <div class="mb-3">
               <label class="form-label">Country<span class="text-danger">*</span> :</label>
               <select class="form-select" aria-label="Default select example" id="country" name="country_id">
-                <option value="">Select Country</option>
+                {{-- <option value="">Select Country</option> --}}
                 @if ($countries->isNotEmpty())
                     @foreach ($countries as $country)
                         <option value="{{ $country->id }}">{{ $country->country_name }}</option>
@@ -136,6 +137,11 @@
               <label class="form-label">State<span class="text-danger">*</span> :</label>
               <select class="form-select" aria-label="Default select example" id="state" name="state_id">
                 <option value="">Select State</option>
+                @if ($states->isNotEmpty())
+                  @foreach ($states as $state)
+                      <option value="{{ $state->id }}">{{ $state->state_name }}</option>
+                  @endforeach
+                @endif
               </select>
               <small class="text-danger error_state"></small>
             </div>
@@ -165,7 +171,7 @@
           </div>
         </div>
         <div class="text-end">
-          <button type="submit" class="btn grey-primary">Cancle</button>
+          <button type="button" class="btn grey-primary reset_add_customer">Cancel</button>
           <button type="submit" class="btn black-btn">Save</button>
         </div>
       </form>
@@ -381,7 +387,7 @@
         $('.error_phone_no').html('');
       }
 
-      if (phone_no === alter_mobile_no) {
+      if (phone_no && alter_mobile_no && (phone_no === alter_mobile_no)) {
         $('#mobile_code-3').focus();
         return $('.error_phone_no').html('Phone number should not be the same as alternate mobile number');
       } else {
@@ -473,6 +479,10 @@
 
       __e[0].submit();
     });
+
+    $(document).on('click','.reset_add_customer',function(e){
+      $('#customer-add-form')[0].reset();
+    });    
 
     function IsEmail(email) {
         var regex = /^([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;

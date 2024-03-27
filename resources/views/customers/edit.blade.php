@@ -122,7 +122,7 @@
             <div class="mb-3">
               <label class="form-label">Country<span class="text-danger">*</span> :</label>
               <select class="form-select" aria-label="Default select example" id="country" name="country_id">
-                <option value="">Select Country</option>
+                {{-- <option value="">Select Country</option> --}}
                 @if ($countries->isNotEmpty())
                     @foreach ($countries as $country)
                         <option value="{{ $country->id }}" {{ $country->id == $customer->country_id ? 'selected' : null }}>{{ $country->country_name }}</option>
@@ -176,7 +176,7 @@
           </div>
         </div>
         <div class="text-end">
-          <button type="submit" class="btn grey-primary">Cancle</button>
+          <a href="{{ route('customers.index') }}"><button type="button" class="btn grey-primary reset_edit_customer">Cancel</button></a>
           <button type="submit" class="btn black-btn">Save</button>
         </div>
       </form>
@@ -393,7 +393,7 @@
         $('.error_phone_no').html('');
       }
 
-      if (phone_no === alter_mobile_no) {
+      if (phone_no && alternative_phone_no && (phone_no === alter_mobile_no)) {
         $('#mobile_code-3').focus();
         return $('.error_phone_no').html('Phone number should not be the same as alternate mobile number');
       } else {

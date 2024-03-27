@@ -3,7 +3,7 @@
    
     <div class="popup-content ">
         <h4>
-            Customer ID: {{ $customer->id }}
+            {{ $customer->company_name }} (Company Id :{{ $customer->id }})
         </h4>
         <button class="close-popup-btn" data-bs-dismiss="modal" aria-label="Close">
             <svg width="9" height="9" viewBox="0 0 9 9" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -27,7 +27,7 @@
                             </div>
     
                             <!-- table row -->
-                            <div class="col-5 child-table-row">
+                            {{-- <div class="col-5 child-table-row">
                                 <div>
                                     Company Name
                                 </div>
@@ -37,7 +37,7 @@
                                     {{ $customer->company_name }}
     
                                 </div>
-                            </div>
+                            </div> --}}
                             <!-- table row end -->
                             <!-- table row -->
                             <div class="col-5 child-table-row">
@@ -65,31 +65,36 @@
                             </div>
                             <!-- table row end -->
                             <!-- table row -->
-                            <div class="col-5 child-table-row">
-                                <div>
-                                    Contact Person Designation
+                            @if (!empty($customer->contact_person_designation))
+                                <div class="col-5 child-table-row">
+                                    <div>
+                                        Contact Person Designation
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-7 child-table-row">
-                                <div>
-                                    {{ $customer->contact_person_designation }}
-    
+                                <div class="col-7 child-table-row">
+                                    <div>
+                                        {{ $customer->contact_person_designation }}
+        
+                                    </div>
                                 </div>
-                            </div>
+                            @endif
                             <!-- table row end -->
     
                             <!-- table row -->
-                            <div class="col-5 child-table-row">
-                                <div>
-                                    Customer Website
+                            @if (!empty($customer->customer_website))
+                                
+                                <div class="col-5 child-table-row">
+                                    <div>
+                                        Customer Website
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-7 child-table-row">
-                                <div>
-                                    {{ $customer->customer_website }}
-    
+                                <div class="col-7 child-table-row">
+                                    <div>
+                                        {{ $customer->customer_website }}
+        
+                                    </div>
                                 </div>
-                            </div>
+                            @endif
                             <!-- table row end -->
                         </div>
                     </div>
@@ -120,16 +125,18 @@
                             </div>
                             <!-- table row end -->
                             <!-- table row -->
-                            <div class="col-5 child-table-row">
-                                <div>
-                                    Alternative Mobile No.
+                            @if (!empty($customer->alter_mobile_no))
+                                <div class="col-5 child-table-row">
+                                    <div>
+                                        Alternative Mobile No.
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-7 child-table-row">
-                                <div>
-                                    +91 {{ $customer->alter_mobile_no }}
+                                <div class="col-7 child-table-row">
+                                    <div>
+                                        +91 {{ $customer->alter_mobile_no }}
+                                    </div>
                                 </div>
-                            </div>
+                            @endif
                             <!-- table row end -->
                             <!-- table row -->
                             <div class="col-5 child-table-row">
@@ -145,43 +152,49 @@
                             </div>
                             <!-- table row end -->
                             <!-- table row -->
-                            <div class="col-5 child-table-row">
-                                <div>
-                                    Alternative Email Id.
+                            @if (!empty($customer->alternative_email_id))
+                                <div class="col-5 child-table-row">
+                                    <div>
+                                        Alternative Email Id.
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-7 child-table-row">
-                                <div>
-                                    {{ $customer->alternative_email_id }}
+                                <div class="col-7 child-table-row">
+                                    <div>
+                                        {{ $customer->alternative_email_id }}
+                                    </div>
                                 </div>
-                            </div>
+                            @endif
                             <!-- table row end -->
     
                             <!-- table row -->
-                            <div class="col-5 child-table-row">
-                                <div>
-                                    Phone No.
+                            @if (!empty($customer->phone_no))
+                                <div class="col-5 child-table-row">
+                                    <div>
+                                        Phone No.
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-7 child-table-row">
-                                <div>
-                                   +91 {{ $customer->phone_no }}
-    
+                                <div class="col-7 child-table-row">
+                                    <div>
+                                    +91 {{ $customer->phone_no }}
+        
+                                    </div>
                                 </div>
-                            </div>
+                            @endif
                             <!-- table row end -->
                             <!-- table row -->
-                            <div class="col-5 child-table-row">
-                                <div>
-                                    Alternative Phone No.
+                            @if (!empty($customer->alternative_phone_no))
+                                <div class="col-5 child-table-row">
+                                    <div>
+                                        Alternative Phone No.
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-7 child-table-row">
-                                <div>
-                                   +91 {{ $customer->alternative_phone_no }}
-    
+                                <div class="col-7 child-table-row">
+                                    <div>
+                                    +91 {{ $customer->alternative_phone_no }}
+        
+                                    </div>
                                 </div>
-                            </div>
+                            @endif
                             <!-- table row end -->
                             <!-- table row -->
                             <div class="col-5 child-table-row">
@@ -243,6 +256,18 @@
                             <div class="col-7 child-table-row">
                                 <div>
                                     {{ $customer->pincode }}
+    
+                                </div>
+                            </div>
+
+                            <div class="col-5 child-table-row">
+                                <div>
+                                    Print Margin
+                                </div>
+                            </div>
+                            <div class="col-7 child-table-row">
+                                <div>
+                                    {{ $customer->print_margin }}%
     
                                 </div>
                             </div>
