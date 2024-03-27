@@ -1518,20 +1518,3 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 .modal-backdrop.show {
     display: none !important;
 }
-
-.modal-background-blur {
-    background: rgba(0, 0, 0, 0.7215686275);
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    .modal-dialog {
-        min-width: 800px;
-    }
-
-}
-
-input[type="file"]::file-selector-button {
-    height: 46px !important;
-}

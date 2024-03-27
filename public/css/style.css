@@ -1352,3 +1352,14 @@ input[type=date]::-webkit-calendar-picker-indicator {
 input[type=file]::file-selector-button {
   height: 46px !important;
 }/*# sourceMappingURL=style.css.map */
+
+.pass-inp-wrap{
+  position: relative
+}
+.pass-inp-wrap .password-toggle-icon{
+  position: absolute;
+    top: 50%;
+    right: 15px;
+    transform: translateY(-50%);
+    cursor: pointer;
+}

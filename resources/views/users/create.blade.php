@@ -8,7 +8,9 @@
 <div class="page-name">
     <div class="row justify-content-between align-items-center">
         <div class="col-md-4">
-        <h2><i class="ri-arrow-left-line"></i> Add User</h2>
+        <h2>
+          <a href="{{ route('users.index') }}"><i class="ri-arrow-left-line"></i></a> Add User
+        </h2>
         </div>
     </div>
 </div>
@@ -23,7 +25,7 @@
           <div class="col-md-6">
             <div class="mb-3">
               <label class="form-label">Name <span class="text-danger">*</span>:</label>
-              <input type="text" class="form-control" name="name" id="name"/>
+              <input type="text" class="form-control alphaChar" name="name" id="name"/>
               <small class="text-danger error_name"></small>
             </div>
           </div>
@@ -31,7 +33,7 @@
             <div class="mb-3">
               <label class="form-label">Manager :</label>
               <select class="form-select" aria-label="Default select example" id="manager_id" name="manager_id">
-              <option value="">Select Manager</option>
+              <option value="">Select</option>
               @if ($managers->isNotEmpty())
                     @foreach ($managers as $mn)
                         <option value="{{ $mn->id }}">{{ $mn->name }}</option>
@@ -71,7 +73,7 @@
           <div class="col-md-6">
             <div class="mb-3">
               <label class="form-label">Email <span class="text-danger">*</span>:</label>
-              <input type="email" class="form-control" name="email" id="email"/>
+              <input type="text" class="form-control" name="email" id="email"/>
               <small class="text-danger error_email"></small>
             </div>
           </div>
@@ -79,7 +81,7 @@
           <div class="col-md-6">
             <div class="mb-3  d-flex flex-column">
               <label class="form-label">Mobile <span class="text-danger">*</span>:</label>
-              <input type="text" class="form-control onlyNumber" name="mobile" id="mobile"/>
+              <input type="text" class="form-control mobileNumber" name="mobile" id="mobile"/>
               <small class="text-danger error_mobile"></small>
             </div>
           </div>
@@ -135,14 +137,20 @@
           <div class="col-md-6">
             <div class="mb-3">
               <label class="form-label">Password <span class="text-danger">*</span>:</label>
+              <div class="pass-inp-wrap">
               <input type="password" class="form-control" name="password" id="password"/>
+              <span class="password-toggle-icon"><i class="fas fa-eye"></i></span>
+              </div>
               <small class="text-danger error_password"></small>
             </div>
           </div>
           <div class="col-md-6">
             <div class="mb-3">
               <label class="form-label">Confirm Password <span class="text-danger">*</span>:</label>
+              <div class="pass-inp-wrap">
               <input type="password" class="form-control" name="conf_password" id="conf_password"/>
+              <span class="cnf-password-toggle-icon password-toggle-icon"><i class="fas fa-eye"></i></span>
+              </div>
               <small class="text-danger error_conf_password"></small>
             </div>
           </div>
@@ -150,7 +158,7 @@
 
         </div>
         <div class="text-end">
-          <button type="submit" class="btn grey-primary">Cancle</button>
+          <button type="reset" class="btn grey-primary">Cancle</button>
           <button type="submit" class="btn black-btn">Save & Continue</button>
         </div>
       </form>
@@ -173,9 +181,6 @@
             <label for="recipient-name" class="col-form-label">Functional Area:</label>
             <input type="text" class="form-control" id="functional_area_name" name="functional_area_name">
             <div class="text-danger" id="functional_area_error">
-            @if ($errors->has('paying_amount'))
-            <span class="text-danger">{{ $errors->first('paying_amount') }}</span>
-            @endif
             </div>
           </div>
       </div>
@@ -240,7 +245,7 @@ function getFunctionalAreaName()
     dataType: "json",
     data: { _token: token },
     beforeSend: function () {
-      $('select#state').find("option:eq(0)").html("Please wait..");
+      //$('select#state').find("option:eq(0)").html("Please wait..");
     },
     success: function (response) {
       //console.log(response)
@@ -261,6 +266,19 @@ function getFunctionalAreaName()
 
 
 $(document).ready(function(){
+    $(".alphaChar").on('input', function() {
+        var inputValue = $(this).val();
+        // Remove non-numeric characters
+        var sanitizedValue = inputValue.replace(/[^a-zA-Z0-9\s]/g, '');
+        $(this).val(sanitizedValue); // Update input field with sanitized value
+    });
+
+    $('#functional_area_name').on('input', function() {
+        this.value = this.value
+        .replace(/([0-9]|[-,.€~!@#$%^&*()_+=`{}\[\]\|\\:;'<>])/g, "");  //Replace numbers and special characters only
+    });
+
+
     $(document).on('click','.add_func_modal',function(e){
     e.preventDefault();
      $('#addFuncAreaMd').modal('show');
@@ -308,7 +326,7 @@ $(document).ready(function(){
           dataType: "json",
           data: { countryId },
           beforeSend: function () {
-            $('select#state').find("option:eq(0)").html("Please wait..");
+            //$('select#state').find("option:eq(0)").html("Please wait..");
           },
           success: function (response) {
             console.log(response)
@@ -467,6 +485,38 @@ function IsEmail(email) {
     }
 } 
 
-  }); 
+  });
+
+
+
+const passwordField = document.getElementById("password");
+const togglePassword = document.querySelector(".password-toggle-icon i");
+
+togglePassword.addEventListener("click", function () {
+  if (passwordField.type === "password") {
+    passwordField.type = "text";
+    togglePassword.classList.remove("fa-eye");
+    togglePassword.classList.add("fa-eye-slash");
+  } else {
+    passwordField.type = "password";
+    togglePassword.classList.remove("fa-eye-slash");
+    togglePassword.classList.add("fa-eye");
+  }
+});
+
+const cnf_passwordField = document.getElementById("conf_password");
+const cnf_togglePassword = document.querySelector(".cnf-password-toggle-icon i");
+
+cnf_togglePassword.addEventListener("click", function () {
+  if (cnf_passwordField.type === "password") {
+    cnf_passwordField.type = "text";
+    cnf_togglePassword.classList.remove("fa-eye");
+    cnf_togglePassword.classList.add("fa-eye-slash");
+  } else {
+    cnf_passwordField.type = "password";
+    cnf_togglePassword.classList.remove("fa-eye-slash");
+    cnf_togglePassword.classList.add("fa-eye");
+  }
+});
 </script>
 @endsection
