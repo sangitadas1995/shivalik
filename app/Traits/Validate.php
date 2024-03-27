@@ -178,7 +178,7 @@ trait Validate
                 }
             }
         } else {
-            return ['status' => false, 'message' => 'Alternate email field is required.'];
+            return ['status' => true];
         }
     }
 
