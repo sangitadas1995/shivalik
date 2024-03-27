@@ -180,17 +180,22 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <div class="form-group">
-            <label for="recipient-name" class="col-form-label">Functional Area:</label>
-            <input type="text" class="form-control" id="functional_area_name" name="functional_area_name">
-            <div class="text-danger" id="functional_area_error">
+          <div class="row">
+
+            <div class="form-group mb-3">
+              <label for="recipient-name" class="col-form-label">Functional Area:</label>
+              <input type="text" class="form-control" id="functional_area_name" name="functional_area_name">
+              <div class="text-danger" id="functional_area_error">
+              </div>
+            </div>
+            <div class="col-md-12">
+              <div class="text-end">
+                <button type="button" id='addNewFuncArea' class="btn primary-btn bulk_upload_btn">save</button>
+              </div>
             </div>
           </div>
         </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary clsmdfnarea" data-dismiss="modal">Close</button>
-          <button type="submit" class="btn btn-primary" id='addNewFuncArea'>Save</button>
-        </div>
+
       </div>
     </div>
   </div>
