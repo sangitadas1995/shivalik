@@ -72,7 +72,7 @@ class CustomersController extends Controller
             'mobile_no' => [
                 'required',
                 'regex:/^[6-9]\d{9}$/',
-                new UniqueMobileNumber('mobile_no', 'alter_mobile_no', 'phone_no', 'alternative_phone_no', '', 'The mobile number :input has already been taken.'),
+                new UniqueMobileNumber('mobile_no', 'alter_mobile_no', 'phone_no', 'alternative_phone_no', '', 'The mobile number :input has already been taken.')
             ],
             'alter_mobile_no' => [
                 'sometimes',
@@ -207,8 +207,8 @@ class CustomersController extends Controller
                 $subarray[] = $value->city?->city_name ?? null;
                 $subarray[] = 0;
                 $subarray[] = $value->print_margin . '%';
-                $subarray[] = '<a href="#" class="view_details" data-id ="' . $value->id . '"><img src="' . $view_icon . '" /></a>
-                                <a href="' . $editLink . '"><img src="' . $edit_icon . '" /></a>';
+                $subarray[] = '<a href="#" class="view_details" title="View Details" data-id ="' . $value->id . '"><img src="' . $view_icon . '" /></a>
+                                <a href="' . $editLink . '" title="Edit"><img src="' . $edit_icon . '" /></a>';
 
                 $data[] = $subarray;
             }
@@ -231,7 +231,7 @@ class CustomersController extends Controller
         $id = decrypt($id);
         $states = null;
         $cities = null;
-        $customer  = Customer::findOrFail($id);
+        $customer = Customer::findOrFail($id);
         $countries = Country::where([
             'status' => 'A'
         ])
@@ -464,46 +464,46 @@ class CustomersController extends Controller
                         $errorMessage = json_encode($errors);
                         $customer = new FailedCustomer();
                         $customer->company_name = !empty($row[0]) ? $row[0] : null;
-                        $customer->gst_no       = !empty($row[1]) ? $row[1] : null;
+                        $customer->gst_no = !empty($row[1]) ? $row[1] : null;
                         $customer->contact_person = !empty($row[2]) ? $row[2] : null;
                         $customer->contact_person_designation = !empty($row[3]) ? $row[3] : null;
                         $customer->mobile_no = !empty($row[4]) ? $row[4] : null;
                         $customer->alter_mobile_no = !empty($row[5]) ? $row[5] : null;
                         $customer->email = !empty($row[6]) ? $row[6] : null;
                         $customer->alternative_email_id = !empty($row[7]) ? $row[7] : null;
-                        $customer->phone_no =  !empty($row[8]) ? $row[8] : null;
+                        $customer->phone_no = !empty($row[8]) ? $row[8] : null;
                         $customer->alternative_phone_no = !empty($row[9]) ? $row[9] : null;
                         $customer->customer_website = !empty($row[10]) ? $row[10] : null;
                         $customer->address = !empty($row[11]) ? $row[11] : null;
-                        $customer->country_id = !empty($country) ?  $country->id : 101;
-                        $customer->state_id =  !empty($states) ? $states->id : null;
+                        $customer->country_id = !empty($country) ? $country->id : 101;
+                        $customer->state_id = !empty($states) ? $states->id : null;
                         $customer->city_id = !empty($city) ? $city->id : null;
                         $customer->pincode = !empty($row[15]) ? $row[15] : null;
-                        $customer->print_margin =  !empty($row[16]) ? $row[16] : null;
-                        $customer->row_id =  $key;
-                        $customer->reason =  $errorMessage;
+                        $customer->print_margin = !empty($row[16]) ? $row[16] : null;
+                        $customer->row_id = $key;
+                        $customer->reason = $errorMessage;
                         $customer->save();
 
                         $failed_counter++;
                     } else {
                         $customer = new Customer();
                         $customer->company_name = !empty($row[0]) ? ucwords(strtolower($row[0])) : null;
-                        $customer->gst_no       = !empty($row[1]) ? $row[1] : null;
+                        $customer->gst_no = !empty($row[1]) ? $row[1] : null;
                         $customer->contact_person = !empty($row[2]) ? ucwords(strtolower($row[2])) : null;
                         $customer->contact_person_designation = !empty($row[3]) ? ucwords(strtolower($row[3])) : null;
                         $customer->mobile_no = !empty($row[4]) ? $row[4] : null;
                         $customer->alter_mobile_no = !empty($row[5]) ? $row[5] : null;
                         $customer->email = !empty($row[6]) ? $row[6] : null;
                         $customer->alternative_email_id = !empty($row[7]) ? $row[7] : null;
-                        $customer->phone_no =  !empty($row[8]) ? $row[8] : null;
+                        $customer->phone_no = !empty($row[8]) ? $row[8] : null;
                         $customer->alternative_phone_no = !empty($row[9]) ? $row[9] : null;
                         $customer->customer_website = !empty($row[10]) ? $row[10] : null;
                         $customer->address = !empty($row[11]) ? $row[11] : null;
-                        $customer->country_id = !empty($country) ?  $country->id : 101;
-                        $customer->state_id =  !empty($states) ? $states->id : null;
+                        $customer->country_id = !empty($country) ? $country->id : 101;
+                        $customer->state_id = !empty($states) ? $states->id : null;
                         $customer->city_id = !empty($city) ? $city->id : null;
                         $customer->pincode = !empty($row[15]) ? $row[15] : null;
-                        $customer->print_margin =  !empty($row[16]) ? $row[16] : null;
+                        $customer->print_margin = !empty($row[16]) ? $row[16] : null;
                         $customer->collected_from = 'csv';
                         $customer->save();
 
