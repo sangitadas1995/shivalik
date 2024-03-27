@@ -232,8 +232,6 @@ a {
     padding: 0 15px;
     border-bottom: solid 1px #acacac;
     box-shadow: 0px 4px 6px 0px #00000029;
-    position: relative;
-    z-index: 5;
 }
 
 .page-breadcrumb .breadcrumb {
@@ -1701,4 +1699,16 @@ input[type="file"]::file-selector-button {
 
 .bg-lightGray {
     background: #E6ECF3;
+}
+
+.pass-inp-wrap {
+    position: relative;
+
+    .password-toggle-icon {
+        position: absolute;
+        top: 50%;
+        right: 15px;
+        transform: translateY(-50%);
+        cursor: pointer;
+    }
 }

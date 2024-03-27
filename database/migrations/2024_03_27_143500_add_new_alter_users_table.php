@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -13,7 +12,8 @@ return new class extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             $table->integer('manager_id')->nullable()->after('id');
-            $table->integer('func_area_id')->nullable()->after('designation');
+            $table->integer('func_area_id')->nullable()->after('manager_id');
+            $table->integer('designation_id')->nullable()->after('func_area_id');
             $table->string('mobile')->unique()->after('email');
             $table->string('address')->nullable()->after('mobile');
             $table->integer('country_id')->nullable()->after('address');
@@ -29,8 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            //
-        });
+        Schema::dropIfExists('users');
     }
 };
