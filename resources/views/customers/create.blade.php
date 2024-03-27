@@ -29,7 +29,7 @@
           </div>
           <div class="col-md-6">
             <div class="mb-3">
-              <label class="form-label">GST No. :</label>
+              <label class="form-label">GST No.<span class="text-danger">*</span> :</label>
               <input type="text" class="form-control alphaNumericChar uppercaseChar" name="gst_no" id="gst_no" value="{{ old('gst_no') }}" />
               <small class="text-danger error_gst_no"></small>
             </div>
@@ -89,7 +89,7 @@
             <div class=" row">
               <div class="col-md-6">
                 <div class="mb-3  d-flex flex-column">
-                  <label class="form-label">Phone No<span class="text-danger">*</span> :</label>
+                  <label class="form-label">Phone No :</label>
                   <input type="text" id="mobile_code-3" class="form-control onlyNumber" name="phone_no" value="{{ old('phone_no') }}" />
                   <small class="text-danger error_phone_no"></small>
                 </div>
@@ -269,7 +269,7 @@
       var alter_mobile_no               = $('#mobile_code-2').val().trim();
       var email                         = $('#email').val().trim();
       var alternative_email_id          = $('#alternative_email_id').val().trim();
-      var phone_no                      = $('#mobile_code-3').val();
+      var phone_no                      = $('#mobile_code-3').val().trim();
       var alternative_phone_no          = $('#mobile_code-4').val();
       var customer_website              = $('#customer_website').val().trim();
       var address                       = $('#address').val();
@@ -288,6 +288,13 @@
       }
 
       var regex_gst = /^([0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}[Z]{1}[0-9A-Z]{1})$/;
+      if (!gst_no) {
+        $('#gst_no').focus();
+        return $('.error_gst_no').html('GST number field is required.');
+      } else {
+        $('.error_gst_no').html('');
+      }
+
       if (gst_no && !regex_gst.test(gst_no)) {
         $('#gst_no').focus();
         return $('.error_gst_no').html('Please enter a valid GST number');
@@ -360,9 +367,9 @@
         $('.error_alternative_email_id').html('');
       }
 
-      if (!phone_no.trim()) {
+      if (phone_no && (phone_no.length > 11 || phone_no.length < 11)) {
         $('#mobile_code-3').focus();
-        return $('.error_phone_no').html('Phone number field is required');
+        return $('.error_phone_no').html('Phone number must be 11 digits');
       } else {
           $('.error_phone_no').html('');
       }
@@ -381,6 +388,13 @@
         $('.error_phone_no').html('');
       }
 
+      if (alternative_phone_no && (alternative_phone_no.length > 11 || alternative_phone_no.length < 11)) {
+        $('#mobile_code-4').focus();
+        return $('.error_alternative_phone_no').html('Alternate phone number must be 11 digits');
+      } else {
+          $('.error_alternative_phone_no').html('');
+      }
+
       if (mobile_no === alternative_phone_no) {
         $('#mobile_code-4').focus();
         return $('.error_alternative_phone_no').html('Alternate phone number should not be the same as mobile number');
@@ -388,14 +402,14 @@
         $('.error_alternative_phone_no').html('');
       }
 
-      if (alter_mobile_no === alternative_phone_no) {
+      if (alter_mobile_no && alternative_phone_no && (alter_mobile_no === alternative_phone_no)) {
         $('#mobile_code-4').focus();
         return $('.error_alternative_phone_no').html('Alternate phone number should not be the same as alternate mobile number');
       } else {
         $('.error_alternative_phone_no').html('');
       }
 
-      if (phone_no === alternative_phone_no) {
+      if (phone_no && alternative_phone_no && (phone_no === alternative_phone_no)) {
         $('#mobile_code-4').focus();
         return $('.error_alternative_phone_no').html('Alternate phone number should not be the same as phone number');
       } else {

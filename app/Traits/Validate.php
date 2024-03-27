@@ -9,7 +9,7 @@ trait Validate
     public function company_name($str)
     {
         if (!empty($str)) {
-            $valid = preg_match('/^[a-zA-Z]+$/', $str);
+            $valid = preg_match('/^[a-zA-Z ]+$/', $str);
             if ($valid) {
                 return ['status' => true];
             } else {
@@ -38,14 +38,14 @@ trait Validate
                 return ['status' => false, 'message' => 'GST number is invalid format.'];
             }
         } else {
-            return ['status' => true];
+            return ['status' => false, 'message' => 'GST number field is required.'];
         }
     }
 
     public function contact_person($str)
     {
         if (!empty($str)) {
-            $valid = preg_match('/^[a-zA-Z]+$/', $str);
+            $valid = preg_match('/^[a-zA-Z ]+$/', $str);
             if ($valid) {
                 return ['status' => true];
             } else {
@@ -59,7 +59,7 @@ trait Validate
     public function contact_person_designation($str)
     {
         if (!empty($str)) {
-            $valid = preg_match('/^[a-zA-Z]+$/', $str);
+            $valid = preg_match('/^[a-zA-Z ]+$/', $str);
             if ($valid) {
                 return ['status' => true];
             } else {
@@ -76,12 +76,12 @@ trait Validate
             $valid = preg_match('/^[6-9]\d{9}$/', $str);
             if ($valid) {
                 if (strlen($str) === 10) {
-                    $find_mob = Customer::where([
-                        'mobile_no' => $str,
-                        'alter_mobile_no' => $str,
-                        'phone_no' => $str,
-                        'alternative_phone_no' => $str
-                    ])
+                    $find_mob = Customer::where(function ($q) use ($str) {
+                        $q->where('mobile_no', $str)
+                            ->orWhere('alter_mobile_no', $str)
+                            ->orWhere('phone_no', $str)
+                            ->orWhere('alternative_phone_no', $str);
+                    })
                         ->first();
 
                     if (!empty($find_mob)) {
@@ -109,12 +109,12 @@ trait Validate
             } else {
                 if ($valid) {
                     if (strlen($str) === 10) {
-                        $find_mob = Customer::where([
-                            'mobile_no' => $str,
-                            'alter_mobile_no' => $str,
-                            'phone_no' => $str,
-                            'alternative_phone_no' => $str
-                        ])
+                        $find_mob = Customer::where(function ($q) use ($str) {
+                            $q->where('mobile_no', $str)
+                                ->orWhere('alter_mobile_no', $str)
+                                ->orWhere('phone_no', $str)
+                                ->orWhere('alternative_phone_no', $str);
+                        })
                             ->first();
 
                         if (!empty($find_mob)) {
@@ -139,9 +139,9 @@ trait Validate
         if (!empty($str)) {
             if (filter_var($str, FILTER_VALIDATE_EMAIL)) {
                 $find_email = Customer::where([
-                    'email' => $str,
-                    'alternative_email_id' => $str
+                    'email' => $str
                 ])
+                    ->orWhere('alternative_email_id', $str)
                     ->first();
                 if (!empty($find_email)) {
                     return ['status' => false, 'message' => 'Email is already exist.'];
@@ -164,9 +164,9 @@ trait Validate
             } else {
                 if (filter_var($str, FILTER_VALIDATE_EMAIL)) {
                     $find_email = Customer::where([
-                        'email' => $str,
-                        'alternative_email_id' => $str
+                        'email' => $str
                     ])
+                        ->orWhere('alternative_email_id', $str)
                         ->first();
                     if (!empty($find_email)) {
                         return ['status' => false, 'message' => 'Alternate email is already exist.'];
@@ -178,14 +178,14 @@ trait Validate
                 }
             }
         } else {
-            return ['status' => false, 'message' => 'Alternate email field is required.'];
+            return ['status' => true];
         }
     }
 
     public function phone_no($str, $mob_n, $amob_n)
     {
         if (!empty($str)) {
-            $valid = preg_match('/^[0-9]+$/', $str);
+            $valid = preg_match('/^[0-9]\d{10}$/', $str);
             if ($str === $mob_n) {
                 return ['status' => false, 'message' => 'Phone number should not be the same as mobile number.'];
             } else {
@@ -193,12 +193,12 @@ trait Validate
                     return ['status' => false, 'message' => 'Phone number should not be the same as alternate mobile number.'];
                 } else {
                     if ($valid) {
-                        $find_mob = Customer::where([
-                            'mobile_no' => $str,
-                            'alter_mobile_no' => $str,
-                            'phone_no' => $str,
-                            'alternative_phone_no' => $str
-                        ])
+                        $find_mob = Customer::where(function ($q) use ($str) {
+                            $q->where('mobile_no', $str)
+                                ->orWhere('alter_mobile_no', $str)
+                                ->orWhere('phone_no', $str)
+                                ->orWhere('alternative_phone_no', $str);
+                        })
                             ->first();
 
                         if (!empty($find_mob)) {
@@ -212,14 +212,14 @@ trait Validate
                 }
             }
         } else {
-            return ['status' => false, 'message' => 'Phone number field is required.'];
+            return ['status' => true];
         }
     }
 
     public function alternate_phone_no($str, $mob_n, $amob_n, $p_n)
     {
         if (!empty($str)) {
-            $valid = preg_match('/^[0-9]+$/', $str);
+            $valid = preg_match('/^[0-9]\d{10}$/', $str);
             if ($str === $mob_n) {
                 return ['status' => false, 'message' => 'Alternate phone number should not be the same as mobile number.'];
             } else {
@@ -230,12 +230,12 @@ trait Validate
                         return ['status' => false, 'message' => 'Alternate phone number should not be the same as phone number.'];
                     } else {
                         if ($valid) {
-                            $find_mob = Customer::where([
-                                'mobile_no' => $str,
-                                'alter_mobile_no' => $str,
-                                'phone_no' => $str,
-                                'alternative_phone_no' => $str
-                            ])
+                            $find_mob = Customer::where(function ($q) use ($str) {
+                                $q->where('mobile_no', $str)
+                                    ->orWhere('alter_mobile_no', $str)
+                                    ->orWhere('phone_no', $str)
+                                    ->orWhere('alternative_phone_no', $str);
+                            })
                                 ->first();
 
                             if (!empty($find_mob)) {
