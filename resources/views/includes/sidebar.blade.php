@@ -25,11 +25,11 @@
           <li>
             <a href="#"><span class="w-100"><img src="{{ asset('images/order-approve-outline-sharp.png') }}" />
                 <br />
-                Customer</span></a>
+                Order Management</span></a>
           </li>
           <li>
             <a href="#"><span class="w-100"><img src="{{ asset('images/ic_round-inventory.png') }}" /><br />
-                Customer</span></a>
+                Inventory Management</span></a>
           </li>
         </ul>
       </div>

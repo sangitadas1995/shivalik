@@ -22,13 +22,13 @@
               alt=""
           /></span>
           <span class="profile-text ms-2">
-            <b>Welcome to<br /></b> Henry Klein</span
+            <b>Welcome to<br /></b> Admin</span
           >
         </span>
       </a>
       <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-        <li><a class="dropdown-item" href="#">Action</a></li>
-        <li><a class="dropdown-item" href="#">Another action</a></li>
+        {{-- <li><a class="dropdown-item" href="#">Action</a></li>
+        <li><a class="dropdown-item" href="#">Another action</a></li> --}}
         <li>
             <form method="POST" action="{{ route('logout') }}">
                 @csrf
