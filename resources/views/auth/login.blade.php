@@ -28,6 +28,7 @@
               <div class="login-hd">
                 <h2 class="mb-5">Login</h2>
               </div>
+              @include('utils.alert')
               <form class="login-form" method="POST" action="{{ route('login') }}">
                 @csrf
                 <div class="mb-3">
@@ -55,7 +56,7 @@
                   />
                 </div>
                 <div class="btn-sec text-end">
-                  <button type="button" class="btn grey-primary">Cancle</button>
+                  <button type="button" class="btn grey-primary login-reset">Cancel</button>
                   <button type="submit" class="btn black-primary">Login</button>
                 </div>
               </form>
@@ -70,3 +71,10 @@
     <script src="{{ asset('js/popper.min.js') }}"></script>
   </body>
 </html>
+<script>
+  $(document).ready(function(){
+    $('.login-reset').click(function(){
+      $('.login-form')[0].reset();
+    });
+  });
+</script>
