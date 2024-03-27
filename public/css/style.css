@@ -1336,4 +1336,30 @@ input[type=date]::-webkit-calendar-picker-indicator {
 
 .modal-backdrop.show {
   display: none !important;
+}
+
+.modal-background-blur {
+  background: rgba(0, 0, 0, 0.7215686275);
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.modal-background-blur .modal-dialog {
+  min-width: 800px;
+}
+
+input[type=file]::file-selector-button {
+  height: 46px !important;
 }/*# sourceMappingURL=style.css.map */
+
+.pass-inp-wrap{
+  position: relative
+}
+.pass-inp-wrap .password-toggle-icon{
+  position: absolute;
+    top: 50%;
+    right: 15px;
+    transform: translateY(-50%);
+    cursor: pointer;
+}
