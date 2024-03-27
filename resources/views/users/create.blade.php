@@ -55,7 +55,7 @@
           </div>
           <div class="col-md-6">
             <div class="mb-3">
-              <label class="form-label">Functional Area <i class="fas fa-plus-circle blue-text" data-toggle="modal" data-target="#exampleModal"></i>:</label>
+              <label class="form-label">Functional Area <a href="#" class="add_func_modal"><i class="fas fa-plus-circle blue-text"></i></a>:</label>
               <select class="form-select" aria-label="Default select example" id="func_area_id" name="func_area_id">
               <option value="">Select</option>
               @if ($functional_area->isNotEmpty())
@@ -79,7 +79,7 @@
           <div class="col-md-6">
             <div class="mb-3  d-flex flex-column">
               <label class="form-label">Mobile <span class="text-danger">*</span>:</label>
-              <input type="text" class="form-control" name="mobile" id="mobile"/>
+              <input type="text" class="form-control onlyNumber" name="mobile" id="mobile"/>
               <small class="text-danger error_mobile"></small>
             </div>
           </div>
@@ -156,14 +156,15 @@
       </form>
     </div>
   </div>
-@endsection
 
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+
+
+<div class="modal fade" id="addFuncAreaMd" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="exampleModalLabel">Add New Functional Area</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <button type="button" class="close clsmdfnarea" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
@@ -179,12 +180,15 @@
           </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-secondary clsmdfnarea" data-dismiss="modal">Close</button>
         <button type="submit" class="btn btn-primary" id='addNewFuncArea'>Save</button>
       </div>
     </div>
   </div>
 </div>
+
+@endsection
+
 
 @section('scripts')
 <script>
@@ -219,6 +223,7 @@ $(document).on("click","#addNewFuncArea",function(){
             {
               //window.location = "{{ route('users.add') }}";
               getFunctionalAreaName();
+              $('#addFuncAreaMd').modal('hide');
             }
         }
     });
@@ -256,7 +261,15 @@ function getFunctionalAreaName()
 
 
 $(document).ready(function(){
-   $("#myModal").modal();
+    $(document).on('click','.add_func_modal',function(e){
+    e.preventDefault();
+     $('#addFuncAreaMd').modal('show');
+  });
+
+  $(document).on('click','.clsmdfnarea',function(e){
+    e.preventDefault();
+     $('#addFuncAreaMd').modal('hide');
+  });
 });
 
   $(document).ready(function() {
