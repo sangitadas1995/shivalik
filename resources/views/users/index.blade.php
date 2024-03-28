@@ -30,6 +30,7 @@
             <tr>
             <th>Row ID</th>
             <th style="text-align: center">ID</th>
+            <th style="text-align: center">Date</th>
             <th style="text-align: center">Name</th>
             <th style="text-align: center">Manager</th>
             <th style="text-align: center">Designation</th>
@@ -111,7 +112,7 @@
               visible: false,
             },
             {
-              target: [1,6],
+              target: [1,7],
               searchable: false,
               sortable: false,
             },

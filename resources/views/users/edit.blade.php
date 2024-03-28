@@ -30,7 +30,7 @@
         </div>
         <div class="col-md-6">
           <div class="mb-3">
-            <label class="form-label">Manager :</label>
+            <label class="form-label">Manager <span class="text-danger">*</span>:</label>
             <select class="form-select" aria-label="Default select example" id="manager_id" name="manager_id">
               <option value="">Select Manager</option>
               @if ($managers->isNotEmpty())
@@ -40,6 +40,7 @@
               @endforeach
               @endif
             </select>
+            <small class="text-danger error_manager"></small>
           </div>
         </div>
         <div class="col-md-6">
@@ -58,8 +59,8 @@
         </div>
         <div class="col-md-6">
           <div class="mb-3">
-            <label class="form-label">Functional Area <a href="#" class="add_func_modal"><i
-                  class="fas fa-plus-circle blue-text"></i></a>:</label>
+            <label class="form-label">Functional Area <span class="text-danger">*</span><a href="#"
+                class="add_func_modal"><i class="fas fa-plus-circle blue-text"></i></a>:</label>
             <select class="form-select" aria-label="Default select example" id="func_area_id" name="func_area_id">
               <option value="">Select</option>
               @if ($functional_area->isNotEmpty())
@@ -69,6 +70,7 @@
               @endforeach
               @endif
             </select>
+            <small class="text-danger error_func_area"></small>
           </div>
         </div>
 
@@ -171,7 +173,7 @@
         </div>
       </div>
       <div class="text-end">
-        <button type="reset" class="btn grey-primary">Cancle</button>
+        <button type="reset" class="btn grey-primary">Cancel</button>
         <button type="submit" class="btn black-btn">Save & Continue</button>
       </div>
     </form>
@@ -186,9 +188,6 @@
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="exampleModalLabel">Add New Functional Area</h5>
-          <!-- <button type="button" class="close clsmdfnarea" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button> -->
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
@@ -207,10 +206,7 @@
             </div>
           </div>
         </div>
-        <!-- <div class="modal-footer">
-          <button type="button" class="btn btn-secondary clsmdfnarea" data-dismiss="modal">Close</button>
-          <button type="submit" class="btn btn-primary" id='addNewFuncArea'>Save</button>
-        </div> -->
+
       </div>
     </div>
   </div>
@@ -259,13 +255,15 @@
     $(".alphaChar").on('input', function () {
       var inputValue = $(this).val();
       // Remove non-numeric characters
-      var sanitizedValue = inputValue.replace(/[^a-zA-Z0-9\s]/g, '');
+      var sanitizedValue = inputValue.replace(/[^a-zA-Z\s]/g, '');
       $(this).val(sanitizedValue); // Update input field with sanitized value
     });
 
     $('#functional_area_name').on('input', function () {
-      this.value = this.value
-        .replace(/([0-9]|[-,.€~!@#$%^&*()_+=`{}\[\]\|\\:;'<>])/g, "");  //Replace numbers and special characters only
+      var inputValue = $(this).val();
+      // Remove non-numeric characters
+      var sanitizedValue = inputValue.replace(/[^a-zA-Z\s]/g, '');
+      $(this).val(sanitizedValue); // Update input field with sanitized value
     });
 
     $(document).on('click', '.add_func_modal', function (e) {
@@ -368,6 +366,8 @@
       e.preventDefault();
       var __e = $(this);
       var name = $('#name').val();
+      var manager_id = $('#manager_id').val();
+      var func_area_id = $('#func_area_id').val();
       var email = $('#email').val().trim();
       var mobile = $('#mobile').val().trim();
       var country = $('#country').val();
@@ -382,6 +382,20 @@
         return $('.error_name').html('Name field is required');
       } else {
         $('.error_name').html('');
+      }
+
+      if (!manager_id.trim()) {
+        $('#manager_id').focus();
+        return $('.error_manager').html('Manager field is required');
+      } else {
+        $('.error_manager').html('');
+      }
+
+      if (!func_area_id.trim()) {
+        $('#func_area_id').focus();
+        return $('.error_func_area').html('Functional area field is required');
+      } else {
+        $('.error_func_area').html('');
       }
 
       if (!email.trim()) {
@@ -441,12 +455,27 @@
         }
       }
 
-      // if (password.trim()!=conf_password.trim()) {
-      //   $('#conf_password').focus();
-      //   return $('.error_conf_password').html('Password and Confirm password does not match');
-      // } else {
-      //   $('.error_conf_password').html('');
-      // }
+
+      if (password.trim() != "" && password.length < 8) {
+        $('#password').focus();
+        return $('.error_password').html('Password should be minimum at least 8 character');
+      } else {
+        $('.error_password').html('');
+      }
+
+      if (conf_password.trim() != "" && conf_password.length < 8) {
+        $('#conf_password').focus();
+        return $('.error_conf_password').html('Confirm password should be minimum at least 8 character');
+      } else {
+        $('.error_conf_password').html('');
+      }
+
+      if (password.trim() != conf_password.trim()) {
+        $('#conf_password').focus();
+        return $('.error_conf_password').html('Password and Confirm password does not match');
+      } else {
+        $('.error_conf_password').html('');
+      }
 
       __e[0].submit();
     });
