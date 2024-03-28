@@ -252,8 +252,10 @@ $(document).ready(function(){
   });
 
   $('#functional_area_name').on('input', function() {
-    this.value = this.value
-    .replace(/([0-9]|[-,.€~!@#$%^&*()_+=`{}\[\]\|\\:;'<>])/g, "");  //Replace numbers and special characters only
+    var inputValue = $(this).val();
+    // Remove non-numeric characters
+    var sanitizedValue = inputValue.replace(/[^a-zA-Z\s]/g, '');
+    $(this).val(sanitizedValue); // Update input field with sanitized value
   });
 
     $(document).on('click','.add_func_modal',function(e){
