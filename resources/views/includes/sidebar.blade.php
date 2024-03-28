@@ -23,7 +23,7 @@
                 Customers</span></a>
           </li>
           <li>
-            <a href="#"><span class="w-100"><img src="{{ asset('images/order-approve-outline-sharp.png') }}" />
+            <a href="{{ route('orders.index') }}"><span class="w-100"><img src="{{ asset('images/order-approve-outline-sharp.png') }}" />
                 <br />
                 Order Management</span></a>
           </li>

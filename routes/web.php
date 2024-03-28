@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CustomersController;
+use App\Http\Controllers\OrdersController;
 use App\Http\Controllers\UsersController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\VendorsController;
@@ -57,7 +58,7 @@ Route::middleware('auth')->group(function () {
         Route::post('update/{id}', [UsersController::class, 'update'])->name('update');
     });
 
-        Route::prefix('vendors')->name('vendors.')->group(function () {
+    Route::prefix('vendors')->name('vendors.')->group(function () {
         Route::get('/', [VendorsController::class, 'index'])->name('index');
         Route::get('add', [VendorsController::class, 'create'])->name('add');
         Route::post('store', [VendorsController::class, 'store'])->name('store');
@@ -70,6 +71,11 @@ Route::middleware('auth')->group(function () {
         Route::post('view', [VendorsController::class, 'view'])->name('view');
         Route::get('edit/{id}', [VendorsController::class, 'edit'])->name('edit');
         Route::post('update/{id}', [VendorsController::class, 'update'])->name('update');
+    });
+
+    Route::prefix('orders')->name('orders.')->group(function () {
+        Route::get('/', [OrdersController::class, 'index'])->name('index');
+        Route::get('add', [OrdersController::class, 'create'])->name('add');
     });
 });
 
