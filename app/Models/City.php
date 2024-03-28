@@ -21,4 +21,9 @@ class City extends Model
     {
         return $this->hasMany(User::class, 'city_id', 'id');
     }
+
+    public function vendors(): HasMany
+    {
+        return $this->hasMany(Vendor::class, 'city_id', 'id');
+    }
 }

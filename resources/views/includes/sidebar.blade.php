@@ -35,6 +35,14 @@
       </div>
       <nav class="menu open-current-submenu">
         <ul>
+          <li class="menu-item">
+            <a href="{{ route('vendors.index') }}">
+              <span class="menu-icon">
+                <i class="ri-layout-3-fill"></i>
+              </span>
+              <span class="menu-title">Vendor List</span>
+            </a>
+          </li>
           <!-- sub-menu -->
           <li class="menu-item sub-menu">
             <a href="#">
