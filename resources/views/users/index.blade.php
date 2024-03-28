@@ -112,7 +112,7 @@
               visible: false,
             },
             {
-              target: [1,6],
+              target: [1,7],
               searchable: false,
               sortable: false,
             },
