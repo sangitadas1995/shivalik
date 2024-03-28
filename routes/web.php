@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CustomersController;
+use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\OrdersController;
 use App\Http\Controllers\UsersController;
 use App\Http\Controllers\ProfileController;
@@ -77,6 +78,14 @@ Route::middleware('auth')->group(function () {
         Route::get('/', [OrdersController::class, 'index'])->name('index');
         Route::get('add', [OrdersController::class, 'create'])->name('add');
         Route::get('view', [OrdersController::class, 'view'])->name('view');
+    });
+
+    Route::prefix('inventory')->name('inventory.')->group(function () {
+        Route::get('/', [InventoryController::class, 'index'])->name('index');
+
+        Route::prefix('warehouse')->name('warehouse.')->group(function () {
+            Route::get('add', [InventoryController::class, 'create'])->name('add');
+        });
     });
 });
 

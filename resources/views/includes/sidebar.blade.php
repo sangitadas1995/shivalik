@@ -28,7 +28,7 @@
                 Order Management</span></a>
           </li>
           <li>
-            <a href="#"><span class="w-100"><img src="{{ asset('images/ic_round-inventory.png') }}" /><br />
+            <a href="{{ route('inventory.index') }}"><span class="w-100"><img src="{{ asset('images/ic_round-inventory.png') }}" /><br />
                 Inventory Management</span></a>
           </li>
         </ul>

@@ -79,8 +79,8 @@
                    <td style="text-align: center">Manager-1</td>
                    <td style="text-align: center">Manager-1</td>
                    <td style="text-align: center">
-                       <a href="{{ route('orders.view') }}"><img src="{{ asset('images/lucide_view.png') }}" /></a>
-                       <a href="#"><img src="{{ asset('images/akar-icons_edit.png') }}" /></a>
+                       <a href="{{ route('orders.view') }}" title="view"><img src="{{ asset('images/lucide_view.png') }}" /></a>
+                       <a href="#" title="edit"><img src="{{ asset('images/akar-icons_edit.png') }}" /></a>
                    </td>
                </tr>
            </tbody>
