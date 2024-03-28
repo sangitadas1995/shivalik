@@ -79,7 +79,7 @@
                    <td style="text-align: center">Manager-1</td>
                    <td style="text-align: center">Manager-1</td>
                    <td style="text-align: center">
-                       <a href="#"><img src="images/lucide_view.png" /></a>
+                       <a href="{{ route('orders.view') }}"><img src="images/lucide_view.png" /></a>
                        <a href="#"><img src="images/akar-icons_edit.png" /></a>
                    </td>
                </tr>

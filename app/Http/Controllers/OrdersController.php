@@ -10,8 +10,14 @@ class OrdersController extends Controller
     {
         return view('orders.index');
     }
+
     public function create()
     {
         return view('orders.add');
+    }
+
+    public function view()
+    {
+        return view('orders.details');
     }
 }

@@ -76,6 +76,7 @@ Route::middleware('auth')->group(function () {
     Route::prefix('orders')->name('orders.')->group(function () {
         Route::get('/', [OrdersController::class, 'index'])->name('index');
         Route::get('add', [OrdersController::class, 'create'])->name('add');
+        Route::get('view', [OrdersController::class, 'view'])->name('view');
     });
 });
 
