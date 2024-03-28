@@ -190,7 +190,7 @@
             </div>
             <div class="col-md-12">
               <div class="text-end">
-                <button type="button" id='addNewFuncArea' class="btn primary-btn bulk_upload_btn">save</button>
+                <button type="button" id='addNewFuncArea' class="btn primary-btn bulk_upload_btn">Save</button>
               </div>
             </div>
           </div>
