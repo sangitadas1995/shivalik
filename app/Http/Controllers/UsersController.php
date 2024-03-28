@@ -33,6 +33,11 @@ class UsersController extends Controller
         ->orderBy('country_name', 'asc')
         ->get();
 
+        $states = State::where([
+                'country_id' => 101,
+                'status' => 'A',
+            ])->orderBy('state_name', 'ASC')->get();
+
         $managers = Manager::where([
             'status' => 'A'
         ])
@@ -53,6 +58,7 @@ class UsersController extends Controller
 
         return view('users.create', [
             'countries' => $countries,
+            'states' => $states,
             'managers' => $managers,
             'designations' => $designations,
             'functional_area' => $functional_area
@@ -210,12 +216,14 @@ class UsersController extends Controller
             'state_id' => ['required', 'numeric'],
             'city_id' => ['required', 'numeric'],
             'pincode' => ['required', 'regex:/^[1-9][0-9]{5}$/'],
-            'password' => ['required'],
+            'password' => ['required', 'min:8'],
             'conf_password' => [
                 'required',
+                'min:8',
                 new UserUniquePasswordCheck($request->password, $request->conf_password, 'Password and Confirm Password does not match.')
             ],
         ]);
+
 
         try {
         $user = new User();
@@ -312,20 +320,20 @@ class UsersController extends Controller
         // if (isset($request->order['0']['dir']) && ($request->order['0']['column'] != 0) && ($request->order['0']['column'] != 3)) {
         //     $query->orderBy($column[$request->order['0']['column']], $request->order['0']['dir']);
         // }
-        if (isset($request->order['0']['dir']) && ($request->order['0']['column'] != 0) && ($request->order['0']['column'] == 2)) {
+        if (isset($request->order['0']['dir']) && ($request->order['0']['column'] != 0) && ($request->order['0']['column'] == 3)) {
             $query->orderBy('name', $request->order['0']['dir']);
         }
-        else if (isset($request->order['0']['dir']) && ($request->order['0']['column'] != 0) && ($request->order['0']['column'] == 3)) {
+        else if (isset($request->order['0']['dir']) && ($request->order['0']['column'] != 0) && ($request->order['0']['column'] == 4)) {
             $query->whereHas('manager', function ($q) use ($request) {
                 return $q->orderBy('name', $request->order['0']['dir']);
             });
         }
-        else if (isset($request->order['0']['dir']) && ($request->order['0']['column'] != 0) && ($request->order['0']['column'] == 4)) {
+        else if (isset($request->order['0']['dir']) && ($request->order['0']['column'] != 0) && ($request->order['0']['column'] == 5)) {
             $query->whereHas('designation', function ($q) use ($request) {
                 return $q->orderBy('name', $request->order['0']['dir']);
             });
         } 
-        else if (isset($request->order['0']['dir']) && ($request->order['0']['column'] != 0) && ($request->order['0']['column'] == 5)) {
+        else if (isset($request->order['0']['dir']) && ($request->order['0']['column'] != 0) && ($request->order['0']['column'] == 6)) {
             $query->whereHas('functionalareas', function ($q) use ($request) {
                 return $q->orderBy('name', $request->order['0']['dir']);
             });
@@ -351,6 +359,7 @@ class UsersController extends Controller
                 $subarray = [];
                 $subarray[] = $value->id;
                 $subarray[] = ++$key . '.';
+                $subarray[] = Carbon::parse($value->created_at)->format('d/m/Y h:i A');
                 $subarray[] = $value->name;
                 $subarray[] = $value->manager?->name ?? null;
                 $subarray[] = $value->designation?->name ?? null;

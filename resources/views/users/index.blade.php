@@ -30,6 +30,7 @@
             <tr>
             <th>Row ID</th>
             <th style="text-align: center">ID</th>
+            <th style="text-align: center">Date</th>
             <th style="text-align: center">Name</th>
             <th style="text-align: center">Manager</th>
             <th style="text-align: center">Designation</th>

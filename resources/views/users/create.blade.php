@@ -25,21 +25,26 @@
         <div class="col-md-6">
           <div class="mb-3">
             <label class="form-label">Name <span class="text-danger">*</span>:</label>
-            <input type="text" class="form-control alphaChar" name="name" id="name" />
+            <input type="text" class="form-control alphaChar" name="name" id="name" value="{{ old('name') }}"/>
             <small class="text-danger error_name"></small>
           </div>
         </div>
         <div class="col-md-6">
           <div class="mb-3">
-            <label class="form-label">Manager :</label>
+            <label class="form-label">Manager <span class="text-danger">*</span>:</label>
             <select class="form-select" aria-label="Default select example" id="manager_id" name="manager_id">
               <option value="">Select</option>
               @if ($managers->isNotEmpty())
               @foreach ($managers as $mn)
+              @if (old('manager_id') == $mn->id)
+              <option value="{{ $mn->id }}" selected>{{ $mn->name }}</option>
+              @else
               <option value="{{ $mn->id }}">{{ $mn->name }}</option>
+              @endif
               @endforeach
               @endif
             </select>
+            <small class="text-danger error_manager"></small>
           </div>
         </div>
         <div class="col-md-6">
@@ -49,7 +54,11 @@
               <option value="">Select</option>
               @if ($designations->isNotEmpty())
               @foreach ($designations as $dg)
+              @if (old('designation') == $dg->id)
+              <option value="{{ $dg->id }}" selected>{{ $dg->name }}</option>
+              @else
               <option value="{{ $dg->id }}">{{ $dg->name }}</option>
+              @endif
               @endforeach
               @endif
             </select>
@@ -57,16 +66,21 @@
         </div>
         <div class="col-md-6">
           <div class="mb-3">
-            <label class="form-label">Functional Area <a href="#" class="add_func_modal"><i
+            <label class="form-label">Functional Area <span class="text-danger">*</span>:</label><a href="#" class="add_func_modal"><i
                   class="fas fa-plus-circle blue-text"></i></a>:</label>
             <select class="form-select" aria-label="Default select example" id="func_area_id" name="func_area_id">
               <option value="">Select</option>
               @if ($functional_area->isNotEmpty())
               @foreach ($functional_area as $fa)
+              @if (old('func_area_id') == $fa->id)
+              <option value="{{ $fa->id }}" selected>{{ $fa->name }}</option>
+              @else
               <option value="{{ $fa->id }}">{{ $fa->name }}</option>
+              @endif
               @endforeach
               @endif
             </select>
+            <small class="text-danger error_func_area"></small>
           </div>
         </div>
 
@@ -74,7 +88,7 @@
         <div class="col-md-6">
           <div class="mb-3">
             <label class="form-label">Email <span class="text-danger">*</span>:</label>
-            <input type="text" class="form-control" name="email" id="email" />
+            <input type="text" class="form-control" name="email" id="email" value="{{ old('email') }}"/>
             <small class="text-danger error_email"></small>
           </div>
         </div>
@@ -82,7 +96,7 @@
         <div class="col-md-6">
           <div class="mb-3  d-flex flex-column">
             <label class="form-label">Mobile <span class="text-danger">*</span>:</label>
-            <input type="text" class="form-control mobileNumber" name="mobile" id="mobile" />
+            <input type="text" class="form-control mobileNumber" name="mobile" id="mobile" value="{{ old('mobile') }}"/>
             <small class="text-danger error_mobile"></small>
           </div>
         </div>
@@ -91,14 +105,14 @@
 
       <div class="mb-3">
         <label class="form-label">Address :</label>
-        <input type="text" class="form-control" name="address" id="address" />
+        <input type="text" class="form-control" name="address" id="address" value="{{ old('address') }}"/>
       </div>
       <div class="row">
         <div class="col-md-6">
           <div class="mb-3">
             <label class="form-label">Country <span class="text-danger">*</span>:</label>
             <select class="form-select" aria-label="Default select example" id="country" name="country_id">
-              <option value="">Select Country</option>
+              {{-- <option value="">Select Country</option> --}}
               @if ($countries->isNotEmpty())
               @foreach ($countries as $country)
               <option value="{{ $country->id }}">{{ $country->country_name }}</option>
@@ -113,6 +127,15 @@
             <label class="form-label">State <span class="text-danger">*</span>:</label>
             <select class="form-select" aria-label="Default select example" id="state" name="state_id">
               <option value="">Select State</option>
+                @if ($states->isNotEmpty())
+                  @foreach ($states as $state)
+                  @if (old('state_id') == $state->id)
+                  <option value="{{ $state->id }}" selected>{{ $state->state_name }}</option>
+                  @else
+                  <option value="{{ $state->id }}">{{ $state->state_name }}</option>
+                  @endif
+                  @endforeach
+                @endif
             </select>
             <small class="text-danger error_state"></small>
           </div>
@@ -129,7 +152,7 @@
         <div class="col-md-6">
           <div class="mb-3">
             <label class="form-label">Pincode <span class="text-danger">*</span>:</label>
-            <input type="text" class="form-control" name="pincode" id="pincode" />
+            <input type="text" class="form-control" name="pincode" id="pincode" value="{{ old('pincode') }}" />
             <small class="text-danger error_pincode"></small>
           </div>
         </div>
@@ -139,7 +162,7 @@
           <div class="mb-3">
             <label class="form-label">Password <span class="text-danger">*</span>:</label>
             <div class="pass-inp-wrap">
-              <input type="password" class="form-control" name="password" id="password" />
+              <input type="password" class="form-control" name="password" id="password"/>
               <span class="password-toggle-icon"><i class="fas fa-eye"></i></span>
             </div>
             <small class="text-danger error_password"></small>
@@ -149,17 +172,16 @@
           <div class="mb-3">
             <label class="form-label">Confirm Password <span class="text-danger">*</span>:</label>
             <div class="pass-inp-wrap">
-              <input type="password" class="form-control" name="conf_password" id="conf_password" />
+              <input type="password" class="form-control" name="conf_password" id="conf_password"/>
               <span class="cnf-password-toggle-icon password-toggle-icon"><i class="fas fa-eye"></i></span>
             </div>
             <small class="text-danger error_conf_password"></small>
           </div>
         </div>
 
-
       </div>
       <div class="text-end">
-        <button type="reset" class="btn grey-primary">Cancle</button>
+        <button type="reset" class="btn grey-primary">Cancel</button>
         <button type="submit" class="btn black-btn">Save & Continue</button>
       </div>
     </form>
@@ -240,7 +262,7 @@
     }
   });
 
-  getFunctionalAreaName();
+  //getFunctionalAreaName();
 
   function getFunctionalAreaName() {
     $.ajax({
@@ -273,7 +295,7 @@
     $(".alphaChar").on('input', function () {
       var inputValue = $(this).val();
       // Remove non-numeric characters
-      var sanitizedValue = inputValue.replace(/[^a-zA-Z0-9\s]/g, '');
+      var sanitizedValue = inputValue.replace(/[^a-zA-Z\s]/g, '');
       $(this).val(sanitizedValue); // Update input field with sanitized value
     });
 
@@ -325,12 +347,12 @@
       let countryId = this.value;
       if (countryId) {
         $.ajax({
-          url: "{{ route('users.states') }}",
+          url: "{{ route('customers.states') }}",
           type: 'post',
           dataType: "json",
           data: { countryId },
           beforeSend: function () {
-            //$('select#state').find("option:eq(0)").html("Please wait..");
+            $('select#state').find("option:eq(0)").html("Please wait..");
           },
           success: function (response) {
             console.log(response)
@@ -353,7 +375,7 @@
       let stateId = this.value;
       if (stateId) {
         $.ajax({
-          url: "{{ route('users.cities') }}",
+          url: "{{ route('customers.cities') }}",
           type: 'post',
           dataType: "json",
           data: { stateId },
@@ -382,6 +404,8 @@
       e.preventDefault();
       var __e = $(this);
       var name = $('#name').val();
+      var manager_id = $('#manager_id').val();
+      var func_area_id = $('#func_area_id').val();
       var email = $('#email').val().trim();
       var mobile = $('#mobile').val().trim();
       var country = $('#country').val();
@@ -396,6 +420,20 @@
         return $('.error_name').html('Name field is required');
       } else {
         $('.error_name').html('');
+      }
+
+      if (!manager_id.trim()) {
+        $('#manager_id').focus();
+        return $('.error_manager').html('Manager field is required');
+      } else {
+        $('.error_manager').html('');
+      }
+
+      if (!func_area_id.trim()) {
+        $('#func_area_id').focus();
+        return $('.error_func_area').html('Functional area field is required');
+      } else {
+        $('.error_func_area').html('');
       }
 
       if (!email.trim()) {
@@ -462,12 +500,26 @@
         $('.error_password').html('');
       }
 
+      if (password.length < 8) {
+          $('#password').focus();
+          return $('.error_password').html('Password should be minimum at least 8 character');
+        } else {
+          $('.error_password').html('');
+        }
+
       if (!conf_password.trim()) {
         $('#conf_password').focus();
         return $('.error_conf_password').html('Confirm password field is required');
       } else {
         $('.error_conf_password').html('');
       }
+
+      if (conf_password.length < 8) {
+          $('#conf_password').focus();
+          return $('.error_conf_password').html('Confirm password should be minimum at least 8 character');
+        } else {
+          $('.error_conf_password').html('');
+        }
 
       if (password.trim() != conf_password.trim()) {
         $('#conf_password').focus();
