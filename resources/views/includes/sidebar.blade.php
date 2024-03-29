@@ -40,7 +40,7 @@
               <span class="menu-icon">
                 <i class="ri-layout-3-fill"></i>
               </span>
-              <span class="menu-title">Vendor List</span>
+              <span class="menu-title">Vendor Management</span>
             </a>
           </li>
           <!-- sub-menu -->

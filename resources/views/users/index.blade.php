@@ -137,6 +137,78 @@
             });
           }
         });
+
+
+
+        $(document).on('click','.dolock',function(e){
+          e.preventDefault();
+          var __e = $(this);
+          var rowid = __e.data('id');
+          if (rowid) {
+            $.ajax({
+              type: "post",
+              url: "{{ route('users.dolock') }}",
+              data: {rowid},
+              dataType: "json",
+              success: function (response) {
+                if(response.status == "success")
+                {
+                  return Swal.fire({
+                  icon: "success",
+                  text: response.message,
+                  showDenyButton: false,
+                  showCancelButton: false,
+                  confirmButtonText: "Ok",
+                }).then((result) => {
+                  if (result.isConfirmed) {
+                    location.reload();
+                  }
+                });
+              }
+              },
+              error: function(xhr, status, error) {
+                return Swal.fire('Error!', 'Something went wrong, please try again.', 'error');
+              }
+            });
+          }
+        });
+
+
+
+          $(document).on('click','.doUnlock',function(e){
+          e.preventDefault();
+          var __e = $(this);
+          var rowid = __e.data('id');
+          if (rowid) {
+            $.ajax({
+              type: "post",
+              url: "{{ route('users.dounlock') }}",
+              data: {rowid},
+              dataType: "json",
+              success: function (response) {
+                if(response.status == "success")
+                {
+                  return Swal.fire({
+                  icon: "success",
+                  text: response.message,
+                  showDenyButton: false,
+                  showCancelButton: false,
+                  confirmButtonText: "Ok",
+                }).then((result) => {
+                  if (result.isConfirmed) {
+                    location.reload();
+                  }
+                });
+              }
+              },
+              error: function(xhr, status, error) {
+                return Swal.fire('Error!', 'Something went wrong, please try again.', 'error');
+              }
+            });
+          }
+        });
+
+
         
         $(document).on('click', '.bulk_upload_btn', function () {
           var __e = $(this);

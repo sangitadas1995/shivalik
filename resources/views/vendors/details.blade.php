@@ -35,25 +35,9 @@
                             <div class="col-7 child-table-row">
                                 <div>
                                     {{ $vendor->contact_person }}
-    
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="child-table">
-                    <div class="container">
-    
-                        <div class="row border-gray">
-                            <div class="col-12 child-table-row">
-                                <div>
-                                    <p class="title">
-                                        Personal Details
-                                    </p>
-                                </div>
-                            </div>
-    
-                            <!-- table row -->
+
                             <div class="col-5 child-table-row">
                                 <div>
                                     Mobile No.
@@ -61,13 +45,11 @@
                             </div>
                             <div class="col-7 child-table-row">
                                 <div>
-                                    +91 {{ $customer->mobile_no }}
-    
+                                    +91 {{ $vendor->mobile_no }}
                                 </div>
                             </div>
-                            <!-- table row end -->
-                            <!-- table row -->
-                            @if (!empty($customer->alter_mobile_no))
+
+                            @if (!empty($vendor->alter_mobile_no))
                                 <div class="col-5 child-table-row">
                                     <div>
                                         Alternative Mobile No.
@@ -75,12 +57,11 @@
                                 </div>
                                 <div class="col-7 child-table-row">
                                     <div>
-                                        +91 {{ $customer->alter_mobile_no }}
+                                        +91 {{ $vendor->alter_mobile_no }}
                                     </div>
                                 </div>
                             @endif
-                            <!-- table row end -->
-                            <!-- table row -->
+
                             <div class="col-5 child-table-row">
                                 <div>
                                     Email Id.
@@ -88,13 +69,11 @@
                             </div>
                             <div class="col-7 child-table-row">
                                 <div>
-                                    {{ $customer->email }}
-    
+                                    {{ $vendor->email }}
                                 </div>
                             </div>
-                            <!-- table row end -->
-                            <!-- table row -->
-                            @if (!empty($customer->alternative_email_id))
+
+                            @if (!empty($vendor->alternative_email_id))
                                 <div class="col-5 child-table-row">
                                     <div>
                                         Alternative Email Id.
@@ -102,14 +81,12 @@
                                 </div>
                                 <div class="col-7 child-table-row">
                                     <div>
-                                        {{ $customer->alternative_email_id }}
+                                        {{ $vendor->alternative_email_id }}
                                     </div>
                                 </div>
                             @endif
-                            <!-- table row end -->
-    
-                            <!-- table row -->
-                            @if (!empty($customer->phone_no))
+
+                            @if (!empty($vendor->phone_no))
                                 <div class="col-5 child-table-row">
                                     <div>
                                         Phone No.
@@ -117,14 +94,12 @@
                                 </div>
                                 <div class="col-7 child-table-row">
                                     <div>
-                                    +91 {{ $customer->phone_no }}
-        
+                                    +91 {{ $vendor->phone_no }}
                                     </div>
                                 </div>
-                            @endif
-                            <!-- table row end -->
-                            <!-- table row -->
-                            @if (!empty($customer->alternative_phone_no))
+                            @endif                                                    
+
+                             @if (!empty($vendor->alternative_phone_no))
                                 <div class="col-5 child-table-row">
                                     <div>
                                         Alternative Phone No.
@@ -132,26 +107,22 @@
                                 </div>
                                 <div class="col-7 child-table-row">
                                     <div>
-                                    +91 {{ $customer->alternative_phone_no }}
-        
+                                    +91 {{ $vendor->alternative_phone_no }}
                                     </div>
                                 </div>
                             @endif
-                            <!-- table row end -->
-                            <!-- table row -->
-                            <div class="col-5 child-table-row">
+
+                             <div class="col-5 child-table-row">
                                 <div>
                                     Address
                                 </div>
                             </div>
                             <div class="col-7 child-table-row">
                                 <div>
-                                    {{ $customer->address }}
-    
+                                    {{ $vendor->address }}
                                 </div>
-                            </div>
-                            <!-- table row end -->
-                            <!-- table row -->
+                            </div> 
+
                             <div class="col-5 child-table-row">
                                 <div>
                                     Country
@@ -159,12 +130,10 @@
                             </div>
                             <div class="col-7 child-table-row">
                                 <div>
-                                    {{ $customer->country?->country_name ?? null }}
-    
+                                    {{ $vendor->country?->country_name ?? null }}
                                 </div>
                             </div>
-                            <!-- table row end -->
-                            <!-- table row -->
+
                             <div class="col-5 child-table-row">
                                 <div>
                                     State
@@ -172,12 +141,10 @@
                             </div>
                             <div class="col-7 child-table-row">
                                 <div>
-                                    {{ $customer->state?->state_name ?? null }}
-    
+                                    {{ $vendor->state?->state_name ?? null }}
                                 </div>
                             </div>
-                            <!-- table row end -->
-                            <!-- table row -->
+
                             <div class="col-5 child-table-row">
                                 <div>
                                     City
@@ -185,11 +152,10 @@
                             </div>
                             <div class="col-7 child-table-row">
                                 <div>
-                                    {{ $customer->city?->city_name ?? null }}
+                                    {{ $vendor->city?->city_name ?? null }}
                                 </div>
                             </div>
-                            <!-- table row end -->
-                            <!-- table row -->
+
                             <div class="col-5 child-table-row">
                                 <div>
                                     Pincode
@@ -197,69 +163,45 @@
                             </div>
                             <div class="col-7 child-table-row">
                                 <div>
-                                    {{ $customer->pincode }}
-    
+                                    {{ $vendor->pincode }}
                                 </div>
                             </div>
 
                             <div class="col-5 child-table-row">
                                 <div>
-                                    Print Margin
+                                    Vendor Type
                                 </div>
                             </div>
                             <div class="col-7 child-table-row">
                                 <div>
-                                    {{ $customer->print_margin }}%
-    
+                                    {{ $vendor->vendortype?->name ?? null }}
+                                </div>
+                            </div>                                                                                                             
+                            <div class="col-5 child-table-row">
+                                <div>
+                                    Paper Type
                                 </div>
                             </div>
-                            <!-- table row end -->
+                            <div class="col-7 child-table-row">
+                                <div>
+                                    {{ $vendor->papertype?->name ?? null }}
+                                </div>
+                            </div>                                                       
+                            <div class="col-5 child-table-row">
+                                <div>
+                                    Paper Size
+                                </div>
+                            </div>
+                            <div class="col-7 child-table-row">
+                                <div>
+                                    {{ $vendor->papersize?->name ?? null }}
+                                </div>
+                            </div>
+
                         </div>
                     </div>
                 </div>
-                {{--             <div class="child-table">
-            </div>
-
-                <div class="container">
-
-                    <div class="row border-gray">
-                        <div class="col-12 child-table-row">
-                            <div>
-                                <p class="title">
-                                    Order Details
-                                </p>
-                            </div>
-                        </div>
-
-                        <!-- table row -->
-                        <div class="col-5 child-table-row">
-                            <div>
-                                No. of Orders
-                            </div>
-                        </div>
-                        <div class="col-7 child-table-row">
-                            <div>
-                                24
-
-                            </div>
-                        </div>
-                        <!-- table row end -->
-                        <!-- table row -->
-                        <div class="col-5 child-table-row">
-                            <div>
-                                Print Margin
-                            </div>
-                        </div>
-                        <div class="col-7 child-table-row">
-                            <div>
-                                2%
-                            </div>
-                        </div>
-                        <!-- table row end -->
-
-                    </div>
-                </div>
-            </div> --}}
+                
         </div>
     </div>
   </div>

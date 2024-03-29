@@ -351,10 +351,24 @@ class UsersController extends Controller
 
         $data = [];
         if ($result->isNotEmpty()) {
+            //dd($result);
             foreach ($result as $key => $value) {
-                //dd($value);
+                
                 $view_icon = asset('images/lucide_view.png');
                 $edit_icon = asset('images/akar-icons_edit.png');
+
+                $lock_icon =  asset('images/eva_lock-outline.png'); 
+                $unlock_icon =  asset('images/lock-open-right-outline.png');
+
+                if($value->status == "A")
+                {
+                    $status = '<a href="#" class="dolock" data-id ="' . $value->id . '" title="Active"><img src="' . $unlock_icon . '" /></a>';
+                }
+                if($value->status == "I")
+                {
+                    $status = '<a href="#" class="doUnlock" data-id ="' . $value->id . '" title="Inactive"><img src="' . $lock_icon . '" /></a>';
+                }   
+
                 $editLink = route('users.edit', encrypt($value->id));
                 $subarray = [];
                 $subarray[] = $value->id;
@@ -364,8 +378,8 @@ class UsersController extends Controller
                 $subarray[] = $value->manager?->name ?? null;
                 $subarray[] = $value->designation?->name ?? null;
                 $subarray[] = $value->functionalareas?->name ?? null;
-                $subarray[] = '<a href="#" class="view_details" data-id ="' . $value->id . '"><img src="' . $view_icon . '" /></a>
-                <a href="' . $editLink . '"><img src="' . $edit_icon . '" /></a>';
+                $subarray[] = '<div class="align-items-center d-flex dt-center"><a href="#" class="view_details" data-id ="' . $value->id . '" title="View Details"><img src="' . $view_icon . '" /></a>
+                <a href="' . $editLink . '" title="Edit"><img src="' . $edit_icon . '" /></a>'.$status.'</div>';
                 $data[] = $subarray;
             }
         }
@@ -381,6 +395,48 @@ class UsersController extends Controller
 
         return response()->json($output);
     }
+
+
+
+    public function do_unlock(Request $request)
+    {
+        $id = $request->rowid;
+
+        try {
+        $user = User::find($id);
+        $user->status = "A";
+        $update = $user->update();
+
+        if ($update) {
+            return response()->json(['status' => 'success','message' => 'Successfully active']);
+        } else {
+            return response()->json(['status' => 'fail']);
+        }
+        } catch (Exception $th) {
+           return response()->json(['status' => 'fail']);
+        }
+    }
+
+    public function do_lock(Request $request)
+    {
+        $id = $request->rowid;
+
+        try {
+        $user = User::find($id);
+        $user->status = "I";
+        $update = $user->update();
+
+        if ($update) {
+            return response()->json(['status' => 'success','message' => 'Successfully inactive']);
+        } else {
+            return response()->json(['status' => 'fail']);
+        }
+        } catch (Exception $th) {
+           return response()->json(['status' => 'fail']);
+        }
+    }
+
+
 
 
     public function view(Request $request)

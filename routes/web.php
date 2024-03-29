@@ -57,6 +57,9 @@ Route::middleware('auth')->group(function () {
         Route::post('view', [UsersController::class, 'view'])->name('view');
         Route::get('edit/{id}', [UsersController::class, 'edit'])->name('edit');
         Route::post('update/{id}', [UsersController::class, 'update'])->name('update');
+
+        Route::post('dounlock', [UsersController::class, 'do_unlock'])->name('dounlock');
+        Route::post('dolock', [UsersController::class, 'do_lock'])->name('dolock');
     });
 
     Route::prefix('vendors')->name('vendors.')->group(function () {
