@@ -49,7 +49,7 @@
         </div>
         <div class="col-md-6">
           <div class="mb-3">
-            <label class="form-label">Designation:</label>
+            <label class="form-label">Designation:</label><a href="#" class="add_designation_modal"><i class="fas fa-plus-circle blue-text"></i></a>
             <select class="form-select" aria-label="Default select example" id="designation" name="designation">
               <option value="">Select</option>
               @if ($designations->isNotEmpty())
@@ -95,7 +95,7 @@
 
         <div class="col-md-6">
           <div class="mb-3  d-flex flex-column">
-            <label class="form-label">Mobile <span class="text-danger">*</span>:</label>
+            <label class="form-label">Mobile :</label>
             <input type="text" class="form-control mobileNumber" name="mobile" id="mobile" value="{{ old('mobile') }}"/>
             <small class="text-danger error_mobile"></small>
           </div>
@@ -157,7 +157,6 @@
           </div>
         </div>
 
-
         <div class="col-md-6">
           <div class="mb-3">
             <label class="form-label">Password <span class="text-danger">*</span>:</label>
@@ -214,6 +213,40 @@
             <div class="col-md-12">
               <div class="text-end">
                 <button type="button" id='addNewFuncArea' class="btn primary-btn bulk_upload_btn">Save</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="modal fade" id="addDesignationModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-background-blur">
+
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Add New Designation</h5>
+
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+
+            <div class="form-group mb-3">
+              <label for="recipient-name" class="col-form-label">Designation:</label>
+              <input type="text" class="form-control" id="new_designation" name="new_designation">
+              <div class="text-danger" id="new_designation_error">
+              </div>
+            </div>
+            <div class="col-md-12">
+              <div class="text-end">
+                <button type="button" id='addNewDesignation' class="btn primary-btn bulk_upload_btn">Save</button>
               </div>
             </div>
           </div>
@@ -292,6 +325,42 @@
 
 
 
+  $(document).on("click", "#addNewDesignation", function () {
+    var new_designation = $("#new_designation").val().trim();
+    var status = 0;
+    if (new_designation == '') {
+      $('#new_designation_error').html('Please enter new designation');
+      $("#new_designation").focus();
+      status = 0;
+      return false;
+    }
+    else {
+      $('#new_designation_error').html('');
+      status = 1;
+    }
+
+    if (status == "1") {
+      $.ajax({
+        url: "{{ route('users.add_new_designation') }}",
+        data: { _token: token, "new_designation": new_designation },
+        type: "post",
+        dataType: 'json',
+        success: function (response) {
+          var rest = response.status;
+          if (rest == "success") {
+            //window.location = "{{ route('users.add') }}";
+            //getFunctionalAreaName();
+            $('#addDesignationModal').modal('hide');
+            location.reload();
+          }
+        }
+      });
+    }
+  });
+
+
+
+
   $(document).ready(function () {
     $(".alphaChar").on('input', function () {
       var inputValue = $(this).val();
@@ -307,6 +376,13 @@
         $(this).val(sanitizedValue); // Update input field with sanitized value
     });
 
+    $('#new_designation').on('input', function () {
+        var inputValue = $(this).val();
+        // Remove non-numeric characters
+        var sanitizedValue = inputValue.replace(/[^a-zA-Z\s]/g, '');
+        $(this).val(sanitizedValue); // Update input field with sanitized value
+    });
+
 
     $(document).on('click', '.add_func_modal', function (e) {
       e.preventDefault();
@@ -316,6 +392,11 @@
     $(document).on('click', '.clsmdfnarea', function (e) {
       e.preventDefault();
       $('#addFuncAreaMd').modal('hide');
+    });
+
+    $(document).on('click', '.add_designation_modal', function (e) {
+      e.preventDefault();
+      $('#addDesignationModal').modal('show');
     });
   });
 
@@ -451,17 +532,17 @@
         }
       }
 
-      if (!mobile.trim()) {
-        $('#mobile').focus();
-        return $('.error_mobile').html('Mobile number field is required');
-      } else {
-        if (mobile.length > 10 || mobile.length < 10) {
-          $('#mobile-1').focus();
-          return $('.error_mobile').html('Mobile number must be 10 digits');
-        } else {
-          $('.error_mobile').html('');
-        }
-      }
+      // if (!mobile.trim()) {
+      //   $('#mobile').focus();
+      //   return $('.error_mobile').html('Mobile number field is required');
+      // } else {
+      //   if (mobile.length > 10 || mobile.length < 10) {
+      //     $('#mobile-1').focus();
+      //     return $('.error_mobile').html('Mobile number must be 10 digits');
+      //   } else {
+      //     $('.error_mobile').html('');
+      //   }
+      // }
 
       if (!country.trim()) {
         $('#country').focus();

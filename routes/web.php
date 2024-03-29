@@ -60,6 +60,8 @@ Route::middleware('auth')->group(function () {
         Route::post('update/{id}', [UsersController::class, 'update'])->name('update');
         Route::post('dounlock', [UsersController::class, 'do_unlock'])->name('dounlock');
         Route::post('dolock', [UsersController::class, 'do_lock'])->name('dolock');
+
+        Route::post('add_new_designation', [UsersController::class, 'add_new_designation'])->name('add_new_designation');
     });
 
     Route::prefix('vendors')->name('vendors.')->group(function () {
