@@ -362,11 +362,11 @@ class UsersController extends Controller
 
                 if($value->status == "A")
                 {
-                    $status = '<a href="#" class="dolock" data-id ="' . $value->id . '" title="Active"><img src="' . $unlock_icon . '" /></a>';
+                    $status = '<a href="#" class="dolock" data-id ="' . $value->id . '" title="Unlock"><img src="' . $unlock_icon . '" /></a>';
                 }
                 if($value->status == "I")
                 {
-                    $status = '<a href="#" class="doUnlock" data-id ="' . $value->id . '" title="Inactive"><img src="' . $lock_icon . '" /></a>';
+                    $status = '<a href="#" class="doUnlock" data-id ="' . $value->id . '" title="Lock"><img src="' . $lock_icon . '" /></a>';
                 }   
 
                 $editLink = route('users.edit', encrypt($value->id));
@@ -408,7 +408,7 @@ class UsersController extends Controller
         $update = $user->update();
 
         if ($update) {
-            return response()->json(['status' => 'success','message' => 'Successfully active']);
+            return response()->json(['status' => 'success','message' => 'Successfully unlock']);
         } else {
             return response()->json(['status' => 'fail']);
         }
@@ -427,7 +427,7 @@ class UsersController extends Controller
         $update = $user->update();
 
         if ($update) {
-            return response()->json(['status' => 'success','message' => 'Successfully inactive']);
+            return response()->json(['status' => 'success','message' => 'Successfully lock']);
         } else {
             return response()->json(['status' => 'fail']);
         }
