@@ -67,7 +67,7 @@
         <div class="col-md-6">
           <div class="mb-3">
             <label class="form-label">Functional Area <span class="text-danger">*</span>:</label><a href="#" class="add_func_modal"><i
-                  class="fas fa-plus-circle blue-text"></i></a>:</label>
+                  class="fas fa-plus-circle blue-text"></i></a></label>
             <select class="form-select" aria-label="Default select example" id="func_area_id" name="func_area_id">
               <option value="">Select</option>
               @if ($functional_area->isNotEmpty())

@@ -12,8 +12,8 @@ use App\Traits\Validate;
 use App\Traits\Helper;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
-use App\Rules\UniqueEmailAddress;
-use App\Rules\UniqueMobileNumber;
+use App\Rules\VendorUniqueEmailAddress;
+use App\Rules\VendorUniqueMobileNumber;
 use App\Models\Failed_customer_csv;
 use App\Models\FailedCustomer;
 
@@ -102,39 +102,39 @@ class VendorsController extends Controller
             'mobile_no' => [
                 'required',
                 'regex:/^[6-9]\d{9}$/',
-                new UniqueMobileNumber('mobile_no', 'alter_mobile_no', 'phone_no', 'alternative_phone_no', '', 'The mobile number :input has already been taken.')
+                new VendorUniqueMobileNumber('mobile_no', 'alter_mobile_no', 'phone_no', 'alternative_phone_no', '', 'The mobile number :input has already been taken.')
             ],
             'alter_mobile_no' => [
                 'sometimes',
                 'nullable',
                 'regex:/^[6-9]\d{9}$/',
                 'different:mobile_no',
-                new UniqueMobileNumber('mobile_no', 'alter_mobile_no', 'phone_no', 'alternative_phone_no', '', 'The alternate mobile number :input has already been taken.'),
+                new VendorUniqueMobileNumber('mobile_no', 'alter_mobile_no', 'phone_no', 'alternative_phone_no', '', 'The alternate mobile number :input has already been taken.'),
             ],
             'email' => [
                 'required',
                 'email',
-                new UniqueEmailAddress('email', 'alternative_email_id', '', 'The email address :input has already been taken.'),
+                new VendorUniqueEmailAddress('email', 'alternative_email_id', '', 'The email address :input has already been taken.'),
             ],
             'alternative_email_id' => [
                 'sometimes',
                 'nullable',
                 'email',
                 'different:email',
-                new UniqueEmailAddress('email', 'alternative_email_id', '', 'The alternate email address :input has already been taken.'),
+                new VendorUniqueEmailAddress('email', 'alternative_email_id', '', 'The alternate email address :input has already been taken.'),
             ],
             'phone_no' => [
                 'sometimes',
                 'nullable',
                 'regex:/^[0-9]\d{10}$/',
-                new UniqueMobileNumber('phone_no', 'alternative_phone_no', 'mobile_no', 'alter_mobile_no', '', 'The phone number :input has already been taken.'),
+                new VendorUniqueMobileNumber('phone_no', 'alternative_phone_no', 'mobile_no', 'alter_mobile_no', '', 'The phone number :input has already been taken.'),
             ],
             'alternative_phone_no' => [
                 'sometimes',
                 'nullable',
                 'regex:/^[0-9]\d{10}$/',
                 'different:phone_no',
-                new UniqueMobileNumber('phone_no', 'alternative_phone_no', 'mobile_no', 'alter_mobile_no', '', 'The alternate phone number :input has already been taken.'),
+                new VendorUniqueMobileNumber('phone_no', 'alternative_phone_no', 'mobile_no', 'alter_mobile_no', '', 'The alternate phone number :input has already been taken.'),
             ],
             'vendor_type_id' => ['required'],
             'address' => ['required'],
@@ -252,7 +252,7 @@ class VendorsController extends Controller
                 $subarray[] = $value->papertype?->name ?? null;
                 $subarray[] = $value->papersize?->name ?? null;
                 $subarray[] = '<a href="#" class="view_details" title="View Details" data-id ="' . $value->id . '"><img src="' . $view_icon . '" /></a>
-                <a href="' . $editLink . '" title="Edit"><img src="' . $edit_icon . '" /></a>';
+                ';
                 $data[] = $subarray;
             }
         }
