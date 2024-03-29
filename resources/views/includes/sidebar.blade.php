@@ -40,11 +40,11 @@
               <span class="menu-icon">
                 <i class="ri-layout-3-fill"></i>
               </span>
-              <span class="menu-title">Vendor Management</span>
+              <span class="menu-title">Vendor List</span>
             </a>
           </li>
           <!-- sub-menu -->
-          <li class="menu-item sub-menu">
+          {{-- <li class="menu-item sub-menu">
             <a href="#">
               <span class="menu-icon">
                 <i class="ri-focus-2-fill"></i>
@@ -120,25 +120,24 @@
                 </li>
               </ul>
             </div>
-          </li>
-          <li class="menu-item">
+          </li> --}}
+         {{--  <li class="menu-item">
             <a href="#">
               <span class="menu-icon">
                 <i class="ri-layout-3-fill"></i>
               </span>
               <span class="menu-title">Printing Plate Vendor</span>
             </a>
-          </li>
-          <li class="menu-item">
+          </li> --}}
+          {{-- <li class="menu-item">
             <a href="loi-timeline.html">
               <span class="menu-icon">
                 <i class="ri-pie-chart-2-fill"></i>
               </span>
               <span class="menu-title">Paper Vendor</span>
             </a>
-
-          </li>
-          <li class="menu-item">
+          </li> --}}
+          {{-- <li class="menu-item">
             <a href="records.html">
               <span class="menu-icon">
                 <i class="ri-global-fill"></i>
@@ -146,7 +145,7 @@
               <span class="menu-title">Books Database</span>
             </a>
 
-          </li>
+          </li> --}}
           <li class="menu-item sub-menu">
             <a>
               <span class="menu-icon">
@@ -158,35 +157,35 @@
               style="position: fixed; left: 0px; top: 0px; margin: 0px; visibility: hidden; transform: translate3d(280px, 355.2px, 0px);">
               <ul>
                 <li class="menu-item">
-                  <a href="#">
+                  <a href="{{ route('settings.paper-type') }}">
                     <span class="menu-title">Paper Type</span>
                   </a>
                 </li>
-                <li class="menu-item">
+                {{-- <li class="menu-item">
                   <a href="#">
                     <span class="menu-title">Color Type</span>
                   </a>
-                </li>
-                <li class="menu-item">
+                </li> --}}
+                {{-- <li class="menu-item">
                   <a href="#">
                     <span class="menu-title">Book Cover Type</span>
                   </a>
-                </li>
+                </li> --}}
                 <li class="menu-item">
-                  <a href="#">
-                    <span class="menu-title">Binding Type</span>
+                  <a href="{{ route('settings.printing-product-type') }}">
+                    <span class="menu-title">Printing Product Type</span>
                   </a>
                 </li>
-                <li class="menu-item">
+                {{-- <li class="menu-item">
                   <a href="#">
                     <span class="menu-title">Printing Machine Type</span>
                   </a>
-                </li>
-                <li class="menu-item">
+                </li> --}}
+                {{-- <li class="menu-item">
                   <a href="#">
                     <span class="menu-title">General Setting</span>
                   </a>
-                </li>
+                </li> --}}
 
               </ul>
             </div>

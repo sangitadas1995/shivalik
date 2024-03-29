@@ -5,6 +5,7 @@ use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\OrdersController;
 use App\Http\Controllers\UsersController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\SettingController;
 use App\Http\Controllers\VendorsController;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
@@ -57,9 +58,6 @@ Route::middleware('auth')->group(function () {
         Route::post('view', [UsersController::class, 'view'])->name('view');
         Route::get('edit/{id}', [UsersController::class, 'edit'])->name('edit');
         Route::post('update/{id}', [UsersController::class, 'update'])->name('update');
-
-        Route::post('dounlock', [UsersController::class, 'do_unlock'])->name('dounlock');
-        Route::post('dolock', [UsersController::class, 'do_lock'])->name('dolock');
     });
 
     Route::prefix('vendors')->name('vendors.')->group(function () {
@@ -89,6 +87,12 @@ Route::middleware('auth')->group(function () {
         Route::prefix('warehouse')->name('warehouse.')->group(function () {
             Route::get('add', [InventoryController::class, 'create'])->name('add');
         });
+    });
+
+    Route::prefix('settings')->name('settings.')->group(function () {
+        Route::get('paper-type', [SettingController::class, 'papertype'])->name('paper-type');
+        Route::get('printing-product-type', [SettingController::class, 'printingProductType'])->name('printing-product-type');
+        Route::get('create-printing-product-type', [SettingController::class, 'addPrintingProductType'])->name('create-printing-product-type');
     });
 });
 
