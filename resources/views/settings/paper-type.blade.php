@@ -42,7 +42,7 @@
                 <div class="">
                     <div class="text-end">
                         <button type="submit" class="btn black-btn">Save </button>
-                        <button type="button" onclick="addTypeFormOpen(event)" class="btn grey-primary">Cancle</button>
+                        <button type="button" onclick="addTypeFormOpen(event)" class="btn grey-primary">Cancel</button>
 
                     </div>
                 </div>
