@@ -95,8 +95,8 @@
                     <td style="text-align: center">24</td>
                     <td style="text-align: center">2%</td>
                     <td style="text-align: center">
-                        <a href="#"><img src="images/lucide_view.png" /></a>
-                        <a href="#"><img src="images/akar-icons_edit.png" /></a>
+                        <a href="#"><img src="{{ asset('images/lucide_view.png') }}" /></a>
+                        <a href="#"><img src="{{ asset('images/akar-icons_edit.png') }}" /></a>
                     </td>
                 </tr>
                 <tr>
@@ -108,8 +108,8 @@
                     <td style="text-align: center">24</td>
                     <td style="text-align: center">2%</td>
                     <td style="text-align: center">
-                        <a href="#"><img src="images/lucide_view.png" /></a>
-                        <a href="#"><img src="images/akar-icons_edit.png" /></a>
+                        <a href="#"><img src="{{ asset('images/lucide_view.png') }}" /></a>
+                        <a href="#"><img src="{{ asset('images/akar-icons_edit.png') }}" /></a>
                     </td>
                 </tr>
                 <tr>
@@ -121,8 +121,8 @@
                     <td style="text-align: center">24</td>
                     <td style="text-align: center">2%</td>
                     <td style="text-align: center">
-                        <a href="#"><img src="images/lucide_view.png" /></a>
-                        <a href="#"><img src="images/akar-icons_edit.png" /></a>
+                        <a href="#"><img src="{{ asset('images/lucide_view.png') }}" /></a>
+                        <a href="#"><img src="{{ asset('images/akar-icons_edit.png') }}" /></a>
                     </td>
                 </tr>
             </tbody>

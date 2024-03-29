@@ -149,7 +149,7 @@
                 </div>
             </div>
             <div class="text-end">
-                <button type="submit" class="btn grey-primary">Cancle</button>
+                <button type="submit" class="btn grey-primary">Cancel</button>
                 <button type="submit" class="btn black-btn">Save</button>
             </div>
         </form>
