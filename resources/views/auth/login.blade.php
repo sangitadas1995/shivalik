@@ -35,11 +35,11 @@
                   <label for="exampleInputEmail1" class="form-label"
                     >User id</label
                   >
-                  <input name="email"
-                    type="email"
+                  <input name="login"
+                    type="text"
                     class="form-control"
                     id="exampleInputEmail1"
-                    aria-describedby="emailHelp" value="{{ old('email') }}"
+                    aria-describedby="emailHelp" value="{{ old('login') }}"
                   />
                   <div id="emailHelp" class="form-text">
                     We'll never share your email with anyone else.
