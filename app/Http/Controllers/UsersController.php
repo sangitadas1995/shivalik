@@ -153,10 +153,10 @@ class UsersController extends Controller
         {
             $user->mobile = $request->mobile;
         }
-        else
-        {
-            $user->mobile = "0";
-        }
+        // else
+        // {
+        //     $user->mobile = "0";
+        // }
         $user->address = $request->address;
         $user->country_id = $request->country_id;
         $user->state_id = $request->state_id;

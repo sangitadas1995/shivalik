@@ -23,14 +23,14 @@
         </div>
         <div class="col-md-6">
           <div class="mb-3">
-            <label class="form-label">Name <span class="text-danger">*</span>:</label>
+            <label class="form-label"><span class="text-danger">*</span>Name :</label>
             <input type="text" class="form-control alphaChar" name="name" id="name" value="{{ $user->name }}" />
             <small class="text-danger error_name"></small>
           </div>
         </div>
         <div class="col-md-6">
           <div class="mb-3">
-            <label class="form-label">Manager <span class="text-danger">*</span>:</label>
+            <label class="form-label"><span class="text-danger">*</span>Manager :</label>
             <select class="form-select" aria-label="Default select example" id="manager_id" name="manager_id">
               <option value="">Select Manager</option>
               @if ($managers->isNotEmpty())
@@ -59,7 +59,7 @@
         </div>
         <div class="col-md-6">
           <div class="mb-3">
-            <label class="form-label">Functional Area <span class="text-danger">*</span><a href="#"
+            <label class="form-label"><span class="text-danger">*</span>Functional Area <a href="#"
                 class="add_func_modal"><i class="fas fa-plus-circle blue-text"></i></a></label>
             <select class="form-select" aria-label="Default select example" id="func_area_id" name="func_area_id">
               <option value="">Select</option>
@@ -77,7 +77,7 @@
 
         <div class="col-md-6">
           <div class="mb-3">
-            <label class="form-label">Email <span class="text-danger">*</span>:</label>
+            <label class="form-label"><span class="text-danger">*</span>Email :</label>
             <input type="text" class="form-control" name="email" id="email" value="{{ $user->email }}" />
             <small class="text-danger error_email"></small>
           </div>
@@ -99,7 +99,7 @@
       <div class="row">
         <div class="col-md-6">
           <div class="mb-3">
-            <label class="form-label">Country <span class="text-danger">*</span>:</label>
+            <label class="form-label"><span class="text-danger">*</span>Country :</label>
             <select class="form-select" aria-label="Default select example" id="country" name="country_id">
               <option value="">Select Country</option>
               @if ($countries->isNotEmpty())
@@ -114,7 +114,7 @@
         </div>
         <div class="col-md-6">
           <div class="mb-3">
-            <label class="form-label">State <span class="text-danger">*</span>:</label>
+            <label class="form-label"><span class="text-danger">*</span>State :</label>
             <select class="form-select" aria-label="Default select example" id="state" name="state_id">
               <option value="">Select State</option>
               @if ($states->isNotEmpty())
@@ -129,7 +129,7 @@
         </div>
         <div class="col-md-6">
           <div class="mb-3">
-            <label class="form-label">City <span class="text-danger">*</span>:</label>
+            <label class="form-label"><span class="text-danger">*</span>City :</label>
             <select class="form-select" aria-label="Default select example" id="city" name="city_id">
               <option value="">Select City</option>
               @if ($cities->isNotEmpty())
@@ -144,7 +144,7 @@
         </div>
         <div class="col-md-6">
           <div class="mb-3">
-            <label class="form-label">Pincode <span class="text-danger">*</span>:</label>
+            <label class="form-label"><span class="text-danger">*</span>Pincode :</label>
             <input type="text" class="form-control" name="pincode" id="pincode" value="{{ $user->pincode }}" />
             <small class="text-danger error_pincode"></small>
           </div>
