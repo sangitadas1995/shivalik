@@ -115,7 +115,7 @@
         }
       },
       columnDefs: [{
-        target: [0,6],
+        target: [0,2,6],
         searchable: false,
         sortable: false,
         visible: false,
