@@ -201,7 +201,10 @@ class CustomersController extends Controller
             foreach ($result as $key => $value) {
                 $view_icon = asset('images/lucide_view.png');
                 $edit_icon = asset('images/akar-icons_edit.png');
+                $order_icon = asset('images/order.png');
                 $editLink = route('customers.edit', encrypt($value->id));
+                $orderLink = route('orders.index', ['customer' => encrypt($value->id)]);
+
                 $subarray = [];
                 $subarray[] = $value->id;
                 $subarray[] = ++$key . '.';
@@ -211,7 +214,8 @@ class CustomersController extends Controller
                 $subarray[] = $value->city?->city_name ?? null;
                 $subarray[] = 0;
                 $subarray[] = $value->print_margin . '%';
-                $subarray[] = '<a href="#" class="view_details" title="View Details" data-id ="' . $value->id . '"><img src="' . $view_icon . '" /></a>
+                $subarray[] = '<a href="' . $orderLink . '" class="order_details" title="Order details"><img src="' . $order_icon . '" style="width:21px;"/>
+                                <a href="#" class="view_details" title="View Details" data-id ="' . $value->id . '"><img src="' . $view_icon . '" /></a>
                                 <a href="' . $editLink . '" title="Edit"><img src="' . $edit_icon . '" /></a>';
 
                 $data[] = $subarray;

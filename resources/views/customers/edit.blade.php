@@ -23,21 +23,21 @@
             </div>
           <div class="col-md-6">
             <div class="mb-3">
-              <label class="form-label">Company Name<span class="text-danger">*</span> :</label>
+              <label class="form-label"><span class="text-danger">*</span>Company Name :</label>
               <input type="text" class="form-control" name="company_name" id="company_name" value="{{ $customer->company_name }}" />
               <small class="text-danger error_company_name"></small>
             </div>
           </div>
           <div class="col-md-6">
             <div class="mb-3">
-              <label class="form-label">GST No.<span class="text-danger">*</span> :</label>
+              <label class="form-label"><span class="text-danger">*</span>GST No. :</label>
               <input type="text" class="form-control alphaNumericChar uppercaseChar" name="gst_no" id="gst_no" value="{{ $customer->gst_no }}" />
               <small class="text-danger error_gst_no"></small>
             </div>
           </div>
           <div class="col-md-6">
             <div class="mb-3">
-              <label class="form-label">Contact Person<span class="text-danger">*</span> :</label>
+              <label class="form-label"><span class="text-danger">*</span>Contact Person :</label>
               <input type="text" class="form-control" name="contact_person" id="contact_person" value="{{ $customer->contact_person }}" />
               <small class="text-danger error_contact_person"></small>
             </div>
@@ -53,7 +53,7 @@
             <div class=" row">
               <div class="col-md-6">
                 <div class="mb-3  d-flex flex-column">
-                  <label class="form-label">Mobile No<span class="text-danger">*</span> :</label>
+                  <label class="form-label"><span class="text-danger">*</span>Mobile No :</label>
                   <input type="text" id="mobile_code-1" class="form-control mobileNumber" name="mobile_no" value="{{  $customer->mobile_no }}" />
                   <small class="text-danger error_mobile_no"></small>
                 </div>
@@ -72,7 +72,7 @@
             <div class=" row">
               <div class="col-md-6">
                 <div class="mb-3  d-flex flex-column">
-                  <label class="form-label">Email Id<span class="text-danger">*</span> :</label>
+                  <label class="form-label"><span class="text-danger">*</span>Email Id :</label>
                   <input type="text" id="email" class="form-control" name ="email" value="{{  $customer->email }}" />
                   <small class="text-danger error_email"></small>
                 </div>
@@ -91,14 +91,14 @@
               <div class="col-md-6">
                 <div class="mb-3  d-flex flex-column">
                   <label class="form-label">Phone No :</label>
-                  <input type="text" id="mobile_code-3" class="form-control onlyNumber" name="phone_no" value="{{  $customer->phone_no }}" />
+                  <input type="text" id="mobile_code-3" class="form-control onlyNumber phoneNumber" name="phone_no" value="{{  $customer->phone_no }}" />
                   <small class="text-danger error_phone_no"></small>
                 </div>
               </div>
               <div class="col-md-6">
                 <div class="mb-3 d-flex flex-column">
                   <label class="form-label">Alternative Phone No. :</label>
-                  <input type="text" id="mobile_code-4" class="form-control onlyNumber" name="alternative_phone_no" value="{{  $customer->alternative_phone_no }}" />
+                  <input type="text" id="mobile_code-4" class="form-control onlyNumber phoneNumber" name="alternative_phone_no" value="{{  $customer->alternative_phone_no }}" />
                   <small class="text-danger error_alternative_phone_no"></small>
                 </div>
               </div>
@@ -113,14 +113,14 @@
           </div>
         </div>
         <div class="mb-3">
-          <label class="form-label">Address<span class="text-danger">*</span> :</label>
+          <label class="form-label"><span class="text-danger">*</span>Address :</label>
           <input type="text" class="form-control" name="address" id="address" value="{{  $customer->address }}" />
           <small class="text-danger error_address"></small>
         </div>
         <div class="row">
           <div class="col-md-6">
             <div class="mb-3">
-              <label class="form-label">Country<span class="text-danger">*</span> :</label>
+              <label class="form-label"><span class="text-danger">*</span>Countryx :</label>
               <select class="form-select" aria-label="Default select example" id="country" name="country_id">
                 {{-- <option value="">Select Country</option> --}}
                 @if ($countries->isNotEmpty())
@@ -134,7 +134,7 @@
           </div>
           <div class="col-md-6">
             <div class="mb-3">
-              <label class="form-label">State<span class="text-danger">*</span> :</label>
+              <label class="form-label"><span class="text-danger">*</span>State :</label>
               <select class="form-select" aria-label="Default select example" id="state" name="state_id">
                 <option value="">Select State</option>
                 @if ($states->isNotEmpty())
@@ -148,7 +148,7 @@
           </div>
           <div class="col-md-6">
             <div class="mb-3">
-              <label class="form-label">City<span class="text-danger">*</span> :</label>
+              <label class="form-label"><span class="text-danger">*</span>City :</label>
               <select class="form-select" aria-label="Default select example" id="city" name="city_id">
                 <option value="">Select City</option>
                 @if ($cities->isNotEmpty())
@@ -162,14 +162,14 @@
           </div>
           <div class="col-md-6">
             <div class="mb-3">
-              <label class="form-label">Pincode<span class="text-danger">*</span> :</label>
+              <label class="form-label"><span class="text-danger">*</span>Pincode :</label>
               <input type="text" class="form-control" name="pincode" id="pincode" value="{{  $customer->pincode }}" />
               <small class="text-danger error_pincode"></small>
             </div>
           </div>
           <div class="col-md-6">
             <div class="mb-3">
-              <label class="form-label">Print Margin<span class="text-danger">*</span> :</label>
+              <label class="form-label"><span class="text-danger">*</span>Print Margin :</label>
               <input type="text" class="form-control onlyNumber" name="print_margin" id="print_margin" value="{{  $customer->print_margin }}" />
               <small class="text-danger error_print_margin"></small>
             </div>
@@ -288,7 +288,7 @@
       var state                         = $('#state').val();
       var city                          = $('#city').val();
       var pincode                       = $('#pincode').val().trim();
-      var print_margin                  = $('#print_margin').val();
+      var print_margin                  = $('#print_margin').val().trim();
       
             
       if (!company_name.trim()) {
@@ -476,11 +476,16 @@
         }
       }
 
-      if (!print_margin.trim()) {
+      if (!print_margin) {
         $('#print_margin').focus();
         return $('.error_print_margin').html('Print margin field is required');
       } else {
-          $('.error_print_margin').html('');
+          if (print_margin > 100) {
+            $('#print_margin').focus();
+            return $('.error_print_margin').html('Print margin should not be greter than 100 ');
+          }else{
+            $('.error_print_margin').html('');
+          }
       }
 
       __e[0].submit();

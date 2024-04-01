@@ -30,4 +30,14 @@ $(document).ready(function () {
         var sanitizedValue = inputValue.replace(/[^0-9]/g, '');
         $(this).val(sanitizedValue); // Update input field with sanitized value
     });
+
+    //Mobile number validate
+    $(".phoneNumber").on("keyup", function () {
+        var inputValue = $(this).val();
+        var sanitizedValue = inputValue.replace(/\D/g, '');
+        // Limit the length to a maximum of 10 characters
+        sanitizedValue = sanitizedValue.substring(0, 11);
+        $(this).val(sanitizedValue);
+    });
+
 });
