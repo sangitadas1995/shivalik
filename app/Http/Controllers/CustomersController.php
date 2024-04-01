@@ -207,7 +207,7 @@ class CustomersController extends Controller
 
                 $subarray = [];
                 $subarray[] = $value->id;
-                $subarray[] = ++$key . '.';
+                $subarray[] = $value->id . '.';
                 $subarray[] = Carbon::parse($value->created_at)->format('d/m/Y h:i A');
                 $subarray[] = $value->company_name;
                 $subarray[] = $value->contact_person;
