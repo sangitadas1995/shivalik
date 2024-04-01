@@ -131,8 +131,6 @@ class UsersController extends Controller
                 new UserUniqueEmailAddress('email', $id, 'The email address :input has already been taken.'),
             ],
             'mobile' => [
-                'required',
-                'regex:/^[6-9]\d{9}$/',
                 new UserUniqueMobileNumber('mobile', $id, 'The mobile number :input has already been taken.')
             ],
             'country_id' => ['required', 'numeric'],
@@ -151,7 +149,14 @@ class UsersController extends Controller
         $user->designation_id = $request->designation;
         $user->func_area_id = $request->func_area_id;
         $user->email = $request->email;
-        $user->mobile = $request->mobile;
+        if($request->mobile!="")
+        {
+            $user->mobile = $request->mobile;
+        }
+        else
+        {
+            $user->mobile = "0";
+        }
         $user->address = $request->address;
         $user->country_id = $request->country_id;
         $user->state_id = $request->state_id;
@@ -208,8 +213,6 @@ class UsersController extends Controller
                 new UserUniqueEmailAddress('email', '', 'The email address :input has already been taken.'),
             ],
             'mobile' => [
-                'required',
-                'regex:/^[6-9]\d{9}$/',
                 new UserUniqueMobileNumber('mobile', '', 'The mobile number :input has already been taken.')
             ],
             'country_id' => ['required', 'numeric'],
@@ -232,7 +235,10 @@ class UsersController extends Controller
         $user->designation_id = $request->designation;
         $user->func_area_id = $request->func_area_id;
         $user->email = $request->email;
-        $user->mobile = $request->mobile;
+        if($request->mobile!="")
+        {
+            $user->mobile = $request->mobile;
+        }
         $user->address = $request->address;
         $user->country_id = $request->country_id;
         $user->state_id = $request->state_id;
@@ -290,6 +296,35 @@ class UsersController extends Controller
     }
 
 
+    public function add_new_designation(Request $request)
+    {
+        $data = $request->all();
+        try 
+        {
+            $designation = new Designation();
+            $designation->name = $data['new_designation'];
+            $save = $designation->save();
+
+            if ($save) {
+               $res = array(
+                'status'=>'success'
+                );
+            } else {
+                $res = array(
+                'status'=>'fail'
+                );
+            }
+        } 
+        catch (Exception $th) 
+        {
+            $res = array(
+                'status'=>'fail'
+            );
+        }
+        echo json_encode($res);
+    }
+
+
     public function list_data(Request $request)
     {
         $column = [
@@ -320,20 +355,20 @@ class UsersController extends Controller
         // if (isset($request->order['0']['dir']) && ($request->order['0']['column'] != 0) && ($request->order['0']['column'] != 3)) {
         //     $query->orderBy($column[$request->order['0']['column']], $request->order['0']['dir']);
         // }
-        if (isset($request->order['0']['dir']) && ($request->order['0']['column'] != 0) && ($request->order['0']['column'] == 3)) {
+        if (isset($request->order['0']['dir']) && ($request->order['0']['column'] != 0) && ($request->order['0']['column'] == 2)) {
             $query->orderBy('name', $request->order['0']['dir']);
         }
-        else if (isset($request->order['0']['dir']) && ($request->order['0']['column'] != 0) && ($request->order['0']['column'] == 4)) {
+        else if (isset($request->order['0']['dir']) && ($request->order['0']['column'] != 0) && ($request->order['0']['column'] == 3)) {
             $query->whereHas('manager', function ($q) use ($request) {
                 return $q->orderBy('name', $request->order['0']['dir']);
             });
         }
-        else if (isset($request->order['0']['dir']) && ($request->order['0']['column'] != 0) && ($request->order['0']['column'] == 5)) {
+        else if (isset($request->order['0']['dir']) && ($request->order['0']['column'] != 0) && ($request->order['0']['column'] == 4)) {
             $query->whereHas('designation', function ($q) use ($request) {
                 return $q->orderBy('name', $request->order['0']['dir']);
             });
         } 
-        else if (isset($request->order['0']['dir']) && ($request->order['0']['column'] != 0) && ($request->order['0']['column'] == 6)) {
+        else if (isset($request->order['0']['dir']) && ($request->order['0']['column'] != 0) && ($request->order['0']['column'] == 5)) {
             $query->whereHas('functionalareas', function ($q) use ($request) {
                 return $q->orderBy('name', $request->order['0']['dir']);
             });
@@ -371,9 +406,9 @@ class UsersController extends Controller
 
                 $editLink = route('users.edit', encrypt($value->id));
                 $subarray = [];
-                $subarray[] = $value->id;
                 $subarray[] = ++$key . '.';
-                $subarray[] = Carbon::parse($value->created_at)->format('d/m/Y h:i A');
+                $subarray[] = $value->id;
+                //$subarray[] = Carbon::parse($value->created_at)->format('d/m/Y h:i A');
                 $subarray[] = $value->name;
                 $subarray[] = $value->manager?->name ?? null;
                 $subarray[] = $value->designation?->name ?? null;
