@@ -173,7 +173,9 @@
         </div>
       </div>
       <div class="text-end">
-        <button type="reset" class="btn grey-primary">Cancel</button>
+        <a href="{{ route('users.index') }}">
+        <button type="button" class="btn grey-primary">Cancel</button>
+        </a>
         <button type="submit" class="btn black-btn">Save & Continue</button>
       </div>
     </form>
