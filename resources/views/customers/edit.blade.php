@@ -1,192 +1,208 @@
 @extends('layouts.app')
 @section('title','Customer Management')
 @push('extra_css')
-    
+
 @endpush
 @section('content')
 <div class="page-name">
-    <div class="row justify-content-between align-items-center">
-        <div class="col-md-4">
-        <h2>
-          <a href="{{ route('customers.index') }}"><i class="ri-arrow-left-line"></i></a> Edit Customer</h2>
-        </div>
-    </div>
-</div>
-
-  <div class="card add-new-location mt-2">
-    <div class="card-body">
-      <form action="{{ route('customers.update', encrypt($customer->id)) }}" method="POST" id="customer-edit-form">
-        @csrf
-        <div class="row">
-            <div class="col-md-12">
-                @include('utils.alert')
-            </div>
-          <div class="col-md-6">
-            <div class="mb-3">
-              <label class="form-label"><span class="text-danger">*</span>Company Name :</label>
-              <input type="text" class="form-control" name="company_name" id="company_name" value="{{ $customer->company_name }}" />
-              <small class="text-danger error_company_name"></small>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="mb-3">
-              <label class="form-label"><span class="text-danger">*</span>GST No. :</label>
-              <input type="text" class="form-control alphaNumericChar uppercaseChar" name="gst_no" id="gst_no" value="{{ $customer->gst_no }}" />
-              <small class="text-danger error_gst_no"></small>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="mb-3">
-              <label class="form-label"><span class="text-danger">*</span>Contact Person :</label>
-              <input type="text" class="form-control" name="contact_person" id="contact_person" value="{{ $customer->contact_person }}" />
-              <small class="text-danger error_contact_person"></small>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="mb-3">
-              <label class="form-label">Contact Person Designation :</label>
-              <input type="text" class="form-control" name="contact_person_designation" id="contact_person_designation" value="{{ $customer->contact_person_designation }}" />
-              <small class="text-danger error_contact_person_designation"></small>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class=" row">
-              <div class="col-md-6">
-                <div class="mb-3  d-flex flex-column">
-                  <label class="form-label"><span class="text-danger">*</span>Mobile No :</label>
-                  <input type="text" id="mobile_code-1" class="form-control mobileNumber" name="mobile_no" value="{{  $customer->mobile_no }}" />
-                  <small class="text-danger error_mobile_no"></small>
-                </div>
-              </div>
-              <div class="col-md-6">
-                <div class="mb-3 d-flex flex-column">
-                  <label class="form-label">Alternative Mobile No.
-                    :</label>
-                  <input type="text" id="mobile_code-2" class="form-control mobileNumber" name="alter_mobile_no" value="{{  $customer->alter_mobile_no }}" />
-                  <small class="text-danger error_alter_mobile_no"></small>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class=" row">
-              <div class="col-md-6">
-                <div class="mb-3  d-flex flex-column">
-                  <label class="form-label"><span class="text-danger">*</span>Email Id :</label>
-                  <input type="text" id="email" class="form-control" name ="email" value="{{  $customer->email }}" />
-                  <small class="text-danger error_email"></small>
-                </div>
-              </div>
-              <div class="col-md-6">
-                <div class="mb-3 d-flex flex-column">
-                  <label class="form-label">Alternative Email Id :</label>
-                  <input type="text" id="alternative_email_id" class="form-control" name="alternative_email_id" value="{{  $customer->alternative_email_id }}" />
-                  <small class="text-danger error_alternative_email_id"></small>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class=" row">
-              <div class="col-md-6">
-                <div class="mb-3  d-flex flex-column">
-                  <label class="form-label">Phone No :</label>
-                  <input type="text" id="mobile_code-3" class="form-control onlyNumber phoneNumber" name="phone_no" value="{{  $customer->phone_no }}" />
-                  <small class="text-danger error_phone_no"></small>
-                </div>
-              </div>
-              <div class="col-md-6">
-                <div class="mb-3 d-flex flex-column">
-                  <label class="form-label">Alternative Phone No. :</label>
-                  <input type="text" id="mobile_code-4" class="form-control onlyNumber phoneNumber" name="alternative_phone_no" value="{{  $customer->alternative_phone_no }}" />
-                  <small class="text-danger error_alternative_phone_no"></small>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="mb-3">
-              <label class="form-label">Customer Website :</label>
-              <input type="text" class="form-control" name="customer_website" id="customer_website" value="{{  $customer->customer_website }}" />
-              <small class="text-danger error_customer_website"></small>
-            </div>
-          </div>
-        </div>
-        <div class="mb-3">
-          <label class="form-label"><span class="text-danger">*</span>Address :</label>
-          <input type="text" class="form-control" name="address" id="address" value="{{  $customer->address }}" />
-          <small class="text-danger error_address"></small>
-        </div>
-        <div class="row">
-          <div class="col-md-6">
-            <div class="mb-3">
-              <label class="form-label"><span class="text-danger">*</span>Countryx :</label>
-              <select class="form-select" aria-label="Default select example" id="country" name="country_id">
-                {{-- <option value="">Select Country</option> --}}
-                @if ($countries->isNotEmpty())
-                    @foreach ($countries as $country)
-                        <option value="{{ $country->id }}" {{ $country->id == $customer->country_id ? 'selected' : null }}>{{ $country->country_name }}</option>
-                    @endforeach
-                @endif
-              </select>
-              <small class="text-danger error_country"></small>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="mb-3">
-              <label class="form-label"><span class="text-danger">*</span>State :</label>
-              <select class="form-select" aria-label="Default select example" id="state" name="state_id">
-                <option value="">Select State</option>
-                @if ($states->isNotEmpty())
-                    @foreach ($states as $state)
-                        <option value="{{ $state->id }}" {{ $state->id == $customer->state_id ? 'selected' : null }}>{{ $state->state_name }}</option>
-                    @endforeach
-                @endif
-              </select>
-              <small class="text-danger error_state"></small>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="mb-3">
-              <label class="form-label"><span class="text-danger">*</span>City :</label>
-              <select class="form-select" aria-label="Default select example" id="city" name="city_id">
-                <option value="">Select City</option>
-                @if ($cities->isNotEmpty())
-                    @foreach ($cities as $city)
-                        <option value="{{ $city->id }}" {{ $city->id == $customer->city_id ? 'selected' : null }}>{{ $city->city_name }}</option>
-                    @endforeach
-                @endif
-              </select>
-              <small class="text-danger error_city"></small>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="mb-3">
-              <label class="form-label"><span class="text-danger">*</span>Pincode :</label>
-              <input type="text" class="form-control" name="pincode" id="pincode" value="{{  $customer->pincode }}" />
-              <small class="text-danger error_pincode"></small>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="mb-3">
-              <label class="form-label"><span class="text-danger">*</span>Print Margin :</label>
-              <input type="text" class="form-control onlyNumber" name="print_margin" id="print_margin" value="{{  $customer->print_margin }}" />
-              <small class="text-danger error_print_margin"></small>
-            </div>
-          </div>
-        </div>
-        <div class="text-end">
-          <a href="{{ route('customers.index') }}"><button type="button" class="btn grey-primary reset_edit_customer">Cancel</button></a>
-          <button type="submit" class="btn black-btn">Save</button>
-        </div>
-      </form>
+  <div class="row justify-content-between align-items-center">
+    <div class="col-md-4">
+      <h2>
+        <a href="{{ route('customers.index') }}"><i class="ri-arrow-left-line"></i></a> Edit Customer
+      </h2>
     </div>
   </div>
+</div>
+
+<div class="card add-new-location mt-2">
+  <div class="card-body">
+    <form action="{{ route('customers.update', encrypt($customer->id)) }}" method="POST" id="customer-edit-form">
+      @csrf
+      <div class="row">
+        <div class="col-md-12">
+          @include('utils.alert')
+        </div>
+        <div class="col-md-6">
+          <div class="mb-3">
+            <label class="form-label"><span class="text-danger">*</span>Company Name :</label>
+            <input type="text" class="form-control" name="company_name" id="company_name"
+              value="{{ $customer->company_name }}" />
+            <small class="text-danger error_company_name"></small>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="mb-3">
+            <label class="form-label"><span class="text-danger">*</span>GST No. :</label>
+            <input type="text" class="form-control alphaNumericChar uppercaseChar" name="gst_no" id="gst_no"
+              value="{{ $customer->gst_no }}" />
+            <small class="text-danger error_gst_no"></small>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="mb-3">
+            <label class="form-label"><span class="text-danger">*</span>Contact Person :</label>
+            <input type="text" class="form-control" name="contact_person" id="contact_person"
+              value="{{ $customer->contact_person }}" />
+            <small class="text-danger error_contact_person"></small>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="mb-3">
+            <label class="form-label">Contact Person Designation :</label>
+            <input type="text" class="form-control" name="contact_person_designation" id="contact_person_designation"
+              value="{{ $customer->contact_person_designation }}" />
+            <small class="text-danger error_contact_person_designation"></small>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class=" row">
+            <div class="col-md-6">
+              <div class="mb-3  d-flex flex-column">
+                <label class="form-label"><span class="text-danger">*</span>Mobile No :</label>
+                <input type="text" id="mobile_code-1" class="form-control mobileNumber" name="mobile_no"
+                  value="{{  $customer->mobile_no }}" />
+                <small class="text-danger error_mobile_no"></small>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="mb-3 d-flex flex-column">
+                <label class="form-label">Alternative Mobile No.
+                  :</label>
+                <input type="text" id="mobile_code-2" class="form-control mobileNumber" name="alter_mobile_no"
+                  value="{{  $customer->alter_mobile_no }}" />
+                <small class="text-danger error_alter_mobile_no"></small>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class=" row">
+            <div class="col-md-6">
+              <div class="mb-3  d-flex flex-column">
+                <label class="form-label"><span class="text-danger">*</span>Email Id :</label>
+                <input type="text" id="email" class="form-control" name="email" value="{{  $customer->email }}" />
+                <small class="text-danger error_email"></small>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="mb-3 d-flex flex-column">
+                <label class="form-label">Alternative Email Id :</label>
+                <input type="text" id="alternative_email_id" class="form-control" name="alternative_email_id"
+                  value="{{  $customer->alternative_email_id }}" />
+                <small class="text-danger error_alternative_email_id"></small>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class=" row">
+            <div class="col-md-6">
+              <div class="mb-3  d-flex flex-column">
+                <label class="form-label">Phone No :</label>
+                <input type="text" id="mobile_code-3" class="form-control onlyNumber phoneNumber" name="phone_no"
+                  value="{{  $customer->phone_no }}" />
+                <small class="text-danger error_phone_no"></small>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="mb-3 d-flex flex-column">
+                <label class="form-label">Alternative Phone No. :</label>
+                <input type="text" id="mobile_code-4" class="form-control onlyNumber phoneNumber"
+                  name="alternative_phone_no" value="{{  $customer->alternative_phone_no }}" />
+                <small class="text-danger error_alternative_phone_no"></small>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="mb-3">
+            <label class="form-label">Customer Website :</label>
+            <input type="text" class="form-control" name="customer_website" id="customer_website"
+              value="{{  $customer->customer_website }}" />
+            <small class="text-danger error_customer_website"></small>
+          </div>
+        </div>
+      </div>
+      <div class="mb-3">
+        <label class="form-label"><span class="text-danger">*</span>Address :</label>
+        <input type="text" class="form-control" name="address" id="address" value="{{  $customer->address }}" />
+        <small class="text-danger error_address"></small>
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+          <div class="mb-3">
+            <label class="form-label"><span class="text-danger">*</span>Country :</label>
+            <select class="form-select" aria-label="Default select example" id="country" name="country_id">
+              {{-- <option value="">Select Country</option> --}}
+              @if ($countries->isNotEmpty())
+              @foreach ($countries as $country)
+              <option value="{{ $country->id }}" {{ $country->id == $customer->country_id ? 'selected' : null }}>{{
+                $country->country_name }}</option>
+              @endforeach
+              @endif
+            </select>
+            <small class="text-danger error_country"></small>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="mb-3">
+            <label class="form-label"><span class="text-danger">*</span>State :</label>
+            <select class="form-select" aria-label="Default select example" id="state" name="state_id">
+              <option value="">Select State</option>
+              @if ($states->isNotEmpty())
+              @foreach ($states as $state)
+              <option value="{{ $state->id }}" {{ $state->id == $customer->state_id ? 'selected' : null }}>{{
+                $state->state_name }}</option>
+              @endforeach
+              @endif
+            </select>
+            <small class="text-danger error_state"></small>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="mb-3">
+            <label class="form-label"><span class="text-danger">*</span>City :</label>
+            <select class="form-select" aria-label="Default select example" id="city" name="city_id">
+              <option value="">Select City</option>
+              @if ($cities->isNotEmpty())
+              @foreach ($cities as $city)
+              <option value="{{ $city->id }}" {{ $city->id == $customer->city_id ? 'selected' : null }}>{{
+                $city->city_name }}</option>
+              @endforeach
+              @endif
+            </select>
+            <small class="text-danger error_city"></small>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="mb-3">
+            <label class="form-label"><span class="text-danger">*</span>Pincode :</label>
+            <input type="text" class="form-control" name="pincode" id="pincode" value="{{  $customer->pincode }}" />
+            <small class="text-danger error_pincode"></small>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="mb-3">
+            <label class="form-label"><span class="text-danger">*</span>Print Margin :</label>
+            <input type="text" class="form-control onlyNumber" name="print_margin" id="print_margin"
+              value="{{  $customer->print_margin }}" />
+            <small class="text-danger error_print_margin"></small>
+          </div>
+        </div>
+      </div>
+      <div class="text-end">
+        <a href="{{ route('customers.index') }}"><button type="button"
+            class="btn grey-primary reset_edit_customer">Cancel</button></a>
+        <button type="submit" class="btn black-btn">Save</button>
+      </div>
+    </form>
+  </div>
+</div>
 @endsection
 
 @section('scripts')
 <script>
-  $(document).ready(function() {
+  $(document).ready(function () {
     $("#mobile_code-1").intlTelInput({
       initialCountry: "in",
       separateDialCode: true,
@@ -269,33 +285,33 @@
       }
     });
 
-    $(document).on('submit','#customer-edit-form',function(e){
+    $(document).on('submit', '#customer-edit-form', function (e) {
       e.preventDefault();
       var __e = $(this);
-      var company_name                  = $('#company_name').val();
-      var gst_no                        = $('#gst_no').val().trim();
-      var contact_person                = $('#contact_person').val();
-      var contact_person_designation    = $('#contact_person_designation').val();
-      var mobile_no                     = $('#mobile_code-1').val().trim();
-      var alter_mobile_no               = $('#mobile_code-2').val().trim();
-      var email                         = $('#email').val().trim();
-      var alternative_email_id          = $('#alternative_email_id').val().trim();
-      var phone_no                      = $('#mobile_code-3').val();
-      var alternative_phone_no          = $('#mobile_code-4').val();
-      var customer_website              = $('#customer_website').val().trim();
-      var address                       = $('#address').val();
-      var country                       = $('#country').val();
-      var state                         = $('#state').val();
-      var city                          = $('#city').val();
-      var pincode                       = $('#pincode').val().trim();
-      var print_margin                  = $('#print_margin').val().trim();
-      
-            
+      var company_name = $('#company_name').val();
+      var gst_no = $('#gst_no').val().trim();
+      var contact_person = $('#contact_person').val();
+      var contact_person_designation = $('#contact_person_designation').val();
+      var mobile_no = $('#mobile_code-1').val().trim();
+      var alter_mobile_no = $('#mobile_code-2').val().trim();
+      var email = $('#email').val().trim();
+      var alternative_email_id = $('#alternative_email_id').val().trim();
+      var phone_no = $('#mobile_code-3').val();
+      var alternative_phone_no = $('#mobile_code-4').val();
+      var customer_website = $('#customer_website').val().trim();
+      var address = $('#address').val();
+      var country = $('#country').val();
+      var state = $('#state').val();
+      var city = $('#city').val();
+      var pincode = $('#pincode').val().trim();
+      var print_margin = $('#print_margin').val().trim();
+
+
       if (!company_name.trim()) {
         $('#company_name').focus();
         return $('.error_company_name').html('Company name field is required');
       } else {
-          $('.error_company_name').html('');
+        $('.error_company_name').html('');
       }
 
       var regex_gst = /^([0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}[Z]{1}[0-9A-Z]{1})$/;
@@ -312,7 +328,7 @@
       } else {
         $('.error_gst_no').html('');
       }
-  
+
       if (gst_no && (gst_no.length > 15 || gst_no.length < 15)) {
         $('#gst_no').focus();
         return $('.error_gst_no').html('GST number must be 15 digits');
@@ -324,19 +340,19 @@
         $('#contact_person').focus();
         return $('.error_contact_person').html('Contact person field is required');
       } else {
-          $('.error_contact_person').html('');
+        $('.error_contact_person').html('');
       }
 
       if (!mobile_no.trim()) {
         $('#mobile_code-1').focus();
         return $('.error_mobile_no').html('Mobile number field is required');
       } else {
-          if (mobile_no.length > 10 || mobile_no.length < 10) {
-            $('#mobile_code-1').focus();
-            return $('.error_mobile_no').html('Mobile number must be 10 digits');
-          } else {
-            $('.error_mobile_no').html('');
-          }
+        if (mobile_no.length > 10 || mobile_no.length < 10) {
+          $('#mobile_code-1').focus();
+          return $('.error_mobile_no').html('Mobile number must be 10 digits');
+        } else {
+          $('.error_mobile_no').html('');
+        }
       }
 
       if (alter_mobile_no && (alter_mobile_no.length > 10 || alter_mobile_no.length < 10)) {
@@ -357,7 +373,7 @@
         $('#email').focus();
         return $('.error_email').html('Email field is required');
       } else {
-        if(!IsEmail(email)) {
+        if (!IsEmail(email)) {
           $('#email').focus();
           return $('.error_email').html('Please enter a valid email');
         } else {
@@ -365,7 +381,7 @@
         }
       }
 
-      if(alternative_email_id && !IsEmail(alternative_email_id)) {
+      if (alternative_email_id && !IsEmail(alternative_email_id)) {
         $('#alternative_email_id').focus();
         return $('.error_alternative_email_id').html('Please enter a valid alternate email');
       } else {
@@ -383,7 +399,7 @@
         $('#mobile_code-3').focus();
         return $('.error_phone_no').html('Phone number must be 11 digits');
       } else {
-          $('.error_phone_no').html('');
+        $('.error_phone_no').html('');
       }
 
       if (phone_no === mobile_no) {
@@ -404,7 +420,7 @@
         $('#mobile_code-4').focus();
         return $('.error_alternative_phone_no').html('Alternate phone number must be 11 digits');
       } else {
-          $('.error_alternative_phone_no').html('');
+        $('.error_alternative_phone_no').html('');
       }
 
       if (mobile_no === alternative_phone_no) {
@@ -440,28 +456,28 @@
         $('#address').focus();
         return $('.error_address').html('Address field is required');
       } else {
-          $('.error_address').html('');
+        $('.error_address').html('');
       }
 
       if (!country.trim()) {
         $('#country').focus();
         return $('.error_country').html('Country field is required');
       } else {
-          $('.error_country').html('');
+        $('.error_country').html('');
       }
 
       if (!state.trim()) {
         $('#state').focus();
         return $('.error_state').html('State field is required');
       } else {
-          $('.error_state').html('');
+        $('.error_state').html('');
       }
 
       if (!city.trim()) {
         $('#city').focus();
         return $('.error_city').html('City field is required');
       } else {
-          $('.error_city').html('');
+        $('.error_city').html('');
       }
 
       if (!pincode.trim()) {
@@ -480,24 +496,24 @@
         $('#print_margin').focus();
         return $('.error_print_margin').html('Print margin field is required');
       } else {
-          if (print_margin > 100) {
-            $('#print_margin').focus();
-            return $('.error_print_margin').html('Print margin should not be greter than 100 ');
-          }else{
-            $('.error_print_margin').html('');
-          }
+        if (print_margin > 100) {
+          $('#print_margin').focus();
+          return $('.error_print_margin').html('Print margin should not be greter than 100 ');
+        } else {
+          $('.error_print_margin').html('');
+        }
       }
 
       __e[0].submit();
     });
 
     function IsEmail(email) {
-        var regex = /^([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
-        if(!regex.test(email)) {
-            return false;
-        } else {
-            return true;
-        }
+      var regex = /^([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+      if (!regex.test(email)) {
+        return false;
+      } else {
+        return true;
+      }
     }
   });
 </script>

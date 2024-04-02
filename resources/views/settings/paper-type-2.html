@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+<html lang="">
+
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title></title>
+        <link href="css/bootstrap.min.css" rel="stylesheet" />
+        <link rel="stylesheet" href="css/remixicon.css" />
+        <link rel="stylesheet" href="css/intlTelInput.css" />
+        <link rel="stylesheet" href="css/side-menu.css" />
+        <link rel="stylesheet" href="css/css-pro-layout.css" />
+        <link rel="stylesheet" href="css/style.css" />
+    </head>
+
+    <body>
+
+
+
+
+
+
+
+
+
+
+        <div class="layout has-sidebar fixed-sidebar fixed-header">
+            <aside id="sidebar" class="sidebar break-point-lg has-bg-image">
+                <!-- <div class="image-wrapper">
+              <img src="https://user-images.githubusercontent.com/25878302/144499035-2911184c-76d3-4611-86e7-bc4e8ff84ff5.jpg" alt="sidebar background" />
+            </div> -->
+                <div class="sidebar-layout">
+                    <div class="sidebar-header">
+                        <span style="
+                      text-transform: uppercase;
+                      font-size: 15px;
+                      letter-spacing: 3px;
+                      font-weight: bold;
+                    "><img src="images/logo1.png" class="w-100" />
+                        </span>
+                    </div>
+                    <div class="sidebar-content">
+                        <div class="ul-box mb-3">
+                            <ul class="row">
+                                <li>
+                                    <a href="#"><span class="w-100"><img src="images/mi_user.png" /> <br />User
+                                            Management</span></a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <span class="w-100"><img src="images/customer.png" /> <br />
+                                            Customer</span></a>
+                                </li>
+                                <li>
+                                    <a href="#"><span class="w-100"><img src="images/order-approve-outline-sharp.png" />
+                                            <br />
+                                            Order Management</span></a>
+                                </li>
+                                <li>
+                                    <a href="#"><span class="w-100"><img src="images/ic_round-inventory.png" /><br />
+                                            Inventory Management</span></a>
+                                </li>
+                            </ul>
+                        </div>
+                        <nav class="menu open-current-submenu">
+                            <ul>
+                                <!-- sub-menu -->
+                                <li class="menu-item sub-menu">
+                                    <a href="#">
+                                        <span class="menu-icon">
+                                            <svg width="21" height="21" viewBox="0 0 21 21" fill="none"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <path
+                                                    d="M3.19201 17.3336H4.11451V18.309C4.11451 19.4779 4.68601 19.9879 5.79338 19.9879H15.2066C16.3226 19.9879 16.8851 19.4779 16.8851 18.309V17.3336H17.817C19.5221 17.3336 20.427 16.4723 20.427 14.7585V6.53177C20.427 4.82665 19.5221 3.95665 17.817 3.95665H16.947V3.4909C16.947 1.77715 16.0943 1.01215 14.4596 1.01215H6.54001C5.00213 1.01215 4.05301 1.77715 4.05301 3.4909V3.95665H3.19201C1.56601 3.95665 0.572632 4.82665 0.572632 6.53177V14.7585C0.572632 16.4723 1.47788 17.3336 3.19201 17.3336ZM5.41576 3.39415C5.41576 2.65577 5.79338 2.2954 6.52313 2.2954H14.4769C15.2156 2.2954 15.5846 2.65577 15.5846 3.39415V3.95665H5.41501L5.41576 3.39415ZM3.17401 16.0151C2.39176 16.0151 1.98751 15.6019 1.98751 14.8286V6.46165C1.98751 5.68802 2.39176 5.27477 3.17401 5.27477H17.8343C18.6075 5.27477 19.0118 5.68802 19.0118 6.46127V14.8286C19.0118 15.6023 18.6075 16.0151 17.8343 16.0151H16.8848V10.7419C16.8848 9.57265 16.3223 9.06302 15.2063 9.06302H5.79338C4.73888 9.06302 4.11488 9.57302 4.11488 10.7419V16.0151H3.17401ZM6.23251 18.6694C5.76676 18.6694 5.52938 18.4406 5.52938 17.9576V11.0846C5.52938 10.6099 5.76676 10.3901 6.23251 10.3901H14.7754C15.2501 10.3901 15.4699 10.6099 15.4699 11.0846V17.9576C15.4699 18.441 15.2501 18.6694 14.7754 18.6694H6.23251ZM7.45426 13.5544H13.5626C13.8791 13.5544 14.1075 13.317 14.1075 13.0005C14.1075 12.7016 13.8788 12.4733 13.5626 12.4733H7.45388C7.13776 12.4733 6.90038 12.702 6.90038 13.0005C6.90038 13.317 7.13776 13.5544 7.45426 13.5544ZM7.45426 16.6219H13.5626C13.8791 16.6219 14.1075 16.3841 14.1075 16.0856C14.1075 15.7781 13.8788 15.5404 13.5626 15.5404H7.45388C7.13776 15.5404 6.90038 15.7778 6.90038 16.0853C6.90038 16.3841 7.13776 16.6219 7.45426 16.6219Z"
+                                                    fill="#BEC9D9" />
+                                            </svg>
+
+                                        </span>
+                                        <span class="menu-title">Printing Vendor</span>
+                                    </a>
+                                    <div class="sub-menu-list">
+                                        <ul>
+                                            <li class="menu-item">
+                                                <a href="#">
+                                                    <span class="menu-title">Grid</span>
+                                                </a>
+                                            </li>
+                                            <li class="menu-item">
+                                                <a href="#">
+                                                    <span class="menu-title">Layout</span>
+                                                </a>
+                                            </li>
+                                            <li class="menu-item">
+                                                <a href="#">
+                                                    <span class="menu-title">Forms</span>
+                                                </a>
+
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </li>
+                                <li class="menu-item sub-menu">
+                                    <a href="#">
+                                        <span class="menu-icon">
+                                            <svg width="28" height="29" viewBox="0 0 28 29" fill="none"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <path
+                                                    d="M8.16663 18.0904V15.7358H12.8333V18.0904H8.16663ZM25.6666 22.2109V17.5017L24.3016 18.8792C23.8683 18.4415 23.3536 18.0945 22.787 17.8581C22.2204 17.6217 21.6131 17.5006 21 17.5017C18.4216 17.5017 16.3333 19.6091 16.3333 22.2109C16.3333 24.8127 18.4216 26.92 21 26.92C22.96 26.92 24.64 25.7074 25.3283 23.9768H23.3333C22.9761 24.4562 22.4822 24.814 21.9179 25.0023C21.3536 25.1906 20.7458 25.2004 20.1758 25.0305C19.6058 24.8605 19.1008 24.5189 18.7285 24.0514C18.3563 23.5838 18.1344 23.0127 18.0927 22.4144C18.051 21.8161 18.1914 21.2192 18.4952 20.7037C18.799 20.1882 19.2516 19.7786 19.7924 19.5298C20.3332 19.281 20.9364 19.2049 21.5213 19.3117C22.1062 19.4184 22.6448 19.7029 23.065 20.1271L21 22.2109H25.6666ZM14.21 20.445C14.0816 21.0336 14 21.6222 14 22.2109C14 22.411 14 22.5994 14.035 22.7995H4.66663V14.5585C4.66663 13.9341 4.91246 13.3352 5.35004 12.8936C5.78763 12.452 6.38112 12.204 6.99996 12.204H8.16663V5.14026H19.8333V12.204H21C21.6188 12.204 22.2123 12.452 22.6499 12.8936C23.0875 13.3352 23.3333 13.9341 23.3333 14.5585H6.99996V20.445H14.21ZM10.5 12.204H17.5V7.49483H10.5V12.204Z"
+                                                    fill="#BEC9D9" />
+                                            </svg>
+
+                                        </span>
+                                        <span class="menu-title">Printing Plate Vendor</span>
+                                    </a>
+                                    <div class="sub-menu-list">
+                                        <ul>
+                                            <li class="menu-item">
+                                                <a href="#">
+                                                    <span class="menu-title">Grid</span>
+                                                </a>
+                                            </li>
+                                            <li class="menu-item">
+                                                <a href="#">
+                                                    <span class="menu-title">Layout</span>
+                                                </a>
+                                            </li>
+
+                                        </ul>
+                                    </div>
+                                </li>
+                                <li class="menu-item sub-menu">
+                                    <a href="#">
+                                        <span class="menu-icon">
+                                            <svg width="17" height="17" viewBox="0 0 17 17" fill="none"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <g clip-path="url(#clip0_268_82)">
+                                                    <path
+                                                        d="M13.6 1.7H17V14.45C17 15.1263 16.7313 15.7749 16.2531 16.2531C15.7749 16.7313 15.1263 17 14.45 17H2.55C1.8737 17 1.2251 16.7313 0.746878 16.2531C0.26866 15.7749 0 15.1263 0 14.45L0 0H13.6V1.7ZM13.6 3.4V14.45C13.6 14.6754 13.6896 14.8916 13.849 15.051C14.0084 15.2104 14.2246 15.3 14.45 15.3C14.6754 15.3 14.8916 15.2104 15.051 15.051C15.2104 14.8916 15.3 14.6754 15.3 14.45V3.4H13.6ZM1.7 1.7V14.45C1.7 14.6754 1.78955 14.8916 1.94896 15.051C2.10837 15.2104 2.32457 15.3 2.55 15.3H12.0445C11.9481 15.027 11.8992 14.7395 11.9 14.45V1.7H1.7ZM3.4 8.5H10.2V10.2H3.4V8.5ZM3.4 11.9H10.2V13.6H3.4V11.9ZM3.4 3.4H10.2V6.8H3.4V3.4Z"
+                                                        fill="#BEC9D9" />
+                                                </g>
+                                                <defs>
+                                                    <clipPath id="clip0_268_82">
+                                                        <rect width="17" height="17" fill="white" />
+                                                    </clipPath>
+                                                </defs>
+                                            </svg>
+
+                                        </span>
+                                        <span class="menu-title">Paper Vendor</span>
+                                    </a>
+                                    <div class="sub-menu-list">
+                                        <ul>
+                                            <li class="menu-item">
+                                                <a href="#">
+                                                    <span class="menu-title">Grid</span>
+                                                </a>
+                                            </li>
+                                            <li class="menu-item">
+                                                <a href="#">
+                                                    <span class="menu-title">Layout</span>
+                                                </a>
+                                            </li>
+
+                                        </ul>
+                                    </div>
+                                </li>
+                                <li class="menu-item sub-menu">
+                                    <a href="#">
+                                        <span class="menu-icon">
+                                            <svg width="21" height="21" viewBox="0 0 21 21" fill="none"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <path
+                                                    d="M10.5 1.3125C6.47062 1.3125 2.1875 2.38612 2.1875 4.375V16.625C2.1875 18.6139 6.47062 19.6875 10.5 19.6875C14.5294 19.6875 18.8125 18.6139 18.8125 16.625V4.375C18.8125 2.38612 14.5294 1.3125 10.5 1.3125ZM10.5 15.3125C5.89137 15.3125 3.0625 14.0385 3.0625 13.125V11.9289C4.52025 12.9973 7.5775 13.5625 10.5 13.5625C13.4225 13.5625 16.4797 12.9973 17.9375 11.9289V13.125C17.9375 14.0385 15.1086 15.3125 10.5 15.3125ZM10.5 11.8125C5.89137 11.8125 3.0625 10.5385 3.0625 9.625V8.428C4.52025 9.49725 7.5775 10.0625 10.5 10.0625C13.4225 10.0625 16.4797 9.49725 17.9375 8.428V9.625C17.9375 10.5385 15.1086 11.8125 10.5 11.8125ZM17.9375 16.625C17.9375 17.5385 15.1086 18.8125 10.5 18.8125C5.89137 18.8125 3.0625 17.5385 3.0625 16.625V15.4289C4.52025 16.4972 7.5775 17.0625 10.5 17.0625C13.4225 17.0625 16.4797 16.4972 17.9375 15.4289V16.625ZM10.5 8.3125C5.89137 8.3125 3.0625 7.0385 3.0625 6.125V4.375C3.0625 3.4615 5.89137 2.1875 10.5 2.1875C15.1086 2.1875 17.9375 3.4615 17.9375 4.375V6.125C17.9375 7.0385 15.1086 8.3125 10.5 8.3125Z"
+                                                    fill="#BEC9D9" />
+                                            </svg>
+
+                                        </span>
+                                        <span class="menu-title">Books Database</span>
+                                    </a>
+                                    <div class="sub-menu-list">
+                                        <ul>
+                                            <li class="menu-item ">
+                                                <a href="#">
+                                                    <span class="menu-title">Grid</span>
+                                                </a>
+                                            </li>
+                                            <li class="menu-item">
+                                                <a href="#">
+                                                    <span class="menu-title">Layout</span>
+                                                </a>
+                                            </li>
+
+                                        </ul>
+                                    </div>
+                                </li>
+                                <li class="menu-item sub-menu">
+                                    <a href="#">
+                                        <span class="menu-icon">
+                                            <svg width="21" height="21" viewBox="0 0 21 21" fill="none"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <path
+                                                    d="M10.6925 1.75H10.3075C9.84337 1.75 9.39825 1.93437 9.07006 2.26256C8.74188 2.59075 8.5575 3.03587 8.5575 3.5V3.6575C8.55719 3.96438 8.47618 4.26579 8.3226 4.53148C8.16902 4.79717 7.94827 5.01781 7.6825 5.17125L7.30625 5.39C7.04022 5.54359 6.73844 5.62446 6.43125 5.62446C6.12406 5.62446 5.82229 5.54359 5.55625 5.39L5.425 5.32C5.02343 5.08835 4.54636 5.02551 4.0985 5.14527C3.65065 5.26503 3.26861 5.55759 3.03625 5.95875L2.84375 6.29125C2.61211 6.69282 2.54926 7.16989 2.66902 7.61775C2.78878 8.0656 3.08135 8.44764 3.4825 8.68L3.61375 8.7675C3.87824 8.9202 4.09817 9.13945 4.25167 9.40348C4.40517 9.6675 4.48691 9.9671 4.48875 10.2725V10.7188C4.48998 11.0271 4.4097 11.3303 4.25604 11.5977C4.10238 11.8651 3.88081 12.0871 3.61375 12.2412L3.4825 12.32C3.08135 12.5524 2.78878 12.9344 2.66902 13.3823C2.54926 13.8301 2.61211 14.3072 2.84375 14.7087L3.03625 15.0413C3.26861 15.4424 3.65065 15.735 4.0985 15.8547C4.54636 15.9745 5.02343 15.9116 5.425 15.68L5.55625 15.61C5.82229 15.4564 6.12406 15.3755 6.43125 15.3755C6.73844 15.3755 7.04022 15.4564 7.30625 15.61L7.6825 15.8288C7.94827 15.9822 8.16902 16.2028 8.3226 16.4685C8.47618 16.7342 8.55719 17.0356 8.5575 17.3425V17.5C8.5575 17.9641 8.74188 18.4092 9.07006 18.7374C9.39825 19.0656 9.84337 19.25 10.3075 19.25H10.6925C11.1566 19.25 11.6017 19.0656 11.9299 18.7374C12.2581 18.4092 12.4425 17.9641 12.4425 17.5V17.3425C12.4428 17.0356 12.5238 16.7342 12.6774 16.4685C12.831 16.2028 13.0517 15.9822 13.3175 15.8288L13.6938 15.61C13.9598 15.4564 14.2616 15.3755 14.5688 15.3755C14.8759 15.3755 15.1777 15.4564 15.4438 15.61L15.575 15.68C15.9766 15.9116 16.4536 15.9745 16.9015 15.8547C17.3494 15.735 17.7314 15.4424 17.9638 15.0413L18.1563 14.7C18.3879 14.2984 18.4507 13.8214 18.331 13.3735C18.2112 12.9256 17.9187 12.5436 17.5175 12.3112L17.3863 12.2412C17.1192 12.0871 16.8976 11.8651 16.744 11.5977C16.5903 11.3303 16.51 11.0271 16.5113 10.7188V10.2812C16.51 9.97288 16.5903 9.66967 16.744 9.40231C16.8976 9.13494 17.1192 8.91293 17.3863 8.75875L17.5175 8.68C17.9187 8.44764 18.2112 8.0656 18.331 7.61775C18.4507 7.16989 18.3879 6.69282 18.1563 6.29125L17.9638 5.95875C17.7314 5.55759 17.3494 5.26503 16.9015 5.14527C16.4536 5.02551 15.9766 5.08835 15.575 5.32L15.4438 5.39C15.1777 5.54359 14.8759 5.62446 14.5688 5.62446C14.2616 5.62446 13.9598 5.54359 13.6938 5.39L13.3175 5.17125C13.0517 5.01781 12.831 4.79717 12.6774 4.53148C12.5238 4.26579 12.4428 3.96438 12.4425 3.6575V3.5C12.4425 3.03587 12.2581 2.59075 11.9299 2.26256C11.6017 1.93437 11.1566 1.75 10.6925 1.75Z"
+                                                    stroke="#BEC9D9" stroke-width="2" stroke-linecap="round"
+                                                    stroke-linejoin="round" />
+                                                <path
+                                                    d="M10.5 13.125C11.9497 13.125 13.125 11.9497 13.125 10.5C13.125 9.05025 11.9497 7.875 10.5 7.875C9.05025 7.875 7.875 9.05025 7.875 10.5C7.875 11.9497 9.05025 13.125 10.5 13.125Z"
+                                                    stroke="#BEC9D9" stroke-width="2" stroke-linecap="round"
+                                                    stroke-linejoin="round" />
+                                            </svg>
+
+                                        </span>
+                                        <span class="menu-title">Settings</span>
+                                    </a>
+                                    <div class="sub-menu-list">
+                                        <ul>
+                                            <li class="menu-item">
+                                                <a href="./setting-paper-type.html">
+                                                    <span class="menu-title">Paper Type</span>
+                                                </a>
+                                            </li>
+                                            <li class="menu-item">
+                                                <a href="./setting-printing-products-type.html">
+                                                    <span class="menu-title">Printing Product Type</span>
+                                                </a>
+                                            </li>
+                                            <li class="menu-item">
+                                                <a href="#">
+                                                    <span class="menu-title">Paper Size Type</span>
+                                                </a>
+                                            </li>
+                                            <li class="menu-item">
+                                                <a href="#">
+                                                    <span class="menu-title">Color Type</span>
+                                                </a>
+                                            </li>
+                                            <li class="menu-item">
+                                                <a href="#">
+                                                    <span class="menu-title">Book Cover Type </span>
+                                                </a>
+                                            </li>
+                                            <li class="menu-item">
+                                                <a href="#">
+                                                    <span class="menu-title">Binding Type</span>
+                                                </a>
+                                            </li>
+                                            <li class="menu-item">
+                                                <a href="#">
+                                                    <span class="menu-title">Printing Plate Type</span>
+                                                </a>
+                                            </li>
+                                            <li class="menu-item">
+                                                <a href="#">
+                                                    <span class="menu-title">Book Size Type</span>
+                                                </a>
+                                            </li>
+                                            <li class="menu-item">
+                                                <a href="#">
+                                                    <span class="menu-title">Printing Machine Type</span>
+                                                </a>
+                                            </li>
+                                            <li class="menu-item">
+                                                <a href="#">
+                                                    <span class="menu-title">General Setting</span>
+                                                </a>
+                                            </li>
+
+                                        </ul>
+                                    </div>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                    <!-- <div class="sidebar-footer"><span>Sidebar footer</span></div> -->
+                </div>
+            </aside>
+
+            <!-- sidebar -->
+            <link rel="import" href="sidebar.html">
+            <!-- sidebar end -->
+            <div id="overlay" class="overlay"></div>
+            <div class="layout">
+                <header class="header">
+                    <a id="btn-collapse" class="header-bar" href="#">
+                        <!-- <i class="ri-bar-chart-horizontal-line"></i> -->
+                    </a>
+                    <a id="btn-toggle" href="#" class="sidebar-toggler break-point-lg">
+                        <i class="ri-bar-chart-horizontal-line"></i>
+                    </a>
+                    <div class="dropdown navbar-nav-right profile-img-text">
+                        <a class="dropdown-toggle align-items-center" class="btn btn-secondary dropdown-toggle"
+                            type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                            <span class="d-flex">
+                                <span><img class="img-xs rounded-circle" src="images/face15.jpg" alt="" /></span>
+                                <span class="profile-text ms-2">
+                                    <b>Welcome to<br /></b> Henry Klein</span>
+                            </span>
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                            <li><a class="dropdown-item" href="#">Action</a></li>
+                            <li><a class="dropdown-item" href="#">Another action</a></li>
+                            <li><a class="dropdown-item" href="#">Something else here</a></li>
+                        </ul>
+                    </div>
+                </header>
+                <div class="page-breadcrumb">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item">
+                                <a href="#"><i class="ri-home-4-line"></i></a>
+                            </li>
+                            <li class="breadcrumb-item">
+                                <a href="#" class="d-flex align-items-center">Welcome Back, Admin</a>
+                            </li>
+                        </ol>
+                    </nav>
+                </div>
+                <main class="content">
+                    <div class="page-name">
+                        <div class="row justify-content-between align-items-center">
+                            <div class="col-md-4">
+                                <h2><i class="ri-arrow-left-line"></i> Printing Product Type</h2>
+                            </div>
+                            <!-- add button -->
+                            <!-- <div class="col-md-6">
+                                <div class="text-end mb-4">
+                                    <a href="./setting-add-printing-products-type.html" class="btn primary-btn"><svg
+                                            width="24" height="24" viewBox="0 0 30 30" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                                d="M0 15C0 6.7155 6.7155 0 15 0C23.2845 0 30 6.7155 30 15C30 23.2845 23.2845 30 15 30C6.7155 30 0 23.2845 0 15ZM15 3C11.8174 3 8.76515 4.26428 6.51472 6.51472C4.26428 8.76515 3 11.8174 3 15C3 18.1826 4.26428 21.2348 6.51472 23.4853C8.76515 25.7357 11.8174 27 15 27C18.1826 27 21.2348 25.7357 23.4853 23.4853C25.7357 21.2348 27 18.1826 27 15C27 11.8174 25.7357 8.76515 23.4853 6.51472C21.2348 4.26428 18.1826 3 15 3Z"
+                                                fill="currentColor" />
+                                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                                d="M16.5 7.5C16.5 7.10218 16.342 6.72064 16.0607 6.43934C15.7794 6.15804 15.3978 6 15 6C14.6022 6 14.2206 6.15804 13.9393 6.43934C13.658 6.72064 13.5 7.10218 13.5 7.5V13.5H7.5C7.10218 13.5 6.72064 13.658 6.43934 13.9393C6.15804 14.2206 6 14.6022 6 15C6 15.3978 6.15804 15.7794 6.43934 16.0607C6.72064 16.342 7.10218 16.5 7.5 16.5H13.5V22.5C13.5 22.8978 13.658 23.2794 13.9393 23.5607C14.2206 23.842 14.6022 24 15 24C15.3978 24 15.7794 23.842 16.0607 23.5607C16.342 23.2794 16.5 22.8978 16.5 22.5V16.5H22.5C22.8978 16.5 23.2794 16.342 23.5607 16.0607C23.842 15.7794 24 15.3978 24 15C24 14.6022 23.842 14.2206 23.5607 13.9393C23.2794 13.658 22.8978 13.5 22.5 13.5H16.5V7.5Z"
+                                                fill="currentColor" />
+                                        </svg>
+                                        Add
+                                    </a>
+
+                                </div>
+                            </div> -->
+                        </div>
+                    </div>
+                    <div class="card  mt-2">
+                        <div class="card-body">
+                            <form>
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label class="form-label">Paper Name :</label>
+                                            <input type="text" class="form-control" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label class="form-label">Paper Category :</label>
+                                            <select class="form-select" aria-label="Default select example">
+                                                <option selected>Open this select menu</option>
+                                                <option value="1">One</option>
+                                                <option value="2">Two</option>
+                                                <option value="3">Three</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label class="form-label">GSM :</label>
+                                            <select class="form-select" aria-label="Default select example">
+                                                <option selected>Open this select menu</option>
+                                                <option value="1">One</option>
+                                                <option value="2">Two</option>
+                                                <option value="3">Three</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label class="form-label">Paper Quality :</label>
+                                            <select class="form-select" aria-label="Default select example">
+                                                <option selected>Open this select menu</option>
+                                                <option value="1">One</option>
+                                                <option value="2">Two</option>
+                                                <option value="3">Three</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
+                                <div class="setting-paper-type-table mb-4">
+
+
+
+                                    <!-- head -->
+
+                                    <div class="grid grid-cols-5 head">
+                                        <div class=" colum-border">
+                                            <div class="d-flex align-items-center justify-content-center colum">
+
+                                                Paper Name:
+                                            </div>
+                                        </div>
+                                        <div class=" colum-border">
+                                            <div class="d-flex align-items-center justify-content-center colum">
+
+                                                Paper Category:
+                                            </div>
+                                        </div>
+                                        <div class=" colum-border">
+                                            <div class="d-flex align-items-center justify-content-center colum">
+
+                                                GSM:
+                                            </div>
+                                        </div>
+                                        <div class=" colum-border">
+                                            <div class="d-flex align-items-center justify-content-center colum">
+                                                Paper Quality
+                                            </div>
+                                        </div>
+                                        <div class="colum-border">
+                                            <div class="d-flex align-items-center justify-content-center colum">
+                                                Action
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- rows -->
+                                    <div class="grid grid-cols-5 paper-type-row">
+                                        <div class=" colum-border">
+                                            <div class=" colum">
+
+                                                <p>Matte Paper</p>
+                                            </div>
+                                        </div>
+                                        <div class=" colum-border">
+                                            <div class=" colum">
+
+                                                <p>Text Paper</p>
+                                            </div>
+                                        </div>
+                                        <div class=" colum-border">
+                                            <div class=" colum">
+
+                                                <p>70 GSM</p>
+                                            </div>
+                                        </div>
+                                        <div class=" colum-border content-center">
+                                            <div class="colum ">
+                                                <p>Brightness</p>
+                                            </div>
+                                        </div>
+                                        <div class=" colum-border content-center">
+                                            <div class="colum">
+                                                <a href="#" title="Edit">
+                                                    <svg width="29" height="29" viewBox="0 0 29 29" fill="none"
+                                                        xmlns="http://www.w3.org/2000/svg">
+                                                        <path
+                                                            d="M19.9066 6.5347L22.4647 9.09274M21.5512 4.28116L14.6311 11.2013C14.2735 11.5583 14.0296 12.0133 13.9302 12.5087L13.291 15.7084L16.4907 15.068C16.9861 14.9689 17.4404 14.726 17.7981 14.3683L24.7182 7.4482C24.9262 7.24025 25.0911 6.99338 25.2037 6.72168C25.3162 6.44997 25.3741 6.15877 25.3741 5.86468C25.3741 5.57059 25.3162 5.27939 25.2037 5.00769C25.0911 4.73598 24.9262 4.48911 24.7182 4.28116C24.5103 4.07321 24.2634 3.90825 23.9917 3.79571C23.72 3.68317 23.4288 3.62524 23.1347 3.62524C22.8406 3.62524 22.5494 3.68317 22.2777 3.79571C22.006 3.90825 21.7591 4.07321 21.5512 4.28116Z"
+                                                            stroke="#4A88DA" stroke-width="2" stroke-linecap="round"
+                                                            stroke-linejoin="round" />
+                                                        <path
+                                                            d="M22.958 18.1251V21.7501C22.958 22.391 22.7034 23.0057 22.2502 23.4589C21.797 23.9121 21.1823 24.1667 20.5413 24.1667H7.24967C6.60873 24.1667 5.99405 23.9121 5.54083 23.4589C5.08762 23.0057 4.83301 22.391 4.83301 21.7501V8.45841C4.83301 7.81747 5.08762 7.20279 5.54083 6.74957C5.99405 6.29636 6.60873 6.04175 7.24967 6.04175H10.8747"
+                                                            stroke="#4A88DA" stroke-width="2" stroke-linecap="round"
+                                                            stroke-linejoin="round" />
+                                                    </svg>
+
+                                                </a>
+                                                <a href="#" title="Delete">
+                                                    <svg width="29" height="29" viewBox="0 0 29 29" fill="none"
+                                                        xmlns="http://www.w3.org/2000/svg">
+                                                        <path
+                                                            d="M12.2344 5.89062V6.34375H16.7656V5.89062C16.7656 5.28974 16.5269 4.71347 16.102 4.28859C15.6772 3.8637 15.1009 3.625 14.5 3.625C13.8991 3.625 13.3228 3.8637 12.898 4.28859C12.4731 4.71347 12.2344 5.28974 12.2344 5.89062ZM10.4219 6.34375V5.89062C10.4219 4.80904 10.8515 3.77175 11.6163 3.00696C12.3811 2.24216 13.4184 1.8125 14.5 1.8125C15.5816 1.8125 16.6189 2.24216 17.3837 3.00696C18.1485 3.77175 18.5781 4.80904 18.5781 5.89062V6.34375H25.375C25.6154 6.34375 25.8459 6.43923 26.0158 6.60918C26.1858 6.77914 26.2812 7.00965 26.2812 7.25C26.2812 7.49035 26.1858 7.72086 26.0158 7.89082C25.8459 8.06077 25.6154 8.15625 25.375 8.15625H24.0084L22.2938 23.171C22.1673 24.2768 21.6383 25.2974 20.8076 26.0381C19.9769 26.7789 18.9027 27.188 17.7897 27.1875H11.2103C10.0973 27.188 9.02305 26.7789 8.19237 26.0381C7.36168 25.2974 6.83269 24.2768 6.70625 23.171L4.99162 8.15625H3.625C3.38465 8.15625 3.15414 8.06077 2.98418 7.89082C2.81423 7.72086 2.71875 7.49035 2.71875 7.25C2.71875 7.00965 2.81423 6.77914 2.98418 6.60918C3.15414 6.43923 3.38465 6.34375 3.625 6.34375H10.4219ZM8.50787 22.9644C8.58354 23.6277 8.9006 24.2399 9.39865 24.6845C9.89669 25.1291 10.5409 25.3749 11.2085 25.375H17.7906C18.4582 25.3749 19.1024 25.1291 19.6004 24.6845C20.0985 24.2399 20.4156 23.6277 20.4912 22.9644L22.185 8.15625H6.81591L8.50787 22.9644ZM11.7812 11.3281C12.0216 11.3281 12.2521 11.4236 12.4221 11.5936C12.592 11.7635 12.6875 11.994 12.6875 12.2344V21.2969C12.6875 21.5372 12.592 21.7677 12.4221 21.9377C12.2521 22.1076 12.0216 22.2031 11.7812 22.2031C11.5409 22.2031 11.3104 22.1076 11.1404 21.9377C10.9705 21.7677 10.875 21.5372 10.875 21.2969V12.2344C10.875 11.994 10.9705 11.7635 11.1404 11.5936C11.3104 11.4236 11.5409 11.3281 11.7812 11.3281ZM18.125 12.2344C18.125 11.994 18.0295 11.7635 17.8596 11.5936C17.6896 11.4236 17.4591 11.3281 17.2188 11.3281C16.9784 11.3281 16.7479 11.4236 16.5779 11.5936C16.408 11.7635 16.3125 11.994 16.3125 12.2344V21.2969C16.3125 21.5372 16.408 21.7677 16.5779 21.9377C16.7479 22.1076 16.9784 22.2031 17.2188 22.2031C17.4591 22.2031 17.6896 22.1076 17.8596 21.9377C18.0295 21.7677 18.125 21.5372 18.125 21.2969V12.2344Z"
+                                                            fill="#ED1C24" />
+                                                    </svg>
+
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="grid grid-cols-5 paper-type-row">
+                                        <div class=" colum-border">
+                                            <div class=" colum">
+
+                                                <p>Glossy Paper</p>
+                                            </div>
+                                        </div>
+                                        <div class=" colum-border">
+                                            <div class=" colum">
+
+                                                <p>Art Paper</p>
+                                            </div>
+                                        </div>
+                                        <div class=" colum-border">
+                                            <div class=" colum">
+
+                                                <p>80 GSM</p>
+                                            </div>
+                                        </div>
+                                        <div class=" colum-border content-center">
+                                            <div class="colum ">
+                                                <p>Opacity</p>
+                                            </div>
+                                        </div>
+                                        <div class=" colum-border content-center">
+                                            <div class="colum">
+                                                <a href="#" title="Edit">
+                                                    <svg width="29" height="29" viewBox="0 0 29 29" fill="none"
+                                                        xmlns="http://www.w3.org/2000/svg">
+                                                        <path
+                                                            d="M19.9066 6.5347L22.4647 9.09274M21.5512 4.28116L14.6311 11.2013C14.2735 11.5583 14.0296 12.0133 13.9302 12.5087L13.291 15.7084L16.4907 15.068C16.9861 14.9689 17.4404 14.726 17.7981 14.3683L24.7182 7.4482C24.9262 7.24025 25.0911 6.99338 25.2037 6.72168C25.3162 6.44997 25.3741 6.15877 25.3741 5.86468C25.3741 5.57059 25.3162 5.27939 25.2037 5.00769C25.0911 4.73598 24.9262 4.48911 24.7182 4.28116C24.5103 4.07321 24.2634 3.90825 23.9917 3.79571C23.72 3.68317 23.4288 3.62524 23.1347 3.62524C22.8406 3.62524 22.5494 3.68317 22.2777 3.79571C22.006 3.90825 21.7591 4.07321 21.5512 4.28116Z"
+                                                            stroke="#4A88DA" stroke-width="2" stroke-linecap="round"
+                                                            stroke-linejoin="round" />
+                                                        <path
+                                                            d="M22.958 18.1251V21.7501C22.958 22.391 22.7034 23.0057 22.2502 23.4589C21.797 23.9121 21.1823 24.1667 20.5413 24.1667H7.24967C6.60873 24.1667 5.99405 23.9121 5.54083 23.4589C5.08762 23.0057 4.83301 22.391 4.83301 21.7501V8.45841C4.83301 7.81747 5.08762 7.20279 5.54083 6.74957C5.99405 6.29636 6.60873 6.04175 7.24967 6.04175H10.8747"
+                                                            stroke="#4A88DA" stroke-width="2" stroke-linecap="round"
+                                                            stroke-linejoin="round" />
+                                                    </svg>
+
+                                                </a>
+                                                <a href="#" title="Delete">
+                                                    <svg width="29" height="29" viewBox="0 0 29 29" fill="none"
+                                                        xmlns="http://www.w3.org/2000/svg">
+                                                        <path
+                                                            d="M12.2344 5.89062V6.34375H16.7656V5.89062C16.7656 5.28974 16.5269 4.71347 16.102 4.28859C15.6772 3.8637 15.1009 3.625 14.5 3.625C13.8991 3.625 13.3228 3.8637 12.898 4.28859C12.4731 4.71347 12.2344 5.28974 12.2344 5.89062ZM10.4219 6.34375V5.89062C10.4219 4.80904 10.8515 3.77175 11.6163 3.00696C12.3811 2.24216 13.4184 1.8125 14.5 1.8125C15.5816 1.8125 16.6189 2.24216 17.3837 3.00696C18.1485 3.77175 18.5781 4.80904 18.5781 5.89062V6.34375H25.375C25.6154 6.34375 25.8459 6.43923 26.0158 6.60918C26.1858 6.77914 26.2812 7.00965 26.2812 7.25C26.2812 7.49035 26.1858 7.72086 26.0158 7.89082C25.8459 8.06077 25.6154 8.15625 25.375 8.15625H24.0084L22.2938 23.171C22.1673 24.2768 21.6383 25.2974 20.8076 26.0381C19.9769 26.7789 18.9027 27.188 17.7897 27.1875H11.2103C10.0973 27.188 9.02305 26.7789 8.19237 26.0381C7.36168 25.2974 6.83269 24.2768 6.70625 23.171L4.99162 8.15625H3.625C3.38465 8.15625 3.15414 8.06077 2.98418 7.89082C2.81423 7.72086 2.71875 7.49035 2.71875 7.25C2.71875 7.00965 2.81423 6.77914 2.98418 6.60918C3.15414 6.43923 3.38465 6.34375 3.625 6.34375H10.4219ZM8.50787 22.9644C8.58354 23.6277 8.9006 24.2399 9.39865 24.6845C9.89669 25.1291 10.5409 25.3749 11.2085 25.375H17.7906C18.4582 25.3749 19.1024 25.1291 19.6004 24.6845C20.0985 24.2399 20.4156 23.6277 20.4912 22.9644L22.185 8.15625H6.81591L8.50787 22.9644ZM11.7812 11.3281C12.0216 11.3281 12.2521 11.4236 12.4221 11.5936C12.592 11.7635 12.6875 11.994 12.6875 12.2344V21.2969C12.6875 21.5372 12.592 21.7677 12.4221 21.9377C12.2521 22.1076 12.0216 22.2031 11.7812 22.2031C11.5409 22.2031 11.3104 22.1076 11.1404 21.9377C10.9705 21.7677 10.875 21.5372 10.875 21.2969V12.2344C10.875 11.994 10.9705 11.7635 11.1404 11.5936C11.3104 11.4236 11.5409 11.3281 11.7812 11.3281ZM18.125 12.2344C18.125 11.994 18.0295 11.7635 17.8596 11.5936C17.6896 11.4236 17.4591 11.3281 17.2188 11.3281C16.9784 11.3281 16.7479 11.4236 16.5779 11.5936C16.408 11.7635 16.3125 11.994 16.3125 12.2344V21.2969C16.3125 21.5372 16.408 21.7677 16.5779 21.9377C16.7479 22.1076 16.9784 22.2031 17.2188 22.2031C17.4591 22.2031 17.6896 22.1076 17.8596 21.9377C18.0295 21.7677 18.125 21.5372 18.125 21.2969V12.2344Z"
+                                                            fill="#ED1C24" />
+                                                    </svg>
+
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="grid grid-cols-5 paper-type-row">
+                                        <div class=" colum-border">
+                                            <div class=" colum">
+
+                                                <p>Kraft Paper</p>
+                                            </div>
+                                        </div>
+                                        <div class=" colum-border">
+                                            <div class=" colum">
+
+                                                <p>Newsprint</p>
+                                            </div>
+                                        </div>
+                                        <div class=" colum-border">
+                                            <div class=" colum">
+
+                                                <p>90 GSM</p>
+                                            </div>
+                                        </div>
+                                        <div class=" colum-border content-center">
+                                            <div class="colum ">
+                                                <p>Weight</p>
+                                            </div>
+                                        </div>
+                                        <div class=" colum-border content-center">
+                                            <div class="colum">
+                                                <a href="#" title="Edit">
+                                                    <svg width="29" height="29" viewBox="0 0 29 29" fill="none"
+                                                        xmlns="http://www.w3.org/2000/svg">
+                                                        <path
+                                                            d="M19.9066 6.5347L22.4647 9.09274M21.5512 4.28116L14.6311 11.2013C14.2735 11.5583 14.0296 12.0133 13.9302 12.5087L13.291 15.7084L16.4907 15.068C16.9861 14.9689 17.4404 14.726 17.7981 14.3683L24.7182 7.4482C24.9262 7.24025 25.0911 6.99338 25.2037 6.72168C25.3162 6.44997 25.3741 6.15877 25.3741 5.86468C25.3741 5.57059 25.3162 5.27939 25.2037 5.00769C25.0911 4.73598 24.9262 4.48911 24.7182 4.28116C24.5103 4.07321 24.2634 3.90825 23.9917 3.79571C23.72 3.68317 23.4288 3.62524 23.1347 3.62524C22.8406 3.62524 22.5494 3.68317 22.2777 3.79571C22.006 3.90825 21.7591 4.07321 21.5512 4.28116Z"
+                                                            stroke="#4A88DA" stroke-width="2" stroke-linecap="round"
+                                                            stroke-linejoin="round" />
+                                                        <path
+                                                            d="M22.958 18.1251V21.7501C22.958 22.391 22.7034 23.0057 22.2502 23.4589C21.797 23.9121 21.1823 24.1667 20.5413 24.1667H7.24967C6.60873 24.1667 5.99405 23.9121 5.54083 23.4589C5.08762 23.0057 4.83301 22.391 4.83301 21.7501V8.45841C4.83301 7.81747 5.08762 7.20279 5.54083 6.74957C5.99405 6.29636 6.60873 6.04175 7.24967 6.04175H10.8747"
+                                                            stroke="#4A88DA" stroke-width="2" stroke-linecap="round"
+                                                            stroke-linejoin="round" />
+                                                    </svg>
+
+                                                </a>
+                                                <a href="#" title="Delete">
+                                                    <svg width="29" height="29" viewBox="0 0 29 29" fill="none"
+                                                        xmlns="http://www.w3.org/2000/svg">
+                                                        <path
+                                                            d="M12.2344 5.89062V6.34375H16.7656V5.89062C16.7656 5.28974 16.5269 4.71347 16.102 4.28859C15.6772 3.8637 15.1009 3.625 14.5 3.625C13.8991 3.625 13.3228 3.8637 12.898 4.28859C12.4731 4.71347 12.2344 5.28974 12.2344 5.89062ZM10.4219 6.34375V5.89062C10.4219 4.80904 10.8515 3.77175 11.6163 3.00696C12.3811 2.24216 13.4184 1.8125 14.5 1.8125C15.5816 1.8125 16.6189 2.24216 17.3837 3.00696C18.1485 3.77175 18.5781 4.80904 18.5781 5.89062V6.34375H25.375C25.6154 6.34375 25.8459 6.43923 26.0158 6.60918C26.1858 6.77914 26.2812 7.00965 26.2812 7.25C26.2812 7.49035 26.1858 7.72086 26.0158 7.89082C25.8459 8.06077 25.6154 8.15625 25.375 8.15625H24.0084L22.2938 23.171C22.1673 24.2768 21.6383 25.2974 20.8076 26.0381C19.9769 26.7789 18.9027 27.188 17.7897 27.1875H11.2103C10.0973 27.188 9.02305 26.7789 8.19237 26.0381C7.36168 25.2974 6.83269 24.2768 6.70625 23.171L4.99162 8.15625H3.625C3.38465 8.15625 3.15414 8.06077 2.98418 7.89082C2.81423 7.72086 2.71875 7.49035 2.71875 7.25C2.71875 7.00965 2.81423 6.77914 2.98418 6.60918C3.15414 6.43923 3.38465 6.34375 3.625 6.34375H10.4219ZM8.50787 22.9644C8.58354 23.6277 8.9006 24.2399 9.39865 24.6845C9.89669 25.1291 10.5409 25.3749 11.2085 25.375H17.7906C18.4582 25.3749 19.1024 25.1291 19.6004 24.6845C20.0985 24.2399 20.4156 23.6277 20.4912 22.9644L22.185 8.15625H6.81591L8.50787 22.9644ZM11.7812 11.3281C12.0216 11.3281 12.2521 11.4236 12.4221 11.5936C12.592 11.7635 12.6875 11.994 12.6875 12.2344V21.2969C12.6875 21.5372 12.592 21.7677 12.4221 21.9377C12.2521 22.1076 12.0216 22.2031 11.7812 22.2031C11.5409 22.2031 11.3104 22.1076 11.1404 21.9377C10.9705 21.7677 10.875 21.5372 10.875 21.2969V12.2344C10.875 11.994 10.9705 11.7635 11.1404 11.5936C11.3104 11.4236 11.5409 11.3281 11.7812 11.3281ZM18.125 12.2344C18.125 11.994 18.0295 11.7635 17.8596 11.5936C17.6896 11.4236 17.4591 11.3281 17.2188 11.3281C16.9784 11.3281 16.7479 11.4236 16.5779 11.5936C16.408 11.7635 16.3125 11.994 16.3125 12.2344V21.2969C16.3125 21.5372 16.408 21.7677 16.5779 21.9377C16.7479 22.1076 16.9784 22.2031 17.2188 22.2031C17.4591 22.2031 17.6896 22.1076 17.8596 21.9377C18.0295 21.7677 18.125 21.5372 18.125 21.2969V12.2344Z"
+                                                            fill="#ED1C24" />
+                                                    </svg>
+
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="grid grid-cols-5 paper-type-row">
+                                        <div class=" colum-border">
+                                            <div class=" colum">
+
+                                                <p>Label Paper</p>
+                                            </div>
+                                        </div>
+                                        <div class=" colum-border">
+                                            <div class=" colum">
+
+                                                <p>Cover Paper</p>
+                                            </div>
+                                        </div>
+                                        <div class=" colum-border">
+                                            <div class=" colum">
+
+                                                <p>100 GSM</p>
+                                            </div>
+                                        </div>
+                                        <div class=" colum-border content-center">
+                                            <div class="colum ">
+                                                <p>Finish</p>
+                                            </div>
+                                        </div>
+                                        <div class=" colum-border content-center">
+                                            <div class="colum">
+                                                <a href="#" title="Edit">
+                                                    <svg width="29" height="29" viewBox="0 0 29 29" fill="none"
+                                                        xmlns="http://www.w3.org/2000/svg">
+                                                        <path
+                                                            d="M19.9066 6.5347L22.4647 9.09274M21.5512 4.28116L14.6311 11.2013C14.2735 11.5583 14.0296 12.0133 13.9302 12.5087L13.291 15.7084L16.4907 15.068C16.9861 14.9689 17.4404 14.726 17.7981 14.3683L24.7182 7.4482C24.9262 7.24025 25.0911 6.99338 25.2037 6.72168C25.3162 6.44997 25.3741 6.15877 25.3741 5.86468C25.3741 5.57059 25.3162 5.27939 25.2037 5.00769C25.0911 4.73598 24.9262 4.48911 24.7182 4.28116C24.5103 4.07321 24.2634 3.90825 23.9917 3.79571C23.72 3.68317 23.4288 3.62524 23.1347 3.62524C22.8406 3.62524 22.5494 3.68317 22.2777 3.79571C22.006 3.90825 21.7591 4.07321 21.5512 4.28116Z"
+                                                            stroke="#4A88DA" stroke-width="2" stroke-linecap="round"
+                                                            stroke-linejoin="round" />
+                                                        <path
+                                                            d="M22.958 18.1251V21.7501C22.958 22.391 22.7034 23.0057 22.2502 23.4589C21.797 23.9121 21.1823 24.1667 20.5413 24.1667H7.24967C6.60873 24.1667 5.99405 23.9121 5.54083 23.4589C5.08762 23.0057 4.83301 22.391 4.83301 21.7501V8.45841C4.83301 7.81747 5.08762 7.20279 5.54083 6.74957C5.99405 6.29636 6.60873 6.04175 7.24967 6.04175H10.8747"
+                                                            stroke="#4A88DA" stroke-width="2" stroke-linecap="round"
+                                                            stroke-linejoin="round" />
+                                                    </svg>
+
+                                                </a>
+                                                <a href="#" title="Delete">
+                                                    <svg width="29" height="29" viewBox="0 0 29 29" fill="none"
+                                                        xmlns="http://www.w3.org/2000/svg">
+                                                        <path
+                                                            d="M12.2344 5.89062V6.34375H16.7656V5.89062C16.7656 5.28974 16.5269 4.71347 16.102 4.28859C15.6772 3.8637 15.1009 3.625 14.5 3.625C13.8991 3.625 13.3228 3.8637 12.898 4.28859C12.4731 4.71347 12.2344 5.28974 12.2344 5.89062ZM10.4219 6.34375V5.89062C10.4219 4.80904 10.8515 3.77175 11.6163 3.00696C12.3811 2.24216 13.4184 1.8125 14.5 1.8125C15.5816 1.8125 16.6189 2.24216 17.3837 3.00696C18.1485 3.77175 18.5781 4.80904 18.5781 5.89062V6.34375H25.375C25.6154 6.34375 25.8459 6.43923 26.0158 6.60918C26.1858 6.77914 26.2812 7.00965 26.2812 7.25C26.2812 7.49035 26.1858 7.72086 26.0158 7.89082C25.8459 8.06077 25.6154 8.15625 25.375 8.15625H24.0084L22.2938 23.171C22.1673 24.2768 21.6383 25.2974 20.8076 26.0381C19.9769 26.7789 18.9027 27.188 17.7897 27.1875H11.2103C10.0973 27.188 9.02305 26.7789 8.19237 26.0381C7.36168 25.2974 6.83269 24.2768 6.70625 23.171L4.99162 8.15625H3.625C3.38465 8.15625 3.15414 8.06077 2.98418 7.89082C2.81423 7.72086 2.71875 7.49035 2.71875 7.25C2.71875 7.00965 2.81423 6.77914 2.98418 6.60918C3.15414 6.43923 3.38465 6.34375 3.625 6.34375H10.4219ZM8.50787 22.9644C8.58354 23.6277 8.9006 24.2399 9.39865 24.6845C9.89669 25.1291 10.5409 25.3749 11.2085 25.375H17.7906C18.4582 25.3749 19.1024 25.1291 19.6004 24.6845C20.0985 24.2399 20.4156 23.6277 20.4912 22.9644L22.185 8.15625H6.81591L8.50787 22.9644ZM11.7812 11.3281C12.0216 11.3281 12.2521 11.4236 12.4221 11.5936C12.592 11.7635 12.6875 11.994 12.6875 12.2344V21.2969C12.6875 21.5372 12.592 21.7677 12.4221 21.9377C12.2521 22.1076 12.0216 22.2031 11.7812 22.2031C11.5409 22.2031 11.3104 22.1076 11.1404 21.9377C10.9705 21.7677 10.875 21.5372 10.875 21.2969V12.2344C10.875 11.994 10.9705 11.7635 11.1404 11.5936C11.3104 11.4236 11.5409 11.3281 11.7812 11.3281ZM18.125 12.2344C18.125 11.994 18.0295 11.7635 17.8596 11.5936C17.6896 11.4236 17.4591 11.3281 17.2188 11.3281C16.9784 11.3281 16.7479 11.4236 16.5779 11.5936C16.408 11.7635 16.3125 11.994 16.3125 12.2344V21.2969C16.3125 21.5372 16.408 21.7677 16.5779 21.9377C16.7479 22.1076 16.9784 22.2031 17.2188 22.2031C17.4591 22.2031 17.6896 22.1076 17.8596 21.9377C18.0295 21.7677 18.125 21.5372 18.125 21.2969V12.2344Z"
+                                                            fill="#ED1C24" />
+                                                    </svg>
+
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="grid grid-cols-5 paper-type-row">
+                                        <div class=" colum-border">
+                                            <div class=" colum">
+
+                                                <p>Label Paper</p>
+                                            </div>
+                                        </div>
+                                        <div class=" colum-border">
+                                            <div class=" colum">
+
+                                                <p>Bond Paper</p>
+                                            </div>
+                                        </div>
+                                        <div class=" colum-border">
+                                            <div class=" colum">
+
+                                                <p>110 GSM</p>
+                                            </div>
+                                        </div>
+                                        <div class=" colum-border content-center">
+                                            <div class="colum ">
+                                                <p>Finish</p>
+                                            </div>
+                                        </div>
+                                        <div class=" colum-border content-center">
+                                            <div class="colum">
+                                                <a href="#" title="Edit">
+                                                    <svg width="29" height="29" viewBox="0 0 29 29" fill="none"
+                                                        xmlns="http://www.w3.org/2000/svg">
+                                                        <path
+                                                            d="M19.9066 6.5347L22.4647 9.09274M21.5512 4.28116L14.6311 11.2013C14.2735 11.5583 14.0296 12.0133 13.9302 12.5087L13.291 15.7084L16.4907 15.068C16.9861 14.9689 17.4404 14.726 17.7981 14.3683L24.7182 7.4482C24.9262 7.24025 25.0911 6.99338 25.2037 6.72168C25.3162 6.44997 25.3741 6.15877 25.3741 5.86468C25.3741 5.57059 25.3162 5.27939 25.2037 5.00769C25.0911 4.73598 24.9262 4.48911 24.7182 4.28116C24.5103 4.07321 24.2634 3.90825 23.9917 3.79571C23.72 3.68317 23.4288 3.62524 23.1347 3.62524C22.8406 3.62524 22.5494 3.68317 22.2777 3.79571C22.006 3.90825 21.7591 4.07321 21.5512 4.28116Z"
+                                                            stroke="#4A88DA" stroke-width="2" stroke-linecap="round"
+                                                            stroke-linejoin="round" />
+                                                        <path
+                                                            d="M22.958 18.1251V21.7501C22.958 22.391 22.7034 23.0057 22.2502 23.4589C21.797 23.9121 21.1823 24.1667 20.5413 24.1667H7.24967C6.60873 24.1667 5.99405 23.9121 5.54083 23.4589C5.08762 23.0057 4.83301 22.391 4.83301 21.7501V8.45841C4.83301 7.81747 5.08762 7.20279 5.54083 6.74957C5.99405 6.29636 6.60873 6.04175 7.24967 6.04175H10.8747"
+                                                            stroke="#4A88DA" stroke-width="2" stroke-linecap="round"
+                                                            stroke-linejoin="round" />
+                                                    </svg>
+
+                                                </a>
+                                                <a href="#" title="Delete">
+                                                    <svg width="29" height="29" viewBox="0 0 29 29" fill="none"
+                                                        xmlns="http://www.w3.org/2000/svg">
+                                                        <path
+                                                            d="M12.2344 5.89062V6.34375H16.7656V5.89062C16.7656 5.28974 16.5269 4.71347 16.102 4.28859C15.6772 3.8637 15.1009 3.625 14.5 3.625C13.8991 3.625 13.3228 3.8637 12.898 4.28859C12.4731 4.71347 12.2344 5.28974 12.2344 5.89062ZM10.4219 6.34375V5.89062C10.4219 4.80904 10.8515 3.77175 11.6163 3.00696C12.3811 2.24216 13.4184 1.8125 14.5 1.8125C15.5816 1.8125 16.6189 2.24216 17.3837 3.00696C18.1485 3.77175 18.5781 4.80904 18.5781 5.89062V6.34375H25.375C25.6154 6.34375 25.8459 6.43923 26.0158 6.60918C26.1858 6.77914 26.2812 7.00965 26.2812 7.25C26.2812 7.49035 26.1858 7.72086 26.0158 7.89082C25.8459 8.06077 25.6154 8.15625 25.375 8.15625H24.0084L22.2938 23.171C22.1673 24.2768 21.6383 25.2974 20.8076 26.0381C19.9769 26.7789 18.9027 27.188 17.7897 27.1875H11.2103C10.0973 27.188 9.02305 26.7789 8.19237 26.0381C7.36168 25.2974 6.83269 24.2768 6.70625 23.171L4.99162 8.15625H3.625C3.38465 8.15625 3.15414 8.06077 2.98418 7.89082C2.81423 7.72086 2.71875 7.49035 2.71875 7.25C2.71875 7.00965 2.81423 6.77914 2.98418 6.60918C3.15414 6.43923 3.38465 6.34375 3.625 6.34375H10.4219ZM8.50787 22.9644C8.58354 23.6277 8.9006 24.2399 9.39865 24.6845C9.89669 25.1291 10.5409 25.3749 11.2085 25.375H17.7906C18.4582 25.3749 19.1024 25.1291 19.6004 24.6845C20.0985 24.2399 20.4156 23.6277 20.4912 22.9644L22.185 8.15625H6.81591L8.50787 22.9644ZM11.7812 11.3281C12.0216 11.3281 12.2521 11.4236 12.4221 11.5936C12.592 11.7635 12.6875 11.994 12.6875 12.2344V21.2969C12.6875 21.5372 12.592 21.7677 12.4221 21.9377C12.2521 22.1076 12.0216 22.2031 11.7812 22.2031C11.5409 22.2031 11.3104 22.1076 11.1404 21.9377C10.9705 21.7677 10.875 21.5372 10.875 21.2969V12.2344C10.875 11.994 10.9705 11.7635 11.1404 11.5936C11.3104 11.4236 11.5409 11.3281 11.7812 11.3281ZM18.125 12.2344C18.125 11.994 18.0295 11.7635 17.8596 11.5936C17.6896 11.4236 17.4591 11.3281 17.2188 11.3281C16.9784 11.3281 16.7479 11.4236 16.5779 11.5936C16.408 11.7635 16.3125 11.994 16.3125 12.2344V21.2969C16.3125 21.5372 16.408 21.7677 16.5779 21.9377C16.7479 22.1076 16.9784 22.2031 17.2188 22.2031C17.4591 22.2031 17.6896 22.1076 17.8596 21.9377C18.0295 21.7677 18.125 21.5372 18.125 21.2969V12.2344Z"
+                                                            fill="#ED1C24" />
+                                                    </svg>
+
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="grid grid-cols-5 paper-type-row">
+                                        <div class=" colum-border">
+                                            <div class=" colum">
+
+                                                <p>Bond Paper</p>
+                                            </div>
+                                        </div>
+                                        <div class=" colum-border">
+                                            <div class=" colum">
+
+                                                <p>Coated Paper</p>
+                                            </div>
+                                        </div>
+                                        <div class=" colum-border">
+                                            <div class=" colum">
+
+                                                <p>120 GSM</p>
+                                            </div>
+                                        </div>
+                                        <div class=" colum-border content-center">
+                                            <div class="colum ">
+                                                <p>Smoothness</p>
+                                            </div>
+                                        </div>
+                                        <div class=" colum-border content-center">
+                                            <div class="colum">
+                                                <a href="#" title="Edit">
+                                                    <svg width="29" height="29" viewBox="0 0 29 29" fill="none"
+                                                        xmlns="http://www.w3.org/2000/svg">
+                                                        <path
+                                                            d="M19.9066 6.5347L22.4647 9.09274M21.5512 4.28116L14.6311 11.2013C14.2735 11.5583 14.0296 12.0133 13.9302 12.5087L13.291 15.7084L16.4907 15.068C16.9861 14.9689 17.4404 14.726 17.7981 14.3683L24.7182 7.4482C24.9262 7.24025 25.0911 6.99338 25.2037 6.72168C25.3162 6.44997 25.3741 6.15877 25.3741 5.86468C25.3741 5.57059 25.3162 5.27939 25.2037 5.00769C25.0911 4.73598 24.9262 4.48911 24.7182 4.28116C24.5103 4.07321 24.2634 3.90825 23.9917 3.79571C23.72 3.68317 23.4288 3.62524 23.1347 3.62524C22.8406 3.62524 22.5494 3.68317 22.2777 3.79571C22.006 3.90825 21.7591 4.07321 21.5512 4.28116Z"
+                                                            stroke="#4A88DA" stroke-width="2" stroke-linecap="round"
+                                                            stroke-linejoin="round" />
+                                                        <path
+                                                            d="M22.958 18.1251V21.7501C22.958 22.391 22.7034 23.0057 22.2502 23.4589C21.797 23.9121 21.1823 24.1667 20.5413 24.1667H7.24967C6.60873 24.1667 5.99405 23.9121 5.54083 23.4589C5.08762 23.0057 4.83301 22.391 4.83301 21.7501V8.45841C4.83301 7.81747 5.08762 7.20279 5.54083 6.74957C5.99405 6.29636 6.60873 6.04175 7.24967 6.04175H10.8747"
+                                                            stroke="#4A88DA" stroke-width="2" stroke-linecap="round"
+                                                            stroke-linejoin="round" />
+                                                    </svg>
+
+                                                </a>
+                                                <a href="#" title="Delete">
+                                                    <svg width="29" height="29" viewBox="0 0 29 29" fill="none"
+                                                        xmlns="http://www.w3.org/2000/svg">
+                                                        <path
+                                                            d="M12.2344 5.89062V6.34375H16.7656V5.89062C16.7656 5.28974 16.5269 4.71347 16.102 4.28859C15.6772 3.8637 15.1009 3.625 14.5 3.625C13.8991 3.625 13.3228 3.8637 12.898 4.28859C12.4731 4.71347 12.2344 5.28974 12.2344 5.89062ZM10.4219 6.34375V5.89062C10.4219 4.80904 10.8515 3.77175 11.6163 3.00696C12.3811 2.24216 13.4184 1.8125 14.5 1.8125C15.5816 1.8125 16.6189 2.24216 17.3837 3.00696C18.1485 3.77175 18.5781 4.80904 18.5781 5.89062V6.34375H25.375C25.6154 6.34375 25.8459 6.43923 26.0158 6.60918C26.1858 6.77914 26.2812 7.00965 26.2812 7.25C26.2812 7.49035 26.1858 7.72086 26.0158 7.89082C25.8459 8.06077 25.6154 8.15625 25.375 8.15625H24.0084L22.2938 23.171C22.1673 24.2768 21.6383 25.2974 20.8076 26.0381C19.9769 26.7789 18.9027 27.188 17.7897 27.1875H11.2103C10.0973 27.188 9.02305 26.7789 8.19237 26.0381C7.36168 25.2974 6.83269 24.2768 6.70625 23.171L4.99162 8.15625H3.625C3.38465 8.15625 3.15414 8.06077 2.98418 7.89082C2.81423 7.72086 2.71875 7.49035 2.71875 7.25C2.71875 7.00965 2.81423 6.77914 2.98418 6.60918C3.15414 6.43923 3.38465 6.34375 3.625 6.34375H10.4219ZM8.50787 22.9644C8.58354 23.6277 8.9006 24.2399 9.39865 24.6845C9.89669 25.1291 10.5409 25.3749 11.2085 25.375H17.7906C18.4582 25.3749 19.1024 25.1291 19.6004 24.6845C20.0985 24.2399 20.4156 23.6277 20.4912 22.9644L22.185 8.15625H6.81591L8.50787 22.9644ZM11.7812 11.3281C12.0216 11.3281 12.2521 11.4236 12.4221 11.5936C12.592 11.7635 12.6875 11.994 12.6875 12.2344V21.2969C12.6875 21.5372 12.592 21.7677 12.4221 21.9377C12.2521 22.1076 12.0216 22.2031 11.7812 22.2031C11.5409 22.2031 11.3104 22.1076 11.1404 21.9377C10.9705 21.7677 10.875 21.5372 10.875 21.2969V12.2344C10.875 11.994 10.9705 11.7635 11.1404 11.5936C11.3104 11.4236 11.5409 11.3281 11.7812 11.3281ZM18.125 12.2344C18.125 11.994 18.0295 11.7635 17.8596 11.5936C17.6896 11.4236 17.4591 11.3281 17.2188 11.3281C16.9784 11.3281 16.7479 11.4236 16.5779 11.5936C16.408 11.7635 16.3125 11.994 16.3125 12.2344V21.2969C16.3125 21.5372 16.408 21.7677 16.5779 21.9377C16.7479 22.1076 16.9784 22.2031 17.2188 22.2031C17.4591 22.2031 17.6896 22.1076 17.8596 21.9377C18.0295 21.7677 18.125 21.5372 18.125 21.2969V12.2344Z"
+                                                            fill="#ED1C24" />
+                                                    </svg>
+
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="grid grid-cols-5 paper-type-row">
+                                        <div class=" colum-border">
+                                            <div class=" colum">
+
+                                                <p>Offset Paper</p>
+                                            </div>
+                                        </div>
+                                        <div class=" colum-border">
+                                            <div class=" colum">
+
+                                                <p>Offset Paper</p>
+                                            </div>
+                                        </div>
+                                        <div class=" colum-border">
+                                            <div class=" colum">
+
+                                                <p>120 GSM</p>
+                                            </div>
+                                        </div>
+                                        <div class=" colum-border content-center">
+                                            <div class="colum ">
+                                                <p>Smoothness</p>
+                                            </div>
+                                        </div>
+                                        <div class=" colum-border content-center">
+                                            <div class="colum">
+                                                <a href="#" title="Edit">
+                                                    <svg width="29" height="29" viewBox="0 0 29 29" fill="none"
+                                                        xmlns="http://www.w3.org/2000/svg">
+                                                        <path
+                                                            d="M19.9066 6.5347L22.4647 9.09274M21.5512 4.28116L14.6311 11.2013C14.2735 11.5583 14.0296 12.0133 13.9302 12.5087L13.291 15.7084L16.4907 15.068C16.9861 14.9689 17.4404 14.726 17.7981 14.3683L24.7182 7.4482C24.9262 7.24025 25.0911 6.99338 25.2037 6.72168C25.3162 6.44997 25.3741 6.15877 25.3741 5.86468C25.3741 5.57059 25.3162 5.27939 25.2037 5.00769C25.0911 4.73598 24.9262 4.48911 24.7182 4.28116C24.5103 4.07321 24.2634 3.90825 23.9917 3.79571C23.72 3.68317 23.4288 3.62524 23.1347 3.62524C22.8406 3.62524 22.5494 3.68317 22.2777 3.79571C22.006 3.90825 21.7591 4.07321 21.5512 4.28116Z"
+                                                            stroke="#4A88DA" stroke-width="2" stroke-linecap="round"
+                                                            stroke-linejoin="round" />
+                                                        <path
+                                                            d="M22.958 18.1251V21.7501C22.958 22.391 22.7034 23.0057 22.2502 23.4589C21.797 23.9121 21.1823 24.1667 20.5413 24.1667H7.24967C6.60873 24.1667 5.99405 23.9121 5.54083 23.4589C5.08762 23.0057 4.83301 22.391 4.83301 21.7501V8.45841C4.83301 7.81747 5.08762 7.20279 5.54083 6.74957C5.99405 6.29636 6.60873 6.04175 7.24967 6.04175H10.8747"
+                                                            stroke="#4A88DA" stroke-width="2" stroke-linecap="round"
+                                                            stroke-linejoin="round" />
+                                                    </svg>
+
+                                                </a>
+                                                <a href="#" title="Delete">
+                                                    <svg width="29" height="29" viewBox="0 0 29 29" fill="none"
+                                                        xmlns="http://www.w3.org/2000/svg">
+                                                        <path
+                                                            d="M12.2344 5.89062V6.34375H16.7656V5.89062C16.7656 5.28974 16.5269 4.71347 16.102 4.28859C15.6772 3.8637 15.1009 3.625 14.5 3.625C13.8991 3.625 13.3228 3.8637 12.898 4.28859C12.4731 4.71347 12.2344 5.28974 12.2344 5.89062ZM10.4219 6.34375V5.89062C10.4219 4.80904 10.8515 3.77175 11.6163 3.00696C12.3811 2.24216 13.4184 1.8125 14.5 1.8125C15.5816 1.8125 16.6189 2.24216 17.3837 3.00696C18.1485 3.77175 18.5781 4.80904 18.5781 5.89062V6.34375H25.375C25.6154 6.34375 25.8459 6.43923 26.0158 6.60918C26.1858 6.77914 26.2812 7.00965 26.2812 7.25C26.2812 7.49035 26.1858 7.72086 26.0158 7.89082C25.8459 8.06077 25.6154 8.15625 25.375 8.15625H24.0084L22.2938 23.171C22.1673 24.2768 21.6383 25.2974 20.8076 26.0381C19.9769 26.7789 18.9027 27.188 17.7897 27.1875H11.2103C10.0973 27.188 9.02305 26.7789 8.19237 26.0381C7.36168 25.2974 6.83269 24.2768 6.70625 23.171L4.99162 8.15625H3.625C3.38465 8.15625 3.15414 8.06077 2.98418 7.89082C2.81423 7.72086 2.71875 7.49035 2.71875 7.25C2.71875 7.00965 2.81423 6.77914 2.98418 6.60918C3.15414 6.43923 3.38465 6.34375 3.625 6.34375H10.4219ZM8.50787 22.9644C8.58354 23.6277 8.9006 24.2399 9.39865 24.6845C9.89669 25.1291 10.5409 25.3749 11.2085 25.375H17.7906C18.4582 25.3749 19.1024 25.1291 19.6004 24.6845C20.0985 24.2399 20.4156 23.6277 20.4912 22.9644L22.185 8.15625H6.81591L8.50787 22.9644ZM11.7812 11.3281C12.0216 11.3281 12.2521 11.4236 12.4221 11.5936C12.592 11.7635 12.6875 11.994 12.6875 12.2344V21.2969C12.6875 21.5372 12.592 21.7677 12.4221 21.9377C12.2521 22.1076 12.0216 22.2031 11.7812 22.2031C11.5409 22.2031 11.3104 22.1076 11.1404 21.9377C10.9705 21.7677 10.875 21.5372 10.875 21.2969V12.2344C10.875 11.994 10.9705 11.7635 11.1404 11.5936C11.3104 11.4236 11.5409 11.3281 11.7812 11.3281ZM18.125 12.2344C18.125 11.994 18.0295 11.7635 17.8596 11.5936C17.6896 11.4236 17.4591 11.3281 17.2188 11.3281C16.9784 11.3281 16.7479 11.4236 16.5779 11.5936C16.408 11.7635 16.3125 11.994 16.3125 12.2344V21.2969C16.3125 21.5372 16.408 21.7677 16.5779 21.9377C16.7479 22.1076 16.9784 22.2031 17.2188 22.2031C17.4591 22.2031 17.6896 22.1076 17.8596 21.9377C18.0295 21.7677 18.125 21.5372 18.125 21.2969V12.2344Z"
+                                                            fill="#ED1C24" />
+                                                    </svg>
+
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="grid grid-cols-5 paper-type-row">
+                                        <div class=" colum-border">
+                                            <div class=" colum">
+
+                                                <p>Coated Paper</p>
+                                            </div>
+                                        </div>
+                                        <div class=" colum-border">
+                                            <div class=" colum">
+
+                                                <p>Cardstock</p>
+                                            </div>
+                                        </div>
+                                        <div class=" colum-border">
+                                            <div class=" colum">
+
+                                                <p>160 GSM</p>
+                                            </div>
+                                        </div>
+                                        <div class=" colum-border content-center">
+                                            <div class="colum ">
+                                                <p>Smoothness</p>
+                                            </div>
+                                        </div>
+                                        <div class=" colum-border content-center">
+                                            <div class="colum">
+                                                <a href="#" title="Edit">
+                                                    <svg width="29" height="29" viewBox="0 0 29 29" fill="none"
+                                                        xmlns="http://www.w3.org/2000/svg">
+                                                        <path
+                                                            d="M19.9066 6.5347L22.4647 9.09274M21.5512 4.28116L14.6311 11.2013C14.2735 11.5583 14.0296 12.0133 13.9302 12.5087L13.291 15.7084L16.4907 15.068C16.9861 14.9689 17.4404 14.726 17.7981 14.3683L24.7182 7.4482C24.9262 7.24025 25.0911 6.99338 25.2037 6.72168C25.3162 6.44997 25.3741 6.15877 25.3741 5.86468C25.3741 5.57059 25.3162 5.27939 25.2037 5.00769C25.0911 4.73598 24.9262 4.48911 24.7182 4.28116C24.5103 4.07321 24.2634 3.90825 23.9917 3.79571C23.72 3.68317 23.4288 3.62524 23.1347 3.62524C22.8406 3.62524 22.5494 3.68317 22.2777 3.79571C22.006 3.90825 21.7591 4.07321 21.5512 4.28116Z"
+                                                            stroke="#4A88DA" stroke-width="2" stroke-linecap="round"
+                                                            stroke-linejoin="round" />
+                                                        <path
+                                                            d="M22.958 18.1251V21.7501C22.958 22.391 22.7034 23.0057 22.2502 23.4589C21.797 23.9121 21.1823 24.1667 20.5413 24.1667H7.24967C6.60873 24.1667 5.99405 23.9121 5.54083 23.4589C5.08762 23.0057 4.83301 22.391 4.83301 21.7501V8.45841C4.83301 7.81747 5.08762 7.20279 5.54083 6.74957C5.99405 6.29636 6.60873 6.04175 7.24967 6.04175H10.8747"
+                                                            stroke="#4A88DA" stroke-width="2" stroke-linecap="round"
+                                                            stroke-linejoin="round" />
+                                                    </svg>
+
+                                                </a>
+                                                <a href="#" title="Delete">
+                                                    <svg width="29" height="29" viewBox="0 0 29 29" fill="none"
+                                                        xmlns="http://www.w3.org/2000/svg">
+                                                        <path
+                                                            d="M12.2344 5.89062V6.34375H16.7656V5.89062C16.7656 5.28974 16.5269 4.71347 16.102 4.28859C15.6772 3.8637 15.1009 3.625 14.5 3.625C13.8991 3.625 13.3228 3.8637 12.898 4.28859C12.4731 4.71347 12.2344 5.28974 12.2344 5.89062ZM10.4219 6.34375V5.89062C10.4219 4.80904 10.8515 3.77175 11.6163 3.00696C12.3811 2.24216 13.4184 1.8125 14.5 1.8125C15.5816 1.8125 16.6189 2.24216 17.3837 3.00696C18.1485 3.77175 18.5781 4.80904 18.5781 5.89062V6.34375H25.375C25.6154 6.34375 25.8459 6.43923 26.0158 6.60918C26.1858 6.77914 26.2812 7.00965 26.2812 7.25C26.2812 7.49035 26.1858 7.72086 26.0158 7.89082C25.8459 8.06077 25.6154 8.15625 25.375 8.15625H24.0084L22.2938 23.171C22.1673 24.2768 21.6383 25.2974 20.8076 26.0381C19.9769 26.7789 18.9027 27.188 17.7897 27.1875H11.2103C10.0973 27.188 9.02305 26.7789 8.19237 26.0381C7.36168 25.2974 6.83269 24.2768 6.70625 23.171L4.99162 8.15625H3.625C3.38465 8.15625 3.15414 8.06077 2.98418 7.89082C2.81423 7.72086 2.71875 7.49035 2.71875 7.25C2.71875 7.00965 2.81423 6.77914 2.98418 6.60918C3.15414 6.43923 3.38465 6.34375 3.625 6.34375H10.4219ZM8.50787 22.9644C8.58354 23.6277 8.9006 24.2399 9.39865 24.6845C9.89669 25.1291 10.5409 25.3749 11.2085 25.375H17.7906C18.4582 25.3749 19.1024 25.1291 19.6004 24.6845C20.0985 24.2399 20.4156 23.6277 20.4912 22.9644L22.185 8.15625H6.81591L8.50787 22.9644ZM11.7812 11.3281C12.0216 11.3281 12.2521 11.4236 12.4221 11.5936C12.592 11.7635 12.6875 11.994 12.6875 12.2344V21.2969C12.6875 21.5372 12.592 21.7677 12.4221 21.9377C12.2521 22.1076 12.0216 22.2031 11.7812 22.2031C11.5409 22.2031 11.3104 22.1076 11.1404 21.9377C10.9705 21.7677 10.875 21.5372 10.875 21.2969V12.2344C10.875 11.994 10.9705 11.7635 11.1404 11.5936C11.3104 11.4236 11.5409 11.3281 11.7812 11.3281ZM18.125 12.2344C18.125 11.994 18.0295 11.7635 17.8596 11.5936C17.6896 11.4236 17.4591 11.3281 17.2188 11.3281C16.9784 11.3281 16.7479 11.4236 16.5779 11.5936C16.408 11.7635 16.3125 11.994 16.3125 12.2344V21.2969C16.3125 21.5372 16.408 21.7677 16.5779 21.9377C16.7479 22.1076 16.9784 22.2031 17.2188 22.2031C17.4591 22.2031 17.6896 22.1076 17.8596 21.9377C18.0295 21.7677 18.125 21.5372 18.125 21.2969V12.2344Z"
+                                                            fill="#ED1C24" />
+                                                    </svg>
+
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+
+
+                                </div>
+                                <div class="text-end">
+                                    <button type="submit" class="btn grey-primary">Cancle</button>
+                                    <button type="submit" class="btn black-btn">Save</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- <footer class="footer">
+          <small style="margin-bottom: 20px; display: inline-block">
+            © 2022 made with
+            <span style="color: red; font-size: 18px">&#10084;</span> by -
+            <a target="_blank" href="#"> Mohamed Azouaoui </a>
+          </small>
+          <br />
+          <div>
+            <a href="#" target="_blank" rel="noopener noreferrer">
+              <img alt="GitHub followers" src="#" />
+            </a>
+            <a href="#" target="_blank" rel="noopener noreferrer">
+              <img alt="Twitter Follow" src="#" />
+            </a>
+          </div>
+        </footer> -->
+                </main>
+                <div class="overlay"></div>
+            </div>
+        </div>
+
+        <div class="modal fade rejection-popup" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <h5 class="modal-title" id="exampleModalLabel">
+                            Reason for Rejection
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <hr />
+                        <form>
+                            <div class="mb-3">
+                                <label for="message-text" class="col-form-label">Message:</label>
+                                <textarea class="form-control" id="message-text"></textarea>
+                            </div>
+                            <button type="button" class="btn btn-primary">
+                                Send message
+                            </button>
+                        </form>
+                    </div>
+                    <!-- <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Send message</button>
+        </div> -->
+                </div>
+            </div>
+        </div>
+
+        <script src="js/jquery-3.6.3.min.js"></script>
+        <script src="js/bootstrap.bundle.min.js"></script>
+        <script src="js/popper.min.js"></script>
+        <script src="js/Chart.min.js"></script>
+        <script src="js/chart.js"></script>
+        <script src="js/side-menu.js"></script>
+        <script src="js/intlTelInput-jquery.min.js"></script>
+        <!-- <script src="js/off-canvas.js"></script> -->
+
+        <script>
+            $("#mobile_code-1").intlTelInput({
+                initialCountry: "in",
+                separateDialCode: true,
+                // utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/11.0.4/js/utils.js"
+            });
+            $("#mobile_code-2").intlTelInput({
+                initialCountry: "in",
+                separateDialCode: true,
+                // utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/11.0.4/js/utils.js"
+            });
+            $("#mobile_code-3").intlTelInput({
+                initialCountry: "in",
+                separateDialCode: true,
+                // utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/11.0.4/js/utils.js"
+            });
+            $("#mobile_code-4").intlTelInput({
+                initialCountry: "in",
+                separateDialCode: true,
+                // utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/11.0.4/js/utils.js"
+            });
+        </script>
+    </body>
+
+</html>
