@@ -1473,4 +1473,12 @@ input[type=file]::file-selector-button {
   right: 15px;
   transform: translateY(-50%);
   cursor: pointer;
+}
+
+.grid {
+  display: grid;
+}
+
+.grid-cols-5 {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
 }/*# sourceMappingURL=style.css.map */
