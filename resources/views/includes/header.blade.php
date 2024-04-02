@@ -11,7 +11,7 @@
       <span class="d-flex">
         <span><img class="img-xs rounded-circle" src="{{ asset('images/face15.jpg') }}" alt="" /></span>
         <span class="profile-text ms-2">
-          <b>Welcome to<br /></b> Admin</span>
+          <b>Welcome to<br /></b> <?php echo Helper::userDetails(session('user_auto_id'));?></span>
       </span>
     </a>
     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
@@ -34,7 +34,7 @@
         <a href="#"><i class="ri-home-4-line"></i></a>
       </li>
       <li class="breadcrumb-item">
-        <a href="#" class="d-flex align-items-center">Welcome Back, Admin</a>
+        <a href="#" class="d-flex align-items-center">Welcome Back, <?php echo Helper::userDetails(session('user_auto_id'));?></a>
       </li>
     </ol>
   </nav>

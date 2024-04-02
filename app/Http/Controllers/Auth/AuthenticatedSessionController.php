@@ -10,6 +10,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
+use Session;
+
 class AuthenticatedSessionController extends Controller
 {
     /**
@@ -28,6 +30,11 @@ class AuthenticatedSessionController extends Controller
         $request->authenticate();
 
         $request->session()->regenerate();
+
+        $user_auto_id=Auth::user()->id;
+        Session::put('user_auto_id', $user_auto_id);
+
+        //dd($request->session());
 
         return redirect()->intended(RouteServiceProvider::HOME);
     }

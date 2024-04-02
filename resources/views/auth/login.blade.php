@@ -33,13 +33,13 @@
                 @csrf
                 <div class="mb-3">
                   <label for="exampleInputEmail1" class="form-label"
-                    >User id</label
+                    >User id (ID or Email)</label
                   >
-                  <input name="email"
-                    type="email"
+                  <input name="userid"
+                    type="text"
                     class="form-control"
                     id="exampleInputEmail1"
-                    aria-describedby="emailHelp" value="{{ old('email') }}"
+                    aria-describedby="emailHelp" value="{{ old('userid') }}"
                   />
                   <div id="emailHelp" class="form-text">
                     We'll never share your email with anyone else.
