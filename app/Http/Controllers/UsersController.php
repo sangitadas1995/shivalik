@@ -56,7 +56,12 @@ class UsersController extends Controller
         ->orderBy('name', 'asc')
         ->get();
 
+        $managerusers = User::where([
+                'status' => 'A',
+        ])->orderBy('name', 'ASC')->get();
+
         return view('users.create', [
+            'managerusers' => $managerusers,
             'countries' => $countries,
             'states' => $states,
             'managers' => $managers,
@@ -105,9 +110,15 @@ class UsersController extends Controller
                 'state_id' => $user->state_id,
                 'status' => 'A',
             ])->orderBy('city_name', 'ASC')->get();
+
+
+            $managerusers = User::where(
+            'status', '=', 'A')
+            ->where('id', '!=', $user->id)->orderBy('name', 'ASC')->get();
         }
 
         return view('users.edit', [
+            'managerusers' => $managerusers,
             'countries' => $countries,
             'user' => $user,
             'states' => $states,
@@ -332,14 +343,17 @@ class UsersController extends Controller
             'name'
         ];
 
-        $query = User::with('manager', 'designation', 'functionalareas');
+        $query = User::with('manager', 'designation', 'functionalareas', 'usermanager');
         $query->where('id', '!=' , 1);
 
 
         if (isset($request->search['value'])) {
             $query->where(function ($q) use ($request) {
             $q->where('name', 'LIKE', "%" . $request->search['value'] . "%")
-           ->orWhereHas('manager', function ($q) use ($request) {
+           // ->orWhereHas('manager', function ($q) use ($request) {
+           //      $q->where('name', 'LIKE', "%" . $request->search['value'] . "%");
+           //  })
+            ->orWhereHas('usermanager', function ($q) use ($request) {
                 $q->where('name', 'LIKE', "%" . $request->search['value'] . "%");
             })
            ->orWhereHas('designation', function ($q) use ($request) {
@@ -347,7 +361,8 @@ class UsersController extends Controller
             })
            ->orWhereHas('functionalareas', function ($q) use ($request) {
                 $q->where('name', 'LIKE', "%" . $request->search['value'] . "%");
-            });  
+            });
+
             });
         }
 
@@ -359,7 +374,11 @@ class UsersController extends Controller
             $query->orderBy('name', $request->order['0']['dir']);
         }
         else if (isset($request->order['0']['dir']) && ($request->order['0']['column'] != 0) && ($request->order['0']['column'] == 3)) {
-            $query->whereHas('manager', function ($q) use ($request) {
+            // $query->whereHas('manager', function ($q) use ($request) {
+            //     return $q->orderBy('name', $request->order['0']['dir']);
+            // });
+
+            $query->whereHas('usermanager', function ($q) use ($request) {
                 return $q->orderBy('name', $request->order['0']['dir']);
             });
         }
@@ -410,7 +429,7 @@ class UsersController extends Controller
                 $subarray[] = $value->id;
                 //$subarray[] = Carbon::parse($value->created_at)->format('d/m/Y h:i A');
                 $subarray[] = $value->name;
-                $subarray[] = $value->manager?->name ?? null;
+                $subarray[] = $value->usermanager?->name ?? null;
                 $subarray[] = $value->designation?->name ?? null;
                 $subarray[] = $value->functionalareas?->name ?? null;
                 $subarray[] = '<div class="align-items-center d-flex dt-center"><a href="#" class="view_details" data-id ="' . $value->id . '" title="View Details"><img src="' . $view_icon . '" /></a>
@@ -419,7 +438,7 @@ class UsersController extends Controller
             }
         }
 
-        $count = User::with('manager', 'designation', 'functionalareas')->where('id', '!=' , 1)->count();
+        $count = User::with('manager', 'designation', 'functionalareas', 'usermanager')->where('id', '!=' , 1)->count();
 
         $output = [
             'draw' => intval($request->draw),
@@ -476,7 +495,7 @@ class UsersController extends Controller
 
     public function view(Request $request)
     {
-        $user = User::with('manager', 'designation', 'functionalareas', 'city', 'state', 'country')->findOrFail($request->rowid);
+        $user = User::with('manager', 'designation', 'functionalareas', 'city', 'state', 'country', 'usermanager')->findOrFail($request->rowid);
         $html = view('users.details', ['user' => $user])->render();
         return response()->json($html);
     }

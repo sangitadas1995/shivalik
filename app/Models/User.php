@@ -78,4 +78,9 @@ class User extends Authenticatable
     {
         return $this->belongsTo(FunctionalArea::class, 'func_area_id');
     }
+
+    public function usermanager()
+    {
+        return $this->belongsTo(User::class,'manager_id','id');
+    }
 }
