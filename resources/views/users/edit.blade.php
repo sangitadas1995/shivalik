@@ -33,8 +33,8 @@
             <label class="form-label"><span class="text-danger">*</span>Manager :</label>
             <select class="form-select" aria-label="Default select example" id="manager_id" name="manager_id">
               <option value="">Select Manager</option>
-              @if ($managers->isNotEmpty())
-              @foreach ($managers as $mn)
+              @if ($managerusers->isNotEmpty())
+              @foreach ($managerusers as $mn)
               <option value="{{ $mn->id }}" {{ $mn->id == $user->manager_id ? 'selected' : null }}>{{ $mn->name }}
               </option>
               @endforeach

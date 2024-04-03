@@ -33,7 +33,7 @@
                             </div>
                             <div class="col-7 child-table-row">
                                 <div>
-                                    {{ $user->manager?->name ?? null }}
+                                    {{ $user->usermanager?->name ?? null }}
                                 </div>
                             </div>
                             <!-- table row end -->
