@@ -11,15 +11,22 @@ use App\Models\Manager;
 use App\Models\Designation;
 use App\Models\FunctionalArea;
 use App\Models\User;
+use App\Models\Menu_permissions;
+use App\Models\Sub_menu_permissions;
+use App\Models\User_wise_menu_permissions;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use App\Rules\UserUniqueEmailAddress;
 use App\Rules\UserUniqueMobileNumber;
 use App\Rules\UserUniquePasswordCheck;
+
+use App\Traits\Permissionhelper;
+
 use Hash;
 
 class UsersController extends Controller
 {
+    use Permissionhelper;
     public function index()
     {
         return view('users.index');
@@ -128,6 +135,99 @@ class UsersController extends Controller
             'functional_area' => $functional_area
         ]);
     }
+
+
+    public function permission($id)
+    {
+        $id = decrypt($id);
+        $user  = User::findOrFail($id);
+
+        $Menu_permissions = Menu_permissions::where([
+            'status' => 'A'
+        ])
+        ->orderBy('sort_order', 'asc')
+        ->get();
+
+        $menu_arr = array();
+        foreach($Menu_permissions as $md)
+        {
+            $getSubMenuList=$this->getSubMenuList($md->id,$id);
+
+            $sub_menu_arr = array();
+            foreach($getSubMenuList as $sm)
+            {
+                $sub_menu_arr[] = array(
+                    'id' => $sm->sub_menu_id,
+                    'display_name' => $sm->display_name,
+                    'reserve_keyword' => $sm->reserve_keyword,
+                    'user_menu_status' => $sm->user_menu_status
+                );
+            }
+
+            $menu_arr[] = array(
+                'id' => $md->id,
+                'menu_keyword' => $md->menu_keyword,
+                'menu_name' => $md->menu_name,
+                'sub_menu' => $sub_menu_arr
+            );
+        }
+
+
+        //echo $Menu_permissions->id;
+        //echo "<PRE>";print_r($menu_arr);echo "</PRE>";exit;
+        //dd($a);
+       
+        return view('users.permission', [
+            'user' => $user,
+            'menu_permissions' => $menu_arr
+        ]);
+    }
+
+
+
+    public function update_permission(Request $request, $id)
+    {
+        $user_id = decrypt($id);
+
+        //echo "<PRE>";print_r($request->all());echo "</PRE>";exit;
+
+
+        // for($i=0;$i<count($request->menu_ids);$i++)
+        // {
+        //     echo $menu_ids = $request->menu_ids[$i];
+
+        //     //$a=$this->getReserveKeywordByMenuId($menu_ids);
+        //     //echo "<PRE>";print_r($a);echo "</PRE>";
+        // }
+
+
+        // exit;
+
+        try 
+        {
+            if(is_countable($request->sub_menu) && count($request->sub_menu)>0)
+            {
+                //User_wise_menu_permissions::where('user_id',$user_id)->delete();
+                for($i=0;$i<count($request->sub_menu);$i++)
+                {
+                    $menu_id = $this->getMenuId($request->sub_menu[$i]);
+                    $uwmpAdd = new User_wise_menu_permissions();
+                    $uwmpAdd->user_id = $user_id;
+                    $uwmpAdd->sub_menu_id = $request->sub_menu[$i];
+                    $uwmpAdd->menu_id = $menu_id->menu_id;
+                    $uwmpAdd->save();
+                }
+                return redirect()->back()->with('success', 'The user permission has been updated successfully.');
+            }
+            else
+            {
+                return redirect()->back()->with('fail', 'Please select atleast one menu');
+            }
+        } catch (Exception $th) {
+            return redirect()->back()->with('fail', trans('messages.server_error'));
+        }
+    }
+
 
 
     public function update(Request $request, $id)
@@ -413,6 +513,7 @@ class UsersController extends Controller
 
                 $lock_icon =  asset('images/eva_lock-outline.png'); 
                 $unlock_icon =  asset('images/lock-open-right-outline.png');
+                $permissions_icon =  asset('images/permissions.png');
 
                 if($value->status == "A")
                 {
@@ -421,7 +522,10 @@ class UsersController extends Controller
                 if($value->status == "I")
                 {
                     $status = '<a href="#" class="doUnlock" data-id ="' . $value->id . '" title="Lock"><img src="' . $lock_icon . '" /></a>';
-                }   
+                }
+
+                $userPermissionLink = route('users.permission', encrypt($value->id));
+                $userPermission = '<a href="' .  $userPermissionLink . '" title="Permission"><img src="' . $permissions_icon . '" /></a>';   
 
                 $editLink = route('users.edit', encrypt($value->id));
                 $subarray = [];

@@ -7,6 +7,7 @@ use App\Http\Controllers\UsersController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\VendorsController;
+use App\Http\Controllers\PaperSettingController;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
 
@@ -60,9 +61,53 @@ Route::middleware('auth')->group(function () {
         Route::post('update/{id}', [UsersController::class, 'update'])->name('update');
         Route::post('dounlock', [UsersController::class, 'do_unlock'])->name('dounlock');
         Route::post('dolock', [UsersController::class, 'do_lock'])->name('dolock');
-
         Route::post('add_new_designation', [UsersController::class, 'add_new_designation'])->name('add_new_designation');
+
+        Route::get('permission/{id}', [UsersController::class, 'permission'])->name('permission');
+        Route::post('update_permission/{id}', [UsersController::class, 'update_permission'])->name('update_permission');
     });
+
+
+
+    Route::prefix('papersettings')->name('papersettings.')->group(function () {
+        Route::get('catlist', [PaperSettingController::class, 'catlist'])->name('catlist');
+        Route::get('addpapercategory', [PaperSettingController::class, 'createcategory'])->name('addpapercategory');
+        Route::post('storepapercategory', [PaperSettingController::class, 'storepapercategory'])->name('storepapercategory');
+        Route::get('editpapercategory/{id}', [PaperSettingController::class, 'editpapercategory'])->name('editpapercategory');
+        Route::post('updatepapercategory/{id}', [PaperSettingController::class, 'updatepapercategory'])->name('updatepapercategory');
+        Route::post('list-data', [PaperSettingController::class, 'list_data'])->name('data');
+        Route::post('doactivecategory', [PaperSettingController::class, 'doactivecategory'])->name('doactivecategory');
+        Route::post('doinactivecategory', [PaperSettingController::class, 'doinactivecategory'])->name('doinactivecategory');
+
+
+        Route::get('sizelist', [PaperSettingController::class, 'sizelist'])->name('sizelist');
+        Route::post('sizelist-data', [PaperSettingController::class, 'sizelist_data'])->name('sizelistdata');
+
+        Route::post('doinactivesize', [PaperSettingController::class, 'doinactivesize'])->name('doinactivesize');
+        Route::post('doactivesize', [PaperSettingController::class, 'doactivesize'])->name('doactivesize');
+
+        Route::get('addpapersize', [PaperSettingController::class, 'createsize'])->name('addpapersize');
+        Route::post('storepapersize', [PaperSettingController::class, 'storepapersize'])->name('storepapersize');
+
+        Route::get('editpapersize/{id}', [PaperSettingController::class, 'editpapersize'])->name('editpapersize');
+        Route::post('updatepapersize/{id}', [PaperSettingController::class, 'updatepapersize'])->name('updatepapersize');
+
+
+
+        Route::get('qualitylist', [PaperSettingController::class, 'qualitylist'])->name('qualitylist');
+        Route::post('qualitylist-data', [PaperSettingController::class, 'qualitylist_data'])->name('qualitylistdata');
+
+        Route::post('doinactivequality', [PaperSettingController::class, 'doinactivequality'])->name('doinactivequality');
+        Route::post('doactivequality', [PaperSettingController::class, 'doactivequality'])->name('doactivequality');
+
+        Route::get('addpaperquality', [PaperSettingController::class, 'createquality'])->name('addpaperquality');
+        Route::post('storepaperquality', [PaperSettingController::class, 'storepaperquality'])->name('storepaperquality');
+
+        Route::get('editpaperquality/{id}', [PaperSettingController::class, 'editpaperquality'])->name('editpaperquality');
+        Route::post('updatepaperquality/{id}', [PaperSettingController::class, 'updatepaperquality'])->name('updatepaperquality');
+    });
+
+
 
     Route::prefix('vendors')->name('vendors.')->group(function () {
         Route::get('/', [VendorsController::class, 'index'])->name('index');

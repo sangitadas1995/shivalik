@@ -176,7 +176,7 @@
 
 
 
-          $(document).on('click','.doUnlock',function(e){
+        $(document).on('click','.doUnlock',function(e){
           e.preventDefault();
           var __e = $(this);
           var rowid = __e.data('id');

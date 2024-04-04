@@ -1285,22 +1285,29 @@ input[type="date"]::-webkit-calendar-picker-indicator {
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                background-color: #80CBC4;
+
                 color: white;
                 cursor: pointer;
 
-                svg {
-                    height: 16px;
-                }
-            }
 
-            input[type="checkbox"]:checked+label {
+
+
                 background-color: white;
                 border: 1px solid #80CBC4;
 
                 svg {
                     display: none;
                 }
+
+            }
+
+            input[type="checkbox"]:checked+label {
+                svg {
+                    height: 16px;
+                    display: inline;
+                }
+
+                background-color: #80CBC4;
             }
         }
     }
