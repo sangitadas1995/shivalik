@@ -24,7 +24,7 @@
         </div>
         <div class="col-md-12">
           <div class="mb-3">
-            <label class="form-label"><span class="text-danger">*</span>Size(GSM) :</label>
+            <label class="form-label"><span class="text-danger">*</span>Name :</label>
             <input type="text" class="form-control alphaChar" name="name" id="name" value="{{ old('name') }}"/>
             <small class="text-danger error_name"></small>
           </div>
@@ -49,7 +49,8 @@
     $(".alphaChar").on('input', function () {
       var inputValue = $(this).val();
       //var sanitizedValue = inputValue.replace(/[^0-9]/g, '');
-      var sanitizedValue = inputValue.replace(/[^\d]+|^0+(?!$)/g, '');
+      //var sanitizedValue = inputValue.replace(/[^\d]+|^0+(?!$)/g, '');
+      var sanitizedValue = inputValue.replace(/[^a-zA-Z0-9\s]/g, '');
       $(this).val(sanitizedValue);
     });
 
@@ -68,12 +69,12 @@
         $('.error_name').html('');
       }
 
-      if (name.trim()=="0") {
-        $('#name').focus();
-        return $('.error_name').html('Size field is required');
-      } else {
-        $('.error_name').html('');
-      }
+      // if (name.trim()=="0") {
+      //   $('#name').focus();
+      //   return $('.error_name').html('Size field is required');
+      // } else {
+      //   $('.error_name').html('');
+      // }
       __e[0].submit();
     });
   });

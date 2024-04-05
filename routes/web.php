@@ -105,6 +105,19 @@ Route::middleware('auth')->group(function () {
 
         Route::get('editpaperquality/{id}', [PaperSettingController::class, 'editpaperquality'])->name('editpaperquality');
         Route::post('updatepaperquality/{id}', [PaperSettingController::class, 'updatepaperquality'])->name('updatepaperquality');
+
+
+        Route::get('colorlist', [PaperSettingController::class, 'colorlist'])->name('colorlist');
+        Route::post('colorlist-data', [PaperSettingController::class, 'colorlist_data'])->name('colorlistdata');
+
+        Route::post('doinactivecolor', [PaperSettingController::class, 'doinactivecolor'])->name('doinactivecolor');
+        Route::post('doactivecolor', [PaperSettingController::class, 'doactivecolor'])->name('doactivecolor');
+
+        Route::get('addpapercolor', [PaperSettingController::class, 'addpapercolor'])->name('addpapercolor');
+        Route::post('storepapercolor', [PaperSettingController::class, 'storepapercolor'])->name('storepapercolor');
+
+        Route::get('editpapercolor/{id}', [PaperSettingController::class, 'editpapercolor'])->name('editpapercolor');
+        Route::post('updatepapercolor/{id}', [PaperSettingController::class, 'updatepapercolor'])->name('updatepapercolor');
     });
 
 
