@@ -7,13 +7,11 @@
 <div class="page-name">
     <div class="row justify-content-between align-items-center">
       <div class="col-md-4">
-        <h2><i class="ri-arrow-left-line"></i> Paper Quality</h2>
+        <h2><i class="ri-arrow-left-line"></i>Paper Thickness</h2>
       </div>
       <div class="col-md-6">
         <div class="text-end mb-4">
-          <a href="{{ route('papersettings.add_paper_quality') }}" class="btn primary-btn"
-            ><img src="{{ asset('images/add-accoun-1t.png') }}" /> Add Paper Quality</a
-          >
+          <a href="{{ route('papersettings.add_paper_thickness') }}" class="btn primary-btn"><img src="{{ asset('images/add-accoun-1t.png') }}" /> Add Paper Thickness</a>
         </div>
       </div>
     </div>
@@ -25,13 +23,17 @@
 </div>
 <div class="row">
     <div class="table-responsive table-sec mb-4">
-        <table class="table table-striped" id="paperquality_list_table">
+        <table class="table table-striped" id="gsm_list_table">
         <thead>
             <tr>
             <th>Row ID</th>
             <th style="text-align: center">ID</th>
-            <th style="text-align: center">Name</th>
+            <!-- <th style="text-align: center">Date</th> -->
+            <th style="text-align: center">Value</th>
             <th style="text-align: center">Status</th>
+            <!-- <th style="text-align: center">Manager</th>
+            <th style="text-align: center">Designation</th>
+            <th style="text-align: center">Functional Area</th> -->
             <th style="text-align: center">Action</th>
             </tr>
         </thead>
@@ -52,13 +54,13 @@
           }
         });
 
-        let users_list_table = $('#paperquality_list_table').DataTable({
+        let users_list_table = $('#gsm_list_table').DataTable({
           stateSave: true,
           processing: true,
           serverSide: true,
           pageLength: 10,
           ajax: {
-            url: "{{ route('papersettings.qualitylistdata') }}",
+            url: "{{ route('papersettings.gsmlistdata') }}",
             type: 'POST',
             'data': function(data) {
               return data;
@@ -79,6 +81,7 @@
           ]
         });
 
+        
         $(document).on('click','.doInactive',function(e){
           e.preventDefault();
           var __e = $(this);
@@ -86,7 +89,7 @@
           if (rowid) {
             $.ajax({
               type: "post",
-              url: "{{ route('papersettings.doinactivequality') }}",
+              url: "{{ route('papersettings.doinactivegsm') }}",
               data: {rowid},
               dataType: "json",
               success: function (response) {
@@ -119,7 +122,7 @@
           if (rowid) {
             $.ajax({
               type: "post",
-              url: "{{ route('papersettings.doactivequality') }}",
+              url: "{{ route('papersettings.doactivegsm') }}",
               data: {rowid},
               dataType: "json",
               success: function (response) {

@@ -11,7 +11,7 @@
       </div>
       <div class="col-md-6">
         <div class="text-end mb-4">
-          <a href="{{ route('papersettings.addpapersize') }}" class="btn primary-btn"
+          <a href="{{ route('papersettings.add_paper_size') }}" class="btn primary-btn"
             ><img src="{{ asset('images/add-accoun-1t.png') }}" /> Add Paper Size</a
           >
         </div>

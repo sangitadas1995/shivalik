@@ -148,30 +148,33 @@
               style="position: fixed; left: 0px; top: 0px; margin: 0px; visibility: hidden; transform: translate3d(280px, 355.2px, 0px);">
               <ul>
                 <li class="menu-item">
-                  <a href="{{ route('papersettings.catlist') }}">
+                  <a href="{{ route('papersettings.paper_category_list') }}">
                     <span class="menu-title">Paper Category</span>
                   </a>
                 </li>
                 <li class="menu-item">
-                  <a href="{{ route('papersettings.sizelist') }}">
+                  <a href="{{ route('papersettings.paper_size_list') }}">
                     <span class="menu-title">Paper Size</span>
                   </a>
                 </li>
                 <li class="menu-item">
-                  <a href="{{ route('papersettings.colorlist') }}">
+                  <a href="{{ route('papersettings.paper_color_list') }}">
                     <span class="menu-title">Paper Color</span>
                   </a>
                 </li>
                 <li class="menu-item">
-                  <a href="{{ route('papersettings.qualitylist') }}">
+                  <a href="{{ route('papersettings.paper_quality_list') }}">
                     <span class="menu-title">Paper Quality</span>
+                  </a>
+                </li>
+                <li class="menu-item">
+                  <a href="{{ route('papersettings.paper_thickness_list') }}">
+                    <span class="menu-title">Paper Thickness</span>
                   </a>
                 </li>
               </ul>
             </div>
           </li>
-
-
 
           <li class="menu-item sub-menu">
             <a>

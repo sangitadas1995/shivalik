@@ -9,7 +9,7 @@
   <div class="row justify-content-between align-items-center">
     <div class="col-md-4">
       <h2>
-        <a href="{{ route('papersettings.sizelist') }}"><i class="ri-arrow-left-line"></i></a> Add Paper Size
+        <a href="{{ route('papersettings.paper_size_list') }}"><i class="ri-arrow-left-line"></i></a> Add Paper Size
       </h2>
     </div>
   </div>
