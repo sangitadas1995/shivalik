@@ -10,10 +10,13 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
+use App\Traits\Permissionhelper;
+
 use Session;
 
 class AuthenticatedSessionController extends Controller
 {
+    use Permissionhelper;
     /**
      * Display the login view.
      */
@@ -33,6 +36,9 @@ class AuthenticatedSessionController extends Controller
 
         $user_auto_id=Auth::user()->id;
         Session::put('user_auto_id', $user_auto_id);
+
+        //$user_wise_permission=$this->userWisePermission($user_auto_id);
+        //Session::put('user_wise_permission', $user_wise_permission);
 
         //dd($request->session());
 

@@ -1156,19 +1156,20 @@ input[type=date]::-webkit-calendar-picker-indicator {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #80CBC4;
   color: white;
   cursor: pointer;
-}
-.permission ul li label svg {
-  height: 16px;
-}
-.permission ul li input[type=checkbox]:checked + label {
   background-color: white;
   border: 1px solid #80CBC4;
 }
-.permission ul li input[type=checkbox]:checked + label svg {
+.permission ul li label svg {
   display: none;
+}
+.permission ul li input[type=checkbox]:checked + label {
+  background-color: #80CBC4;
+}
+.permission ul li input[type=checkbox]:checked + label svg {
+  height: 16px;
+  display: inline;
 }
 
 .searchBox {
