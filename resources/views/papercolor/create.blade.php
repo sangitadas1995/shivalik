@@ -9,7 +9,7 @@
   <div class="row justify-content-between align-items-center">
     <div class="col-md-4">
       <h2>
-        <a href="{{ route('papersettings.colorlist') }}"><i class="ri-arrow-left-line"></i></a> Add Paper Color
+        <a href="{{ route('papersettings.paper_color_list') }}"><i class="ri-arrow-left-line"></i></a> Add Paper Color
       </h2>
     </div>
   </div>

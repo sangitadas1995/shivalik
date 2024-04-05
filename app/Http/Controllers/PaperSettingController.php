@@ -7,6 +7,7 @@ use App\Models\Paper_categories;
 use App\Models\Paper_size;
 use App\Models\Paper_quality;
 use App\Models\Paper_color;
+use App\Models\Paper_weights;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use App\Rules\PaperSettingUniqueValueCheck;
@@ -50,7 +51,7 @@ class PaperSettingController extends Controller
             $update = $papercategories->update();
 
             if ($update) {
-                return redirect()->route('papersettings.catlist')->with('success', 'The paper category has been updated successfully.');
+                return redirect()->route('papersettings.paper_category_list')->with('success', 'The paper category has been updated successfully.');
             } else {
                 return redirect()->back()->with('fail', 'Failed to updated the paper category.');
             }
@@ -75,7 +76,7 @@ class PaperSettingController extends Controller
             $save = $papercategories->save();
 
             if ($save) {
-                return redirect()->route('papersettings.catlist')->with('success', 'The paper category has been created successfully.');
+                return redirect()->route('papersettings.paper_category_list')->with('success', 'The paper category has been created successfully.');
             } else {
                 return redirect()->back()->with('fail', 'Failed to create the paper category.');
             }
@@ -102,7 +103,10 @@ class PaperSettingController extends Controller
         if (isset($request->order['0']['dir']) && ($request->order['0']['column'] != 0) && ($request->order['0']['column'] == 2)) {
             $query->orderBy('name', $request->order['0']['dir']);
         }
-       else {
+        else if (isset($request->order['0']['dir']) && ($request->order['0']['column'] != 0) && ($request->order['0']['column'] == 3)) {
+            $query->orderBy('status', $request->order['0']['dir']);
+        }
+        else {
             $query->orderBy('created_at', 'desc');
         }
 
@@ -136,13 +140,13 @@ class PaperSettingController extends Controller
                     $presentStatus = '<span style="color:red">Inactive</span>';
                 }
 
-                $editLink = route('papersettings.editpapercategory', encrypt($value->id));
+                $editLink = route('papersettings.edit_paper_category', encrypt($value->id));
                 $subarray = [];
                 $subarray[] = ++$key . '.';
                 $subarray[] = $value->id;
                 $subarray[] = $value->name;
                 $subarray[] = $presentStatus;
-                $subarray[] = '<div class="align-items-center d-flex dt-center">
+                $subarray[] = '<div class="align-items-center d-flex dt-center justify-content-center">
                 <a href="' . $editLink . '" title="Edit"><img src="' . $edit_icon . '" /></a>'.$status.'</div>';
                 $data[] = $subarray;
             }
@@ -222,7 +226,10 @@ class PaperSettingController extends Controller
         if (isset($request->order['0']['dir']) && ($request->order['0']['column'] != 0) && ($request->order['0']['column'] == 2)) {
             $query->orderBy('name', $request->order['0']['dir']);
         }
-       else {
+        else if (isset($request->order['0']['dir']) && ($request->order['0']['column'] != 0) && ($request->order['0']['column'] == 3)) {
+            $query->orderBy('status', $request->order['0']['dir']);
+        }
+        else {
             $query->orderBy('created_at', 'desc');
         }
 
@@ -256,13 +263,13 @@ class PaperSettingController extends Controller
                     $presentStatus = '<span style="color:red">Inactive</span>';
                 }
 
-                $editLink = route('papersettings.editpapersize', encrypt($value->id));
+                $editLink = route('papersettings.edit_paper_size', encrypt($value->id));
                 $subarray = [];
                 $subarray[] = ++$key . '.';
                 $subarray[] = $value->id;
                 $subarray[] = $value->name;
                 $subarray[] = $presentStatus;
-                $subarray[] = '<div class="align-items-center d-flex dt-center">
+                $subarray[] = '<div class="align-items-center d-flex dt-center justify-content-center">
                 <a href="' . $editLink . '" title="Edit"><img src="' . $edit_icon . '" /></a>' . $status . '</div>';
                 $data[] = $subarray;
             }
@@ -340,7 +347,7 @@ class PaperSettingController extends Controller
             $save = $papersize->save();
 
             if ($save) {
-                return redirect()->route('papersettings.sizelist')->with('success', 'The paper size has been created successfully.');
+                return redirect()->route('papersettings.paper_size_list')->with('success', 'The paper size has been created successfully.');
             } else {
                 return redirect()->back()->with('fail', 'Failed to create the paper size.');
             }
@@ -348,7 +355,6 @@ class PaperSettingController extends Controller
             return redirect()->back()->with('fail', trans('messages.server_error'));
         }
     }
-
 
     public function editpapersize($id)
     {
@@ -377,7 +383,7 @@ class PaperSettingController extends Controller
             $update = $papersize->update();
 
             if ($update) {
-                return redirect()->route('papersettings.sizelist')->with('success', 'The paper size has been updated successfully.');
+                return redirect()->route('papersettings.paper_size_list')->with('success', 'The paper size has been updated successfully.');
             } else {
                 return redirect()->back()->with('fail', 'Failed to updated the paper size.');
             }
@@ -410,7 +416,10 @@ class PaperSettingController extends Controller
         if (isset($request->order['0']['dir']) && ($request->order['0']['column'] != 0) && ($request->order['0']['column'] == 2)) {
             $query->orderBy('name', $request->order['0']['dir']);
         }
-       else {
+        else if (isset($request->order['0']['dir']) && ($request->order['0']['column'] != 0) && ($request->order['0']['column'] == 3)) {
+            $query->orderBy('status', $request->order['0']['dir']);
+        }
+        else {
             $query->orderBy('created_at', 'desc');
         }
 
@@ -444,13 +453,13 @@ class PaperSettingController extends Controller
                     $presentStatus = '<span style="color:red">Inactive</span>';
                 }
 
-                $editLink = route('papersettings.editpaperquality', encrypt($value->id));
+                $editLink = route('papersettings.edit_paper_quality', encrypt($value->id));
                 $subarray = [];
                 $subarray[] = ++$key . '.';
                 $subarray[] = $value->id;
                 $subarray[] = $value->name;
                 $subarray[] = $presentStatus;
-                $subarray[] = '<div class="align-items-center d-flex dt-center">
+                $subarray[] = '<div class="align-items-center d-flex dt-center justify-content-center">
                 <a href="' . $editLink . '" title="Edit"><img src="' . $edit_icon . '" /></a>' . $status . '</div>';
                 $data[] = $subarray;
             }
@@ -529,7 +538,7 @@ class PaperSettingController extends Controller
             $save = $paperquality->save();
 
             if ($save) {
-                return redirect()->route('papersettings.qualitylist')->with('success', 'The paper quality has been created successfully.');
+                return redirect()->route('papersettings.paper_quality_list')->with('success', 'The paper quality has been created successfully.');
             } else {
                 return redirect()->back()->with('fail', 'Failed to create the paper quality.');
             }
@@ -565,7 +574,7 @@ class PaperSettingController extends Controller
             $update = $paperquality->update();
 
             if ($update) {
-                return redirect()->route('papersettings.qualitylist')->with('success', 'The paper quality has been updated successfully.');
+                return redirect()->route('papersettings.paper_quality_list')->with('success', 'The paper quality has been updated successfully.');
             } else {
                 return redirect()->back()->with('fail', 'Failed to updated the paper quality.');
             }
@@ -597,7 +606,10 @@ class PaperSettingController extends Controller
         if (isset($request->order['0']['dir']) && ($request->order['0']['column'] != 0) && ($request->order['0']['column'] == 2)) {
             $query->orderBy('name', $request->order['0']['dir']);
         }
-       else {
+        else if (isset($request->order['0']['dir']) && ($request->order['0']['column'] != 0) && ($request->order['0']['column'] == 3)) {
+            $query->orderBy('status', $request->order['0']['dir']);
+        }
+        else {
             $query->orderBy('created_at', 'desc');
         }
 
@@ -631,13 +643,13 @@ class PaperSettingController extends Controller
                     $presentStatus = '<span style="color:red">Inactive</span>';
                 }
 
-                $editLink = route('papersettings.editpapercolor', encrypt($value->id));
+                $editLink = route('papersettings.edit_paper_color', encrypt($value->id));
                 $subarray = [];
                 $subarray[] = ++$key . '.';
                 $subarray[] = $value->id;
                 $subarray[] = $value->name;
                 $subarray[] = $presentStatus;
-                $subarray[] = '<div class="align-items-center d-flex dt-center">
+                $subarray[] = '<div class="align-items-center d-flex dt-center justify-content-center">
                 <a href="' . $editLink . '" title="Edit"><img src="' . $edit_icon . '" /></a>' . $status . '</div>';
                 $data[] = $subarray;
             }
@@ -714,7 +726,7 @@ class PaperSettingController extends Controller
             $save = $papercolor->save();
 
             if ($save) {
-                return redirect()->route('papersettings.colorlist')->with('success', 'The paper color has been created successfully.');
+                return redirect()->route('papersettings.paper_color_list')->with('success', 'The paper color has been created successfully.');
             } else {
                 return redirect()->back()->with('fail', 'Failed to create the paper color.');
             }
@@ -751,9 +763,198 @@ class PaperSettingController extends Controller
             $update = $papercolor->update();
 
             if ($update) {
-                return redirect()->route('papersettings.colorlist')->with('success', 'The paper color has been updated successfully.');
+                return redirect()->route('papersettings.paper_color_list')->with('success', 'The paper color has been updated successfully.');
             } else {
                 return redirect()->back()->with('fail', 'Failed to updated the paper color.');
+            }
+        } catch (Exception $th) {
+            return redirect()->back()->with('fail', trans('messages.server_error'));
+        }
+    }
+
+
+    public function gsmlist()
+    {
+        return view('paperweight.index');
+    }
+
+    public function gsmlist_data(Request $request)
+    {
+        $column = [
+            'id',
+            'name'
+        ];
+
+        $query = Paper_weights::where('id', '!=' , '0');
+
+        if (isset($request->search['value'])) {
+            $query->where(function ($q) use ($request) {
+                $q->where('name', 'LIKE', "%" . $request->search['value'] . "%");
+            });
+        }
+
+        if (isset($request->order['0']['dir']) && ($request->order['0']['column'] != 0) && ($request->order['0']['column'] == 2)) {
+            $query->orderBy('name', $request->order['0']['dir']);
+        }
+        else if (isset($request->order['0']['dir']) && ($request->order['0']['column'] != 0) && ($request->order['0']['column'] == 3)) {
+            $query->orderBy('status', $request->order['0']['dir']);
+        }
+        else {
+            $query->orderBy('created_at', 'desc');
+        }
+
+        $number_filtered_row = $query->count();
+
+        if ($request->length != -1) {
+            $query->limit($request->length)->offset($request->start);
+        }
+
+        $result = $query->get();
+
+        $data = [];
+        if ($result->isNotEmpty()) {
+            //dd($result);
+            foreach ($result as $key => $value) {
+                
+                $delete_icon = asset('images/lucide_view.png');
+                $edit_icon = asset('images/akar-icons_edit.png');
+
+                $inactive_icon =  asset('images/eva_lock-outline.png'); 
+                $active_icon =  asset('images/lock-open-right-outline.png');
+
+                if($value->status == "A")
+                {
+                    $status = '<a href="#" class="doInactive" data-id ="' . $value->id . '" title="Active"><img src="' . $active_icon . '" /></a>';
+                    $presentStatus = '<span style="color:green">Active</span>';
+                }
+                if($value->status == "I")
+                {
+                    $status = '<a href="#" class="doActive" data-id ="' . $value->id . '" title="Inactive"><img src="' . $inactive_icon . '" /></a>';
+                    $presentStatus = '<span style="color:red">Inactive</span>';
+                }
+
+                $editLink = route('papersettings.edit_paper_thickness', encrypt($value->id));
+                $subarray = [];
+                $subarray[] = ++$key . '.';
+                $subarray[] = $value->id;
+                $subarray[] = $value->name;
+                $subarray[] = $presentStatus;
+                $subarray[] = '<div class="align-items-center d-flex dt-center justify-content-center">
+                <a href="' . $editLink . '" title="Edit"><img src="' . $edit_icon . '" /></a>' . $status . '</div>';
+                $data[] = $subarray;
+            }
+        }
+
+        $count = Paper_weights::where('id', '!=' , '0')->count();
+
+        $output = [
+            'draw' => intval($request->draw),
+            'recordsTotal' => $count,
+            'recordsFiltered' => $number_filtered_row,
+            'data' => $data
+        ];
+
+        return response()->json($output);
+    }
+
+    public function doactivegsm(Request $request)
+    {
+        $id = $request->rowid;
+
+        try {
+            $paperquality = Paper_weights::find($id);
+            $paperquality->status = "A";
+            $update = $paperquality->update();
+
+            if ($update) {
+                return response()->json(['status' => 'success','message' => 'Successfully active']);
+            } else {
+                return response()->json(['status' => 'fail']);
+            }
+        } catch (Exception $th) {
+           return response()->json(['status' => 'fail']);
+        }
+    }
+
+    public function doinactivegsm(Request $request)
+    {
+        $id = $request->rowid;
+
+        try {
+            $paperquality = Paper_weights::find($id);
+            $paperquality->status = "I";
+            $update = $paperquality->update();
+
+            if ($update) {
+                return response()->json(['status' => 'success','message' => 'Successfully inactive']);
+            } else {
+                return response()->json(['status' => 'fail']);
+            }
+        } catch (Exception $th) {
+           return response()->json(['status' => 'fail']);
+        }
+    }
+
+    public function addpapergsm()
+    {
+        return view('paperweight.create');
+    }
+
+    public function storepapergsm(Request $request)
+    {
+        $request->validate([
+            'value' => [
+                'required',
+                'regex:/^(([0-9]*)(\.([0-9]+))?)$/',
+                new PaperSettingUniqueValueCheck('name', 'paperGsm', '', 'The value :input has already been taken.')
+            ],
+        ]);
+
+        try {
+            $papergsm = new Paper_weights();
+            $papergsm->name = $request->value;
+            $save = $papergsm->save();
+
+            if ($save) {
+                return redirect()->route('papersettings.paper_thickness_list')->with('success', 'The paper thickness has been created successfully.');
+            } else {
+                return redirect()->back()->with('fail', 'Failed to create the paper thickness.');
+            }
+        } catch (Exception $th) {
+            return redirect()->back()->with('fail', trans('messages.server_error'));
+        }
+    }
+
+    public function editpapergsm($id)
+    {
+        $id = decrypt($id);
+        $papergsm  = Paper_weights::findOrFail($id);
+        return view('paperweight.edit', [
+            'papergsm' => $papergsm
+        ]);
+    }
+
+    public function updatepapergsm(Request $request, $id)
+    {
+        $id = decrypt($id);
+
+        $request->validate([
+            'value' => [
+                'required',
+                'string',
+                new PaperSettingUniqueValueCheck('name', 'paperGsm', $id, 'The value :input has already been taken.')
+            ],
+        ]);
+
+        try {
+            $papergsm = Paper_weights::find($id);
+            $papergsm->name = $request->value;
+            $update = $papergsm->update();
+
+            if ($update) {
+                return redirect()->route('papersettings.paper_thickness_list')->with('success', 'The paper thickness has been updated successfully.');
+            } else {
+                return redirect()->back()->with('fail', 'Failed to updated the GSM.');
             }
         } catch (Exception $th) {
             return redirect()->back()->with('fail', trans('messages.server_error'));

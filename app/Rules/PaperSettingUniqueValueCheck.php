@@ -5,6 +5,7 @@ use App\Models\Paper_categories;
 use App\Models\Paper_size;
 use App\Models\Paper_quality;
 use App\Models\Paper_color;
+use App\Models\Paper_weights;
 use Closure;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\DB;
@@ -49,6 +50,12 @@ class PaperSettingUniqueValueCheck implements ValidationRule
             if($this->column2 == "paperQuality")
             {
                 $query = Paper_quality::where(function ($q) use ($value) {
+                    $q->where($this->column1, $value);
+                });
+            }
+            if($this->column2 == "paperGsm")
+            {
+                $query = Paper_weights::where(function ($q) use ($value) {
                     $q->where($this->column1, $value);
                 });
             }

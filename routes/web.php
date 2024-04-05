@@ -70,54 +70,67 @@ Route::middleware('auth')->group(function () {
 
 
     Route::prefix('papersettings')->name('papersettings.')->group(function () {
-        Route::get('catlist', [PaperSettingController::class, 'catlist'])->name('catlist');
-        Route::get('addpapercategory', [PaperSettingController::class, 'createcategory'])->name('addpapercategory');
+        Route::get('paper_category_list', [PaperSettingController::class, 'catlist'])->name('paper_category_list');
+        Route::get('add_paper_category', [PaperSettingController::class, 'createcategory'])->name('add_paper_category');
         Route::post('storepapercategory', [PaperSettingController::class, 'storepapercategory'])->name('storepapercategory');
-        Route::get('editpapercategory/{id}', [PaperSettingController::class, 'editpapercategory'])->name('editpapercategory');
+        Route::get('edit_paper_category/{id}', [PaperSettingController::class, 'editpapercategory'])->name('edit_paper_category');
         Route::post('updatepapercategory/{id}', [PaperSettingController::class, 'updatepapercategory'])->name('updatepapercategory');
         Route::post('list-data', [PaperSettingController::class, 'list_data'])->name('data');
         Route::post('doactivecategory', [PaperSettingController::class, 'doactivecategory'])->name('doactivecategory');
         Route::post('doinactivecategory', [PaperSettingController::class, 'doinactivecategory'])->name('doinactivecategory');
 
 
-        Route::get('sizelist', [PaperSettingController::class, 'sizelist'])->name('sizelist');
+        Route::get('paper_size_list', [PaperSettingController::class, 'sizelist'])->name('paper_size_list');
         Route::post('sizelist-data', [PaperSettingController::class, 'sizelist_data'])->name('sizelistdata');
 
         Route::post('doinactivesize', [PaperSettingController::class, 'doinactivesize'])->name('doinactivesize');
         Route::post('doactivesize', [PaperSettingController::class, 'doactivesize'])->name('doactivesize');
 
-        Route::get('addpapersize', [PaperSettingController::class, 'createsize'])->name('addpapersize');
+        Route::get('add_paper_size', [PaperSettingController::class, 'createsize'])->name('add_paper_size');
         Route::post('storepapersize', [PaperSettingController::class, 'storepapersize'])->name('storepapersize');
 
-        Route::get('editpapersize/{id}', [PaperSettingController::class, 'editpapersize'])->name('editpapersize');
+        Route::get('edit_paper_size/{id}', [PaperSettingController::class, 'editpapersize'])->name('edit_paper_size');
         Route::post('updatepapersize/{id}', [PaperSettingController::class, 'updatepapersize'])->name('updatepapersize');
 
 
 
-        Route::get('qualitylist', [PaperSettingController::class, 'qualitylist'])->name('qualitylist');
+        Route::get('paper_quality_list', [PaperSettingController::class, 'qualitylist'])->name('paper_quality_list');
         Route::post('qualitylist-data', [PaperSettingController::class, 'qualitylist_data'])->name('qualitylistdata');
 
         Route::post('doinactivequality', [PaperSettingController::class, 'doinactivequality'])->name('doinactivequality');
         Route::post('doactivequality', [PaperSettingController::class, 'doactivequality'])->name('doactivequality');
 
-        Route::get('addpaperquality', [PaperSettingController::class, 'createquality'])->name('addpaperquality');
+        Route::get('add_paper_quality', [PaperSettingController::class, 'createquality'])->name('add_paper_quality');
         Route::post('storepaperquality', [PaperSettingController::class, 'storepaperquality'])->name('storepaperquality');
 
-        Route::get('editpaperquality/{id}', [PaperSettingController::class, 'editpaperquality'])->name('editpaperquality');
+        Route::get('edit_paper_quality/{id}', [PaperSettingController::class, 'editpaperquality'])->name('edit_paper_quality');
         Route::post('updatepaperquality/{id}', [PaperSettingController::class, 'updatepaperquality'])->name('updatepaperquality');
 
 
-        Route::get('colorlist', [PaperSettingController::class, 'colorlist'])->name('colorlist');
+        Route::get('paper_color_list', [PaperSettingController::class, 'colorlist'])->name('paper_color_list');
         Route::post('colorlist-data', [PaperSettingController::class, 'colorlist_data'])->name('colorlistdata');
 
         Route::post('doinactivecolor', [PaperSettingController::class, 'doinactivecolor'])->name('doinactivecolor');
         Route::post('doactivecolor', [PaperSettingController::class, 'doactivecolor'])->name('doactivecolor');
 
-        Route::get('addpapercolor', [PaperSettingController::class, 'addpapercolor'])->name('addpapercolor');
+        Route::get('add_paper_color', [PaperSettingController::class, 'addpapercolor'])->name('add_paper_color');
         Route::post('storepapercolor', [PaperSettingController::class, 'storepapercolor'])->name('storepapercolor');
 
-        Route::get('editpapercolor/{id}', [PaperSettingController::class, 'editpapercolor'])->name('editpapercolor');
+        Route::get('edit_paper_color/{id}', [PaperSettingController::class, 'editpapercolor'])->name('edit_paper_color');
         Route::post('updatepapercolor/{id}', [PaperSettingController::class, 'updatepapercolor'])->name('updatepapercolor');
+
+
+        Route::get('paper_thickness_list', [PaperSettingController::class, 'gsmlist'])->name('paper_thickness_list');
+        Route::post('gsmlist-data', [PaperSettingController::class, 'gsmlist_data'])->name('gsmlistdata');
+
+        Route::post('doinactivegsm', [PaperSettingController::class, 'doinactivegsm'])->name('doinactivegsm');
+        Route::post('doactivegsm', [PaperSettingController::class, 'doactivegsm'])->name('doactivegsm');
+
+        Route::get('add_paper_thickness', [PaperSettingController::class, 'addpapergsm'])->name('add_paper_thickness');
+        Route::post('storepapergsm', [PaperSettingController::class, 'storepapergsm'])->name('storepapergsm');
+
+        Route::get('edit_paper_thickness/{id}', [PaperSettingController::class, 'editpapergsm'])->name('edit_paper_thickness');
+        Route::post('updatepapergsm/{id}', [PaperSettingController::class, 'updatepapergsm'])->name('updatepapergsm');
     });
 
 

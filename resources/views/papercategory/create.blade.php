@@ -9,7 +9,7 @@
   <div class="row justify-content-between align-items-center">
     <div class="col-md-4">
       <h2>
-        <a href="{{ route('papersettings.catlist') }}"><i class="ri-arrow-left-line"></i></a> Add Paper Category
+        <a href="{{ route('papersettings.paper_category_list') }}"><i class="ri-arrow-left-line"></i></a> Add Paper Category
       </h2>
     </div>
   </div>

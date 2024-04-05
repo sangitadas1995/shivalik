@@ -8,7 +8,7 @@
   <div class="row justify-content-between align-items-center">
     <div class="col-md-4">
       <h2>
-        <a href="{{ route('papersettings.colorlist') }}"><i class="ri-arrow-left-line"></i></a> Edit Paper Color
+        <a href="{{ route('papersettings.paper_color_list') }}"><i class="ri-arrow-left-line"></i></a> Edit Paper Color
       </h2>
     </div>
   </div>
@@ -31,7 +31,7 @@
       </div>
       
       <div class="text-end">
-        <a href="{{ route('papersettings.colorlist') }}">
+        <a href="{{ route('papersettings.paper_color_list') }}">
         <button type="button" class="btn grey-primary">Cancel</button>
         </a>
         <button type="submit" class="btn black-btn">Save & Continue</button>
