@@ -158,7 +158,7 @@
                   </a>
                 </li>
                 <li class="menu-item">
-                  <a href="#">
+                  <a href="{{ route('papersettings.colorlist') }}">
                     <span class="menu-title">Paper Color</span>
                   </a>
                 </li>

@@ -31,7 +31,7 @@
       </div>
       
       <div class="text-end">
-        <a href="{{ route('papersettings.sizelist') }}">
+        <a href="{{ route('papersettings.qualitylist') }}">
         <button type="button" class="btn grey-primary">Cancel</button>
         </a>
         <button type="submit" class="btn black-btn">Save & Continue</button>
