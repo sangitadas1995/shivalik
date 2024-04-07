@@ -102,7 +102,7 @@
         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
       }
     });
-
+     
     let customers_list_table = $('#customers_list_table').DataTable({
       processing: true,
       serverSide: true,

@@ -16,7 +16,7 @@
 
 <div class="card add-new-location mt-2">
   <div class="card-body">
-    <form action="{{ route('customers.update', encrypt($customer->id)) }}" method="POST" id="customer-edit-form">
+    <form action="{{ route('customers.update', ['id' => encrypt($customer->id)]) }}" method="POST" id="customer-edit-form">
       @csrf
       <div class="row">
         <div class="col-md-12">

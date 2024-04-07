@@ -202,7 +202,7 @@ class CustomersController extends Controller
                 $view_icon = asset('images/lucide_view.png');
                 $edit_icon = asset('images/akar-icons_edit.png');
                 $order_icon = asset('images/order.png');
-                $editLink = route('customers.edit', encrypt($value->id));
+                $editLink = route('customers.edit', ['id' => encrypt($value->id)]);
                 $orderLink = route('orders.index', ['customer' => encrypt($value->id)]);
 
                 $subarray = [];

@@ -11,7 +11,8 @@
       <span class="d-flex">
         <span><img class="img-xs rounded-circle" src="{{ asset('images/face15.jpg') }}" alt="" /></span>
         <span class="profile-text ms-2">
-          <b>Welcome to<br /></b> <?php echo Helper::userDetails(session('user_auto_id'));?></span>
+          {{-- <b>Welcome to<br /></b> <?php //echo Helper::userDetails(session('user_auto_id'));?></span> --}}
+          <b>Welcome to<br /></b> {{ auth('web')->user()->name }}</span>
       </span>
     </a>
     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">

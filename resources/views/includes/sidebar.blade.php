@@ -195,62 +195,15 @@
               style="position: fixed; left: 0px; top: 0px; margin: 0px; visibility: hidden; transform: translate3d(280px, 355.2px, 0px);">
               <ul>
                 <li class="menu-item">
-                  <a href="{{ route('settings.paper-type') }}">
-                    <span class="menu-title">Paper Type</span>
+                  <a href="{{ route('settings.vendor.service-type.index') }}">
+                    <span class="menu-title">vendor Settings</span>
                   </a>
                 </li>
-                <li class="menu-item">
-                  <a href="./setting-printing-products-type.html">
-                    <span class="menu-title">Printing Product Type</span>
-                  </a>
-                </li>
-                <li class="menu-item">
-                  <a href="#">
-                    <span class="menu-title">Paper Size Type</span>
-                  </a>
-                </li>
-                <li class="menu-item">
-                  <a href="#">
-                    <span class="menu-title">Color Type</span>
-                  </a>
-                </li>
-                <li class="menu-item">
-                  <a href="#">
-                    <span class="menu-title">Book Cover Type </span>
-                  </a>
-                </li>
-                <li class="menu-item">
-                  <a href="#">
-                    <span class="menu-title">Binding Type</span>
-                  </a>
-                </li>
-                <li class="menu-item">
-                  <a href="#">
-                    <span class="menu-title">Printing Plate Type</span>
-                  </a>
-                </li>
-                <li class="menu-item">
-                  <a href="#">
-                    <span class="menu-title">Book Size Type</span>
-                  </a>
-                </li>
-                <li class="menu-item">
-                  <a href="#">
-                    <span class="menu-title">Printing Machine Type</span>
-                  </a>
-                </li>
-                <li class="menu-item">
-                  <a href="#">
-                    <span class="menu-title">General Setting</span>
-                  </a>
-                </li>
-
               </ul>
             </div>
           </li>
         </ul>
       </nav>
     </div>
-
   </div>
 </aside>

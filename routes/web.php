@@ -139,11 +139,6 @@ Route::middleware('auth')->group(function () {
         Route::get('/', [VendorsController::class, 'index'])->name('index');
         Route::get('add', [VendorsController::class, 'create'])->name('add');
         Route::post('store', [VendorsController::class, 'store'])->name('store');
-        // Route::post('states', [VendorsController::class, 'getStates'])->name('states');
-        // Route::post('cities', [VendorsController::class, 'getCities'])->name('cities');
-        // Route::post('add_functional_area', [VendorsController::class, 'add_functional_area'])->name('add_functional_area');
-        // Route::get('/users/edit/{id}', 'UsersController@edit');
-        // Route::post('getfunctionalarea', [VendorsController::class, 'getfunctionalarea'])->name('getfunctionalarea');
         Route::post('list-data', [VendorsController::class, 'list_data'])->name('data');
         Route::post('view', [VendorsController::class, 'view'])->name('view');
         Route::get('edit/{id}', [VendorsController::class, 'edit'])->name('edit');
@@ -165,9 +160,17 @@ Route::middleware('auth')->group(function () {
     });
 
     Route::prefix('settings')->name('settings.')->group(function () {
-        Route::get('paper-type', [SettingController::class, 'papertype'])->name('paper-type');
-        Route::get('printing-product-type', [SettingController::class, 'printingProductType'])->name('printing-product-type');
-        Route::get('create-printing-product-type', [SettingController::class, 'addPrintingProductType'])->name('create-printing-product-type');
+        Route::prefix('vendor')->name('vendor.')->group(function () {
+            Route::prefix('service-type')->name('service-type.')->group(function () {
+                Route::get('/', [SettingController::class, 'servicetype'])->name('index');
+                Route::get('add', [SettingController::class, 'addservicetype'])->name('add');
+                Route::post('store', [SettingController::class, 'storeServicetype'])->name('store');
+                Route::post('list-data', [SettingController::class, 'serviceListdata'])->name('list-data');
+                Route::post('update-status', [SettingController::class, 'service_type_update_status'])->name('update-status');
+                Route::get('edit/{id}', [SettingController::class, 'edit_service_type'])->name('edit');
+                Route::post('update/{id}', [SettingController::class, 'updateServiceType'])->name('update');
+            });
+        });
     });
 });
 
