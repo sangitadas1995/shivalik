@@ -179,25 +179,18 @@
                             </div>                                                                                                             
                             <div class="col-5 child-table-row">
                                 <div>
-                                    Paper Type
+                                    Service Types
                                 </div>
                             </div>
                             <div class="col-7 child-table-row">
                                 <div>
-                                    {{ $vendor->papertype?->name ?? null }}
+                                   @if (!empty($service_types) && $service_types->isNotEmpty())
+                                       @foreach ($service_types as $s_type)
+                                           {{ $loop->iteration == 1 ? $s_type->name : ', '.$s_type->name }}
+                                       @endforeach
+                                   @endif
                                 </div>
                             </div>                                                       
-                            <div class="col-5 child-table-row">
-                                <div>
-                                    Paper Size
-                                </div>
-                            </div>
-                            <div class="col-7 child-table-row">
-                                <div>
-                                    {{ $vendor->papersize?->name ?? null }}
-                                </div>
-                            </div>
-
                         </div>
                     </div>
                 </div>

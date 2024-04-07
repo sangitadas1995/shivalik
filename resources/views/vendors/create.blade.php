@@ -1,14 +1,14 @@
 @extends('layouts.app')
 @section('title','Vendor Management')
 @push('extra_css')
-    
+  <link rel="stylesheet" href="{{ asset('css/select2.min.css') }}"> 
 @endpush
 @section('content')
 <div class="page-name">
     <div class="row justify-content-between align-items-center">
         <div class="col-md-4">
         <h2>
-          <a href="{{ route('vendors.index') }}"><i class="ri-arrow-left-line"></i></a> Add Vendor</h2>
+          <a href="{{ route('printing-vendor') }}"><i class="ri-arrow-left-line"></i></a> Add Vendor</h2>
         </div>
     </div>
 </div>
@@ -19,6 +19,15 @@
         <div class="row">
             <div class="col-md-12">
                 @include('utils.alert')
+            </div>
+
+            <div class="col-md-12">
+              <div class="mb-3">
+                <input type="radio" id="paper_vendor" name="vendor_type_id" value="1" class="vendor_type" />
+                <label class="form-label">Paper Vendor</label> &nbsp; &nbsp;&nbsp;&nbsp;
+                <input type="radio" id="print_vendor" name="vendor_type_id" value="2" class="vendor_type"  />
+                <label class="form-label">Printing Vendor</label> 
+              </div>
             </div>
           <div class="col-md-6">
             <div class="mb-3">
@@ -89,24 +98,6 @@
               </div>
             </div>
           </div>
-          <div class="col-md-6">
-            <div class="mb-3">
-              <label class="form-label">Vendor Type<span class="text-danger">*</span> :</label>
-              <select class="form-select" aria-label="Default select example" id="vendor_type_id" name="vendor_type_id">
-              <option value="">Select</option>
-              @if ($vendorType->isNotEmpty())
-              @foreach ($vendorType as $vt)
-              @if (old('vendor_type_id') == $vt->id)
-              <option value="{{ $vt->id }}" selected>{{ $vt->name }}</option>
-              @else
-              <option value="{{ $vt->id }}">{{ $vt->name }}</option>
-              @endif
-              @endforeach
-              @endif  
-              </select>
-              <small class="text-danger error_vendor_type"></small>
-            </div>
-          </div>
         </div>
         <div class="mb-3">
           <label class="form-label">Address<span class="text-danger">*</span> :</label>
@@ -158,37 +149,22 @@
               <small class="text-danger error_pincode"></small>
             </div>
           </div>
-          <div class="col-md-6">
-            <div class="mb-3">
-              <label class="form-label">Paper Type <span class="text-danger">*</span>:</label>
-              <select class="form-select" aria-label="Default select example" id="paper_type_id" name="paper_type_id">
-              <option value="">Select</option>
-              @if ($paperType->isNotEmpty())
-              @foreach ($paperType as $pt)
-              @if (old('paper_type_id') == $pt->id)
-              <option value="{{ $pt->id }}" selected>{{ $pt->name }}</option>
-              @else
-              <option value="{{ $pt->id }}">{{ $pt->name }}</option>
-              @endif
-              @endforeach
-              @endif
-              </select>
+       
+          <br>
+          <div class="page-name">
+            <div class="row justify-content-between align-items-center">
+                <div class="col-md-4">
+                    <h2> Vendor Services</h2>
+                </div>
             </div>
-          </div>
-          <div class="col-md-6">
+        </div>
+        
+          <div class="col-md-12">
             <div class="mb-3">
-              <label class="form-label">Paper Size <span class="text-danger">*</span>:</label>
-              <select class="form-select" aria-label="Default select example" id="paper_size_id" name="paper_size_id">
-              <option value="">Select</option>
-              @if ($paperSize->isNotEmpty())
-              @foreach ($paperSize as $ps)
-              @if (old('paper_size_id') == $ps->id)
-              <option value="{{ $ps->id }}" selected>{{ $ps->name }}</option>
-              @else
-              <option value="{{ $ps->id }}">{{ $ps->name }}</option>
-              @endif
-              @endforeach
-              @endif
+              <label class="form-label">Service Types<span class="text-danger">*</span>:</label>
+              <select class="form-select service_types" aria-label="Default select example" id="service_type_id" name="service_type_id[]" multiple="multiple">
+              <option value="">-- Select service type ---</option>
+             
               </select>
             </div>
           </div>
@@ -203,6 +179,7 @@
 @endsection
 
 @section('scripts')
+<script src="{{ asset('js/select2.min.js') }}"></script>
 <script>
   $(document).ready(function() {
     $("#mobile_code-1").intlTelInput({
@@ -225,6 +202,9 @@
       separateDialCode: true,
       // utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/11.0.4/js/utils.js"
     });
+  
+    
+
     $.ajaxSetup({
       headers: {
         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -501,6 +481,36 @@
       }
 
       __e[0].submit();
+    });
+    
+    $(document).on('change', '.vendor_type', function () {
+      let vendor_type = this.value;
+   
+      if (vendor_type) {
+        $.ajax({
+          url: "{{ route('vendors.service-types') }}",
+          type: 'post',
+          dataType: "json",
+          data: { vendor_type },
+          beforeSend: function () {
+            $('select#service_type_id').find("option:eq(0)").html("Please wait..");
+          },
+          success: function (response) {
+            console.log(response)
+            var options = '';
+            
+            for (var i = 0; i < response.data.length; i++) {
+              options += '<option value="' + response.data[i].id + '">' + response.data[i].name + '</option>';
+            }
+            $("select#service_type_id").html(options);
+            $('.service_types').select2();
+
+          },
+          error: function (xhr, ajaxOptions, thrownError) {
+            return Swal.fire('Error!', 'Something went wrong, Plese try again.', 'error');
+          }
+        });
+      } 
     });
 
     $(document).on('click','.reset_add_vendor',function(e){

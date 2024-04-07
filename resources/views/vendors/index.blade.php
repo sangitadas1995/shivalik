@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title','Vendor Management')
+@section('title','Printing Vendor Management')
 @push('extra_css')
 
 @endpush
@@ -7,7 +7,7 @@
 <div class="page-name">
   <div class="row justify-content-between align-items-center">
     <div class="col-md-4">
-      <h2><i class="ri-arrow-left-line"></i> Vendor Management</h2>
+      <h2><i class="ri-arrow-left-line"></i> Printing Vendor Management</h2>
     </div>
     <div class="col-md-6">
       <div class="text-end mb-4">
@@ -29,12 +29,9 @@
         <tr>
           <th>Row ID</th>
           <th style="text-align: center">ID</th>
-          <th style="text-align: center">Date</th>
           <th style="text-align: center">Company Name</th>
-          <!-- <th style="text-align: center">Contact Person</th> -->
-          <th style="text-align: center">Vendor Type</th>
-          <th style="text-align: center">Paper Type</th>
-          <th style="text-align: center">Paper Size</th>
+          <th style="text-align: center">Contact Person</th>
+          <th style="text-align: center">Mobile No</th>
           <th style="text-align: center">Action</th>
         </tr>
       </thead>
@@ -54,40 +51,7 @@
   </div>
 </div>
 
-{{-- CSV BULK UPLOAD MODAL --}}
-<div class="modal" tabindex="-1" id="bulk_upload_modal">
-  <div class="modal-background-blur">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">Bulk Upload CSV</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <form action="{{ route('customers.upload') }}" method="POST" id="customer_bulkUpload"
-            enctype="multipart/form-data">
-            <div class="row">
-              <div class="col-md-12 mb-3">
-                <label class="form-label d-flex justify-content-between">
-                  <span>Customer Csv Upload</span>
-                  <a href="{{ asset('downloadable/customers-sample-csv.csv') }}" download="customers-sample-csv.csv">Download Sample</a>
-                </label>
-                <input type="file" class="form-control" name="csv_upload" id="csv_upload" accept=".csv" />
-                <small class="text-danger error_file"></small>
-              </div>
 
-              <div class="col-md-12">
-                <div class="text-end">
-                  <button type="button" class="btn primary-btn bulk_upload_btn">Upload</button>
-                </div>
-              </div>
-            </div>
-          </form>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
 @endsection
 
 @section('scripts')
@@ -117,7 +81,7 @@
         visible: false,
       },
       {
-        target: [1, 7],
+        target: [ 5],
         searchable: false,
         sortable: false,
       },

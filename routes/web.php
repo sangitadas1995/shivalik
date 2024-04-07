@@ -136,14 +136,19 @@ Route::middleware('auth')->group(function () {
 
 
     Route::prefix('vendors')->name('vendors.')->group(function () {
-        Route::get('/', [VendorsController::class, 'index'])->name('index');
+        /*  Route::get('/', [VendorsController::class, 'index'])->name('index'); */
         Route::get('add', [VendorsController::class, 'create'])->name('add');
         Route::post('store', [VendorsController::class, 'store'])->name('store');
         Route::post('list-data', [VendorsController::class, 'list_data'])->name('data');
         Route::post('view', [VendorsController::class, 'view'])->name('view');
         Route::get('edit/{id}', [VendorsController::class, 'edit'])->name('edit');
         Route::post('update/{id}', [VendorsController::class, 'update'])->name('update');
+        Route::post('service-types', [VendorsController::class, 'getServiceTypes'])->name('service-types');
     });
+    Route::get('printing-vendor', [VendorsController::class, 'index'])->name('printing-vendor');
+    Route::get('paper-vendor', [VendorsController::class, 'papervendorList'])->name('paper-vendor');
+
+
 
     Route::prefix('orders')->name('orders.')->group(function () {
         Route::get('/', [OrdersController::class, 'index'])->name('index');
