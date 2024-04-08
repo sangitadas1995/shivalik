@@ -136,7 +136,7 @@ class PaperSettingController extends Controller
                 }
                 if($value->status == "I")
                 {
-                    $status = '<a href="#" class="updateStatus" data-id ="' . $value->id . '" data-status="Lock" title="Lock"><img src="' . $inactive_icon . '" /></a>';
+                    $status = '<a href="#" class="updateStatus" data-id ="' . $value->id . '" data-status="unlock" title="Lock"><img src="' . $inactive_icon . '" /></a>';
                     $presentStatus = '<span style="color:red">Inactive</span>';
                 }
 
