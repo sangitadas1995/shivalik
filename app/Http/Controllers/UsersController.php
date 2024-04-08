@@ -517,11 +517,11 @@ class UsersController extends Controller
 
                 if($value->status == "A")
                 {
-                    $status = '<a href="#" class="dolock" data-id ="' . $value->id . '" title="Unlock"><img src="' . $unlock_icon . '" /></a>';
+                    $status = '<a href="#" class="updateStatus" data-id ="' . $value->id . '" data-status="lock" title="Unlock"><img src="' . $unlock_icon . '" /></a>';
                 }
                 if($value->status == "I")
                 {
-                    $status = '<a href="#" class="doUnlock" data-id ="' . $value->id . '" title="Lock"><img src="' . $lock_icon . '" /></a>';
+                    $status = '<a href="#" class="updateStatus" data-id ="' . $value->id . '" data-status="unlock" title="Lock"><img src="' . $lock_icon . '" /></a>';
                 }
 
                 $userPermissionLink = route('users.permission', encrypt($value->id));
@@ -554,48 +554,30 @@ class UsersController extends Controller
         return response()->json($output);
     }
 
-
-
-    public function do_unlock(Request $request)
+    public function doupdatestatususer(Request $request)
     {
-        $id = $request->rowid;
+        $request->validate([
+            'rowid' => ['required'],
+            'rowstatus' => ['required']
+        ]);
 
         try {
-        $user = User::find($id);
-        $user->status = "A";
-        $update = $user->update();
+            $id = $request->rowid;
+            $status = $request->rowstatus == 'lock' ? 'I' : 'A';
 
-        if ($update) {
-            return response()->json(['status' => 'success','message' => 'Successfully unlock']);
-        } else {
-            return response()->json(['status' => 'fail']);
-        }
+            $user = User::findOrFail($id);
+            $user->status = $status;
+            $user->update();
+
+            return response()->json([
+                'message' => 'User has been ' . $request->rowstatus . ' successfully.'
+            ]);
         } catch (Exception $th) {
-           return response()->json(['status' => 'fail']);
+            return response()->json([
+                'message' => trans('messages.server_error')
+            ], 500);
         }
     }
-
-    public function do_lock(Request $request)
-    {
-        $id = $request->rowid;
-
-        try {
-        $user = User::find($id);
-        $user->status = "I";
-        $update = $user->update();
-
-        if ($update) {
-            return response()->json(['status' => 'success','message' => 'Successfully lock']);
-        } else {
-            return response()->json(['status' => 'fail']);
-        }
-        } catch (Exception $th) {
-           return response()->json(['status' => 'fail']);
-        }
-    }
-
-
-
 
     public function view(Request $request)
     {

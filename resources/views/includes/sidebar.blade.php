@@ -47,6 +47,11 @@
             <div class="sub-menu-list">
               <ul>
                 <li class="menu-item">
+                  <a href="{{ route('vendors.add') }}">
+                    <span class="menu-title">Add vendor</span>
+                  </a>
+                </li>
+                <li class="menu-item">
                   <a href="{{ route('printing-vendor') }}">
                     <span class="menu-title">Printing vendor</span>
                   </a>
