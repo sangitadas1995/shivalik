@@ -44,7 +44,7 @@ class VendorsController extends Controller
             ->orderBy('name', 'asc')
             ->get();
 
-        
+
 
         return view('vendors.create', [
             'countries' => $countries,
@@ -202,7 +202,7 @@ class VendorsController extends Controller
 
                 $view_icon = asset('images/lucide_view.png');
                 $edit_icon = asset('images/akar-icons_edit.png');
-                $editLink = route('vendors.edit', encrypt($value->id));
+                $editLink = route('vendors.printing.edit', encrypt($value->id));
 
                 $subarray = [];
                 $subarray[] = $value->id;
@@ -231,7 +231,7 @@ class VendorsController extends Controller
 
     public function view(Request $request)
     {
-        $vendor = Vendor::with('vendortype','city', 'state', 'country')->findOrFail($request->rowid);
+        $vendor = Vendor::with('vendortype', 'city', 'state', 'country')->findOrFail($request->rowid);
         $service_types_id = !empty($vendor->service_type_ids) ? json_decode($vendor->service_type_ids) : null;
         $service_types = null;
         if (!empty($service_types_id)) {
@@ -240,6 +240,7 @@ class VendorsController extends Controller
         $html = view('vendors.details', ['vendor' => $vendor, 'service_types' => $service_types])->render();
         return response()->json($html);
     }
+
     public function getServiceTypes(Request $request)
     {
         try {
@@ -253,50 +254,29 @@ class VendorsController extends Controller
         }
     }
 
-    public function papervendorList(Request $request)
+    public function papervendorsList(Request $request)
     {
         $column = [
-            'id',
             'index',
-            // 'created_at',
-            // 'company_name',
-            // 'contact_person',
-            // 'city_id',
-            // 'no_of_orders',
-            // 'print_margin'
+            'id',
+            'company_name',
+            'contact_person',
+            'mobile_no',
         ];
 
-        $query = Vendor::where('vendor_type_id', '2');
+        $query = Vendor::where('vendor_type_id', '1');
 
         if (isset($request->search['value'])) {
             $query->where(function ($q) use ($request) {
                 $q->where('company_name', 'LIKE', "%" . $request->search['value'] . "%")
-                    ->orWhereHas('vendortype', function ($q) use ($request) {
-                        $q->where('name', 'LIKE', "%" . $request->search['value'] . "%");
-                    })
-                    ->orWhereHas('papertype', function ($q) use ($request) {
-                        $q->where('name', 'LIKE', "%" . $request->search['value'] . "%");
-                    })
-                    ->orWhereHas('papersize', function ($q) use ($request) {
-                        $q->where('name', 'LIKE', "%" . $request->search['value'] . "%");
-                    });
+                    ->orWhere('contact_person', 'LIKE', "%" . $request->search['value'] . "%")
+                    ->orWhere('mobile_no', 'LIKE', "%" . $request->search['value'] . "%")
+                    ->orWhere('id', 'LIKE', "%" . $request->search['value'] . "%");
             });
         }
 
-        if (isset($request->order['0']['dir']) && ($request->order['0']['column'] != 0) && ($request->order['0']['column'] == 3)) {
-            $query->orderBy('company_name', $request->order['0']['dir']);
-        } else if (isset($request->order['0']['dir']) && ($request->order['0']['column'] != 0) && ($request->order['0']['column'] == 4)) {
-            $query->whereHas('vendortype', function ($q) use ($request) {
-                return $q->orderBy('name', $request->order['0']['dir']);
-            });
-        } else if (isset($request->order['0']['dir']) && ($request->order['0']['column'] != 0) && ($request->order['0']['column'] == 5)) {
-            $query->whereHas('papertype', function ($q) use ($request) {
-                return $q->orderBy('name', $request->order['0']['dir']);
-            });
-        } else if (isset($request->order['0']['dir']) && ($request->order['0']['column'] != 0) && ($request->order['0']['column'] == 6)) {
-            $query->whereHas('papersize', function ($q) use ($request) {
-                return $q->orderBy('name', $request->order['0']['dir']);
-            });
+        if (isset($request->order['0']['dir']) && ($request->order['0']['column'] != 0)) {
+            $query->orderBy($column[$request->order['0']['column']], $request->order['0']['dir']);
         } else {
             $query->orderBy('created_at', 'desc');
         }
@@ -314,14 +294,15 @@ class VendorsController extends Controller
 
                 $view_icon = asset('images/lucide_view.png');
                 $edit_icon = asset('images/akar-icons_edit.png');
-                $editLink = route('vendors.edit', encrypt($value->id));
+                $editLink = route('vendors.paper.edit', encrypt($value->id));
+
                 $subarray = [];
                 $subarray[] = $value->id;
                 $subarray[] = $value->id;
                 $subarray[] = $value->company_name;
                 $subarray[] = $value->contact_person;
                 $subarray[] = $value->mobile_no;
-                $subarray[] = '<a href="#" class="view_details" title="View Details" data-id ="' . $value->id . '"><img src="' . $view_icon . '" /></a>
+                $subarray[] = '<a href="#" class="view_details" title="View Details" data-id ="' . $value->id . '"><img src="' . $view_icon . '" /></a> <a href="' . $editLink . '" title="Edit"><img src="' . $edit_icon . '" /></a>
                 ';
                 $data[] = $subarray;
             }
@@ -337,5 +318,220 @@ class VendorsController extends Controller
         ];
 
         return response()->json($output);
+    }
+
+    public function papervendors()
+    {
+        return view('vendors.paper-vendor');
+    }
+
+    public function paper_edit($id)
+    {
+        $id = decrypt($id);
+        $paper = Vendor::findOrFail($id);
+        $countries = $this->getAllCountries();
+        $states = $this->getAllStates(101);
+        $cities = $this->getAllCitiesByState($paper->state_id);
+
+        $service_types = ServiceType::where([
+            'vendor_type_id' => $paper->vendor_type_id,
+            'status' => 'A'
+        ])
+            ->get();
+        return view('vendors.paper-edit', [
+            'paper' => $paper,
+            'countries' => $countries,
+            'states' => $states,
+            'cities' => $cities,
+            'service_types' => $service_types,
+            'service_type_ids' => json_decode($paper->service_type_ids)
+        ]);
+    }
+
+    public function paper_update(Request $request, $id)
+    {
+        $id = decrypt($id);
+        $request->validate([
+            'vendor_type_id' => ['required'],
+            'company_name' => ['required', 'string'],
+            'contact_person' => ['required', 'string'],
+            'mobile_no' => [
+                'required',
+                'regex:/^[6-9]\d{9}$/',
+                new VendorUniqueMobileNumber('mobile_no', 'alter_mobile_no', 'phone_no', 'alternative_phone_no', $id, 'The mobile number :input has already been taken.')
+            ],
+            'alter_mobile_no' => [
+                'sometimes',
+                'nullable',
+                'regex:/^[6-9]\d{9}$/',
+                'different:mobile_no',
+                new VendorUniqueMobileNumber('mobile_no', 'alter_mobile_no', 'phone_no', 'alternative_phone_no', $id, 'The alternate mobile number :input has already been taken.'),
+            ],
+            'email' => [
+                'required',
+                'email',
+                new VendorUniqueEmailAddress('email', 'alternative_email_id', $id, 'The email address :input has already been taken.'),
+            ],
+            'alternative_email_id' => [
+                'sometimes',
+                'nullable',
+                'email',
+                'different:email',
+                new VendorUniqueEmailAddress('email', 'alternative_email_id', $id, 'The alternate email address :input has already been taken.'),
+            ],
+            'phone_no' => [
+                'sometimes',
+                'nullable',
+                'regex:/^[0-9]\d{10}$/',
+                new VendorUniqueMobileNumber('phone_no', 'alternative_phone_no', 'mobile_no', 'alter_mobile_no', $id, 'The phone number :input has already been taken.'),
+            ],
+            'alternative_phone_no' => [
+                'sometimes',
+                'nullable',
+                'regex:/^[0-9]\d{10}$/',
+                'different:phone_no',
+                new VendorUniqueMobileNumber('phone_no', 'alternative_phone_no', 'mobile_no', 'alter_mobile_no', $id, 'The alternate phone number :input has already been taken.'),
+            ],
+
+            'address' => ['required'],
+            'country_id' => ['required', 'numeric'],
+            'state_id' => ['required', 'numeric'],
+            'city_id' => ['required', 'numeric'],
+            'pincode' => ['required', 'regex:/^[1-9][0-9]{5}$/'],
+            'service_type_id' => ['required'],
+        ]);
+
+        try {
+            $vendor = Vendor::findOrFail($id);
+            $vendor->vendor_type_id = $request->vendor_type_id;
+            $vendor->company_name = ucwords(strtolower($request->company_name));
+            $vendor->contact_person = ucwords(strtolower($request->contact_person));
+            $vendor->mobile_no = $request->mobile_no;
+            $vendor->alter_mobile_no = $request->alter_mobile_no;
+            $vendor->email = $request->email;
+            $vendor->alternative_email_id = $request->alternative_email_id;
+            $vendor->phone_no = $request->phone_no;
+            $vendor->alternative_phone_no = $request->alternative_phone_no;
+            $vendor->address = $request->address;
+            $vendor->country_id = $request->country_id;
+            $vendor->state_id = $request->state_id;
+            $vendor->city_id = $request->city_id;
+            $vendor->pincode = $request->pincode;
+            $vendor->service_type_ids = json_encode($request->service_type_id);
+            $update = $vendor->update();
+
+            if ($update) {
+                return redirect()->route('paper-vendor')->with('success', 'The vendor has been updated successfully.');
+            } else {
+                return redirect()->back()->with('fail', 'Failed to create the vendor.');
+            }
+        } catch (Exception $th) {
+            return redirect()->back()->with('fail', trans('messages.server_error'));
+        }
+    }
+
+    public function printing_edit($id)
+    {
+        $id = decrypt($id);
+        $printing = Vendor::findOrFail($id);
+        $countries = $this->getAllCountries();
+        $states = $this->getAllStates(101);
+        $cities = $this->getAllCitiesByState($printing->state_id);
+
+        $service_types = ServiceType::where([
+            'vendor_type_id' => $printing->vendor_type_id,
+            'status' => 'A'
+        ])
+            ->get();
+        return view('vendors.printing-edit', [
+            'printing' => $printing,
+            'countries' => $countries,
+            'states' => $states,
+            'cities' => $cities,
+            'service_types' => $service_types,
+            'service_type_ids' => json_decode($printing->service_type_ids)
+        ]);
+    }
+
+    public function printing_update(Request $request, $id)
+    {
+        $id = decrypt($id);
+        $request->validate([
+            'vendor_type_id' => ['required'],
+            'company_name' => ['required', 'string'],
+            'contact_person' => ['required', 'string'],
+            'mobile_no' => [
+                'required',
+                'regex:/^[6-9]\d{9}$/',
+                new VendorUniqueMobileNumber('mobile_no', 'alter_mobile_no', 'phone_no', 'alternative_phone_no', $id, 'The mobile number :input has already been taken.')
+            ],
+            'alter_mobile_no' => [
+                'sometimes',
+                'nullable',
+                'regex:/^[6-9]\d{9}$/',
+                'different:mobile_no',
+                new VendorUniqueMobileNumber('mobile_no', 'alter_mobile_no', 'phone_no', 'alternative_phone_no', $id, 'The alternate mobile number :input has already been taken.'),
+            ],
+            'email' => [
+                'required',
+                'email',
+                new VendorUniqueEmailAddress('email', 'alternative_email_id', $id, 'The email address :input has already been taken.'),
+            ],
+            'alternative_email_id' => [
+                'sometimes',
+                'nullable',
+                'email',
+                'different:email',
+                new VendorUniqueEmailAddress('email', 'alternative_email_id', $id, 'The alternate email address :input has already been taken.'),
+            ],
+            'phone_no' => [
+                'sometimes',
+                'nullable',
+                'regex:/^[0-9]\d{10}$/',
+                new VendorUniqueMobileNumber('phone_no', 'alternative_phone_no', 'mobile_no', 'alter_mobile_no', $id, 'The phone number :input has already been taken.'),
+            ],
+            'alternative_phone_no' => [
+                'sometimes',
+                'nullable',
+                'regex:/^[0-9]\d{10}$/',
+                'different:phone_no',
+                new VendorUniqueMobileNumber('phone_no', 'alternative_phone_no', 'mobile_no', 'alter_mobile_no', $id, 'The alternate phone number :input has already been taken.'),
+            ],
+
+            'address' => ['required'],
+            'country_id' => ['required', 'numeric'],
+            'state_id' => ['required', 'numeric'],
+            'city_id' => ['required', 'numeric'],
+            'pincode' => ['required', 'regex:/^[1-9][0-9]{5}$/'],
+            'service_type_id' => ['required'],
+        ]);
+
+        try {
+            $vendor = Vendor::findOrFail($id);
+            $vendor->vendor_type_id = $request->vendor_type_id;
+            $vendor->company_name = ucwords(strtolower($request->company_name));
+            $vendor->contact_person = ucwords(strtolower($request->contact_person));
+            $vendor->mobile_no = $request->mobile_no;
+            $vendor->alter_mobile_no = $request->alter_mobile_no;
+            $vendor->email = $request->email;
+            $vendor->alternative_email_id = $request->alternative_email_id;
+            $vendor->phone_no = $request->phone_no;
+            $vendor->alternative_phone_no = $request->alternative_phone_no;
+            $vendor->address = $request->address;
+            $vendor->country_id = $request->country_id;
+            $vendor->state_id = $request->state_id;
+            $vendor->city_id = $request->city_id;
+            $vendor->pincode = $request->pincode;
+            $vendor->service_type_ids = json_encode($request->service_type_id);
+            $update = $vendor->update();
+
+            if ($update) {
+                return redirect()->route('printing-vendor')->with('success', 'The vendor has been updated successfully.');
+            } else {
+                return redirect()->back()->with('fail', 'Failed to create the vendor.');
+            }
+        } catch (Exception $th) {
+            return redirect()->back()->with('fail', trans('messages.server_error'));
+        }
     }
 }

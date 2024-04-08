@@ -25,9 +25,9 @@
               <div class="mb-3">
                 <label class="form-label">Vendor Type<span class="text-danger">*</span> :</label><br>
                 <input type="radio" id="paper_vendor" name="vendor_type_id" value="1" class="vendor_type" />
-                <label class="form-label">Paper Vendor</label> &nbsp; &nbsp;&nbsp;&nbsp;
+                <label class="form-label" for="paper_vendor">Paper Vendor</label> &nbsp; &nbsp;&nbsp;&nbsp;
                 <input type="radio" id="print_vendor" name="vendor_type_id" value="2" class="vendor_type"  />
-                <label class="form-label">Printing Vendor</label> 
+                <label class="form-label" for="print_vendor">Printing Vendor</label> 
               </div>
             </div>
           <div class="col-md-6">
@@ -49,7 +49,7 @@
               <div class="col-md-6">
                 <div class="mb-3  d-flex flex-column">
                   <label class="form-label">Mobile No<span class="text-danger">*</span> :</label>
-                  <input type="text" id="mobile_code-1" class="form-control mobileNumber" name="mobile_no" value="{{ old('mobile_no') }}" />
+                  <input type="tel" id="mobile_code-1" class="form-control mobileNumber" name="mobile_no" value="{{ old('mobile_no') }}" />
                   <small class="text-danger error_mobile_no"></small>
                 </div>
               </div>
@@ -57,7 +57,7 @@
                 <div class="mb-3 d-flex flex-column">
                   <label class="form-label">Alternative Mobile No.
                     :</label>
-                  <input type="text" id="mobile_code-2" class="form-control mobileNumber" name="alter_mobile_no" value="{{ old('alter_mobile_no') }}" />
+                  <input type="tel" id="mobile_code-2" class="form-control mobileNumber" name="alter_mobile_no" value="{{ old('alter_mobile_no') }}" />
                   <small class="text-danger error_alter_mobile_no"></small>
                 </div>
               </div>
@@ -86,14 +86,14 @@
               <div class="col-md-6">
                 <div class="mb-3  d-flex flex-column">
                   <label class="form-label">Phone No :</label>
-                  <input type="text" id="mobile_code-3" class="form-control onlyNumber" name="phone_no" value="{{ old('phone_no') }}" />
+                  <input type="tel" id="mobile_code-3" class="form-control onlyNumber phoneNumber" name="phone_no" value="{{ old('phone_no') }}" />
                   <small class="text-danger error_phone_no"></small>
                 </div>
               </div>
               <div class="col-md-6">
                 <div class="mb-3 d-flex flex-column">
                   <label class="form-label">Alternative Phone No. :</label>
-                  <input type="text" id="mobile_code-4" class="form-control onlyNumber" name="alternative_phone_no" value="{{ old('alternative_phone_no') }}" />
+                  <input type="tel" id="mobile_code-4" class="form-control onlyNumber phoneNumber" name="alternative_phone_no" value="{{ old('alternative_phone_no') }}" />
                   <small class="text-danger error_alternative_phone_no"></small>
                 </div>
               </div>

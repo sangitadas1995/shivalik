@@ -30,6 +30,7 @@ class SettingController extends Controller
     {
         $request->validate([
             'vendor_type_id' => ['required'],
+            'name.*' => ['required'],
         ]);
 
         try {

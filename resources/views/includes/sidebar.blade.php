@@ -57,7 +57,7 @@
                   </a>
                 </li>
                 <li class="menu-item">
-                  <a href="#">
+                  <a href="{{ route('paper-vendor') }}">
                     <span class="menu-title">Paper vendor</span>
                   </a>
                 </li>

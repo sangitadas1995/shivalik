@@ -126,8 +126,6 @@ Route::middleware('auth')->group(function () {
         Route::post('updatepapergsm/{id}', [PaperSettingController::class, 'updatepapergsm'])->name('updatepapergsm');
     });
 
-
-
     Route::prefix('vendors')->name('vendors.')->group(function () {
         /*  Route::get('/', [VendorsController::class, 'index'])->name('index'); */
         Route::get('add', [VendorsController::class, 'create'])->name('add');
@@ -137,9 +135,21 @@ Route::middleware('auth')->group(function () {
         Route::get('edit/{id}', [VendorsController::class, 'edit'])->name('edit');
         Route::post('update/{id}', [VendorsController::class, 'update'])->name('update');
         Route::post('service-types', [VendorsController::class, 'getServiceTypes'])->name('service-types');
+
+        Route::prefix('paper')->name('paper.')->group(function () {
+            Route::get('edit/{id}', [VendorsController::class, 'paper_edit'])->name('edit');
+            Route::post('update/{id}', [VendorsController::class, 'paper_update'])->name('update');
+        });
+
+        Route::prefix('printing')->name('printing.')->group(function () {
+            Route::get('edit/{id}', [VendorsController::class, 'printing_edit'])->name('edit');
+            Route::post('update/{id}', [VendorsController::class, 'printing_update'])->name('update');
+        });
     });
+
     Route::get('printing-vendor', [VendorsController::class, 'index'])->name('printing-vendor');
-    Route::get('paper-vendor', [VendorsController::class, 'papervendorList'])->name('paper-vendor');
+    Route::get('paper-vendor', [VendorsController::class, 'papervendors'])->name('paper-vendor');
+    Route::post('paper-vendors', [VendorsController::class, 'papervendorsList'])->name('paper-vendor-list');
 
 
 
