@@ -38,16 +38,16 @@ class PaperSettingController extends Controller
         $id = decrypt($id);
 
         $request->validate([
-            'name' => [
+            'category_name' => [
                 'required',
                 'string',
-                new PaperSettingUniqueValueCheck('name', 'paperCategory', $id, 'The name :input has already been taken.')
+                new PaperSettingUniqueValueCheck('name', 'paperCategory', $id, 'The category name :input has already been taken.')
             ],
         ]);
 
         try {
             $papercategories = Paper_categories::find($id);
-            $papercategories->name = $request->name;
+            $papercategories->name = $request->category_name;
             $update = $papercategories->update();
 
             if ($update) {
@@ -63,16 +63,16 @@ class PaperSettingController extends Controller
     public function storepapercategory(Request $request)
     {
         $request->validate([
-            'name' => [
+            'category_name' => [
                 'required',
                 'string',
-                new PaperSettingUniqueValueCheck('name', 'paperCategory', '', 'The name :input has already been taken.')
+                new PaperSettingUniqueValueCheck('name', 'paperCategory', '', 'The category name :input has already been taken.')
             ],
         ]);
 
         try {
             $papercategories = new Paper_categories();
-            $papercategories->name = $request->name;
+            $papercategories->name = $request->category_name;
             $save = $papercategories->save();
 
             if ($save) {
@@ -308,16 +308,16 @@ class PaperSettingController extends Controller
     public function storepapersize(Request $request)
     {
         $request->validate([
-            'name' => [
+            'size_name' => [
                 'required',
                 'string',
-                new PaperSettingUniqueValueCheck('name', 'paperSize', '', 'The name :input has already been taken.')
+                new PaperSettingUniqueValueCheck('name', 'paperSize', '', 'The size name :input has already been taken.')
             ],
         ]);
 
         try {
             $papersize = new Paper_size();
-            $papersize->name = $request->name;
+            $papersize->name = $request->size_name;
             $save = $papersize->save();
 
             if ($save) {
@@ -344,16 +344,16 @@ class PaperSettingController extends Controller
         $id = decrypt($id);
 
         $request->validate([
-            'name' => [
+            'size_name' => [
                 'required',
                 'string',
-                new PaperSettingUniqueValueCheck('name', 'paperSize', $id, 'The name :input has already been taken.')
+                new PaperSettingUniqueValueCheck('name', 'paperSize', $id, 'The size name :input has already been taken.')
             ],
         ]);
 
         try {
             $papersize = Paper_size::find($id);
-            $papersize->name = $request->name;
+            $papersize->name = $request->size_name;
             $update = $papersize->update();
 
             if ($update) {
@@ -485,16 +485,16 @@ class PaperSettingController extends Controller
     public function storepaperquality(Request $request)
     {
         $request->validate([
-            'name' => [
+            'quality_name' => [
                 'required',
                 'string',
-                new PaperSettingUniqueValueCheck('name', 'paperQuality', '', 'The name :input has already been taken.')
+                new PaperSettingUniqueValueCheck('name', 'paperQuality', '', 'The quality name :input has already been taken.')
             ],
         ]);
 
         try {
             $paperquality = new Paper_quality();
-            $paperquality->name = $request->name;
+            $paperquality->name = $request->quality_name;
             $save = $paperquality->save();
 
             if ($save) {
@@ -521,16 +521,16 @@ class PaperSettingController extends Controller
         $id = decrypt($id);
 
         $request->validate([
-            'name' => [
+            'quality_name' => [
                 'required',
                 'string',
-                new PaperSettingUniqueValueCheck('name', 'paperQuality', $id, 'The name :input has already been taken.')
+                new PaperSettingUniqueValueCheck('name', 'paperQuality', $id, 'The quality name :input has already been taken.')
             ],
         ]);
 
         try {
             $paperquality = Paper_quality::find($id);
-            $paperquality->name = $request->name;
+            $paperquality->name = $request->quality_name;
             $update = $paperquality->update();
 
             if ($update) {
@@ -660,16 +660,16 @@ class PaperSettingController extends Controller
     public function storepapercolor(Request $request)
     {
         $request->validate([
-            'name' => [
+            'color_name' => [
                 'required',
                 'string',
-                new PaperSettingUniqueValueCheck('name', 'paperColor', '', 'The name :input has already been taken.')
+                new PaperSettingUniqueValueCheck('name', 'paperColor', '', 'The color name :input has already been taken.')
             ],
         ]);
 
         try {
             $papercolor = new Paper_color();
-            $papercolor->name = $request->name;
+            $papercolor->name = $request->color_name;
             $save = $papercolor->save();
 
             if ($save) {
@@ -697,16 +697,16 @@ class PaperSettingController extends Controller
         $id = decrypt($id);
 
         $request->validate([
-            'name' => [
+            'color_name' => [
                 'required',
                 'string',
-                new PaperSettingUniqueValueCheck('name', 'paperColor', $id, 'The name :input has already been taken.')
+                new PaperSettingUniqueValueCheck('name', 'paperColor', $id, 'The color name :input has already been taken.')
             ],
         ]);
 
         try {
             $papercolor = Paper_color::find($id);
-            $papercolor->name = $request->name;
+            $papercolor->name = $request->color_name;
             $update = $papercolor->update();
 
             if ($update) {
@@ -838,16 +838,16 @@ class PaperSettingController extends Controller
     public function storepapergsm(Request $request)
     {
         $request->validate([
-            'value' => [
+            'thickness_value' => [
                 'required',
                 'regex:/^(([0-9]*)(\.([0-9]+))?)$/',
-                new PaperSettingUniqueValueCheck('name', 'paperGsm', '', 'The value :input has already been taken.')
+                new PaperSettingUniqueValueCheck('name', 'paperGsm', '', 'The thickness value :input has already been taken.')
             ],
         ]);
 
         try {
             $papergsm = new Paper_weights();
-            $papergsm->name = $request->value;
+            $papergsm->name = $request->thickness_value;
             $save = $papergsm->save();
 
             if ($save) {
@@ -874,16 +874,16 @@ class PaperSettingController extends Controller
         $id = decrypt($id);
 
         $request->validate([
-            'value' => [
+            'thickness_value' => [
                 'required',
                 'string',
-                new PaperSettingUniqueValueCheck('name', 'paperGsm', $id, 'The value :input has already been taken.')
+                new PaperSettingUniqueValueCheck('name', 'paperGsm', $id, 'The thickness value :input has already been taken.')
             ],
         ]);
 
         try {
             $papergsm = Paper_weights::find($id);
-            $papergsm->name = $request->value;
+            $papergsm->name = $request->thickness_value;
             $update = $papergsm->update();
 
             if ($update) {

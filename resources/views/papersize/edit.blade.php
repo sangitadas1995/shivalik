@@ -23,8 +23,8 @@
         </div>
         <div class="col-md-12">
           <div class="mb-3">
-            <label class="form-label"><span class="text-danger">*</span>Name :</label>
-            <input type="text" class="form-control alphaChar" name="name" id="name" value="{{ $papersize->name }}" />
+            <label class="form-label"><span class="text-danger">*</span>Size Name :</label>
+            <input type="text" class="form-control alphaChar" name="size_name" id="name" value="{{ $papersize->name }}" />
             <small class="text-danger error_name"></small>
           </div>
         </div>
@@ -64,17 +64,10 @@
 
       if (!name.trim()) {
         $('#name').focus();
-        return $('.error_name').html('Name field is required');
+        return $('.error_name').html('Size name field is required');
       } else {
         $('.error_name').html('');
       }
-
-      // if (name.trim()=="0") {
-      //   $('#name').focus();
-      //   return $('.error_name').html('Size field is required');
-      // } else {
-      //   $('.error_name').html('');
-      // }
       __e[0].submit();
     });
   });
