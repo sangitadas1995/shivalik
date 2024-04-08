@@ -44,24 +44,12 @@ class VendorsController extends Controller
             ->orderBy('name', 'asc')
             ->get();
 
-        $paperSize = Paper_size::where([
-            'status' => 'A'
-        ])
-            ->orderBy('name', 'asc')
-            ->get();
-
-        $paperType = Paper_type::where([
-            'status' => 'A'
-        ])
-            ->orderBy('name', 'asc')
-            ->get();
+        
 
         return view('vendors.create', [
             'countries' => $countries,
             'states' => $states,
-            'vendorType' => $vendorType,
-            'paperSize' => $paperSize,
-            'paperType' => $paperType
+            'vendorType' => $vendorType
         ]);
     }
 

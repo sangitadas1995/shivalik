@@ -32,13 +32,5 @@ class Vendor extends Model
         return $this->belongsTo(Vendor_type::class, 'vendor_type_id');
     }
 
-    public function papertype(): BelongsTo
-    {
-        return $this->belongsTo(Paper_type::class, 'paper_type_id');
-    }
-
-    public function papersize(): BelongsTo
-    {
-        return $this->belongsTo(Paper_size::class, 'paper_size_id');
-    }
+    
 }
