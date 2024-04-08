@@ -7,19 +7,13 @@ use Carbon\Carbon;
 use App\Models\City;
 use App\Models\State;
 use App\Models\Country;
-use App\Models\Customer;
 use App\Traits\Validate;
 use App\Traits\Helper;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use App\Rules\VendorUniqueEmailAddress;
 use App\Rules\VendorUniqueMobileNumber;
-use App\Models\Failed_customer_csv;
-use App\Models\FailedCustomer;
-
 use App\Models\Vendor;
-use App\Models\Paper_size;
-use App\Models\Paper_type;
 use App\Models\ServiceType;
 use App\Models\Vendor_type;
 
@@ -247,120 +241,9 @@ class VendorsController extends Controller
     }
 
 
-    public function edit($id)
-    {
-        $id = decrypt($id);
-        $states = null;
-        $cities = null;
-        $customer = Customer::findOrFail($id);
-        $countries = Country::where([
-            'status' => 'A'
-        ])
-            ->orderBy('country_name', 'asc')
-            ->get();
-        if (!empty($customer)) {
-            $states = State::where([
-                'country_id' => $customer->country_id,
-                'status' => 'A',
-            ])->orderBy('state_name', 'ASC')->get();
-            $cities = City::where([
-                'state_id' => $customer->state_id,
-                'status' => 'A',
-            ])->orderBy('city_name', 'ASC')->get();
-        }
-        return view('customers.edit', [
-            'countries' => $countries,
-            'customer' => $customer,
-            'states' => $states,
-            'cities' => $cities
-        ]);
-    }
-
-    public function update(Request $request, $id)
-    {
-        $id = decrypt($id);
-        $request->validate([
-            'company_name' => ['required', 'string'],
-            'gst_no' => ['required', 'regex:/^([0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}[Z]{1}[0-9A-Z]{1})$/', Rule::unique('customers')->ignore($id)],
-            'contact_person' => ['required', 'string'],
-            'contact_person_designation' => ['sometimes', 'nullable', 'string'],
-            'mobile_no' => [
-                'required',
-                'regex:/^[6-9]\d{9}$/',
-                new UniqueMobileNumber('mobile_no', 'alter_mobile_no', 'phone_no', 'alternative_phone_no', $id, 'The mobile number :input has already been taken.'),
-            ],
-            'alter_mobile_no' => [
-                'sometimes',
-                'nullable',
-                'regex:/^[6-9]\d{9}$/',
-                'different:mobile_no',
-                new UniqueMobileNumber('mobile_no', 'alter_mobile_no', 'phone_no', 'alternative_phone_no', $id, 'The alternate mobile number :input has already been taken.'),
-            ],
-            'email' => [
-                'required',
-                'email',
-                new UniqueEmailAddress('email', 'alternative_email_id', $id, 'The email address :input has already been taken.'),
-            ],
-            'alternative_email_id' => [
-                'sometimes',
-                'nullable',
-                'email',
-                'different:email',
-                new UniqueEmailAddress('email', 'alternative_email_id', $id, 'The alternate email address :input has already been taken.'),
-            ],
-            'phone_no' => [
-                'sometimes',
-                'nullable',
-                'regex:/^[0-9]\d{10}$/',
-                new UniqueMobileNumber('phone_no', 'alternative_phone_no', 'mobile_no', 'alter_mobile_no', $id, 'The phone number :input has already been taken.'),
-            ],
-            'alternative_phone_no' => [
-                'sometimes',
-                'nullable',
-                'regex:/^[0-9]\d{10}$/',
-                'different:phone_no',
-                new UniqueMobileNumber('phone_no', 'alternative_phone_no', 'mobile_no', 'alter_mobile_no', $id, 'The alternate phone number :input has already been taken.'),
-            ],
-            'customer_website' => ['sometimes', 'nullable', 'url', Rule::unique('customers')->ignore($id)],
-            'address' => ['required'],
-            'country_id' => ['required', 'numeric'],
-            'state_id' => ['required', 'numeric'],
-            'city_id' => ['required', 'numeric'],
-            'pincode' => ['required', 'regex:/^[1-9][0-9]{5}$/'],
-            'print_margin' => ['required', 'numeric'],
-        ]);
-
-        try {
-
-            $customer = Customer::find($id);
-            $customer->company_name = ucwords(strtolower($request->company_name));
-            $customer->gst_no = $request->gst_no;
-            $customer->contact_person = ucwords(strtolower($request->contact_person));
-            $customer->contact_person_designation = ucwords(strtolower($request->contact_person_designation));
-            $customer->mobile_no = $request->mobile_no;
-            $customer->alter_mobile_no = $request->alter_mobile_no;
-            $customer->email = $request->email;
-            $customer->alternative_email_id = $request->alternative_email_id;
-            $customer->phone_no = $request->phone_no;
-            $customer->alternative_phone_no = $request->alternative_phone_no;
-            $customer->customer_website = $request->customer_website;
-            $customer->address = $request->address;
-            $customer->country_id = $request->country_id;
-            $customer->state_id = $request->state_id;
-            $customer->city_id = $request->city_id;
-            $customer->pincode = $request->pincode;
-            $customer->print_margin = $request->print_margin;
-            $customer->update();
-
-            return redirect()->route('customers.index')->with('success', 'The customer has been updated successfully.');
-        } catch (Exception $th) {
-            return redirect()->back()->with('fail', trans('messages.server_error'));
-        }
-    }
-
     public function view(Request $request)
     {
-        $vendor = Vendor::with('vendortype', 'papertype', 'papersize', 'city', 'state', 'country')->findOrFail($request->rowid);
+        $vendor = Vendor::with('vendortype','city', 'state', 'country')->findOrFail($request->rowid);
         $service_types_id = !empty($vendor->service_type_ids) ? json_decode($vendor->service_type_ids) : null;
         $service_types = null;
         if (!empty($service_types_id)) {
