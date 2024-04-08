@@ -6,15 +6,15 @@
 @section('content')
 <div class="page-name">
   <div class="row justify-content-between align-items-center">
-    <div class="col-md-4">
+    <div class="col-md-12">
       <h2><i class="ri-arrow-left-line"></i> Printing Vendor Management</h2>
     </div>
-    <div class="col-md-6">
+    <!-- <div class="col-md-6">
       <div class="text-end mb-4">
         <a href="{{ route('vendors.add') }}" class="btn primary-btn"><img
             src="{{ asset('images/add-accoun-1t.png') }}" /> Add Vendor</a>
       </div>
-    </div>
+    </div> -->
   </div>
 </div>
 <div class="row">

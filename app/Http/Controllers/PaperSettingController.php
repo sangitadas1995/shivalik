@@ -131,12 +131,12 @@ class PaperSettingController extends Controller
 
                 if($value->status == "A")
                 {
-                    $status = '<a href="#" class="doInactive" data-id ="' . $value->id . '" title="Active"><img src="' . $active_icon . '" /></a>';
+                    $status = '<a href="#" class="updateStatus" data-id ="' . $value->id . '" data-status="lock" title="Unlock"><img src="' . $active_icon . '" /></a>';
                     $presentStatus = '<span style="color:green">Active</span>';
                 }
                 if($value->status == "I")
                 {
-                    $status = '<a href="#" class="doActive" data-id ="' . $value->id . '" title="Inactive"><img src="' . $inactive_icon . '" /></a>';
+                    $status = '<a href="#" class="updateStatus" data-id ="' . $value->id . '" data-status="Lock" title="Lock"><img src="' . $inactive_icon . '" /></a>';
                     $presentStatus = '<span style="color:red">Inactive</span>';
                 }
 
@@ -164,41 +164,28 @@ class PaperSettingController extends Controller
         return response()->json($output);
     }
 
-    public function doactivecategory(Request $request)
+    public function doupdatestatuspapercat(Request $request)
     {
-        $id = $request->rowid;
+        $request->validate([
+            'rowid' => ['required'],
+            'rowstatus' => ['required']
+        ]);
 
         try {
-        $papersize = Paper_categories::find($id);
-        $papersize->status = "A";
-        $update = $papersize->update();
+            $id = $request->rowid;
+            $status = $request->rowstatus == 'lock' ? 'I' : 'A';
 
-        if ($update) {
-            return response()->json(['status' => 'success','message' => 'Successfully active']);
-        } else {
-            return response()->json(['status' => 'fail']);
-        }
+            $papercategories = Paper_categories::findOrFail($id);
+            $papercategories->status = $status;
+            $papercategories->update();
+
+            return response()->json([
+                'message' => 'Paper category has been ' . $request->rowstatus . ' successfully.'
+            ]);
         } catch (Exception $th) {
-           return response()->json(['status' => 'fail']);
-        }
-    }
-
-    public function doinactivecategory(Request $request)
-    {
-        $id = $request->rowid;
-
-        try {
-        $papersize = Paper_categories::find($id);
-        $papersize->status = "I";
-        $update = $papersize->update();
-
-        if ($update) {
-            return response()->json(['status' => 'success','message' => 'Successfully inactive']);
-        } else {
-            return response()->json(['status' => 'fail']);
-        }
-        } catch (Exception $th) {
-           return response()->json(['status' => 'fail']);
+            return response()->json([
+                'message' => trans('messages.server_error')
+            ], 500);
         }
     }
 
@@ -254,12 +241,12 @@ class PaperSettingController extends Controller
 
                 if($value->status == "A")
                 {
-                    $status = '<a href="#" class="doInactive" data-id ="' . $value->id . '" title="Active"><img src="' . $active_icon . '" /></a>';
+                    $status = '<a href="#" class="updateStatus" data-id ="' . $value->id . '" data-status="lock" title="Unlock"><img src="' . $active_icon . '" /></a>';
                     $presentStatus = '<span style="color:green">Active</span>';
                 }
                 if($value->status == "I")
                 {
-                    $status = '<a href="#" class="doActive" data-id ="' . $value->id . '" title="Inactive"><img src="' . $inactive_icon . '" /></a>';
+                    $status = '<a href="#" class="updateStatus" data-id ="' . $value->id . '" data-status="unlock" title="Lock"><img src="' . $inactive_icon . '" /></a>';
                     $presentStatus = '<span style="color:red">Inactive</span>';
                 }
 
@@ -287,41 +274,28 @@ class PaperSettingController extends Controller
         return response()->json($output);
     }
 
-    public function doactivesize(Request $request)
+    public function doupdatestatuspapersize(Request $request)
     {
-        $id = $request->rowid;
+        $request->validate([
+            'rowid' => ['required'],
+            'rowstatus' => ['required']
+        ]);
 
         try {
-        $papersize = Paper_size::find($id);
-        $papersize->status = "A";
-        $update = $papersize->update();
+            $id = $request->rowid;
+            $status = $request->rowstatus == 'lock' ? 'I' : 'A';
 
-        if ($update) {
-            return response()->json(['status' => 'success','message' => 'Successfully active']);
-        } else {
-            return response()->json(['status' => 'fail']);
-        }
+            $papersize = Paper_size::findOrFail($id);
+            $papersize->status = $status;
+            $papersize->update();
+
+            return response()->json([
+                'message' => 'Paper size has been ' . $request->rowstatus . ' successfully.'
+            ]);
         } catch (Exception $th) {
-           return response()->json(['status' => 'fail']);
-        }
-    }
-
-    public function doinactivesize(Request $request)
-    {
-        $id = $request->rowid;
-
-        try {
-        $papersize = Paper_size::find($id);
-        $papersize->status = "I";
-        $update = $papersize->update();
-
-        if ($update) {
-            return response()->json(['status' => 'success','message' => 'Successfully inactive']);
-        } else {
-            return response()->json(['status' => 'fail']);
-        }
-        } catch (Exception $th) {
-           return response()->json(['status' => 'fail']);
+            return response()->json([
+                'message' => trans('messages.server_error')
+            ], 500);
         }
     }
 
@@ -444,12 +418,12 @@ class PaperSettingController extends Controller
 
                 if($value->status == "A")
                 {
-                    $status = '<a href="#" class="doInactive" data-id ="' . $value->id . '" title="Active"><img src="' . $active_icon . '" /></a>';
+                    $status = '<a href="#" class="updateStatus" data-id ="' . $value->id . '" data-status="lock" title="Unlock"><img src="' . $active_icon . '" /></a>';
                     $presentStatus = '<span style="color:green">Active</span>';
                 }
                 if($value->status == "I")
                 {
-                    $status = '<a href="#" class="doActive" data-id ="' . $value->id . '" title="Inactive"><img src="' . $inactive_icon . '" /></a>';
+                    $status = '<a href="#" class="updateStatus" data-id ="' . $value->id . '" data-status="unlock" title="Lock"><img src="' . $inactive_icon . '" /></a>';
                     $presentStatus = '<span style="color:red">Inactive</span>';
                 }
 
@@ -477,42 +451,28 @@ class PaperSettingController extends Controller
         return response()->json($output);
     }
 
-
-    public function doactivequality(Request $request)
+    public function doupdatestatuspaperquality(Request $request)
     {
-        $id = $request->rowid;
+        $request->validate([
+            'rowid' => ['required'],
+            'rowstatus' => ['required']
+        ]);
 
         try {
-        $paperquality = Paper_quality::find($id);
-        $paperquality->status = "A";
-        $update = $paperquality->update();
+            $id = $request->rowid;
+            $status = $request->rowstatus == 'lock' ? 'I' : 'A';
 
-        if ($update) {
-            return response()->json(['status' => 'success','message' => 'Successfully active']);
-        } else {
-            return response()->json(['status' => 'fail']);
-        }
+            $paperquality = Paper_quality::findOrFail($id);
+            $paperquality->status = $status;
+            $paperquality->update();
+
+            return response()->json([
+                'message' => 'Paper quality has been ' . $request->rowstatus . ' successfully.'
+            ]);
         } catch (Exception $th) {
-           return response()->json(['status' => 'fail']);
-        }
-    }
-
-    public function doinactivequality(Request $request)
-    {
-        $id = $request->rowid;
-
-        try {
-        $paperquality = Paper_quality::find($id);
-        $paperquality->status = "I";
-        $update = $paperquality->update();
-
-        if ($update) {
-            return response()->json(['status' => 'success','message' => 'Successfully inactive']);
-        } else {
-            return response()->json(['status' => 'fail']);
-        }
-        } catch (Exception $th) {
-           return response()->json(['status' => 'fail']);
+            return response()->json([
+                'message' => trans('messages.server_error')
+            ], 500);
         }
     }
 
@@ -634,12 +594,12 @@ class PaperSettingController extends Controller
 
                 if($value->status == "A")
                 {
-                    $status = '<a href="#" class="doInactive" data-id ="' . $value->id . '" title="Active"><img src="' . $active_icon . '" /></a>';
+                    $status = '<a href="#" class="updateStatus" data-id ="' . $value->id . '" data-status="lock" title="Unlock"><img src="' . $active_icon . '" /></a>';
                     $presentStatus = '<span style="color:green">Active</span>';
                 }
                 if($value->status == "I")
                 {
-                    $status = '<a href="#" class="doActive" data-id ="' . $value->id . '" title="Inactive"><img src="' . $inactive_icon . '" /></a>';
+                    $status = '<a href="#" class="updateStatus" data-id ="' . $value->id . '" data-status="unlock" title="Lock"><img src="' . $inactive_icon . '" /></a>';
                     $presentStatus = '<span style="color:red">Inactive</span>';
                 }
 
@@ -667,41 +627,28 @@ class PaperSettingController extends Controller
         return response()->json($output);
     }
 
-    public function doactivecolor(Request $request)
+    public function doupdatestatuspapercolor(Request $request)
     {
-        $id = $request->rowid;
+        $request->validate([
+            'rowid' => ['required'],
+            'rowstatus' => ['required']
+        ]);
 
         try {
-            $paperquality = Paper_color::find($id);
-            $paperquality->status = "A";
-            $update = $paperquality->update();
+            $id = $request->rowid;
+            $status = $request->rowstatus == 'lock' ? 'I' : 'A';
 
-            if ($update) {
-                return response()->json(['status' => 'success','message' => 'Successfully active']);
-            } else {
-                return response()->json(['status' => 'fail']);
-            }
+            $papercolor = Paper_color::findOrFail($id);
+            $papercolor->status = $status;
+            $papercolor->update();
+
+            return response()->json([
+                'message' => 'Paper color has been ' . $request->rowstatus . ' successfully.'
+            ]);
         } catch (Exception $th) {
-           return response()->json(['status' => 'fail']);
-        }
-    }
-
-    public function doinactivecolor(Request $request)
-    {
-        $id = $request->rowid;
-
-        try {
-            $paperquality = Paper_color::find($id);
-            $paperquality->status = "I";
-            $update = $paperquality->update();
-
-            if ($update) {
-                return response()->json(['status' => 'success','message' => 'Successfully inactive']);
-            } else {
-                return response()->json(['status' => 'fail']);
-            }
-        } catch (Exception $th) {
-           return response()->json(['status' => 'fail']);
+            return response()->json([
+                'message' => trans('messages.server_error')
+            ], 500);
         }
     }
 
@@ -824,12 +771,12 @@ class PaperSettingController extends Controller
 
                 if($value->status == "A")
                 {
-                    $status = '<a href="#" class="doInactive" data-id ="' . $value->id . '" title="Active"><img src="' . $active_icon . '" /></a>';
+                    $status = '<a href="#" class="updateStatus" data-id ="' . $value->id . '" data-status="lock" title="Unlock"><img src="' . $active_icon . '" /></a>';
                     $presentStatus = '<span style="color:green">Active</span>';
                 }
                 if($value->status == "I")
                 {
-                    $status = '<a href="#" class="doActive" data-id ="' . $value->id . '" title="Inactive"><img src="' . $inactive_icon . '" /></a>';
+                    $status = '<a href="#" class="updateStatus" data-id ="' . $value->id . '" data-status="unlock" title="Lock"><img src="' . $inactive_icon . '" /></a>';
                     $presentStatus = '<span style="color:red">Inactive</span>';
                 }
 
@@ -857,41 +804,29 @@ class PaperSettingController extends Controller
         return response()->json($output);
     }
 
-    public function doactivegsm(Request $request)
+
+    public function doupdatestatuspaperthickness(Request $request)
     {
-        $id = $request->rowid;
+        $request->validate([
+            'rowid' => ['required'],
+            'rowstatus' => ['required']
+        ]);
 
         try {
-            $paperquality = Paper_weights::find($id);
-            $paperquality->status = "A";
-            $update = $paperquality->update();
+            $id = $request->rowid;
+            $status = $request->rowstatus == 'lock' ? 'I' : 'A';
 
-            if ($update) {
-                return response()->json(['status' => 'success','message' => 'Successfully active']);
-            } else {
-                return response()->json(['status' => 'fail']);
-            }
+            $paperthickness = Paper_weights::findOrFail($id);
+            $paperthickness->status = $status;
+            $paperthickness->update();
+
+            return response()->json([
+                'message' => 'Paper thickness has been ' . $request->rowstatus . ' successfully.'
+            ]);
         } catch (Exception $th) {
-           return response()->json(['status' => 'fail']);
-        }
-    }
-
-    public function doinactivegsm(Request $request)
-    {
-        $id = $request->rowid;
-
-        try {
-            $paperquality = Paper_weights::find($id);
-            $paperquality->status = "I";
-            $update = $paperquality->update();
-
-            if ($update) {
-                return response()->json(['status' => 'success','message' => 'Successfully inactive']);
-            } else {
-                return response()->json(['status' => 'fail']);
-            }
-        } catch (Exception $th) {
-           return response()->json(['status' => 'fail']);
+            return response()->json([
+                'message' => trans('messages.server_error')
+            ], 500);
         }
     }
 

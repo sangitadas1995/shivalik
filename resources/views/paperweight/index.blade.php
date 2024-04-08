@@ -54,7 +54,7 @@
           }
         });
 
-        let users_list_table = $('#gsm_list_table').DataTable({
+        let gsm_list_table = $('#gsm_list_table').DataTable({
           stateSave: true,
           processing: true,
           serverSide: true,
@@ -82,71 +82,43 @@
         });
 
         
-        $(document).on('click','.doInactive',function(e){
-          e.preventDefault();
-          var __e = $(this);
-          var rowid = __e.data('id');
-          if (rowid) {
-            $.ajax({
-              type: "post",
-              url: "{{ route('papersettings.doinactivegsm') }}",
-              data: {rowid},
-              dataType: "json",
-              success: function (response) {
-                if(response.status == "success")
-                {
-                  return Swal.fire({
-                  icon: "success",
-                  text: response.message,
-                  showDenyButton: false,
-                  showCancelButton: false,
-                  confirmButtonText: "Ok",
-                }).then((result) => {
-                  if (result.isConfirmed) {
-                    location.reload();
-                  }
-                });
-              }
-              },
-              error: function(xhr, status, error) {
-                return Swal.fire('Error!', 'Something went wrong, please try again.', 'error');
-              }
-            });
-          }
-        });
-
-        $(document).on('click','.doActive',function(e){
-          e.preventDefault();
-          var __e = $(this);
-          var rowid = __e.data('id');
-          if (rowid) {
-            $.ajax({
-              type: "post",
-              url: "{{ route('papersettings.doactivegsm') }}",
-              data: {rowid},
-              dataType: "json",
-              success: function (response) {
-                if(response.status == "success")
-                {
-                  return Swal.fire({
-                  icon: "success",
-                  text: response.message,
-                  showDenyButton: false,
-                  showCancelButton: false,
-                  confirmButtonText: "Ok",
-                }).then((result) => {
-                  if (result.isConfirmed) {
-                    location.reload();
-                  }
-                });
-              }
-              },
-              error: function(xhr, status, error) {
-                return Swal.fire('Error!', 'Something went wrong, please try again.', 'error');
-              }
-            });
-          }
-        });
+        $(document).on('click','.updateStatus',function(e){
+        e.preventDefault();
+        var __e = $(this);
+        var rowid = __e.data('id');
+        var rowstatus = __e.data('status');
+        var currentPage = gsm_list_table.page();
+        if (rowid) {
+          Swal.fire({
+            icon: "warning",
+            text: `Are you sure, you want to ${rowstatus} this paper thickness?`,
+            showDenyButton: false,
+            showCancelButton: true,
+            confirmButtonText: "Yes",
+            cancelButtonText: "No",
+            cancelButtonColor: "crimson",
+          }).then((result) => {
+            if (result.isConfirmed) {
+              $.ajax({
+                type: "post",
+                url: "{{ route('papersettings.doupdatestatuspaperthickness') }}",
+                data: {
+                  rowid,
+                  rowstatus
+                },
+                dataType: "json",
+                success: function (response) {
+                  gsm_list_table.page(currentPage).draw(false);
+                  return Swal.fire('Success!', response.message, 'success');
+                },
+                error: function(xhr, status, error) {
+                  return Swal.fire('Error!', 'Something went wrong, please try again.', 'error');
+                }
+              });
+            }
+          });
+        }
+      });
 
       });
       

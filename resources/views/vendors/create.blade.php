@@ -23,6 +23,7 @@
 
             <div class="col-md-12">
               <div class="mb-3">
+                <label class="form-label">Vendor Type<span class="text-danger">*</span> :</label><br>
                 <input type="radio" id="paper_vendor" name="vendor_type_id" value="1" class="vendor_type" />
                 <label class="form-label">Paper Vendor</label> &nbsp; &nbsp;&nbsp;&nbsp;
                 <input type="radio" id="print_vendor" name="vendor_type_id" value="2" class="vendor_type"  />

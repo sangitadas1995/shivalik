@@ -52,7 +52,7 @@
           }
         });
 
-        let users_list_table = $('#paperquality_list_table').DataTable({
+        let paperquality_list_table = $('#paperquality_list_table').DataTable({
           stateSave: true,
           processing: true,
           serverSide: true,
@@ -79,71 +79,44 @@
           ]
         });
 
-        $(document).on('click','.doInactive',function(e){
-          e.preventDefault();
-          var __e = $(this);
-          var rowid = __e.data('id');
-          if (rowid) {
-            $.ajax({
-              type: "post",
-              url: "{{ route('papersettings.doinactivequality') }}",
-              data: {rowid},
-              dataType: "json",
-              success: function (response) {
-                if(response.status == "success")
-                {
-                  return Swal.fire({
-                  icon: "success",
-                  text: response.message,
-                  showDenyButton: false,
-                  showCancelButton: false,
-                  confirmButtonText: "Ok",
-                }).then((result) => {
-                  if (result.isConfirmed) {
-                    location.reload();
-                  }
-                });
-              }
-              },
-              error: function(xhr, status, error) {
-                return Swal.fire('Error!', 'Something went wrong, please try again.', 'error');
-              }
-            });
-          }
-        });
 
-        $(document).on('click','.doActive',function(e){
-          e.preventDefault();
-          var __e = $(this);
-          var rowid = __e.data('id');
-          if (rowid) {
-            $.ajax({
-              type: "post",
-              url: "{{ route('papersettings.doactivequality') }}",
-              data: {rowid},
-              dataType: "json",
-              success: function (response) {
-                if(response.status == "success")
-                {
-                  return Swal.fire({
-                  icon: "success",
-                  text: response.message,
-                  showDenyButton: false,
-                  showCancelButton: false,
-                  confirmButtonText: "Ok",
-                }).then((result) => {
-                  if (result.isConfirmed) {
-                    location.reload();
-                  }
-                });
-              }
-              },
-              error: function(xhr, status, error) {
-                return Swal.fire('Error!', 'Something went wrong, please try again.', 'error');
-              }
-            });
-          }
-        });
+      $(document).on('click','.updateStatus',function(e){
+        e.preventDefault();
+        var __e = $(this);
+        var rowid = __e.data('id');
+        var rowstatus = __e.data('status');
+        var currentPage = paperquality_list_table.page();
+        if (rowid) {
+          Swal.fire({
+            icon: "warning",
+            text: `Are you sure, you want to ${rowstatus} this paper quality?`,
+            showDenyButton: false,
+            showCancelButton: true,
+            confirmButtonText: "Yes",
+            cancelButtonText: "No",
+            cancelButtonColor: "crimson",
+          }).then((result) => {
+            if (result.isConfirmed) {
+              $.ajax({
+                type: "post",
+                url: "{{ route('papersettings.doupdatestatuspaperquality') }}",
+                data: {
+                  rowid,
+                  rowstatus
+                },
+                dataType: "json",
+                success: function (response) {
+                  paperquality_list_table.page(currentPage).draw(false);
+                  return Swal.fire('Success!', response.message, 'success');
+                },
+                error: function(xhr, status, error) {
+                  return Swal.fire('Error!', 'Something went wrong, please try again.', 'error');
+                }
+              });
+            }
+          });
+        }
+      });
 
       });
       
