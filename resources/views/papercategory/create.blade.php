@@ -24,8 +24,8 @@
         </div>
         <div class="col-md-12">
           <div class="mb-3">
-            <label class="form-label"><span class="text-danger">*</span>Name :</label>
-            <input type="text" class="form-control alphaChar" name="name" id="name" value="{{ old('name') }}"/>
+            <label class="form-label"><span class="text-danger">*</span>Category Name :</label>
+            <input type="text" class="form-control alphaChar" name="category_name" id="name" value="{{ old('category_name') }}"/>
             <small class="text-danger error_name"></small>
           </div>
         </div>
@@ -63,11 +63,10 @@
 
       if (!name.trim()) {
         $('#name').focus();
-        return $('.error_name').html('Name field is required');
+        return $('.error_name').html('Category name field is required');
       } else {
         $('.error_name').html('');
       }
-
       __e[0].submit();
     });
   });

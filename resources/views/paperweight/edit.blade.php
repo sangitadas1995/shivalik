@@ -23,8 +23,8 @@
         </div>
         <div class="col-md-12">
           <div class="mb-3">
-            <label class="form-label"><span class="text-danger">*</span>Value (GSM) :</label>
-            <input type="text" class="form-control alphaChar" name="value" id="value" value="{{ $papergsm->name }}" />
+            <label class="form-label"><span class="text-danger">*</span>Thickness Value (GSM) :</label>
+            <input type="text" class="form-control alphaChar" name="thickness_value" id="value" value="{{ $papergsm->name }}" />
             <small class="text-danger error_name"></small>
           </div>
         </div>
@@ -62,7 +62,7 @@
 
       if (!value.trim()) {
         $('#value').focus();
-        return $('.error_name').html('Value field is required');
+        return $('.error_name').html('Thickness value field is required');
       } else {
         $('.error_name').html('');
       }
