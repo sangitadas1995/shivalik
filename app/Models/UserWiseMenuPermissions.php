@@ -5,7 +5,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class User_wise_menu_permissions extends Model
+class UserWiseMenuPermissions extends Model
 {
      use HasFactory;
 

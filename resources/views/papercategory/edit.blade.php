@@ -8,14 +8,14 @@
   <div class="row justify-content-between align-items-center">
     <div class="col-md-4">
       <h2>
-        <a href="{{ route('papersettings.paper_category_list') }}"><i class="ri-arrow-left-line"></i></a> Edit Paper Category
+        <a href="{{ route('settings.papersettings.paper_category_list') }}"><i class="ri-arrow-left-line"></i></a> Edit Paper Category
       </h2>
     </div>
   </div>
 </div>
 <div class="card add-new-location mt-2">
   <div class="card-body">
-    <form action="{{ route('papersettings.updatepapercategory', encrypt($papercategories->id)) }}" method="POST" id="papercat-edit-form">
+    <form action="{{ route('settings.papersettings.updatepapercategory', encrypt($papercategories->id)) }}" method="POST" id="papercat-edit-form">
       @csrf
       <div class="row">
         <div class="col-md-12">
@@ -31,7 +31,7 @@
       </div>
       
       <div class="text-end">
-        <a href="{{ route('papersettings.paper_category_list') }}">
+        <a href="{{ route('settings.papersettings.paper_category_list') }}">
         <button type="button" class="btn grey-primary">Cancel</button>
         </a>
         <button type="submit" class="btn black-btn">Save & Continue</button>

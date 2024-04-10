@@ -11,9 +11,9 @@ use App\Models\Manager;
 use App\Models\Designation;
 use App\Models\FunctionalArea;
 use App\Models\User;
-use App\Models\Menu_permissions;
-use App\Models\Sub_menu_permissions;
-use App\Models\User_wise_menu_permissions;
+use App\Models\MenuPermissions;
+use App\Models\SubMenuPermissions;
+use App\Models\UserWiseMenuPermissions;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use App\Rules\UserUniqueEmailAddress;
@@ -142,7 +142,7 @@ class UsersController extends Controller
         $id = decrypt($id);
         $user  = User::findOrFail($id);
 
-        $Menu_permissions = Menu_permissions::where([
+        $Menu_permissions = MenuPermissions::where([
             'status' => 'A'
         ])
         ->orderBy('sort_order', 'asc')
@@ -151,16 +151,39 @@ class UsersController extends Controller
         $menu_arr = array();
         foreach($Menu_permissions as $md)
         {
+            $userWiseMenu = UserWiseMenuPermissions::where([
+                'user_id' => $id,
+                'menu_id' => $md->id
+            ])->first();
+            $userSubMenuIds = !empty($userWiseMenu->sub_menu_ids) ? json_decode($userWiseMenu->sub_menu_ids,true) : null;
+
+
             $getSubMenuList=$this->getSubMenuList($md->id,$id);
 
             $sub_menu_arr = array();
             foreach($getSubMenuList as $sm)
             {
+                if(is_countable($userSubMenuIds) && count($userSubMenuIds)>0)
+                {
+                    if (array_key_exists($sm->reserve_keyword,$userSubMenuIds))
+                    {
+                        $user_menu_status = $userSubMenuIds[$sm->reserve_keyword];
+                    }
+                    else
+                    {
+                        $user_menu_status = 0;
+                    }
+                }
+                else
+                {
+                    $user_menu_status = "";
+                }
+
                 $sub_menu_arr[] = array(
                     'id' => $sm->sub_menu_id,
                     'display_name' => $sm->display_name,
                     'reserve_keyword' => $sm->reserve_keyword,
-                    'user_menu_status' => $sm->user_menu_status
+                    'user_menu_status' => $user_menu_status
                 );
             }
 
@@ -172,11 +195,8 @@ class UsersController extends Controller
             );
         }
 
-
-        //echo $Menu_permissions->id;
         //echo "<PRE>";print_r($menu_arr);echo "</PRE>";exit;
-        //dd($a);
-       
+
         return view('users.permission', [
             'user' => $user,
             'menu_permissions' => $menu_arr
@@ -191,41 +211,66 @@ class UsersController extends Controller
 
         //echo "<PRE>";print_r($request->all());echo "</PRE>";exit;
 
-
-        // for($i=0;$i<count($request->menu_ids);$i++)
-        // {
-        //     echo $menu_ids = $request->menu_ids[$i];
-
-        //     //$a=$this->getReserveKeywordByMenuId($menu_ids);
-        //     //echo "<PRE>";print_r($a);echo "</PRE>";
-        // }
-
-
-        // exit;
-
         try 
         {
-            if(is_countable($request->sub_menu) && count($request->sub_menu)>0)
+            if(is_countable($request->menu_ids) && count($request->menu_ids)>0)
             {
-                //User_wise_menu_permissions::where('user_id',$user_id)->delete();
-                for($i=0;$i<count($request->sub_menu);$i++)
+                if(is_countable($request->sub_menu) && count($request->sub_menu)>0)
                 {
-                    $menu_id = $this->getMenuId($request->sub_menu[$i]);
-                    $uwmpAdd = new User_wise_menu_permissions();
-                    $uwmpAdd->user_id = $user_id;
-                    $uwmpAdd->sub_menu_id = $request->sub_menu[$i];
-                    $uwmpAdd->menu_id = $menu_id->menu_id;
-                    $uwmpAdd->save();
+                    for($i=0;$i<count($request->menu_ids);$i++)
+                    {
+                        $menu_ids = $request->menu_ids[$i];
+
+                        $getReserveKeyword=$this->getReserveKeywordByMenuId($menu_ids);
+
+                        $subMenuSetArr = array();
+                        for($z=0;$z<count($getReserveKeyword);$z++)
+                        {
+                            $submenu = $getReserveKeyword[$z];
+
+                            if (in_array($submenu, $request->sub_menu))
+                            {
+                                $subMenuSetArr[$submenu] = 1;
+                            }
+                            else
+                            {
+                                $subMenuSetArr[$submenu] = 0;
+                            }
+                        }
+
+                        $chkUserWiseMenu = UserWiseMenuPermissions::where([
+                            'user_id' => $user_id,
+                            'menu_id' => $menu_ids
+                        ])
+                        ->first();
+
+                        if (empty($chkUserWiseMenu)) 
+                        {
+                            $insertUserWiseMenu = new UserWiseMenuPermissions();
+                            $insertUserWiseMenu->user_id = $user_id;
+                            $insertUserWiseMenu->menu_id = $menu_ids;
+                            $insertUserWiseMenu->sub_menu_ids = json_encode($subMenuSetArr);
+                            $insertUserWiseMenu->save();
+                        }
+                        else
+                        {
+                            $updateUserWiseMenu = UserWiseMenuPermissions::find($chkUserWiseMenu->id);
+                            $updateUserWiseMenu->sub_menu_ids = json_encode($subMenuSetArr);
+                            $updateUserWiseMenu->update();
+                        }
+                    }
+
+                    return redirect()->back()->with('success', 'The user permission has been updated successfully.');
                 }
-                return redirect()->back()->with('success', 'The user permission has been updated successfully.');
+                else
+                {
+                    return redirect()->back()->with('fail', 'Please select atleast one menu');
+                }    
             }
-            else
-            {
-                return redirect()->back()->with('fail', 'Please select atleast one menu');
-            }
-        } catch (Exception $th) {
-            return redirect()->back()->with('fail', trans('messages.server_error'));
         }
+        catch (Exception $th) {
+            return redirect()->back()->with('fail', trans('messages.server_error'));
+        }  
     }
 
 

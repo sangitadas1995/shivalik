@@ -11,7 +11,7 @@
       </div>
       <div class="col-md-6">
         <div class="text-end mb-4">
-          <a href="{{ route('papersettings.add_paper_category') }}" class="btn primary-btn"
+          <a href="{{ route('settings.papersettings.add_paper_category') }}" class="btn primary-btn"
             ><img src="{{ asset('images/add-accoun-1t.png') }}" /> Add Paper Category</a
           >
         </div>
@@ -62,7 +62,7 @@
           serverSide: true,
           pageLength: 10,
           ajax: {
-            url: "{{ route('papersettings.data') }}",
+            url: "{{ route('settings.papersettings.data') }}",
             type: 'POST',
             'data': function(data) {
               return data;
@@ -102,7 +102,7 @@
             if (result.isConfirmed) {
               $.ajax({
                 type: "post",
-                url: "{{ route('papersettings.doupdatestatuspapercat') }}",
+                url: "{{ route('settings.papersettings.doupdatestatuspapercat') }}",
                 data: {
                   rowid,
                   rowstatus
