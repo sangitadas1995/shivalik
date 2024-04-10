@@ -51,7 +51,7 @@ class PaperSettingController extends Controller
             $update = $papercategories->update();
 
             if ($update) {
-                return redirect()->route('papersettings.paper_category_list')->with('success', 'The paper category has been updated successfully.');
+                return redirect()->route('settings.papersettings.paper_category_list')->with('success', 'The paper category has been updated successfully.');
             } else {
                 return redirect()->back()->with('fail', 'Failed to updated the paper category.');
             }
@@ -76,7 +76,7 @@ class PaperSettingController extends Controller
             $save = $papercategories->save();
 
             if ($save) {
-                return redirect()->route('papersettings.paper_category_list')->with('success', 'The paper category has been created successfully.');
+                return redirect()->route('settings.papersettings.paper_category_list')->with('success', 'The paper category has been created successfully.');
             } else {
                 return redirect()->back()->with('fail', 'Failed to create the paper category.');
             }
@@ -140,7 +140,7 @@ class PaperSettingController extends Controller
                     $presentStatus = '<span style="color:red">Inactive</span>';
                 }
 
-                $editLink = route('papersettings.edit_paper_category', encrypt($value->id));
+                $editLink = route('settings.papersettings.edit_paper_category', encrypt($value->id));
                 $subarray = [];
                 $subarray[] = ++$key . '.';
                 $subarray[] = $value->id;
@@ -299,7 +299,6 @@ class PaperSettingController extends Controller
         }
     }
 
-
     public function createsize()
     {
         return view('papersize.create');
@@ -427,7 +426,7 @@ class PaperSettingController extends Controller
                     $presentStatus = '<span style="color:red">Inactive</span>';
                 }
 
-                $editLink = route('papersettings.edit_paper_quality', encrypt($value->id));
+                $editLink = route('settings.papersettings.edit_paper_quality', encrypt($value->id));
                 $subarray = [];
                 $subarray[] = ++$key . '.';
                 $subarray[] = $value->id;
@@ -498,7 +497,7 @@ class PaperSettingController extends Controller
             $save = $paperquality->save();
 
             if ($save) {
-                return redirect()->route('papersettings.paper_quality_list')->with('success', 'The paper quality has been created successfully.');
+                return redirect()->route('settings.papersettings.paper_quality_list')->with('success', 'The paper quality has been created successfully.');
             } else {
                 return redirect()->back()->with('fail', 'Failed to create the paper quality.');
             }
@@ -534,7 +533,7 @@ class PaperSettingController extends Controller
             $update = $paperquality->update();
 
             if ($update) {
-                return redirect()->route('papersettings.paper_quality_list')->with('success', 'The paper quality has been updated successfully.');
+                return redirect()->route('settings.papersettings.paper_quality_list')->with('success', 'The paper quality has been updated successfully.');
             } else {
                 return redirect()->back()->with('fail', 'Failed to updated the paper quality.');
             }
@@ -603,7 +602,7 @@ class PaperSettingController extends Controller
                     $presentStatus = '<span style="color:red">Inactive</span>';
                 }
 
-                $editLink = route('papersettings.edit_paper_color', encrypt($value->id));
+                $editLink = route('settings.papersettings.edit_paper_color', encrypt($value->id));
                 $subarray = [];
                 $subarray[] = ++$key . '.';
                 $subarray[] = $value->id;
@@ -673,7 +672,7 @@ class PaperSettingController extends Controller
             $save = $papercolor->save();
 
             if ($save) {
-                return redirect()->route('papersettings.paper_color_list')->with('success', 'The paper color has been created successfully.');
+                return redirect()->route('settings.papersettings.paper_color_list')->with('success', 'The paper color has been created successfully.');
             } else {
                 return redirect()->back()->with('fail', 'Failed to create the paper color.');
             }
@@ -710,7 +709,7 @@ class PaperSettingController extends Controller
             $update = $papercolor->update();
 
             if ($update) {
-                return redirect()->route('papersettings.paper_color_list')->with('success', 'The paper color has been updated successfully.');
+                return redirect()->route('settings.papersettings.paper_color_list')->with('success', 'The paper color has been updated successfully.');
             } else {
                 return redirect()->back()->with('fail', 'Failed to updated the paper color.');
             }
@@ -780,7 +779,7 @@ class PaperSettingController extends Controller
                     $presentStatus = '<span style="color:red">Inactive</span>';
                 }
 
-                $editLink = route('papersettings.edit_paper_thickness', encrypt($value->id));
+                $editLink = route('settings.papersettings.edit_paper_thickness', encrypt($value->id));
                 $subarray = [];
                 $subarray[] = ++$key . '.';
                 $subarray[] = $value->id;
@@ -840,7 +839,8 @@ class PaperSettingController extends Controller
         $request->validate([
             'thickness_value' => [
                 'required',
-                'regex:/^(([0-9]*)(\.([0-9]+))?)$/',
+                'string',
+                //'regex:/^(([0-9]*)(\.([0-9]+))?)$/',
                 new PaperSettingUniqueValueCheck('name', 'paperGsm', '', 'The thickness value :input has already been taken.')
             ],
         ]);
@@ -851,7 +851,7 @@ class PaperSettingController extends Controller
             $save = $papergsm->save();
 
             if ($save) {
-                return redirect()->route('papersettings.paper_thickness_list')->with('success', 'The paper thickness has been created successfully.');
+                return redirect()->route('settings.papersettings.paper_thickness_list')->with('success', 'The paper thickness has been created successfully.');
             } else {
                 return redirect()->back()->with('fail', 'Failed to create the paper thickness.');
             }
@@ -887,7 +887,7 @@ class PaperSettingController extends Controller
             $update = $papergsm->update();
 
             if ($update) {
-                return redirect()->route('papersettings.paper_thickness_list')->with('success', 'The paper thickness has been updated successfully.');
+                return redirect()->route('settings.papersettings.paper_thickness_list')->with('success', 'The paper thickness has been updated successfully.');
             } else {
                 return redirect()->back()->with('fail', 'Failed to updated the GSM.');
             }

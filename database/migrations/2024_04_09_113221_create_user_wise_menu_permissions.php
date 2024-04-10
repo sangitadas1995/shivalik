@@ -11,9 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('paper_types', function (Blueprint $table) {
+        Schema::create('user_wise_menu_permissions', function (Blueprint $table){
             $table->id();
-            $table->string('name');
+            $table->integer('user_id')->nullable();
+            $table->integer('menu_id')->nullable();
+            $table->json('sub_menu_ids')->nullable();
             $table->enum('status', ['A', 'I', 'D'])->default('A');
             $table->timestamps();
         });
@@ -24,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('paper_types');
+        Schema::dropIfExists('user_wise_menu_permissions');
     }
 };

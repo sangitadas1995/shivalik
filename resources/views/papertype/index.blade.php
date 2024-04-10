@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title','Paper Setting')
+@section('title','Paper Type')
 @push('extra_css')
     
 @endpush
@@ -7,11 +7,13 @@
 <div class="page-name">
     <div class="row justify-content-between align-items-center">
       <div class="col-md-4">
-        <h2><i class="ri-arrow-left-line"></i>Paper GSM</h2>
+        <h2><i class="ri-arrow-left-line"></i> Paper Type List</h2>
       </div>
       <div class="col-md-6">
         <div class="text-end mb-4">
-          <a href="{{ route('settings.papersettings.add_paper_thickness') }}" class="btn primary-btn"><img src="{{ asset('images/add-accoun-1t.png') }}" /> Add Paper GSM</a>
+          <a href="{{ route('papertype.add') }}" class="btn primary-btn"
+            ><img src="{{ asset('images/add-accoun-1t.png') }}" /> Add Paper Type</a
+          >
         </div>
       </div>
     </div>
@@ -23,17 +25,16 @@
 </div>
 <div class="row">
     <div class="table-responsive table-sec mb-4">
-        <table class="table table-striped" id="gsm_list_table">
+        <table class="table table-striped" id="paper_type_list_table">
         <thead>
             <tr>
             <th>Row ID</th>
             <th style="text-align: center">ID</th>
-            <!-- <th style="text-align: center">Date</th> -->
-            <th style="text-align: center">Value</th>
-            <th style="text-align: center">Status</th>
-            <!-- <th style="text-align: center">Manager</th>
-            <th style="text-align: center">Designation</th>
-            <th style="text-align: center">Functional Area</th> -->
+            <th style="text-align: center">Name</th>
+            <th style="text-align: center">Category</th>
+            <th style="text-align: center">Color</th>
+            <th style="text-align: center">Quality</th>
+            <th style="text-align: center">GSM</th>
             <th style="text-align: center">Action</th>
             </tr>
         </thead>
@@ -42,6 +43,14 @@
         </tbody>
         </table>
     </div>
+</div>
+<!-- 
+  Cutomer view details modal
+-->
+<div class="modal fade" id="paperTypeDetailsModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="render_paper_type_details"></div>
+  <div class="modal-dialog modal-dialog-scrollable  modal-dialog-centered">
+  </div>
 </div>
 @endsection
 
@@ -54,13 +63,13 @@
           }
         });
 
-        let gsm_list_table = $('#gsm_list_table').DataTable({
+        let paper_type_list_table = $('#paper_type_list_table').DataTable({
           stateSave: true,
           processing: true,
           serverSide: true,
           pageLength: 10,
           ajax: {
-            url: "{{ route('settings.papersettings.gsmlistdata') }}",
+            url: "{{ route('papertype.data') }}",
             type: 'POST',
             'data': function(data) {
               return data;
@@ -73,7 +82,7 @@
               visible: false,
             },
             {
-              target: [1,4],
+              target: [1,7],
               searchable: false,
               sortable: false,
             },
@@ -81,17 +90,35 @@
           ]
         });
 
-        
+        $(document).on('click','.view_details',function(e){
+          e.preventDefault();
+          var __e = $(this);
+          var rowid = __e.data('id');
+          if (rowid) {
+            $.ajax({
+              type: "post",
+              url: "{{ route('papertype.view') }}",
+              data: {rowid},
+              dataType: "json",
+              success: function (response) {
+                $('.render_paper_type_details').html(response);
+                $('#paperTypeDetailsModal').modal('show');
+              }
+            });
+          }
+        });
+
+      
         $(document).on('click','.updateStatus',function(e){
         e.preventDefault();
         var __e = $(this);
         var rowid = __e.data('id');
         var rowstatus = __e.data('status');
-        var currentPage = gsm_list_table.page();
+        var currentPage = paper_type_list_table.page();
         if (rowid) {
           Swal.fire({
             icon: "warning",
-            text: `Are you sure, you want to ${rowstatus} this paper thickness?`,
+            text: `Are you sure, you want to ${rowstatus} this paper type?`,
             showDenyButton: false,
             showCancelButton: true,
             confirmButtonText: "Yes",
@@ -101,14 +128,14 @@
             if (result.isConfirmed) {
               $.ajax({
                 type: "post",
-                url: "{{ route('settings.papersettings.doupdatestatuspaperthickness') }}",
+                url: "{{ route('papertype.doupdatestatuspapertype') }}",
                 data: {
                   rowid,
                   rowstatus
                 },
                 dataType: "json",
                 success: function (response) {
-                  gsm_list_table.page(currentPage).draw(false);
+                  paper_type_list_table.page(currentPage).draw(false);
                   return Swal.fire('Success!', response.message, 'success');
                 },
                 error: function(xhr, status, error) {
@@ -119,8 +146,6 @@
           });
         }
       });
-
-      });
-      
-    </script>
+      }); 
+</script>
 @endsection

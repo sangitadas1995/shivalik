@@ -9,14 +9,14 @@
   <div class="row justify-content-between align-items-center">
     <div class="col-md-4">
       <h2>
-        <a href="{{ route('papersettings.paper_category_list') }}"><i class="ri-arrow-left-line"></i></a> Add Paper Category
+        <a href="{{ route('settings.papersettings.paper_category_list') }}"><i class="ri-arrow-left-line"></i></a> Add Paper Category
       </h2>
     </div>
   </div>
 </div>
 <div class="card add-new-location mt-2">
   <div class="card-body">
-    <form action="{{ route('papersettings.storepapercategory') }}" method="POST" id="papercat-add-form">
+    <form action="{{ route('settings.papersettings.storepapercategory') }}" method="POST" id="papercat-add-form">
       @csrf
       <div class="row">
         <div class="col-md-12">

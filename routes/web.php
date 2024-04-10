@@ -8,6 +8,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\VendorsController;
 use App\Http\Controllers\PaperSettingController;
+use App\Http\Controllers\PaperTypeController;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
 
@@ -71,6 +72,60 @@ Route::middleware('auth')->group(function () {
 
 
 
+Route::prefix('vendors')->name('vendors.')->group(function () {
+    /*  Route::get('/', [VendorsController::class, 'index'])->name('index'); */
+    Route::get('add', [VendorsController::class, 'create'])->name('add');
+    Route::post('store', [VendorsController::class, 'store'])->name('store');
+    Route::post('list-data', [VendorsController::class, 'list_data'])->name('data');
+    Route::post('view', [VendorsController::class, 'view'])->name('view');
+    Route::get('edit/{id}', [VendorsController::class, 'edit'])->name('edit');
+    Route::post('update/{id}', [VendorsController::class, 'update'])->name('update');
+    Route::post('service-types', [VendorsController::class, 'getServiceTypes'])->name('service-types');
+
+    Route::prefix('paper')->name('paper.')->group(function () {
+        Route::get('edit/{id}', [VendorsController::class, 'paper_edit'])->name('edit');
+        Route::post('update/{id}', [VendorsController::class, 'paper_update'])->name('update');
+    });
+
+    Route::prefix('printing')->name('printing.')->group(function () {
+        Route::get('edit/{id}', [VendorsController::class, 'printing_edit'])->name('edit');
+        Route::post('update/{id}', [VendorsController::class, 'printing_update'])->name('update');
+    });
+});
+
+Route::get('printing-vendor', [VendorsController::class, 'index'])->name('printing-vendor');
+Route::get('paper-vendor', [VendorsController::class, 'papervendors'])->name('paper-vendor');
+Route::post('paper-vendors', [VendorsController::class, 'papervendorsList'])->name('paper-vendor-list');
+
+
+
+Route::prefix('orders')->name('orders.')->group(function () {
+    Route::get('/', [OrdersController::class, 'index'])->name('index');
+    Route::get('add', [OrdersController::class, 'create'])->name('add');
+    Route::get('view', [OrdersController::class, 'view'])->name('view');
+});
+
+Route::prefix('inventory')->name('inventory.')->group(function () {
+    Route::get('/', [InventoryController::class, 'index'])->name('index');
+
+    Route::prefix('warehouse')->name('warehouse.')->group(function () {
+        Route::get('add', [InventoryController::class, 'create'])->name('add');
+    });
+});
+
+Route::prefix('settings')->name('settings.')->group(function () {
+    Route::prefix('vendor')->name('vendor.')->group(function () {
+        Route::prefix('service-type')->name('service-type.')->group(function () {
+            Route::get('/', [SettingController::class, 'servicetype'])->name('index');
+            Route::get('add', [SettingController::class, 'addservicetype'])->name('add');
+            Route::post('store', [SettingController::class, 'storeServicetype'])->name('store');
+            Route::post('list-data', [SettingController::class, 'serviceListdata'])->name('list-data');
+            Route::post('update-status', [SettingController::class, 'service_type_update_status'])->name('update-status');
+            Route::get('edit/{id}', [SettingController::class, 'edit_service_type'])->name('edit');
+            Route::post('update/{id}', [SettingController::class, 'updateServiceType'])->name('update');
+        });
+    });
+
     Route::prefix('papersettings')->name('papersettings.')->group(function () {
         Route::get('paper_category_list', [PaperSettingController::class, 'catlist'])->name('paper_category_list');
         Route::get('add_paper_category', [PaperSettingController::class, 'createcategory'])->name('add_paper_category');
@@ -125,61 +180,20 @@ Route::middleware('auth')->group(function () {
         Route::get('edit_paper_thickness/{id}', [PaperSettingController::class, 'editpapergsm'])->name('edit_paper_thickness');
         Route::post('updatepapergsm/{id}', [PaperSettingController::class, 'updatepapergsm'])->name('updatepapergsm');
     });
+});
 
-    Route::prefix('vendors')->name('vendors.')->group(function () {
-        /*  Route::get('/', [VendorsController::class, 'index'])->name('index'); */
-        Route::get('add', [VendorsController::class, 'create'])->name('add');
-        Route::post('store', [VendorsController::class, 'store'])->name('store');
-        Route::post('list-data', [VendorsController::class, 'list_data'])->name('data');
-        Route::post('view', [VendorsController::class, 'view'])->name('view');
-        Route::get('edit/{id}', [VendorsController::class, 'edit'])->name('edit');
-        Route::post('update/{id}', [VendorsController::class, 'update'])->name('update');
-        Route::post('service-types', [VendorsController::class, 'getServiceTypes'])->name('service-types');
+Route::prefix('papertype')->name('papertype.')->group(function () {
+    Route::get('/', [PaperTypeController::class, 'index'])->name('index');
+    Route::post('list-data', [PaperTypeController::class, 'list_data'])->name('data');
+    Route::post('view', [PaperTypeController::class, 'view'])->name('view');
+    Route::post('doupdatestatuspapertype', [PaperTypeController::class, 'doupdatestatuspapertype'])->name('doupdatestatuspapertype');
 
-        Route::prefix('paper')->name('paper.')->group(function () {
-            Route::get('edit/{id}', [VendorsController::class, 'paper_edit'])->name('edit');
-            Route::post('update/{id}', [VendorsController::class, 'paper_update'])->name('update');
-        });
+    Route::get('add', [PaperTypeController::class, 'create'])->name('add');
+    Route::post('store', [PaperTypeController::class, 'store'])->name('store');
 
-        Route::prefix('printing')->name('printing.')->group(function () {
-            Route::get('edit/{id}', [VendorsController::class, 'printing_edit'])->name('edit');
-            Route::post('update/{id}', [VendorsController::class, 'printing_update'])->name('update');
-        });
-    });
-
-    Route::get('printing-vendor', [VendorsController::class, 'index'])->name('printing-vendor');
-    Route::get('paper-vendor', [VendorsController::class, 'papervendors'])->name('paper-vendor');
-    Route::post('paper-vendors', [VendorsController::class, 'papervendorsList'])->name('paper-vendor-list');
-
-
-
-    Route::prefix('orders')->name('orders.')->group(function () {
-        Route::get('/', [OrdersController::class, 'index'])->name('index');
-        Route::get('add', [OrdersController::class, 'create'])->name('add');
-        Route::get('view', [OrdersController::class, 'view'])->name('view');
-    });
-
-    Route::prefix('inventory')->name('inventory.')->group(function () {
-        Route::get('/', [InventoryController::class, 'index'])->name('index');
-
-        Route::prefix('warehouse')->name('warehouse.')->group(function () {
-            Route::get('add', [InventoryController::class, 'create'])->name('add');
-        });
-    });
-
-    Route::prefix('settings')->name('settings.')->group(function () {
-        Route::prefix('vendor')->name('vendor.')->group(function () {
-            Route::prefix('service-type')->name('service-type.')->group(function () {
-                Route::get('/', [SettingController::class, 'servicetype'])->name('index');
-                Route::get('add', [SettingController::class, 'addservicetype'])->name('add');
-                Route::post('store', [SettingController::class, 'storeServicetype'])->name('store');
-                Route::post('list-data', [SettingController::class, 'serviceListdata'])->name('list-data');
-                Route::post('update-status', [SettingController::class, 'service_type_update_status'])->name('update-status');
-                Route::get('edit/{id}', [SettingController::class, 'edit_service_type'])->name('edit');
-                Route::post('update/{id}', [SettingController::class, 'updateServiceType'])->name('update');
-            });
-        });
-    });
+    Route::get('edit/{id}', [PaperTypeController::class, 'edit'])->name('edit');
+    Route::post('update/{id}', [PaperTypeController::class, 'update'])->name('update');
+});
 });
 
 require __DIR__ . '/auth.php';
