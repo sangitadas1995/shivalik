@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title','Vendor Service Type Setting')
+@section('title','Priting Vendor Service Type Setting')
 @push('extra_css')
 
 @endpush
@@ -7,7 +7,7 @@
 <div class="page-name">
   <div class="row justify-content-between align-items-center">
     <div class="col-md-4">
-      <h2><i class="ri-arrow-left-line"></i> Vendor Service Type</h2>
+      <h2><i class="ri-arrow-left-line"></i> Priting Vendor Service Type</h2>
     </div>
     <div class="col-md-6">
       <div class="text-end mb-4">
@@ -65,7 +65,7 @@
       },
       columnDefs: [
         {
-          target: [0],
+          target: [0, 2],
           searchable: false,
           sortable: false,
           visible: false,

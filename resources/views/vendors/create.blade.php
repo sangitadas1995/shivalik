@@ -161,12 +161,8 @@
         </div>
         
           <div class="col-md-12">
-            <div class="mb-3">
-              <label class="form-label">Service Types<span class="text-danger">*</span>:</label>
-              <select class="form-select service_types" aria-label="Default select example" id="service_type_id" name="service_type_id[]" multiple="multiple">
-              <option value="">-- Select service type ---</option>
-             
-              </select>
+            <div class="mb-3" id="service_types">
+              
             </div>
           </div>
         </div>
@@ -497,13 +493,8 @@
             $('select#service_type_id').find("option:eq(0)").html("Please wait..");
           },
           success: function (response) {
-            console.log(response)
-            var options = '';
-            
-            for (var i = 0; i < response.data.length; i++) {
-              options += '<option value="' + response.data[i].id + '">' + response.data[i].name + '</option>';
-            }
-            $("select#service_type_id").html(options);
+           
+            $('#service_types').html(response.html);
             $('.service_types').select2();
 
           },

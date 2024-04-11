@@ -176,21 +176,38 @@
                                 <div>
                                     {{ $vendor->vendortype?->name ?? null }}
                                 </div>
-                            </div>                                                                                                             
-                            <div class="col-5 child-table-row">
-                                <div>
-                                    Service Types
-                                </div>
                             </div>
-                            <div class="col-7 child-table-row">
-                                <div>
-                                   @if (!empty($service_types) && $service_types->isNotEmpty())
-                                       @foreach ($service_types as $s_type)
-                                           {{ $loop->iteration == 1 ? $s_type->name : ', '.$s_type->name }}
-                                       @endforeach
-                                   @endif
+                            @if ($vendor->vendor_type_id == 2)    
+                                <div class="col-5 child-table-row">
+                                    <div>
+                                        Service Types
+                                    </div>
                                 </div>
-                            </div>                                                       
+                                <div class="col-7 child-table-row">
+                                    <div>
+                                    @if (!empty($service_types) && $service_types->isNotEmpty())
+                                        @foreach ($service_types as $s_type)
+                                            {{ $loop->iteration == 1 ? $s_type->name : ', '.$s_type->name }}
+                                        @endforeach
+                                    @endif
+                                    </div>
+                                </div>  
+                            @else
+                                <div class="col-5 child-table-row">
+                                    <div>
+                                        Paper Types
+                                    </div>
+                                </div>
+                                <div class="col-7 child-table-row">
+                                    <div>
+                                    @if (!empty($service_types) && $service_types->isNotEmpty())
+                                        @foreach ($service_types as $s_type)
+                                            {{ $loop->iteration == 1 ? $s_type->paper_name : ', '.$s_type->paper_name }}
+                                        @endforeach
+                                    @endif
+                                    </div>
+                                </div>                                            
+                            @endif                                                                                                             
                         </div>
                     </div>
                 </div>

@@ -6,6 +6,7 @@ use App\Models\City;
 use App\Models\Country;
 use App\Models\State;
 use App\Models\Customer;
+use App\Models\PaperTypes;
 use App\Models\ServiceType;
 
 trait Helper
@@ -66,6 +67,21 @@ trait Helper
             $service_types = ServiceType::where([
                 'status' => 'A',
             ])->orderBy('name', 'ASC')->get();
+        }
+        return $service_types;
+    }
+
+    public function getAllPaperTypes($vendorTypeid = null)
+    {
+        if (!empty($vendorTypeid)) {
+            $service_types = PaperTypes::where([
+                'id' => $vendorTypeid,
+                'status' => 'A',
+            ])->orderBy('paper_name', 'ASC')->get();
+        } else {
+            $service_types = PaperTypes::where([
+                'status' => 'A',
+            ])->orderBy('paper_name', 'ASC')->get();
         }
         return $service_types;
     }

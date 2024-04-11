@@ -25,10 +25,9 @@
                     <div class="mb-3">
                       <label class="form-label"><span class="text-danger">*</span>Vendor Type :</label>
                       <select class="form-select" aria-label="Default select example" id="vendor_type_id" name="vendor_type_id">
-                        <option value=" ">---Select vendor type---</option>
                         @if ($vendortypes->isNotEmpty())
                             @foreach ($vendortypes as $type)
-                                <option value = "{{ $type->id }}">{{ $type->name }}</option>
+                                <option value = "{{ $type->id }}" {{ $type->id == 2 ? 'selected' : null }}>{{ $type->name }}</option>
                             @endforeach
                         @endif
                       </select>

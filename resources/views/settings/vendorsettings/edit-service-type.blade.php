@@ -21,7 +21,7 @@
                 <div class="col-md-12">
                     @include('utils.alert')
                 </div>
-                <div class="col-md-6">
+                {{-- <div class="col-md-6">
                     <div class="mb-3">
                       <label class="form-label"><span class="text-danger">*</span>Vendor Type :</label>
                       <select class="form-select" aria-label="Default select example" id="vendor_type_id" name="vendor_type_id">
@@ -34,8 +34,9 @@
                       </select>
                       <small class="text-danger error_vendor_type"></small>
                     </div>
-                  </div>
-                <div class="col-md-6" id="input_service_row">
+                  </div> --}}
+                <div class="col-md-12" id="input_service_row">
+                    <input type="hidden" name="vendor_type_id" value="2">
                     <div class="mb-3">
                         <label class="form-label"><span class="text-danger">*</span>Service Type :</label>
                         <input type="text" class="form-control" name="name" value="{{ $service_type->name }}" />

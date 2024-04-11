@@ -19,7 +19,8 @@ class SettingController extends Controller
     public function addservicetype()
     {
         $vendortypes = Vendor_type::select('id', 'name')->where([
-            'status' => 'A'
+            'status' => 'A',
+            'id' => 2
         ])->orderBy('name', 'asc')->get();
         return view('settings.vendorsettings.add-service-type', [
             'vendortypes' => $vendortypes
@@ -89,7 +90,9 @@ class SettingController extends Controller
             'service Name'
         ];
 
-        $query = ServiceType::with('vendor_type');
+        $query = ServiceType::with('vendor_type')->where([
+            'vendor_type_id' => 2
+        ]);
 
         if (isset($request->search['value'])) {
             $query->where(function ($q) use ($request) {
@@ -145,7 +148,9 @@ class SettingController extends Controller
             }
         }
 
-        $count = ServiceType::with('vendor_type')->count();
+        $count = ServiceType::with('vendor_type')->where([
+            'vendor_type_id' => 2
+        ])->count();
 
         $output = [
             'draw' => intval($request->draw),

@@ -7,6 +7,7 @@ use Carbon\Carbon;
 use App\Models\City;
 use App\Models\State;
 use App\Models\Country;
+use App\Models\PaperTypes;
 use App\Traits\Validate;
 use App\Traits\Helper;
 use Illuminate\Http\Request;
@@ -204,14 +205,32 @@ class VendorsController extends Controller
                 $edit_icon = asset('images/akar-icons_edit.png');
                 $editLink = route('vendors.printing.edit', encrypt($value->id));
 
+                $service_types_ids = json_decode($value->service_type_ids);
+
+                $services = ServiceType::whereIn('id', $service_types_ids)->where([
+                    'status' => 'A'
+                ])
+                    ->get();
+
+                $service_types = null;
+                if (!empty($services) && $services->isNotEmpty()) {
+                    foreach ($services as $pkey => $service) {
+                        if ($pkey == 0) {
+                            $service_types .= $service->name;
+                        } else {
+                            $service_types .= ', ' . $service->name;
+                        }
+                    }
+                }
+
                 $subarray = [];
                 $subarray[] = $value->id;
                 $subarray[] = $value->id;
                 $subarray[] = $value->company_name;
                 $subarray[] = $value->contact_person;
                 $subarray[] = $value->mobile_no;
-                $subarray[] = '<a href="#" class="view_details" title="View Details" data-id ="' . $value->id . '"><img src="' . $view_icon . '" /></a> <a href="' . $editLink . '" title="Edit"><img src="' . $edit_icon . '" /></a>
-                ';
+                $subarray[] = $service_types;
+                $subarray[] = '<a href="#" class="view_details" title="View Details" data-id ="' . $value->id . '"><img src="' . $view_icon . '" /></a> <a href="' . $editLink . '" title="Edit"><img src="' . $edit_icon . '" /></a>';
                 $data[] = $subarray;
             }
         }
@@ -235,8 +254,13 @@ class VendorsController extends Controller
         $service_types_id = !empty($vendor->service_type_ids) ? json_decode($vendor->service_type_ids) : null;
         $service_types = null;
         if (!empty($service_types_id)) {
-            $service_types = ServiceType::whereIn('id', $service_types_id)->get();
+            if ($vendor->vendor_type_id == 2) {
+                $service_types = ServiceType::whereIn('id', $service_types_id)->get();
+            } else {
+                $service_types = PaperTypes::whereIn('id', $service_types_id)->get();
+            }
         }
+
         $html = view('vendors.details', ['vendor' => $vendor, 'service_types' => $service_types])->render();
         return response()->json($html);
     }
@@ -245,8 +269,19 @@ class VendorsController extends Controller
     {
         try {
             $vendor_type_id = $request->vendor_type;
-            $service_types = $this->getAllServiceTypes($vendor_type_id);
-            return response()->json(['data' => $service_types]);
+            if ($vendor_type_id == 2) {
+                $service_types = $this->getAllServiceTypes($vendor_type_id);
+            } else {
+                $service_types = $this->getAllPaperTypes();
+            }
+
+            $html = view('vendors.service_types', [
+                'service_types' => $service_types,
+                'vendor_type_id' => $vendor_type_id
+            ])
+                ->render();
+
+            return response()->json(['html' => $html]);
         } catch (Exception $th) {
             return response()->json([
                 'message' => trans('messages.server_error')
@@ -296,12 +331,31 @@ class VendorsController extends Controller
                 $edit_icon = asset('images/akar-icons_edit.png');
                 $editLink = route('vendors.paper.edit', encrypt($value->id));
 
+                $paper_types_ids = json_decode($value->service_type_ids);
+
+                $papers = PaperTypes::whereIn('id', $paper_types_ids)->where([
+                    'status' => 'A'
+                ])
+                    ->get();
+
+                $paper_types = null;
+                if (!empty($papers) && $papers->isNotEmpty()) {
+                    foreach ($papers as $pkey => $paper) {
+                        if ($pkey == 0) {
+                            $paper_types .= $paper->paper_name;
+                        } else {
+                            $paper_types .= ', ' . $paper->paper_name;
+                        }
+                    }
+                }
+
                 $subarray = [];
                 $subarray[] = $value->id;
                 $subarray[] = $value->id;
                 $subarray[] = $value->company_name;
                 $subarray[] = $value->contact_person;
                 $subarray[] = $value->mobile_no;
+                $subarray[] = $paper_types;
                 $subarray[] = '<a href="#" class="view_details" title="View Details" data-id ="' . $value->id . '"><img src="' . $view_icon . '" /></a> <a href="' . $editLink . '" title="Edit"><img src="' . $edit_icon . '" /></a>
                 ';
                 $data[] = $subarray;
@@ -333,11 +387,7 @@ class VendorsController extends Controller
         $states = $this->getAllStates(101);
         $cities = $this->getAllCitiesByState($paper->state_id);
 
-        $service_types = ServiceType::where([
-            'vendor_type_id' => $paper->vendor_type_id,
-            'status' => 'A'
-        ])
-            ->get();
+        $service_types = $this->getAllPaperTypes();
         return view('vendors.paper-edit', [
             'paper' => $paper,
             'countries' => $countries,

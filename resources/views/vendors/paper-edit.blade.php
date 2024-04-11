@@ -165,12 +165,12 @@
         
           <div class="col-md-12">
             <div class="mb-3">
-              <label class="form-label">Service Types<span class="text-danger">*</span>:</label>
+              <label class="form-label">Paper Types<span class="text-danger">*</span>:</label>
               <select class="form-select service_types" aria-label="Default select example" id="service_type_id" name="service_type_id[]" multiple="multiple">
-                <option value="">-- Select service type ---</option>
+                <option value="">-- Select paper type ---</option>
                 @if ($service_types->isNotEmpty())
                   @foreach ($service_types as $type)
-                      <option value="{{ $type->id }}" {{ in_array($type->id, $service_type_ids) ? 'selected' : null }}>{{ $type->name }}</option>
+                      <option value="{{ $type->id }}" {{ in_array($type->id, $service_type_ids) ? 'selected' : null }}>{{ $type->paper_name }}</option>
                   @endforeach
                 @endif
               </select>

@@ -32,6 +32,7 @@
           <th style="text-align: center">Company Name</th>
           <th style="text-align: center">Contact Person</th>
           <th style="text-align: center">Mobile No</th>
+          <th style="text-align: center">Service Types</th>
           <th style="text-align: center">Action</th>
         </tr>
       </thead>
@@ -81,7 +82,7 @@
         visible: false,
       },
       {
-        target: [ 5],
+        target: [5, 6],
         searchable: false,
         sortable: false,
       },
