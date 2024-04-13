@@ -64,7 +64,7 @@
                     </ul>
                  </div>
               </li>
-              <li class="menu-item">
+              <li class="menu-item {{ Route::is('papertype.index','papertype.add','papertype.edit') ? 'active' : null }}">
                  <a href="{{ route('papertype.index') }}">
                  <span class="menu-icon">
                  <i class="ri-pie-chart-2-fill"></i>
