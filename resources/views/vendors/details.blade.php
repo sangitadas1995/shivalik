@@ -99,7 +99,7 @@
                                 </div>
                             @endif                                                    
 
-                             @if (!empty($vendor->alternative_phone_no))
+                            @if (!empty($vendor->alternative_phone_no))
                                 <div class="col-5 child-table-row">
                                     <div>
                                         Alternative Phone No.
@@ -108,6 +108,18 @@
                                 <div class="col-7 child-table-row">
                                     <div>
                                     +91 {{ $vendor->alternative_phone_no }}
+                                    </div>
+                                </div>
+                            @endif
+                            @if (!empty($vendor->gst_no))
+                                <div class="col-5 child-table-row">
+                                    <div>
+                                        Gst No.
+                                    </div>
+                                </div>
+                                <div class="col-7 child-table-row">
+                                    <div>
+                                  {{ $vendor->gst_no }}
                                     </div>
                                 </div>
                             @endif
@@ -180,7 +192,7 @@
                             @if ($vendor->vendor_type_id == 2)    
                                 <div class="col-5 child-table-row">
                                     <div>
-                                        Service Types
+                                        Deals in services
                                     </div>
                                 </div>
                                 <div class="col-7 child-table-row">
@@ -195,7 +207,7 @@
                             @else
                                 <div class="col-5 child-table-row">
                                     <div>
-                                        Paper Types
+                                        Supplier of paper types
                                     </div>
                                 </div>
                                 <div class="col-7 child-table-row">

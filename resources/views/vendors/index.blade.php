@@ -32,7 +32,7 @@
           <th style="text-align: center">Company Name</th>
           <th style="text-align: center">Contact Person</th>
           <th style="text-align: center">Mobile No</th>
-          <th style="text-align: center">Service Types</th>
+          <th style="text-align: center">Deals in services</th>
           <th style="text-align: center">Action</th>
         </tr>
       </thead>

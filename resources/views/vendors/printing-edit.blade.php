@@ -79,20 +79,28 @@
               </div>
             </div>
           </div>
-          <div class="col-md-6">
+          <div class="col-md-12">
             <div class=" row">
-              <div class="col-md-6">
+              <div class="col-md-3">
                 <div class="mb-3  d-flex flex-column">
                   <label class="form-label">Phone No :</label>
                   <input type="tel" id="mobile_code-3" class="form-control onlyNumber phoneNumber" name="phone_no" value="{{ $printing->phone_no }}" />
                   <small class="text-danger error_phone_no"></small>
                 </div>
               </div>
-              <div class="col-md-6">
+              <div class="col-md-3">
                 <div class="mb-3 d-flex flex-column">
                   <label class="form-label">Alternative Phone No. :</label>
                   <input type="tel" id="mobile_code-4" class="form-control onlyNumber phoneNumber" name="alternative_phone_no" value="{{ $printing->alternative_phone_no }}" />
                   <small class="text-danger error_alternative_phone_no"></small>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="mb-3">
+                  <label class="form-label"><span class="text-danger">*</span>GST No. :</label>
+                  <input type="text" class="form-control alphaNumericChar uppercaseChar" name="gst_no" id="gst_no"
+                    value="{{ $printing->gst_no }}" />
+                  <small class="text-danger error_gst_no"></small>
                 </div>
               </div>
             </div>
@@ -165,9 +173,9 @@
         
           <div class="col-md-12">
             <div class="mb-3">
-              <label class="form-label">Service Types<span class="text-danger">*</span>:</label>
+              <label class="form-label">Deals in services<span class="text-danger">*</span>:</label>
               <select class="form-select service_types" aria-label="Default select example" id="service_type_id" name="service_type_id[]" multiple="multiple">
-                <option value="">-- Select service type ---</option>
+                <option value="">-- Select deals in services ---</option>
                 @if ($service_types->isNotEmpty())
                   @foreach ($service_types as $type)
                       <option value="{{ $type->id }}" {{ in_array($type->id, $service_type_ids) ? 'selected' : null }}>{{ $type->name }}</option>

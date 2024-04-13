@@ -84,6 +84,7 @@ class VendorsController extends Controller
         $request->validate([
             'vendor_type_id' => ['required'],
             'company_name' => ['required', 'string'],
+            'gst_no' => ['required', 'regex:/^([0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}[Z]{1}[0-9A-Z]{1})$/', 'unique:customers,gst_no'],
             'contact_person' => ['required', 'string'],
             'mobile_no' => [
                 'required',
@@ -138,6 +139,7 @@ class VendorsController extends Controller
             $vendor->contact_person = ucwords(strtolower($request->contact_person));
             $vendor->mobile_no = $request->mobile_no;
             $vendor->alter_mobile_no = $request->alter_mobile_no;
+            $vendor->gst_no = $request->gst_no;
             $vendor->email = $request->email;
             $vendor->alternative_email_id = $request->alternative_email_id;
             $vendor->phone_no = $request->phone_no;
@@ -404,6 +406,7 @@ class VendorsController extends Controller
         $request->validate([
             'vendor_type_id' => ['required'],
             'company_name' => ['required', 'string'],
+            'gst_no' => ['required', 'regex:/^([0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}[Z]{1}[0-9A-Z]{1})$/', Rule::unique('customers')->ignore($id)],
             'contact_person' => ['required', 'string'],
             'mobile_no' => [
                 'required',
@@ -458,6 +461,7 @@ class VendorsController extends Controller
             $vendor->contact_person = ucwords(strtolower($request->contact_person));
             $vendor->mobile_no = $request->mobile_no;
             $vendor->alter_mobile_no = $request->alter_mobile_no;
+            $vendor->gst_no = $request->gst_no;
             $vendor->email = $request->email;
             $vendor->alternative_email_id = $request->alternative_email_id;
             $vendor->phone_no = $request->phone_no;
@@ -509,6 +513,7 @@ class VendorsController extends Controller
         $request->validate([
             'vendor_type_id' => ['required'],
             'company_name' => ['required', 'string'],
+            'gst_no' => ['required', 'regex:/^([0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}[Z]{1}[0-9A-Z]{1})$/', Rule::unique('customers')->ignore($id)],
             'contact_person' => ['required', 'string'],
             'mobile_no' => [
                 'required',
@@ -563,6 +568,7 @@ class VendorsController extends Controller
             $vendor->contact_person = ucwords(strtolower($request->contact_person));
             $vendor->mobile_no = $request->mobile_no;
             $vendor->alter_mobile_no = $request->alter_mobile_no;
+            $vendor->gst_no = $request->gst_no;
             $vendor->email = $request->email;
             $vendor->alternative_email_id = $request->alternative_email_id;
             $vendor->phone_no = $request->phone_no;
