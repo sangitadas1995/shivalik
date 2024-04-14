@@ -105,43 +105,19 @@
         <div class="col-md-6">
           <div class="mb-3">
             <label class="form-label"><span class="text-danger">*</span>Size Name :</label>
-            <input type="text" class="form-control" name="paper_size_name" id="paper_size_name" value="{{ old('paper_size_name') }}"/>
+            <select class="form-select paper_size_name" aria-label="Default select example" name="paper_size_name" id="paper_size_name">
+              <option value="">Select Paper Size</option>
+              @if (!empty($paperSizes) && $paperSizes->isNotEmpty())
+                @foreach ($paperSizes as $size)
+                  <option value="{{ $size->id }}">{{ $size->name }}</option>
+                @endforeach
+              @endif
+            </select>
             <small class="text-danger error_paper_size_name"></small>
           </div>
         </div>
 
-        <div class="col-md-6">
-          <div class="mb-3">
-            <label class="form-label"><span class="text-danger">*</span>Length :</label>
-            <input type="text" class="form-control" name="paper_length" id="paper_length" value="{{ old('paper_length') }}"/>
-            <small class="text-danger error_paper_size_name"></small>
-          </div>
-        </div>
-
-        <div class="col-md-6">
-          <div class="mb-3">
-            <label class="form-label"><span class="text-danger">*</span>Width :</label>
-            <input type="text" class="form-control" name="paper_width" id="paper_width" value="{{ old('paper_width') }}"/>
-            <small class="text-danger error_paper_size_name"></small>
-          </div>
-        </div>
-
-
-      <div class="mb-3">
-        <label class="form-label"><span class="text-danger">*</span>Paper Unit:</label>
-        <select class="form-select" aria-label="Default select example" id="paper_unit_id" name="paper_unit_id">
-          <option value="">Select</option>
-          @if ($paperUnits->isNotEmpty())
-          @foreach ($paperUnits as $pu)
-          @if (old('paper_unit_id') == $pu->id)
-          <option value="{{ $pu->id }}" selected>{{ $pu->name }}</option>
-          @else
-          <option value="{{ $pu->id }}">{{ $pu->name }}</option>
-          @endif
-          @endforeach
-          @endif
-        </select>
-      </div>
+        <div class="size_details_goes_here"></div>
 
       <div class="text-end">
         <button type="reset" class="btn grey-primary">Cancel</button>
@@ -154,10 +130,12 @@
 
 
 @section('scripts')
+<script src="{{ asset('js/select2.min.js') }}"></script>
 <script>
   var token = "{{ csrf_token() }}";
 
   $(document).ready(function () {
+  
     $(".alphaChar").on('input', function () {
       var inputValue = $(this).val();
       // Remove non-numeric characters
@@ -172,15 +150,11 @@
         $(this).val(sanitizedValue); // Update input field with sanitized value
     });
 
-  });
-
-  $(document).ready(function () {
     $.ajaxSetup({
       headers: {
         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
       }
     });
-
 
     $(document).on('submit', '#user-add-form5', function (e) {
       e.preventDefault();
@@ -206,6 +180,29 @@
       __e[0].submit();
     });
 
+    $(document).on('change', '#paper_size_name', function () {
+      let __e = $(this);
+      let size_val = __e.val();
+
+      if (size_val) {
+        $.ajax({
+          type: "POST",
+          url: "{{ route('papertype.get-size-details') }}",
+          data: {
+            size_val
+          },
+          dataType: "json",
+          success: function (response) {
+            $('.size_details_goes_here').html(response.html);
+          },
+          error: function () {
+            return Swal.fire('Error!', 'Something went wrong, please try again.', 'error');
+          }
+        });
+      }
+    });
+
   });
+
 </script>
 @endsection

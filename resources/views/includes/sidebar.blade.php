@@ -64,14 +64,14 @@
                     </ul>
                  </div>
               </li>
-              <li class="menu-item {{ Route::is('papertype.index','papertype.add','papertype.edit') ? 'active' : null }}">
+               <li class="menu-item {{ Route::is('papertype.index','papertype.add','papertype.edit') ? 'active' : null }}">
                  <a href="{{ route('papertype.index') }}">
                  <span class="menu-icon">
                  <i class="ri-pie-chart-2-fill"></i>
                  </span>
                  <span class="menu-title">Paper Type</span>
                  </a>
-              </li>
+               </li>
               <!-- manna -->
               <!-- <li class="menu-item sub-menu">
                  <a>
@@ -149,7 +149,7 @@
                  </li> -->
               <!-- sub-menu -->
 
-               <li class="menu-item sub-menu {{ Route::is('settings.vendor.service-type.index','settings.vendor.service-type.add','settings.vendor.service-type.edit','settings.papersettings.paper_category_list', 'settings.papersettings.add_paper_category','settings.papersettings.edit_paper_category','settings.papersettings.add_paper_color','settings.papersettings.paper_color_list','settings.papersettings.edit_paper_color','settings.papersettings.paper_quality_list','settings.papersettings.add_paper_quality', 'settings.papersettings.edit_paper_quality','settings.papersettings.paper_thickness_list','settings.papersettings.add_paper_thickness', 'settings.papersettings.edit_paper_thickness') ? 'open active' : null }}">
+               <li class="menu-item sub-menu {{ Route::is('settings.vendor.service-type.index','settings.vendor.service-type.add','settings.vendor.service-type.edit','settings.papersettings.paper_category_list', 'settings.papersettings.add_paper_category','settings.papersettings.edit_paper_category','settings.papersettings.add_paper_color','settings.papersettings.paper_color_list','settings.papersettings.edit_paper_color','settings.papersettings.paper_quality_list','settings.papersettings.add_paper_quality', 'settings.papersettings.edit_paper_quality','settings.papersettings.paper_thickness_list','settings.papersettings.add_paper_thickness', 'settings.papersettings.edit_paper_thickness','settings.papersettings.edit-paper-size','settings.papersettings.add-paper-size','settings.papersettings.paper-size') ? 'open active' : null }}">
                  <a>
                     <span class="menu-icon">
                        <svg width="21" height="21" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -171,26 +171,31 @@
                           <span class="menu-title">Vendor Settings</span>
                           </a>
                        </li>
-                       <li class="menu-item sub-menu {{ Route::is('settings.papersettings.paper_category_list', 'settings.papersettings.add_paper_category','settings.papersettings.edit_paper_category','settings.papersettings.add_paper_color','settings.papersettings.paper_color_list','settings.papersettings.edit_paper_color','settings.papersettings.paper_quality_list','settings.papersettings.add_paper_quality', 'settings.papersettings.edit_paper_quality','settings.papersettings.paper_thickness_list','settings.papersettings.add_paper_thickness', 'settings.papersettings.edit_paper_thickness') ? 'open active' : null }}">
+                       <li class="menu-item sub-menu {{ Route::is('settings.papersettings.paper_category_list', 'settings.papersettings.add_paper_category','settings.papersettings.edit_paper_category','settings.papersettings.add_paper_color','settings.papersettings.paper_color_list','settings.papersettings.edit_paper_color','settings.papersettings.paper_quality_list','settings.papersettings.add_paper_quality', 'settings.papersettings.edit_paper_quality','settings.papersettings.paper_thickness_list','settings.papersettings.add_paper_thickness', 'settings.papersettings.edit_paper_thickness','settings.papersettings.edit-paper-size','settings.papersettings.add-paper-size','settings.papersettings.paper-size') ? 'open active' : null }}">
                           <a><span class="menu-title">Service Settings</span></a>
                           <div class="sub-menu-list" data-popper-escaped="" data-popper-placement="right" style="left: 0px; top: 0px; margin-right: 0px; margin-left: 0px; box-sizing: border-box; display: none;">
                              <ul>
-                                <li class="menu-item {{ Route::is('settings.papersettings.paper_category_list','settings.papersettings.edit_paper_category', 'settings.papersettings.add_paper_category') ? 'active' : null }}">
-                                   <a href="{{ route('settings.papersettings.paper_category_list') }}">
-                                   <span class="menu-title">Paper Category</span>
-                                   </a>
-                                </li>
-                                <li class="menu-item {{ Route::is('settings.papersettings.paper_color_list','settings.papersettings.add_paper_color','settings.papersettings.edit_paper_color') ? 'active' : null }}">
-                                   <a href="{{ route('settings.papersettings.paper_color_list') }}">
-                                   <span class="menu-title">Paper Color</span>
-                                   </a>
-                                </li>
-                                <li class="menu-item {{ Route::is('settings.papersettings.paper_quality_list','settings.papersettings.add_paper_quality', 'settings.papersettings.edit_paper_quality') ? 'active' : null }} ">
-                                   <a href="{{ route('settings.papersettings.paper_quality_list') }}">
-                                   <span class="menu-title">Paper Quality</span>
-                                   </a>
-                                </li>
-                                <li class="menu-item {{ Route::is('settings.papersettings.paper_thickness_list','settings.papersettings.add_paper_thickness', 'settings.papersettings.edit_paper_thickness') ? 'active' : null }}">
+                                 <li class="menu-item {{ Route::is('settings.papersettings.paper_category_list','settings.papersettings.edit_paper_category', 'settings.papersettings.add_paper_category') ? 'active' : null }}">
+                                    <a href="{{ route('settings.papersettings.paper_category_list') }}">
+                                    <span class="menu-title">Paper Category</span>
+                                    </a>
+                                 </li>
+                                 <li class="menu-item {{ Route::is('settings.papersettings.paper-size','settings.papersettings.add-paper-size', 'settings.papersettings.edit-paper-size','settings.papersettings.edit-paper-size','settings.papersettings.add-paper-size','settings.papersettings.paper-size') ? 'active' : null }}">
+                                    <a href="{{ route('settings.papersettings.paper-size') }}">
+                                    <span class="menu-title">Paper Size</span>
+                                    </a>
+                                 </li>
+                                 <li class="menu-item {{ Route::is('settings.papersettings.paper_color_list','settings.papersettings.add_paper_color','settings.papersettings.edit_paper_color') ? 'active' : null }}">
+                                    <a href="{{ route('settings.papersettings.paper_color_list') }}">
+                                    <span class="menu-title">Paper Color</span>
+                                    </a>
+                                 </li>
+                                 <li class="menu-item {{ Route::is('settings.papersettings.paper_quality_list','settings.papersettings.add_paper_quality', 'settings.papersettings.edit_paper_quality') ? 'active' : null }} ">
+                                    <a href="{{ route('settings.papersettings.paper_quality_list') }}">
+                                    <span class="menu-title">Paper Quality</span>
+                                    </a>
+                                 </li>
+                                 <li class="menu-item {{ Route::is('settings.papersettings.paper_thickness_list','settings.papersettings.add_paper_thickness', 'settings.papersettings.edit_paper_thickness') ? 'active' : null }}">
                                    <a href="{{ route('settings.papersettings.paper_thickness_list') }}">
                                    <span class="menu-title">Paper GSM</span>
                                    </a>

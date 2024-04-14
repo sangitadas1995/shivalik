@@ -11,7 +11,7 @@
       </div>
       <div class="col-md-6">
         <div class="text-end mb-4">
-          <a href="{{ route('papersettings.add_paper_size') }}" class="btn primary-btn"
+          <a href="{{ route('settings.papersettings.add-paper-size') }}" class="btn primary-btn"
             ><img src="{{ asset('images/add-accoun-1t.png') }}" /> Add Paper Size</a
           >
         </div>
@@ -28,11 +28,14 @@
         <table class="table table-striped" id="papersize_list_table">
         <thead>
             <tr>
-            <th>Row ID</th>
-            <th style="text-align: center">ID</th>
-            <th style="text-align: center">Name</th>
-            <th style="text-align: center">Status</th>
-            <th style="text-align: center">Action</th>
+              <th>Row ID</th>
+              <th style="text-align: center">ID</th>
+              <th style="text-align: center">Name</th>
+              <th style="text-align: center">Height</th>
+              <th style="text-align: center">Width</th>
+              <th style="text-align: center">Unit</th>
+              <th style="text-align: center">Status</th>
+              <th style="text-align: center">Action</th>
             </tr>
         </thead>
         <tbody>
@@ -58,7 +61,7 @@
           serverSide: true,
           pageLength: 10,
           ajax: {
-            url: "{{ route('papersettings.sizelistdata') }}",
+            url: "{{ route('settings.papersettings.sizelistdata') }}",
             type: 'POST',
             'data': function(data) {
               return data;
@@ -71,7 +74,7 @@
               visible: false,
             },
             {
-              target: [1,4],
+              target: [7],
               searchable: false,
               sortable: false,
             },
@@ -98,7 +101,7 @@
             if (result.isConfirmed) {
               $.ajax({
                 type: "post",
-                url: "{{ route('papersettings.doupdatestatuspapersize') }}",
+                url: "{{ route('settings.papersettings.doupdatestatuspapersize') }}",
                 data: {
                   rowid,
                   rowstatus

@@ -134,14 +134,14 @@ Route::middleware('auth')->group(function () {
             Route::post('doupdatestatuspapercat', [PaperSettingController::class, 'doupdatestatuspapercat'])->name('doupdatestatuspapercat');
 
 
-            Route::get('paper_size_list', [PaperSettingController::class, 'sizelist'])->name('paper_size_list');
+            Route::get('paper-size', [PaperSettingController::class, 'sizelist'])->name('paper-size');
             Route::post('sizelist-data', [PaperSettingController::class, 'sizelist_data'])->name('sizelistdata');
             Route::post('doupdatestatuspapersize', [PaperSettingController::class, 'doupdatestatuspapersize'])->name('doupdatestatuspapersize');
 
-            Route::get('add_paper_size', [PaperSettingController::class, 'createsize'])->name('add_paper_size');
+            Route::get('add-paper-size', [PaperSettingController::class, 'createsize'])->name('add-paper-size');
             Route::post('storepapersize', [PaperSettingController::class, 'storepapersize'])->name('storepapersize');
 
-            Route::get('edit_paper_size/{id}', [PaperSettingController::class, 'editpapersize'])->name('edit_paper_size');
+            Route::get('edit-paper-size/{id}', [PaperSettingController::class, 'editpapersize'])->name('edit-paper-size');
             Route::post('updatepapersize/{id}', [PaperSettingController::class, 'updatepapersize'])->name('updatepapersize');
 
             Route::get('paper_quality_list', [PaperSettingController::class, 'qualitylist'])->name('paper_quality_list');
@@ -191,6 +191,7 @@ Route::middleware('auth')->group(function () {
 
         Route::get('edit/{id}', [PaperTypeController::class, 'edit'])->name('edit');
         Route::post('update/{id}', [PaperTypeController::class, 'update'])->name('update');
+        Route::post('get-size-details', [PaperTypeController::class, 'get_size_details'])->name('get-size-details');
     });
 });
 

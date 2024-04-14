@@ -1,11 +1,12 @@
 <?php
+
 namespace App\Rules;
 
 use App\Models\Paper_categories;
-use App\Models\Paper_size;
 use App\Models\Paper_quality;
 use App\Models\Paper_color;
 use App\Models\Paper_weights;
+use App\Models\PaperSize;
 use Closure;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\DB;
@@ -29,37 +30,32 @@ class PaperSettingUniqueValueCheck implements ValidationRule
     public function validate(string $attribute, mixed $value, Closure $fail): void
     {
         if (!empty($value)) {
-            if($this->column2 == "paperCategory")
-            {
+            if ($this->column2 == "paperCategory") {
                 $query = Paper_categories::where(function ($q) use ($value) {
                     $q->where($this->column1, $value);
                 });
             }
-            if($this->column2 == "paperSize")
-            {
-                $query = Paper_size::where(function ($q) use ($value) {
+            if ($this->column2 == "paperSize") {
+                $query = PaperSize::where(function ($q) use ($value) {
                     $q->where($this->column1, $value);
                 });
             }
-            if($this->column2 == "paperColor")
-            {
+            if ($this->column2 == "paperColor") {
                 $query = Paper_color::where(function ($q) use ($value) {
                     $q->where($this->column1, $value);
                 });
             }
-            if($this->column2 == "paperQuality")
-            {
+            if ($this->column2 == "paperQuality") {
                 $query = Paper_quality::where(function ($q) use ($value) {
                     $q->where($this->column1, $value);
                 });
             }
-            if($this->column2 == "paperGsm")
-            {
+            if ($this->column2 == "paperGsm") {
                 $query = Paper_weights::where(function ($q) use ($value) {
                     $q->where($this->column1, $value);
                 });
             }
-            
+
             if (!empty($this->ignoreId)) {
                 $query->where('id', '!=', $this->ignoreId);
             }

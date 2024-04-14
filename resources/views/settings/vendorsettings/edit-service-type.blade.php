@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title','Vendor Service Management')
+@section('title','Edit vendor Service Management')
 @push('extra_css')
 
 @endpush

@@ -1,21 +1,26 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use Exception;
 use Carbon\Carbon;
-use App\Models\Paper_categories;
+use App\Models\PaperSize;
 use App\Models\Paper_size;
-use App\Models\Paper_quality;
-use App\Models\Paper_color;
-use App\Models\Paper_weights;
-use App\Models\PaperUnits;
 use App\Models\PaperTypes;
+use App\Models\PaperUnits;
+use App\Models\Paper_color;
 use Illuminate\Http\Request;
+use App\Models\Paper_quality;
+use App\Models\Paper_weights;
+use App\Traits\PaperSizeTrait;
 use Illuminate\Validation\Rule;
+use App\Models\Paper_categories;
 use App\Rules\PaperTypeUniqueValueCheck;
 
 class PaperTypeController extends Controller
 {
+    use PaperSizeTrait;
+
     public function index()
     {
         return view('papertype.index');
@@ -29,48 +34,43 @@ class PaperTypeController extends Controller
         ];
 
         $query = PaperTypes::with('papercategory', 'papergsm', 'paperquality', 'papercolor', 'paperunit');
-        $query->where('status', '!=' , 'D');
+        $query->where('status', '!=', 'D');
 
 
         if (isset($request->search['value'])) {
             $query->where(function ($q) use ($request) {
-            $q->where('paper_name', 'LIKE', "%" . $request->search['value'] . "%")
-            ->orWhereHas('papercategory', function ($q) use ($request) {
-                $q->where('name', 'LIKE', "%" . $request->search['value'] . "%");
-            })
-            ->orWhereHas('papergsm', function ($q) use ($request) {
-                $q->where('name', 'LIKE', "%" . $request->search['value'] . "%");
-            })
-           ->orWhereHas('paperquality', function ($q) use ($request) {
-                $q->where('name', 'LIKE', "%" . $request->search['value'] . "%");
-            })
-           ->orWhereHas('papercolor', function ($q) use ($request) {
-                $q->where('name', 'LIKE', "%" . $request->search['value'] . "%");
-            });
-
+                $q->where('paper_name', 'LIKE', "%" . $request->search['value'] . "%")
+                    ->orWhereHas('papercategory', function ($q) use ($request) {
+                        $q->where('name', 'LIKE', "%" . $request->search['value'] . "%");
+                    })
+                    ->orWhereHas('papergsm', function ($q) use ($request) {
+                        $q->where('name', 'LIKE', "%" . $request->search['value'] . "%");
+                    })
+                    ->orWhereHas('paperquality', function ($q) use ($request) {
+                        $q->where('name', 'LIKE', "%" . $request->search['value'] . "%");
+                    })
+                    ->orWhereHas('papercolor', function ($q) use ($request) {
+                        $q->where('name', 'LIKE', "%" . $request->search['value'] . "%");
+                    });
             });
         }
 
 
         if (isset($request->order['0']['dir']) && ($request->order['0']['column'] != 0) && ($request->order['0']['column'] == 2)) {
             $query->orderBy('paper_name', $request->order['0']['dir']);
-        }
-        else if (isset($request->order['0']['dir']) && ($request->order['0']['column'] != 0) && ($request->order['0']['column'] == 3)) {
+        } else if (isset($request->order['0']['dir']) && ($request->order['0']['column'] != 0) && ($request->order['0']['column'] == 3)) {
             $query->whereHas('papercategory', function ($q) use ($request) {
                 return $q->orderBy('name', $request->order['0']['dir']);
             });
-        }
-        else if (isset($request->order['0']['dir']) && ($request->order['0']['column'] != 0) && ($request->order['0']['column'] == 4)) {
+        } else if (isset($request->order['0']['dir']) && ($request->order['0']['column'] != 0) && ($request->order['0']['column'] == 4)) {
             $query->whereHas('papercolor', function ($q) use ($request) {
                 return $q->orderBy('name', $request->order['0']['dir']);
             });
-        } 
-        else if (isset($request->order['0']['dir']) && ($request->order['0']['column'] != 0) && ($request->order['0']['column'] == 5)) {
+        } else if (isset($request->order['0']['dir']) && ($request->order['0']['column'] != 0) && ($request->order['0']['column'] == 5)) {
             $query->whereHas('paperquality', function ($q) use ($request) {
                 return $q->orderBy('name', $request->order['0']['dir']);
             });
-        }
-        else if (isset($request->order['0']['dir']) && ($request->order['0']['column'] != 0) && ($request->order['0']['column'] == 6)) {
+        } else if (isset($request->order['0']['dir']) && ($request->order['0']['column'] != 0) && ($request->order['0']['column'] == 6)) {
             $query->whereHas('papergsm', function ($q) use ($request) {
                 return $q->orderBy('name', $request->order['0']['dir']);
             });
@@ -90,19 +90,17 @@ class PaperTypeController extends Controller
         if ($result->isNotEmpty()) {
             //dd($result);
             foreach ($result as $key => $value) {
-                
+
                 $view_icon = asset('images/lucide_view.png');
                 $edit_icon = asset('images/akar-icons_edit.png');
 
-                $lock_icon =  asset('images/eva_lock-outline.png'); 
+                $lock_icon =  asset('images/eva_lock-outline.png');
                 $unlock_icon =  asset('images/lock-open-right-outline.png');
 
-                if($value->status == "A")
-                {
+                if ($value->status == "A") {
                     $status = '<a href="#" class="updateStatus" data-id ="' . $value->id . '" data-status="lock" title="Unlock"><img src="' . $unlock_icon . '" /></a>';
                 }
-                if($value->status == "I")
-                {
+                if ($value->status == "I") {
                     $status = '<a href="#" class="updateStatus" data-id ="' . $value->id . '" data-status="unlock" title="Lock"><img src="' . $lock_icon . '" /></a>';
                 }
 
@@ -116,12 +114,12 @@ class PaperTypeController extends Controller
                 $subarray[] = $value->paperquality?->name ?? null;
                 $subarray[] = $value->papergsm?->name ?? null;
                 $subarray[] = '<div class="align-items-center d-flex dt-center"><a href="#" class="view_details" data-id ="' . $value->id . '" title="View Details"><img src="' . $view_icon . '" /></a>
-                <a href="' . $editLink . '" title="Edit"><img src="' . $edit_icon . '" /></a>'.$status.'</div>';
+                <a href="' . $editLink . '" title="Edit"><img src="' . $edit_icon . '" /></a>' . $status . '</div>';
                 $data[] = $subarray;
             }
         }
 
-        $count = PaperTypes::with('papercategory', 'papergsm', 'paperquality', 'papercolor', 'paperunit')->where('status', '!=' , 'D')->count();
+        $count = PaperTypes::with('papercategory', 'papergsm', 'paperquality', 'papercolor', 'paperunit')->where('status', '!=', 'D')->count();
 
         $output = [
             'draw' => intval($request->draw),
@@ -190,15 +188,15 @@ class PaperTypeController extends Controller
             'status' => 'A'
         ])->orderBy('id', 'asc')->get();
 
-        //echo "<PRE>";print_r($paperCategories);echo "</PRE>";exit;
+        $paperSizes = $this->getActiveSizes();
 
-        
         return view('papertype.create', [
             'paperCategories' => $paperCategories,
             'paperQuality' => $paperQuality,
             'paperColor' => $paperColor,
             'paperGsm' => $paperGsm,
-            'paperUnits' => $paperUnits
+            'paperUnits' => $paperUnits,
+            'paperSizes' => $paperSizes
         ]);
     }
 
@@ -217,7 +215,7 @@ class PaperTypeController extends Controller
             'paper_color_id' => ['required', 'numeric'],
             'paper_size_name' => ['required', 'string'],
             'paper_length' => ['required', 'string'],
-            'paper_width' => ['required', 'string'],
+            'paper_height' => ['required', 'string'],
             'paper_unit_id' => ['required', 'numeric'],
         ]);
 
@@ -229,8 +227,8 @@ class PaperTypeController extends Controller
             $papertype->paper_quality_id = $request->paper_quality_id;
             $papertype->paper_color_id = $request->paper_color_id;
             $papertype->paper_size_name = $request->paper_size_name;
-            $papertype->paper_height = $request->paper_length;
-            $papertype->paper_width = $request->paper_width;
+            $papertype->paper_height = ($request->paper_size_name == 1) ? $request->paper_height : null;
+            $papertype->paper_width = ($request->paper_size_name == 1) ? $request->paper_length : null;
             $papertype->paper_unit_id = $request->paper_unit_id;
             $save = $papertype->save();
 
@@ -303,26 +301,46 @@ class PaperTypeController extends Controller
             'paper_unit_id' => ['required', 'numeric'],
         ]);
 
-        try {  
-        $papertype = PaperTypes::find($id);
-        $papertype->paper_name = $request->paper_name;
-        $papertype->paper_category_id = $request->paper_category_id;
-        $papertype->paper_gsm_id = $request->paper_gsm_id;
-        $papertype->paper_quality_id = $request->paper_quality_id;
-        $papertype->paper_color_id = $request->paper_color_id;
-        $papertype->paper_size_name = $request->paper_size_name;
-        $papertype->paper_height = $request->paper_length;
-        $papertype->paper_width = $request->paper_width;
-        $papertype->paper_unit_id = $request->paper_unit_id;
-        $update = $papertype->update();
+        try {
+            $papertype = PaperTypes::find($id);
+            $papertype->paper_name = $request->paper_name;
+            $papertype->paper_category_id = $request->paper_category_id;
+            $papertype->paper_gsm_id = $request->paper_gsm_id;
+            $papertype->paper_quality_id = $request->paper_quality_id;
+            $papertype->paper_color_id = $request->paper_color_id;
+            $papertype->paper_size_name = $request->paper_size_name;
+            $papertype->paper_height = $request->paper_length;
+            $papertype->paper_width = $request->paper_width;
+            $papertype->paper_unit_id = $request->paper_unit_id;
+            $update = $papertype->update();
 
-        if ($update) {
-            return redirect()->route('papertype.index')->with('success', 'The paper type has been updated successfully.');
-        } else {
-            return redirect()->back()->with('fail', 'Failed to updated the user.');
-        }
+            if ($update) {
+                return redirect()->route('papertype.index')->with('success', 'The paper type has been updated successfully.');
+            } else {
+                return redirect()->back()->with('fail', 'Failed to updated the user.');
+            }
         } catch (Exception $th) {
             return redirect()->back()->with('fail', trans('messages.server_error'));
         }
+    }
+
+    public function get_size_details(Request $request)
+    {
+        $size_id = $request->size_val;
+
+        $size_details = $this->getSizeDetailsById($size_id);
+
+        $paperUnits = PaperUnits::where([
+            'status' => 'A'
+        ])->orderBy('id', 'asc')->get();
+
+        // dd($size_details->toArray(), $paperUnits->toArray());
+
+        $html = view('papertype.size-details', [
+            'size_details' => $size_details,
+            'paperUnits' => $paperUnits
+        ])->render();
+
+        return response()->json(['html' => $html]);
     }
 }

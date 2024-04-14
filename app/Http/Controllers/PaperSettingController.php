@@ -1,15 +1,17 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use Exception;
 use Carbon\Carbon;
-use App\Models\Paper_categories;
-use App\Models\Paper_size;
-use App\Models\Paper_quality;
+use App\Models\PaperSize;
 use App\Models\Paper_color;
-use App\Models\Paper_weights;
 use Illuminate\Http\Request;
+use App\Models\Paper_quality;
+use App\Models\Paper_weights;
 use Illuminate\Validation\Rule;
+use App\Models\Paper_categories;
+use App\Models\PaperUnits;
 use App\Rules\PaperSettingUniqueValueCheck;
 
 class PaperSettingController extends Controller
@@ -92,7 +94,7 @@ class PaperSettingController extends Controller
             'name'
         ];
 
-        $query = Paper_categories::where('id', '!=' , '0');
+        $query = Paper_categories::where('id', '!=', '0');
 
         if (isset($request->search['value'])) {
             $query->where(function ($q) use ($request) {
@@ -102,11 +104,9 @@ class PaperSettingController extends Controller
 
         if (isset($request->order['0']['dir']) && ($request->order['0']['column'] != 0) && ($request->order['0']['column'] == 2)) {
             $query->orderBy('name', $request->order['0']['dir']);
-        }
-        else if (isset($request->order['0']['dir']) && ($request->order['0']['column'] != 0) && ($request->order['0']['column'] == 3)) {
+        } else if (isset($request->order['0']['dir']) && ($request->order['0']['column'] != 0) && ($request->order['0']['column'] == 3)) {
             $query->orderBy('status', $request->order['0']['dir']);
-        }
-        else {
+        } else {
             $query->orderBy('created_at', 'desc');
         }
 
@@ -122,20 +122,18 @@ class PaperSettingController extends Controller
         if ($result->isNotEmpty()) {
             //dd($result);
             foreach ($result as $key => $value) {
-                
+
                 $delete_icon = asset('images/lucide_view.png');
                 $edit_icon = asset('images/akar-icons_edit.png');
 
-                $inactive_icon =  asset('images/eva_lock-outline.png'); 
+                $inactive_icon =  asset('images/eva_lock-outline.png');
                 $active_icon =  asset('images/lock-open-right-outline.png');
 
-                if($value->status == "A")
-                {
+                if ($value->status == "A") {
                     $status = '<a href="#" class="updateStatus" data-id ="' . $value->id . '" data-status="lock" title="Unlock"><img src="' . $active_icon . '" /></a>';
                     $presentStatus = '<span style="color:green">Active</span>';
                 }
-                if($value->status == "I")
-                {
+                if ($value->status == "I") {
                     $status = '<a href="#" class="updateStatus" data-id ="' . $value->id . '" data-status="unlock" title="Lock"><img src="' . $inactive_icon . '" /></a>';
                     $presentStatus = '<span style="color:red">Inactive</span>';
                 }
@@ -147,12 +145,12 @@ class PaperSettingController extends Controller
                 $subarray[] = $value->name;
                 $subarray[] = $presentStatus;
                 $subarray[] = '<div class="align-items-center d-flex dt-center justify-content-center">
-                <a href="' . $editLink . '" title="Edit"><img src="' . $edit_icon . '" /></a>'.$status.'</div>';
+                <a href="' . $editLink . '" title="Edit"><img src="' . $edit_icon . '" /></a>' . $status . '</div>';
                 $data[] = $subarray;
             }
         }
 
-        $count = Paper_categories::where('id', '!=' , '0')->count();
+        $count = Paper_categories::where('id', '!=', '0')->count();
 
         $output = [
             'draw' => intval($request->draw),
@@ -192,33 +190,47 @@ class PaperSettingController extends Controller
 
     public function sizelist()
     {
-        return view('papersize.index');
+        return view('settings.papersize.index');
     }
 
     public function sizelist_data(Request $request)
     {
         $column = [
             'id',
-            'name'
+            'id',
+            'name',
+            'height',
+            'width',
+            'unit_id',
+            'status'
         ];
 
-        $query = Paper_size::where('id', '!=' , '0');
+        $query = PaperSize::with('paperunit');
 
         if (isset($request->search['value'])) {
             $query->where(function ($q) use ($request) {
-                $q->where('name', 'LIKE', "%" . $request->search['value'] . "%");
+                $q->where('name', 'LIKE', "%" . $request->search['value'] . "%")
+                    ->orWhere('height', 'LIKE', "%" . $request->search['value'] . "%")
+                    ->orWhere('width', 'LIKE', "%" . $request->search['value'] . "%")
+                    ->orWhere('status', 'LIKE', "%" . $request->search['value'] . "%")
+                    ->orWhereHas('paperunit', function ($q) use ($request) {
+                        $q->where('name', 'LIKE', "%" . $request->search['value'] . "%");
+                    });
             });
         }
 
-        if (isset($request->order['0']['dir']) && ($request->order['0']['column'] != 0) && ($request->order['0']['column'] == 2)) {
-            $query->orderBy('name', $request->order['0']['dir']);
+
+        if (isset($request->order['0']['dir']) && ($request->order['0']['column'] != 0) && ($request->order['0']['column'] != 5)) {
+            $query->orderBy($column[$request->order['0']['column']], $request->order['0']['dir']);
         }
-        else if (isset($request->order['0']['dir']) && ($request->order['0']['column'] != 0) && ($request->order['0']['column'] == 3)) {
-            $query->orderBy('status', $request->order['0']['dir']);
-        }
-        else {
+        if (isset($request->order['0']['dir']) && ($request->order['0']['column'] != 0) && ($request->order['0']['column'] == 5)) {
+            $query->when($request->order['0']['column'] == 5, function ($q) use ($request) {
+                return $q->orderBy('name', $request->order['0']['dir']);
+            });
+        } else {
             $query->orderBy('created_at', 'desc');
         }
+
 
         $number_filtered_row = $query->count();
 
@@ -230,39 +242,40 @@ class PaperSettingController extends Controller
 
         $data = [];
         if ($result->isNotEmpty()) {
-            //dd($result);
             foreach ($result as $key => $value) {
-                
-                $delete_icon = asset('images/lucide_view.png');
+
                 $edit_icon = asset('images/akar-icons_edit.png');
 
-                $inactive_icon =  asset('images/eva_lock-outline.png'); 
+                $inactive_icon =  asset('images/eva_lock-outline.png');
                 $active_icon =  asset('images/lock-open-right-outline.png');
 
-                if($value->status == "A")
-                {
+                if ($value->status == "A") {
                     $status = '<a href="#" class="updateStatus" data-id ="' . $value->id . '" data-status="lock" title="Unlock"><img src="' . $active_icon . '" /></a>';
                     $presentStatus = '<span style="color:green">Active</span>';
                 }
-                if($value->status == "I")
-                {
+                if ($value->status == "I") {
                     $status = '<a href="#" class="updateStatus" data-id ="' . $value->id . '" data-status="unlock" title="Lock"><img src="' . $inactive_icon . '" /></a>';
                     $presentStatus = '<span style="color:red">Inactive</span>';
                 }
 
-                $editLink = route('papersettings.edit_paper_size', encrypt($value->id));
+
+                $editLink = route('settings.papersettings.edit-paper-size', encrypt($value->id));
+
                 $subarray = [];
                 $subarray[] = ++$key . '.';
                 $subarray[] = $value->id;
                 $subarray[] = $value->name;
+                $subarray[] = $value->height;
+                $subarray[] = $value->width;
+                $subarray[] = $value->paperunit?->name ?? null;
                 $subarray[] = $presentStatus;
                 $subarray[] = '<div class="align-items-center d-flex dt-center justify-content-center">
-                <a href="' . $editLink . '" title="Edit"><img src="' . $edit_icon . '" /></a>' . $status . '</div>';
+                                    <a href="' . $editLink . '" title="Edit"><img src="' . $edit_icon . '" /></a>' . $status . '</div>';
                 $data[] = $subarray;
             }
         }
 
-        $count = Paper_size::where('id', '!=' , '0')->count();
+        $count = PaperSize::with('paperunit')->count();
 
         $output = [
             'draw' => intval($request->draw),
@@ -285,7 +298,7 @@ class PaperSettingController extends Controller
             $id = $request->rowid;
             $status = $request->rowstatus == 'lock' ? 'I' : 'A';
 
-            $papersize = Paper_size::findOrFail($id);
+            $papersize = PaperSize::findOrFail($id);
             $papersize->status = $status;
             $papersize->update();
 
@@ -301,26 +314,35 @@ class PaperSettingController extends Controller
 
     public function createsize()
     {
-        return view('papersize.create');
+        $paperUnit = PaperUnits::where([
+            'status' => 'A'
+        ])
+            ->orderBy('name', 'asc')
+            ->get();
+        return view('settings.papersize.create', [
+            'units' => $paperUnit
+        ]);
     }
 
     public function storepapersize(Request $request)
     {
         $request->validate([
-            'size_name' => [
-                'required',
-                'string',
-                new PaperSettingUniqueValueCheck('name', 'paperSize', '', 'The size name :input has already been taken.')
-            ],
+            'size_name'     => ['required', 'string', 'unique:paper_sizes,name'],
+            'height'        => ['required', 'regex:/^[0-9]+(\.[0-9]{1,2})?$/'],
+            'width'         => ['required', 'regex:/^[0-9]+(\.[0-9]{1,2})?$/'],
+            'unit_id'       => ['required'],
         ]);
 
         try {
-            $papersize = new Paper_size();
-            $papersize->name = $request->size_name;
+            $papersize = new PaperSize();
+            $papersize->name    = $request->size_name;
+            $papersize->height  = $request->height;
+            $papersize->width   = $request->width;
+            $papersize->unit_id = $request->unit_id;
             $save = $papersize->save();
 
             if ($save) {
-                return redirect()->route('papersettings.paper_size_list')->with('success', 'The paper size has been created successfully.');
+                return redirect()->route('settings.papersettings.paper-size')->with('success', 'The paper size has been created successfully.');
             } else {
                 return redirect()->back()->with('fail', 'Failed to create the paper size.');
             }
@@ -332,31 +354,39 @@ class PaperSettingController extends Controller
     public function editpapersize($id)
     {
         $id = decrypt($id);
-        $papersize  = Paper_size::findOrFail($id);
-        return view('papersize.edit', [
-            'papersize' => $papersize
+        $papersize  = PaperSize::findOrFail($id);
+        $paperUnit = PaperUnits::where([
+            'status' => 'A'
+        ])
+            ->orderBy('name', 'asc')
+            ->get();
+        return view('settings.papersize.edit', [
+            'papersize' => $papersize,
+            'units' => $paperUnit
         ]);
     }
 
     public function updatepapersize(Request $request, $id)
     {
+        // dd($request->all());
         $id = decrypt($id);
-
         $request->validate([
-            'size_name' => [
-                'required',
-                'string',
-                new PaperSettingUniqueValueCheck('name', 'paperSize', $id, 'The size name :input has already been taken.')
-            ],
+            'size_name' => ['required', 'string', Rule::unique('paper_sizes', 'name')->ignore($id)],
+            'height'        => ['required', 'regex:/^[0-9]+(\.[0-9]{1,2})?$/'],
+            'width'         => ['required', 'regex:/^[0-9]+(\.[0-9]{1,2})?$/'],
+            'unit_id'       => ['required'],
         ]);
 
         try {
-            $papersize = Paper_size::find($id);
-            $papersize->name = $request->size_name;
+            $papersize = PaperSize::find($id);
+            $papersize->name    = $request->size_name;
+            $papersize->height  = $request->height;
+            $papersize->width   = $request->width;
+            $papersize->unit_id = $request->unit_id;
             $update = $papersize->update();
 
             if ($update) {
-                return redirect()->route('papersettings.paper_size_list')->with('success', 'The paper size has been updated successfully.');
+                return redirect()->route('settings.papersettings.paper-size')->with('success', 'The paper size has been updated successfully.');
             } else {
                 return redirect()->back()->with('fail', 'Failed to updated the paper size.');
             }
@@ -378,7 +408,7 @@ class PaperSettingController extends Controller
             'name'
         ];
 
-        $query = Paper_quality::where('id', '!=' , '0');
+        $query = Paper_quality::where('id', '!=', '0');
 
         if (isset($request->search['value'])) {
             $query->where(function ($q) use ($request) {
@@ -388,11 +418,9 @@ class PaperSettingController extends Controller
 
         if (isset($request->order['0']['dir']) && ($request->order['0']['column'] != 0) && ($request->order['0']['column'] == 2)) {
             $query->orderBy('name', $request->order['0']['dir']);
-        }
-        else if (isset($request->order['0']['dir']) && ($request->order['0']['column'] != 0) && ($request->order['0']['column'] == 3)) {
+        } else if (isset($request->order['0']['dir']) && ($request->order['0']['column'] != 0) && ($request->order['0']['column'] == 3)) {
             $query->orderBy('status', $request->order['0']['dir']);
-        }
-        else {
+        } else {
             $query->orderBy('created_at', 'desc');
         }
 
@@ -408,20 +436,18 @@ class PaperSettingController extends Controller
         if ($result->isNotEmpty()) {
             //dd($result);
             foreach ($result as $key => $value) {
-                
+
                 $delete_icon = asset('images/lucide_view.png');
                 $edit_icon = asset('images/akar-icons_edit.png');
 
-                $inactive_icon =  asset('images/eva_lock-outline.png'); 
+                $inactive_icon =  asset('images/eva_lock-outline.png');
                 $active_icon =  asset('images/lock-open-right-outline.png');
 
-                if($value->status == "A")
-                {
+                if ($value->status == "A") {
                     $status = '<a href="#" class="updateStatus" data-id ="' . $value->id . '" data-status="lock" title="Unlock"><img src="' . $active_icon . '" /></a>';
                     $presentStatus = '<span style="color:green">Active</span>';
                 }
-                if($value->status == "I")
-                {
+                if ($value->status == "I") {
                     $status = '<a href="#" class="updateStatus" data-id ="' . $value->id . '" data-status="unlock" title="Lock"><img src="' . $inactive_icon . '" /></a>';
                     $presentStatus = '<span style="color:red">Inactive</span>';
                 }
@@ -438,7 +464,7 @@ class PaperSettingController extends Controller
             }
         }
 
-        $count = Paper_quality::where('id', '!=' , '0')->count();
+        $count = Paper_quality::where('id', '!=', '0')->count();
 
         $output = [
             'draw' => intval($request->draw),
@@ -554,7 +580,7 @@ class PaperSettingController extends Controller
             'name'
         ];
 
-        $query = Paper_color::where('id', '!=' , '0');
+        $query = Paper_color::where('id', '!=', '0');
 
         if (isset($request->search['value'])) {
             $query->where(function ($q) use ($request) {
@@ -564,11 +590,9 @@ class PaperSettingController extends Controller
 
         if (isset($request->order['0']['dir']) && ($request->order['0']['column'] != 0) && ($request->order['0']['column'] == 2)) {
             $query->orderBy('name', $request->order['0']['dir']);
-        }
-        else if (isset($request->order['0']['dir']) && ($request->order['0']['column'] != 0) && ($request->order['0']['column'] == 3)) {
+        } else if (isset($request->order['0']['dir']) && ($request->order['0']['column'] != 0) && ($request->order['0']['column'] == 3)) {
             $query->orderBy('status', $request->order['0']['dir']);
-        }
-        else {
+        } else {
             $query->orderBy('created_at', 'desc');
         }
 
@@ -584,20 +608,18 @@ class PaperSettingController extends Controller
         if ($result->isNotEmpty()) {
             //dd($result);
             foreach ($result as $key => $value) {
-                
+
                 $delete_icon = asset('images/lucide_view.png');
                 $edit_icon = asset('images/akar-icons_edit.png');
 
-                $inactive_icon =  asset('images/eva_lock-outline.png'); 
+                $inactive_icon =  asset('images/eva_lock-outline.png');
                 $active_icon =  asset('images/lock-open-right-outline.png');
 
-                if($value->status == "A")
-                {
+                if ($value->status == "A") {
                     $status = '<a href="#" class="updateStatus" data-id ="' . $value->id . '" data-status="lock" title="Unlock"><img src="' . $active_icon . '" /></a>';
                     $presentStatus = '<span style="color:green">Active</span>';
                 }
-                if($value->status == "I")
-                {
+                if ($value->status == "I") {
                     $status = '<a href="#" class="updateStatus" data-id ="' . $value->id . '" data-status="unlock" title="Lock"><img src="' . $inactive_icon . '" /></a>';
                     $presentStatus = '<span style="color:red">Inactive</span>';
                 }
@@ -614,7 +636,7 @@ class PaperSettingController extends Controller
             }
         }
 
-        $count = Paper_color::where('id', '!=' , '0')->count();
+        $count = Paper_color::where('id', '!=', '0')->count();
 
         $output = [
             'draw' => intval($request->draw),
@@ -731,7 +753,7 @@ class PaperSettingController extends Controller
             'name'
         ];
 
-        $query = Paper_weights::where('id', '!=' , '0');
+        $query = Paper_weights::where('id', '!=', '0');
 
         if (isset($request->search['value'])) {
             $query->where(function ($q) use ($request) {
@@ -741,11 +763,9 @@ class PaperSettingController extends Controller
 
         if (isset($request->order['0']['dir']) && ($request->order['0']['column'] != 0) && ($request->order['0']['column'] == 2)) {
             $query->orderBy('name', $request->order['0']['dir']);
-        }
-        else if (isset($request->order['0']['dir']) && ($request->order['0']['column'] != 0) && ($request->order['0']['column'] == 3)) {
+        } else if (isset($request->order['0']['dir']) && ($request->order['0']['column'] != 0) && ($request->order['0']['column'] == 3)) {
             $query->orderBy('status', $request->order['0']['dir']);
-        }
-        else {
+        } else {
             $query->orderBy('created_at', 'desc');
         }
 
@@ -761,20 +781,18 @@ class PaperSettingController extends Controller
         if ($result->isNotEmpty()) {
             //dd($result);
             foreach ($result as $key => $value) {
-                
+
                 $delete_icon = asset('images/lucide_view.png');
                 $edit_icon = asset('images/akar-icons_edit.png');
 
-                $inactive_icon =  asset('images/eva_lock-outline.png'); 
+                $inactive_icon =  asset('images/eva_lock-outline.png');
                 $active_icon =  asset('images/lock-open-right-outline.png');
 
-                if($value->status == "A")
-                {
+                if ($value->status == "A") {
                     $status = '<a href="#" class="updateStatus" data-id ="' . $value->id . '" data-status="lock" title="Unlock"><img src="' . $active_icon . '" /></a>';
                     $presentStatus = '<span style="color:green">Active</span>';
                 }
-                if($value->status == "I")
-                {
+                if ($value->status == "I") {
                     $status = '<a href="#" class="updateStatus" data-id ="' . $value->id . '" data-status="unlock" title="Lock"><img src="' . $inactive_icon . '" /></a>';
                     $presentStatus = '<span style="color:red">Inactive</span>';
                 }
@@ -791,7 +809,7 @@ class PaperSettingController extends Controller
             }
         }
 
-        $count = Paper_weights::where('id', '!=' , '0')->count();
+        $count = Paper_weights::where('id', '!=', '0')->count();
 
         $output = [
             'draw' => intval($request->draw),
