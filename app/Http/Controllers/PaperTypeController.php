@@ -13,13 +13,14 @@ use Illuminate\Http\Request;
 use App\Models\Paper_quality;
 use App\Models\Paper_weights;
 use App\Traits\PaperSizeTrait;
+use App\Traits\PaperTypeTrait;
 use Illuminate\Validation\Rule;
 use App\Models\Paper_categories;
 use App\Rules\PaperTypeUniqueValueCheck;
 
 class PaperTypeController extends Controller
 {
-    use PaperSizeTrait;
+    use PaperSizeTrait, PaperTypeTrait;
 
     public function index()
     {
@@ -134,7 +135,7 @@ class PaperTypeController extends Controller
 
     public function view(Request $request)
     {
-        $papertype = PaperTypes::with('papercategory', 'papergsm', 'paperquality', 'papercolor', 'paperunit')->findOrFail($request->rowid);
+        $papertype = $this->getTypeDetailsById($request->rowid);
         $html = view('papertype.details', ['papertype' => $papertype])->render();
         return response()->json($html);
     }
@@ -213,13 +214,21 @@ class PaperTypeController extends Controller
             'paper_gsm_id' => ['required', 'numeric'],
             'paper_quality_id' => ['required', 'numeric'],
             'paper_color_id' => ['required', 'numeric'],
-            'paper_size_name' => ['required', 'string'],
-            'paper_length' => ['required', 'string'],
-            'paper_height' => ['required', 'string'],
-            'paper_unit_id' => ['required', 'numeric'],
         ]);
 
         try {
+            if (!empty($request->paper_size_name)) {
+                if (empty($request->paper_height)) {
+                    return redirect()->back()->with('fail', 'Paper height field is required.');
+                }
+                if (empty($request->paper_length)) {
+                    return redirect()->back()->with('fail', 'Paper width field is required.');
+                }
+                if (empty($request->paper_unit_id)) {
+                    return redirect()->back()->with('fail', 'Paper unit field is required.');
+                }
+            }
+
             $papertype = new PaperTypes();
             $papertype->paper_name = $request->paper_name;
             $papertype->paper_category_id = $request->paper_category_id;
@@ -269,20 +278,22 @@ class PaperTypeController extends Controller
         $paperUnits = PaperUnits::where([
             'status' => 'A'
         ])->orderBy('id', 'asc')->get();
-
+        $paperSizes = $this->getActiveSizes();
         return view('papertype.edit', [
-            'papertypes' => $papertypes,
-            'paperCategories' => $paperCategories,
-            'paperQuality' => $paperQuality,
-            'paperColor' => $paperColor,
-            'paperGsm' => $paperGsm,
-            'paperUnits' => $paperUnits
+            'papertypes'        => $papertypes,
+            'paperCategories'   => $paperCategories,
+            'paperQuality'      => $paperQuality,
+            'paperColor'        => $paperColor,
+            'paperGsm'          => $paperGsm,
+            'paperUnits'        => $paperUnits,
+            'paperSizes'        => $paperSizes
         ]);
     }
 
 
     public function update(Request $request, $id)
     {
+
         $id = decrypt($id);
 
         $request->validate([
@@ -295,13 +306,21 @@ class PaperTypeController extends Controller
             'paper_gsm_id' => ['required', 'numeric'],
             'paper_quality_id' => ['required', 'numeric'],
             'paper_color_id' => ['required', 'numeric'],
-            'paper_size_name' => ['required', 'string'],
-            'paper_length' => ['required', 'string'],
-            'paper_width' => ['required', 'string'],
-            'paper_unit_id' => ['required', 'numeric'],
         ]);
 
         try {
+            if (!empty($request->paper_size_name)) {
+                if (empty($request->paper_height)) {
+                    return redirect()->back()->with('fail', 'Paper height field is required.');
+                }
+                if (empty($request->paper_length)) {
+                    return redirect()->back()->with('fail', 'Paper width field is required.');
+                }
+                if (empty($request->paper_unit_id)) {
+                    return redirect()->back()->with('fail', 'Paper unit field is required.');
+                }
+            }
+
             $papertype = PaperTypes::find($id);
             $papertype->paper_name = $request->paper_name;
             $papertype->paper_category_id = $request->paper_category_id;
@@ -309,8 +328,8 @@ class PaperTypeController extends Controller
             $papertype->paper_quality_id = $request->paper_quality_id;
             $papertype->paper_color_id = $request->paper_color_id;
             $papertype->paper_size_name = $request->paper_size_name;
-            $papertype->paper_height = $request->paper_length;
-            $papertype->paper_width = $request->paper_width;
+            $papertype->paper_height = $request->paper_height;
+            $papertype->paper_width = $request->paper_length;
             $papertype->paper_unit_id = $request->paper_unit_id;
             $update = $papertype->update();
 

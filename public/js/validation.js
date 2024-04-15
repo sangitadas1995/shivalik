@@ -3,7 +3,7 @@ $(document).ready(function () {
     $(".alphaNumericChar").on("keyup", function () {
         var inputValue = $(this).val();
         // Remove non-alphanumeric characters
-        var sanitizedValue = inputValue.ralphaNumericChareplace(/[^a-zA-Z0-9]/g, '');
+        var sanitizedValue = inputValue.replace(/[^a-zA-Z0-9]/g, '');
         $(this).val(sanitizedValue); // Update input field with sanitized value
     });
 
@@ -55,5 +55,11 @@ $(document).ready(function () {
         $(this).val(sanitizedValue);
     });
 
+    $(".gsm_value").on("keyup", function () {
+        var inputValue = $(this).val();
+        // Remove non-alphanumeric characters
+        var sanitizedValue = inputValue.replace(/[^a-zA-Z0-9/]/g, '');
+        $(this).val(sanitizedValue); // Update input field with sanitized value
+    });
 
 });
