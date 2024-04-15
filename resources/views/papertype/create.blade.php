@@ -101,7 +101,6 @@
           </div>
         </div>
 
-
         <div class="col-md-6">
           <div class="mb-3">
             <label class="form-label"><span class="text-danger">*</span>Size Name :</label>
@@ -121,7 +120,7 @@
 
       <div class="text-end">
         <button type="reset" class="btn grey-primary">Cancel</button>
-        <button type="submit" class="btn black-btn">Save & Continue</button>
+        <button type="submit" class="btn black-btn">Save</button>
       </div>
     </form>
   </div>

@@ -1,7 +1,7 @@
 <div class="row">
     <div class="col-md-6">
         <div class="mb-3">
-            <label class="form-label"><span class="text-danger">*</span>Length :</label>
+            <label class="form-label"><span class="text-danger">*</span>Width :</label>
             <input type="text" class="form-control" name="paper_length" id="paper_length" value="{{ $size_details->width }}" {{ $size_details->name != 'Custom' ? 'readonly' : null }} />
             <small class="text-danger error_paper_size_name"></small>
         </div>
