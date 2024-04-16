@@ -66,8 +66,17 @@
     </div>
 </div>
 <div class="row">
+    <div class="d-flex gap-2 table-title align-items-center">
+
+        <h4 class="mb-0">
+            Warehouse: ABC Printing Company, Mayur vihar, Delhi
+        </h4>
+        <span>
+            <img src="{{ asset('images/oui_tag.png') }}" />
+        </span>
+    </div>
     <div class="table-responsive p-0 table-sec mb-4">
-        <table class="table table-normal mb-0">
+        <table class="table table-normal mb-0" style="width: 1194.8px;">
             <thead>
                 <tr>
                     <th>Product</th>
@@ -83,7 +92,7 @@
                     <td>80GSM</td>
                     <td>29-Feb-24</td>
                     <td>200</td>
-                    <td>55</td>
+                    <td class="text-green">55</td>
                     <td>50</td>
                     <td style="text-align: center">
                         <a href="#"><img src="{{ asset('images/inventoryIcon-1.png') }}" /></a>
@@ -95,8 +104,8 @@
                     <td>70GSM</td>
                     <td>25-Feb-24</td>
                     <td>400</td>
-                    <td>50</td>
-                    <td>40</td>
+                    <td class="text-red">50</td>
+                    <td class="">40</td>
                     <td style="text-align: center">
                         <a href="#"><img src="{{ asset('images/inventoryIcon-1.png') }}" /></a>
                         <a href="#"><img src="{{ asset('images/inventoryIcon-2.png') }}" /></a>
