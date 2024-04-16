@@ -559,9 +559,17 @@ a {
     padding: 15px;
 }
 
+.table-sec .table tr th {
+    color: #595c5f;
+}
+
+.table-sec .table tr td {
+    color: #5a6981;
+}
+
 .table-sec .table tr th,
 .table-sec .table tr td {
-    font-size: 12px;
+    font-size: 14px;
     vertical-align: middle;
 }
 
@@ -1800,4 +1808,12 @@ input[type="file"]::file-selector-button {
             }
         }
     }
+}
+
+.text-green {
+    color: #18bb6b !important;
+}
+
+.text-red {
+    color: #ff2459 !important;
 }

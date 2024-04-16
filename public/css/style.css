@@ -538,9 +538,15 @@ a {
     padding: 15px;
 }
 
+.table-sec .table tr th {
+    color: #595c5f;
+}
+.table-sec .table tr td {
+    color: #5a6981;
+}
 .table-sec .table tr th,
 .table-sec .table tr td {
-    font-size: 12px;
+    font-size: 14px;
     vertical-align: middle;
 }
 
@@ -1583,10 +1589,11 @@ input[type="file"]::file-selector-button {
 }
 #service_type_list tbody tr td:last-child .d-flex {
     justify-content: center;
-} /*# sourceMappingURL=scssconvert.css.map */
+}
+
 .text-green {
-    color: #18bb6b;
+    color: #18bb6b !important;
 }
 .text-red {
-    color: #ff2459;
+    color: #ff2459 !important;
 }
