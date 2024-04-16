@@ -65,7 +65,7 @@
         </div>
     </div>
 </div>
-<div class="row">
+<div class="">
     <div class="d-flex gap-2 table-title align-items-center">
 
         <h4 class="mb-0">
@@ -76,7 +76,7 @@
         </span>
     </div>
     <div class="table-responsive p-0 table-sec mb-4">
-        <table class="table table-normal mb-0" style="width: 1194.8px;">
+        <table class="table table-normal mb-0">
             <thead>
                 <tr>
                     <th>Product</th>
