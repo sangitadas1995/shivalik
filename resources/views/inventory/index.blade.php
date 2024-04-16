@@ -76,7 +76,7 @@
         </span>
     </div>
     <div class="table-responsive p-0 table-sec mb-4">
-        <table class="table table-normal mb-0" style="width: 1194.8px;">
+        <table class="table table-normal mb-0">
             <thead>
                 <tr>
                     <th>Product</th>
