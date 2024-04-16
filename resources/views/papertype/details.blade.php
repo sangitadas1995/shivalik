@@ -82,54 +82,56 @@
                                    {{ $papertype->papergsm?->name ?? null }}
                                 </div>
                             </div>
-                            <!-- table row end -->
-                            <!-- table row -->
-                            <div class="col-5 child-table-row">
-                                <div>
-                                    Size name
+                            @if (!empty($papertype->papersize))    
+                                <!-- table row end -->
+                                <!-- table row -->
+                                <div class="col-5 child-table-row">
+                                    <div>
+                                        Size name
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-7 child-table-row">
-                                <div>
-                                    {{ $papertype->paper_size_name }}
+                                <div class="col-7 child-table-row">
+                                    <div>
+                                        {{ $papertype->papersize?->name ?? null }}
+                                    </div>
                                 </div>
-                            </div>
-                            <!-- table row end -->
-                            <!-- table row -->
-                            <div class="col-5 child-table-row">
-                                <div>
-                                    Unit
+                                <!-- table row end -->
+                                <!-- table row -->
+                                <div class="col-5 child-table-row">
+                                    <div>
+                                        Unit
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-7 child-table-row">
-                                <div>
-                                    {{ $papertype->paperunit?->name ?? null }}
+                                <div class="col-7 child-table-row">
+                                    <div>
+                                        {{ $papertype->paperunit?->name ?? null }}
+                                    </div>
                                 </div>
-                            </div>
-                            <!-- table row end -->
-                            <!-- table row -->
-                            <div class="col-5 child-table-row">
-                                <div>
-                                    Height
+                                <!-- table row end -->
+                                <!-- table row -->
+                                <div class="col-5 child-table-row">
+                                    <div>
+                                        Height
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-7 child-table-row">
-                                <div>
-                                    {{ $papertype->paper_height }}
+                                <div class="col-7 child-table-row">
+                                    <div>
+                                        {{ $papertype->paper_height }}
+                                    </div>
                                 </div>
-                            </div>
-                            <!-- table row end -->
-                            <!-- table row -->
-                            <div class="col-5 child-table-row">
-                                <div>
-                                    Width
+                                <!-- table row end -->
+                                <!-- table row -->
+                                <div class="col-5 child-table-row">
+                                    <div>
+                                        Width
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-7 child-table-row">
-                                <div>
-                                    {{ $papertype->paper_width }}
+                                <div class="col-7 child-table-row">
+                                    <div>
+                                        {{ $papertype->paper_width }}
+                                    </div>
                                 </div>
-                            </div>
+                            @endif
                         </div>
                     </div>
                 </div>

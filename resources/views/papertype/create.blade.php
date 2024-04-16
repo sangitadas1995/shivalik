@@ -103,7 +103,7 @@
 
         <div class="col-md-6">
           <div class="mb-3">
-            <label class="form-label"><span class="text-danger">*</span>Size Name :</label>
+            <label class="form-label">Paper Size :</label>
             <select class="form-select paper_size_name" aria-label="Default select example" name="paper_size_name" id="paper_size_name">
               <option value="">Select Paper Size</option>
               @if (!empty($paperSizes) && $paperSizes->isNotEmpty())
@@ -198,6 +198,8 @@
             return Swal.fire('Error!', 'Something went wrong, please try again.', 'error');
           }
         });
+      } else {
+        $('.size_details_goes_here').html('');
       }
     });
 

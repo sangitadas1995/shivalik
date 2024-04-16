@@ -25,7 +25,7 @@
         <div class="col-md-12">
           <div class="mb-3">
             <label class="form-label"><span class="text-danger">*</span>Value (GSM) :</label>
-            <input type="text" class="form-control alphaChar" name="thickness_value" id="value" value="{{ old('thickness_value') }}"/>
+            <input type="text" class="form-control gsm_value" name="thickness_value" id="value" value="{{ old('thickness_value') }}"/>
             <small class="text-danger error_name"></small>
           </div>
         </div>
