@@ -65,7 +65,7 @@
         </div>
     </div>
 </div>
-<div class="row">
+<div class="">
     <div class="d-flex gap-2 table-title align-items-center">
 
         <h4 class="mb-0">
