@@ -66,50 +66,55 @@
     </div>
 </div>
 <div class="row">
-
     <div class="table-responsive p-0 table-sec mb-4">
         <table class="table table-normal mb-0">
             <thead>
                 <tr>
-                    <th>ID</th>
-                    <th>Date</th>
-                    <th>Company Name</th>
-                    <th>Contact Person</th>
-                    <th>City</th>
-                    <th>No. of Orders</th>
-                    <th>Print Margin</th>
+                    <th>Product</th>
+                    <th>Last Updated</th>
+                    <th>Opening Stock</th>
+                    <th>Current Stock</th>
+                    <th>Low Stock Level</th>
                     <th style="text-align: center">Action</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
-                    <td>1.</td>
-                    <td>Maxbridge Solutions</td>
-                    <td>#01234567</td>
-                    <td>#01234567</td>
-                    <td>Maxbridge Solutions</td>
-                    <td>Saikat Mitra</td>
-                    <td>Kolkata</td>
+                    <td>80GSM</td>
+                    <td>29-Feb-24</td>
+                    <td>200</td>
+                    <td>55</td>
+                    <td>50</td>
                     <td style="text-align: center">
-                        <a href="./edit-vendor.html"><img src="images/lucide_view.png" /></a>
-                        <a href="#"><img src="images/akar-icons_edit.png" /></a>
+                        <a href="#"><img src="{{ asset('images/inventoryIcon-1.png') }}" /></a>
+                        <a href="#"><img src="{{ asset('images/inventoryIcon-2.png') }}" /></a>
+                        <a href="#"><img src="{{ asset('images/inventoryIcon-3.png') }}" /></a>
                     </td>
                 </tr>
                 <tr>
-                    <td>1.</td>
-                    <td>Maxbridge Solutions</td>
-                    <td>#01234567</td>
-                    <td>#01234567</td>
-                    <td>Maxbridge Solutions</td>
-                    <td>Saikat Mitra</td>
-                    <td>Kolkata</td>
+                    <td>70GSM</td>
+                    <td>25-Feb-24</td>
+                    <td>400</td>
+                    <td>50</td>
+                    <td>40</td>
                     <td style="text-align: center">
-                        <a href="./edit-vendor.html"><img src="images/lucide_view.png" /></a>
-                        <a href="#"><img src="images/akar-icons_edit.png" /></a>
+                        <a href="#"><img src="{{ asset('images/inventoryIcon-1.png') }}" /></a>
+                        <a href="#"><img src="{{ asset('images/inventoryIcon-2.png') }}" /></a>
+                        <a href="#"><img src="{{ asset('images/inventoryIcon-3.png') }}" /></a>
                     </td>
                 </tr>
-
-
+                <tr>
+                    <td>100GSM</td>
+                    <td>29-March-24</td>
+                    <td>400</td>
+                    <td>200</td>
+                    <td>100</td>
+                    <td style="text-align: center">
+                        <a href="#"><img src="{{ asset('images/inventoryIcon-1.png') }}" /></a>
+                        <a href="#"><img src="{{ asset('images/inventoryIcon-2.png') }}" /></a>
+                        <a href="#"><img src="{{ asset('images/inventoryIcon-3.png') }}" /></a>
+                    </td>
+                </tr>
             </tbody>
         </table>
     </div>
