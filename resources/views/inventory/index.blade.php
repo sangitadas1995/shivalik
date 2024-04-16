@@ -8,9 +8,8 @@
     <div class="row justify-content-end">
         <div class="col-md-6">
             <div class="text-end mb-4">
-                <a href="{{ route('inventory.warehouse.add') }}" class="btn primary-btn">
-                    <svg width="24" height="22" viewBox="0 0 24 22" fill="none"
-                        xmlns="http://www.w3.org/2000/svg">
+                <a href="#" class="btn primary-btn">
+                    <svg width="24" height="22" viewBox="0 0 24 22" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path
                             d="M21.333 6.74167V19.1667H18.9997V9.83333H4.99967V19.1667H2.66634V6.74167L11.9997 3.00833L21.333 6.74167ZM23.6663 21.5V5.16667L11.9997 0.5L0.333008 5.16667V21.5H7.33301V12.1667H16.6663V21.5H23.6663ZM10.833 19.1667H8.49967V21.5H10.833V19.1667ZM13.1663 15.6667H10.833V18H13.1663V15.6667ZM15.4997 19.1667H13.1663V21.5H15.4997V19.1667Z"
                             fill="white" />
@@ -18,8 +17,7 @@
 
                     Add Warehouse</a>
                 <a href="#" class="btn primary-btn">
-                    <svg width="27" height="27" viewBox="0 0 27 27" fill="none"
-                        xmlns="http://www.w3.org/2000/svg">
+                    <svg width="27" height="27" viewBox="0 0 27 27" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path
                             d="M11.8125 20.2632V12.3398L3.375 8.12109V19.7227L10.5469 23.3218L10.1382 24.9961L1.6875 20.7773V6.22266L12.6562 0.751465L23.625 6.22266V9.78223C23.0098 9.87891 22.4473 10.0767 21.9375 10.3755V8.12109L13.5 12.3398V18.5757L11.8125 20.2632ZM9.94043 3.98145L17.6396 8.38477L20.896 6.75L12.6562 2.62354L9.94043 3.98145ZM12.6562 10.8765L15.8203 9.29443L8.12109 4.89111L4.4165 6.75L12.6562 10.8765ZM24.3633 11.8125C24.7324 11.8125 25.0752 11.8784 25.3916 12.0103C25.708 12.1421 25.9893 12.3223 26.2354 12.5508C26.4814 12.7793 26.666 13.0562 26.7891 13.3813C26.9121 13.7065 26.9824 14.0537 27 14.4229C27 14.7656 26.9341 15.0996 26.8022 15.4248C26.6704 15.75 26.4814 16.0356 26.2354 16.2817L16.7827 25.7344L11.8125 26.9736L13.0518 22.0034L22.5044 12.564C22.7593 12.3091 23.0449 12.1201 23.3613 11.9971C23.6777 11.874 24.0117 11.8125 24.3633 11.8125ZM25.0356 15.0952C25.2202 14.9106 25.3125 14.6865 25.3125 14.4229C25.3125 14.1504 25.2246 13.9307 25.0488 13.7637C24.873 13.5967 24.6445 13.5088 24.3633 13.5C24.2402 13.5 24.1216 13.5176 24.0073 13.5527C23.8931 13.5879 23.792 13.6538 23.7041 13.7505L14.5811 22.8735L14.1328 24.6533L15.9126 24.2051L25.0356 15.0952Z"
                             fill="white" />
@@ -68,63 +66,50 @@
     </div>
 </div>
 <div class="row">
-    <h4 class="table-title">
-        Warehouse: ABC Printing Company, Mayur vihar, Delhi
-    </h4>
+
     <div class="table-responsive p-0 table-sec mb-4">
-        <table class="table table-striped mb-0">
+        <table class="table table-normal mb-0">
             <thead>
                 <tr>
                     <th>ID</th>
-                    <th style="text-align: center">Date</th>
-                    <th style="text-align: center">Company Name</th>
-                    <th style="text-align: center">Contact Person</th>
-                    <th style="text-align: center">City</th>
-                    <th style="text-align: center">No. of Orders</th>
-                    <th style="text-align: center">Print Margin</th>
+                    <th>Date</th>
+                    <th>Company Name</th>
+                    <th>Contact Person</th>
+                    <th>City</th>
+                    <th>No. of Orders</th>
+                    <th>Print Margin</th>
                     <th style="text-align: center">Action</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
                     <td>1.</td>
-                    <td style="text-align: center">#01234567</td>
-                    <td style="text-align: center">Maxbridge Solutions</td>
-                    <td style="text-align: center">Saikat Mitra</td>
-                    <td style="text-align: center">Kolkata</td>
-                    <td style="text-align: center">24</td>
-                    <td style="text-align: center">2%</td>
+                    <td>Maxbridge Solutions</td>
+                    <td>#01234567</td>
+                    <td>#01234567</td>
+                    <td>Maxbridge Solutions</td>
+                    <td>Saikat Mitra</td>
+                    <td>Kolkata</td>
                     <td style="text-align: center">
-                        <a href="#"><img src="{{ asset('images/lucide_view.png') }}" /></a>
-                        <a href="#"><img src="{{ asset('images/akar-icons_edit.png') }}" /></a>
+                        <a href="./edit-vendor.html"><img src="images/lucide_view.png" /></a>
+                        <a href="#"><img src="images/akar-icons_edit.png" /></a>
                     </td>
                 </tr>
                 <tr>
                     <td>1.</td>
-                    <td style="text-align: center">#01234567</td>
-                    <td style="text-align: center">Maxbridge Solutions</td>
-                    <td style="text-align: center">Saikat Mitra</td>
-                    <td style="text-align: center">Kolkata</td>
-                    <td style="text-align: center">24</td>
-                    <td style="text-align: center">2%</td>
+                    <td>Maxbridge Solutions</td>
+                    <td>#01234567</td>
+                    <td>#01234567</td>
+                    <td>Maxbridge Solutions</td>
+                    <td>Saikat Mitra</td>
+                    <td>Kolkata</td>
                     <td style="text-align: center">
-                        <a href="#"><img src="{{ asset('images/lucide_view.png') }}" /></a>
-                        <a href="#"><img src="{{ asset('images/akar-icons_edit.png') }}" /></a>
+                        <a href="./edit-vendor.html"><img src="images/lucide_view.png" /></a>
+                        <a href="#"><img src="images/akar-icons_edit.png" /></a>
                     </td>
                 </tr>
-                <tr>
-                    <td>1.</td>
-                    <td style="text-align: center">#01234567</td>
-                    <td style="text-align: center">Maxbridge Solutions</td>
-                    <td style="text-align: center">Saikat Mitra</td>
-                    <td style="text-align: center">Kolkata</td>
-                    <td style="text-align: center">24</td>
-                    <td style="text-align: center">2%</td>
-                    <td style="text-align: center">
-                        <a href="#"><img src="{{ asset('images/lucide_view.png') }}" /></a>
-                        <a href="#"><img src="{{ asset('images/akar-icons_edit.png') }}" /></a>
-                    </td>
-                </tr>
+
+
             </tbody>
         </table>
     </div>
