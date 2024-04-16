@@ -1782,3 +1782,22 @@ input[type="file"]::file-selector-button {
     width: 20px;
     z-index: 1;
 }
+
+#service_type_list {
+    tbody {
+        tr {
+            td {
+
+                &:first-child {
+                    padding-right: 30px;
+                }
+
+                &:last-child {
+                    .d-flex {
+                        justify-content: center;
+                    }
+                }
+            }
+        }
+    }
+}
