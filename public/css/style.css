@@ -1209,9 +1209,15 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 }
 
 .table-title {
+    margin-bottom: 12px;
+}
+.table-title img {
+    height: 24px;
+    width: 24px;
+}
+.table-title h4 {
     font-size: 14px;
     font-weight: 700;
-    margin-bottom: 12px;
     color: #000;
 }
 
@@ -1578,4 +1584,9 @@ input[type="file"]::file-selector-button {
 #service_type_list tbody tr td:last-child .d-flex {
     justify-content: center;
 } /*# sourceMappingURL=scssconvert.css.map */
-
+.text-green {
+    color: #18bb6b;
+}
+.text-red {
+    color: #ff2459;
+}
