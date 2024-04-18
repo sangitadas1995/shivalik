@@ -14,13 +14,14 @@ use App\Models\Paper_quality;
 use App\Models\Paper_weights;
 use App\Traits\PaperSizeTrait;
 use App\Traits\PaperTypeTrait;
+use App\Traits\QuantityCalculationTrait;
 use Illuminate\Validation\Rule;
 use App\Models\Paper_categories;
 use App\Rules\PaperTypeUniqueValueCheck;
 
 class PaperTypeController extends Controller
 {
-    use PaperSizeTrait, PaperTypeTrait;
+    use PaperSizeTrait, PaperTypeTrait, QuantityCalculationTrait;
 
     public function index()
     {
@@ -190,6 +191,7 @@ class PaperTypeController extends Controller
         ])->orderBy('id', 'asc')->get();
 
         $paperSizes = $this->getActiveSizes();
+        $paperQuantityUnit = $this->getQuantityUnits();
 
         return view('papertype.create', [
             'paperCategories' => $paperCategories,
@@ -197,7 +199,8 @@ class PaperTypeController extends Controller
             'paperColor' => $paperColor,
             'paperGsm' => $paperGsm,
             'paperUnits' => $paperUnits,
-            'paperSizes' => $paperSizes
+            'paperSizes' => $paperSizes,
+            'paperQuantityUnit' => $paperQuantityUnit
         ]);
     }
 
@@ -214,6 +217,7 @@ class PaperTypeController extends Controller
             'paper_gsm_id' => ['required', 'numeric'],
             'paper_quality_id' => ['required', 'numeric'],
             'paper_color_id' => ['required', 'numeric'],
+            'quantity_unit_id' => ['required', 'numeric'],
         ]);
 
         try {
@@ -239,6 +243,7 @@ class PaperTypeController extends Controller
             $papertype->paper_height = ($request->paper_size_name == 1) ? $request->paper_height : null;
             $papertype->paper_width = ($request->paper_size_name == 1) ? $request->paper_length : null;
             $papertype->paper_unit_id = $request->paper_unit_id;
+            $papertype->quantity_unit_id = $request->quantity_unit_id;
             $save = $papertype->save();
 
             if ($save) {

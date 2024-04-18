@@ -5,17 +5,21 @@ namespace App\Http\Controllers;
 use Exception;
 use Carbon\Carbon;
 use App\Models\PaperSize;
+use App\Models\PaperUnits;
 use App\Models\Paper_color;
 use Illuminate\Http\Request;
 use App\Models\Paper_quality;
 use App\Models\Paper_weights;
 use Illuminate\Validation\Rule;
 use App\Models\Paper_categories;
-use App\Models\PaperUnits;
+use App\Models\PaperQuantityCalculation;
+use App\Traits\QuantityCalculationTrait;
 use App\Rules\PaperSettingUniqueValueCheck;
 
 class PaperSettingController extends Controller
 {
+    use QuantityCalculationTrait;
+
     public function catlist()
     {
         return view('papercategory.index');
@@ -910,6 +914,64 @@ class PaperSettingController extends Controller
                 return redirect()->back()->with('fail', 'Failed to updated the GSM.');
             }
         } catch (Exception $th) {
+            return redirect()->back()->with('fail', trans('messages.server_error'));
+        }
+    }
+
+    public function quantityCalculation()
+    {
+        $one_long_ream = $this->getSettingValueByField('one_long_ream');
+        $one_short_ream = $this->getSettingValueByField('one_short_ream');
+        $one_bundle = $this->getSettingValueByField('one_bundle');
+        return view('settings.lotcalculation.index', [
+            'one_long_ream_value' => $one_long_ream->conversion_ratio,
+            'one_short_ream_value' => $one_short_ream->conversion_ratio,
+            'one_bundle_value' => $one_bundle->conversion_ratio
+        ]);
+    }
+
+    public function storeQuantity(Request $request)
+    {
+        $request->validate([
+            'calculation' => ['required']
+        ]);
+
+        try {
+            if (!empty($request->calculation)) {
+                foreach ($request->calculation as $key => $value) {
+
+                    $quantitySetting = $this->getSettingValueByField($key);
+
+                    if (!empty($quantitySetting)) {
+                        //update
+                        $this->updateSetting($key, $value);
+                    } else {
+                        //store
+                        $from_unit = $conversion_unit = $quantity_description = null;
+                        if ($key == 'one_long_ream') {
+                            $from_unit = 'ream';
+                            $conversion_unit = 'sheets';
+                            $quantity_description = '1 (long) ream = 20 (long) quires';
+                            $quantity_unit_name = 'ream(long)';
+                        } elseif ($key == 'one_short_ream') {
+                            $from_unit = 'ream';
+                            $conversion_unit = 'sheets';
+                            $quantity_description = '1 short ream = 20 short quires';
+                            $quantity_unit_name = 'ream(short)';
+                        } elseif ($key == 'one_bundle') {
+                            $from_unit = 'bundle';
+                            $conversion_unit = 'ream';
+                            $quantity_unit_name = 'bundle';
+                        }
+
+                        $this->storeSetting($key, $from_unit, $quantity_description, $value, $conversion_unit);
+                    }
+                }
+            }
+
+            return redirect()->route('settings.papersettings.quantity-calculation')->with('success', 'The settings has been saved successfully.');
+        } catch (Exception $th) {
+            dd($th);
             return redirect()->back()->with('fail', trans('messages.server_error'));
         }
     }
