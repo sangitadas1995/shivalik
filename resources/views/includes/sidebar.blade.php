@@ -13,26 +13,27 @@
       <div class="ul-box mb-3">
         <ul class="row">
           <li>
-            <a href="{{ route('users.index') }}" class="activeBox"><span class="w-100"><img
-                  src="{{ asset('images/mi_user.png') }}" />
-                <br />User
-                Management</span></a>
+            <a href="{{ route('users.index') }}" class="{{ Route::is('users.index','users.add', 'users.edit') ? 'activeBox' : null }}">
+              <span class="w-100"><img src="{{ asset('images/mi_user.png') }}" />
+              <br />User Management</span>
+            </a>
           </li>
           <li>
-            <a href="{{ route('customers.index') }}">
-              <span class="w-100"><img src="{{ asset('images/customer.png') }}" /> <br />
-                Customers</span></a>
+            <a href="{{ route('customers.index') }}" class="{{ Route::is('customers.index','customers.add', 'customers.edit') ? 'activeBox' : null }}">
+            <span class="w-100"><img src="{{ asset('images/customer.png') }}" />
+              <br />Customers</span>
+            </a>
           </li>
           <li>
-            <a href="{{ route('orders.index') }}"><span class="w-100"><img
-                  src="{{ asset('images/order-approve-outline-sharp.png') }}" />
-                <br />
-                Order Management</span></a>
+            <a href="{{ route('orders.index') }}" class="{{ Route::is('orders.index','orders.add', 'orders.view') ? 'activeBox' : null }}">
+              <span class="w-100"><img src="{{ asset('images/order-approve-outline-sharp.png') }}" />
+                <br />Order Management</span>
+            </a>
           </li>
           <li>
-            <a href="{{ route('inventory.index') }}"><span class="w-100"><img
-                  src="{{ asset('images/ic_round-inventory.png') }}" /><br />
-                Inventory Management</span></a>
+            <a href="{{ route('inventory.index') }}" class="{{ Route::is('inventory.index','inventory.warehouse.add') ? 'activeBox' : null }}">
+            <span class="w-100"><img src="{{ asset('images/ic_round-inventory.png') }}" />
+            <br />Inventory Management</span></a>
           </li>
         </ul>
       </div>

@@ -29,6 +29,7 @@ class UsersController extends Controller
     use Permissionhelper;
     public function index()
     {
+        //echo "<PRE>";print_r($_REQUEST);echo "</PRE>";exit;
         return view('users.index');
     }
 
@@ -528,9 +529,13 @@ class UsersController extends Controller
             });
         }
         else if (isset($request->order['0']['dir']) && ($request->order['0']['column'] != 0) && ($request->order['0']['column'] == 4)) {
+            $query->whereNull('designation_id')->whereNotNull('designation_id');
             $query->whereHas('designation', function ($q) use ($request) {
                 return $q->orderBy('name', $request->order['0']['dir']);
+                //return $q->orderBy('name', $request->order['0']['dir']);
             });
+
+            //$query->orderBy('designation.name', $request->order['0']['dir']);
         } 
         else if (isset($request->order['0']['dir']) && ($request->order['0']['column'] != 0) && ($request->order['0']['column'] == 5)) {
             $query->whereHas('functionalareas', function ($q) use ($request) {
