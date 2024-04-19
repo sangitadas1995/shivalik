@@ -1817,3 +1817,29 @@ input[type="file"]::file-selector-button {
 .text-red {
     color: #ff2459 !important;
 }
+
+.paperQuantittyInputWraper {
+    display: flex;
+    align-items: center;
+
+    input {
+        flex-grow: 1;
+        border: none;
+        min-width: 10px;
+
+        &:focus {
+            outline: none;
+        }
+    }
+
+    .left,
+    .right {
+        width: 100px;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: rgba(68, 68, 68, 0.1607843137);
+        white-space: nowrap;
+    }
+}

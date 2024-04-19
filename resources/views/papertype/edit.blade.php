@@ -25,18 +25,21 @@
         <div class="col-md-6">
           <div class="mb-3">
             <label class="form-label"><span class="text-danger">*</span>Paper Name :</label>
-            <input type="text" class="form-control alphaChar" name="paper_name" id="paper_name" value="{{ $papertypes->paper_name }}"/>
+            <input type="text" class="form-control alphaChar" name="paper_name" id="paper_name"
+              value="{{ $papertypes->paper_name }}" />
             <small class="text-danger error_name"></small>
           </div>
         </div>
         <div class="col-md-6">
           <div class="mb-3">
             <label class="form-label"><span class="text-danger">*</span>Paper Category :</label>
-            <select class="form-select" aria-label="Default select example" id="paper_category_id" name="paper_category_id">
+            <select class="form-select" aria-label="Default select example" id="paper_category_id"
+              name="paper_category_id">
               <option value="">Select</option>
               @if ($paperCategories->isNotEmpty())
               @foreach ($paperCategories as $pc)
-              <option value="{{ $pc->id }}" {{ $pc->id == $papertypes->paper_category_id ? 'selected' : null }}>{{ $pc->name }}</option>
+              <option value="{{ $pc->id }}" {{ $pc->id == $papertypes->paper_category_id ? 'selected' : null }}>{{
+                $pc->name }}</option>
               @endforeach
               @endif
             </select>
@@ -50,7 +53,8 @@
               <option value="">Select</option>
               @if ($paperGsm->isNotEmpty())
               @foreach ($paperGsm as $pg)
-              <option value="{{ $pg->id }}" {{ $pg->id == $papertypes->paper_gsm_id ? 'selected' : null }}>{{ $pg->name }}</option>
+              <option value="{{ $pg->id }}" {{ $pg->id == $papertypes->paper_gsm_id ? 'selected' : null }}>{{ $pg->name
+                }}</option>
               @endforeach
               @endif
             </select>
@@ -60,11 +64,13 @@
         <div class="col-md-6">
           <div class="mb-3">
             <label class="form-label"><span class="text-danger">*</span>Paper Quality :</label></label>
-            <select class="form-select" aria-label="Default select example" id="paper_quality_id" name="paper_quality_id">
+            <select class="form-select" aria-label="Default select example" id="paper_quality_id"
+              name="paper_quality_id">
               <option value="">Select</option>
               @if ($paperQuality->isNotEmpty())
               @foreach ($paperQuality as $pq)
-              <option value="{{ $pq->id }}" {{ $pq->id == $papertypes->paper_quality_id ? 'selected' : null }}>{{ $pq->name }}</option>
+              <option value="{{ $pq->id }}" {{ $pq->id == $papertypes->paper_quality_id ? 'selected' : null }}>{{
+                $pq->name }}</option>
               @endforeach
               @endif
             </select>
@@ -79,7 +85,8 @@
               <option value="">Select</option>
               @if ($paperColor->isNotEmpty())
               @foreach ($paperColor as $pc)
-              <option value="{{ $pc->id }}" {{ $pc->id == $papertypes->paper_color_id ? 'selected' : null }}>{{ $pc->name }}</option>
+              <option value="{{ $pc->id }}" {{ $pc->id == $papertypes->paper_color_id ? 'selected' : null }}>{{
+                $pc->name }}</option>
               @endforeach
               @endif
             </select>
@@ -87,59 +94,64 @@
         </div>
 
 
-        <div class="col-md-6">
+        <div class="">
           <div class="mb-3">
             <label class="form-label">Paper Size:</label>
-            <select class="form-select paper_size_name" aria-label="Default select example" name="paper_size_name" id="paper_size_name">
+            <select class="form-select paper_size_name" aria-label="Default select example" name="paper_size_name"
+              id="paper_size_name">
               <option value="">Select Paper Size</option>
               @if (!empty($paperSizes) && $paperSizes->isNotEmpty())
-                @foreach ($paperSizes as $size)
-                  <option value="{{ $size->id }}" {{ $size->id == $papertypes->paper_size_name ? 'selected' : null }} >{{ $size->name }}</option>
-                @endforeach
+              @foreach ($paperSizes as $size)
+              <option value="{{ $size->id }}" {{ $size->id == $papertypes->paper_size_name ? 'selected' : null }} >{{
+                $size->name }}</option>
+              @endforeach
               @endif
             </select>
             <small class="text-danger error_paper_size_name"></small>
           </div>
         </div>
         <div class="size_details_goes_here">
-          @if (!empty($papertypes->paper_size_name))    
-            <div class="row">
-              <div class="col-md-4">
-                <div class="mb-3">
-                  <label class="form-label"><span class="text-danger">*</span>Height :</label>
-                  <input type="text" class="form-control" name="paper_height" id="paper_height" value="{{ $papertypes->paper_height }}"/>
-                  <small class="text-danger error_paper_size_name"></small>
-                </div>
-              </div>
-
-              <div class="col-md-4">
-                <div class="mb-3">
-                  <label class="form-label"><span class="text-danger">*</span>Width :</label>
-                  <input type="text" class="form-control" name="paper_length" id="paper_length" value="{{ $papertypes->paper_width }}"/>
-                  <small class="text-danger error_paper_size_name"></small>
-                </div>
-              </div>
-
-              <div class="col-md-4">
-                <label class="form-label"><span class="text-danger">*</span>Paper Unit:</label>
-                <select class="form-select" aria-label="Default select example" id="paper_unit_id" name="paper_unit_id">
-                  <option value="">Select</option>
-                  @if ($paperUnits->isNotEmpty())
-                  @foreach ($paperUnits as $pu)
-                  <option value="{{ $pu->id }}" {{ $pu->id == $papertypes->paper_unit_id ? 'selected' : null }}>{{ $pu->name }}</option>
-                  @endforeach
-                  @endif
-                </select>
+          @if (!empty($papertypes->paper_size_name))
+          <div class="row">
+            <div class="col-md-4">
+              <div class="mb-3">
+                <label class="form-label"><span class="text-danger">*</span>Height :</label>
+                <input type="text" class="form-control" name="paper_height" id="paper_height"
+                  value="{{ $papertypes->paper_height }}" />
+                <small class="text-danger error_paper_size_name"></small>
               </div>
             </div>
+
+            <div class="col-md-4">
+              <div class="mb-3">
+                <label class="form-label"><span class="text-danger">*</span>Width :</label>
+                <input type="text" class="form-control" name="paper_length" id="paper_length"
+                  value="{{ $papertypes->paper_width }}" />
+                <small class="text-danger error_paper_size_name"></small>
+              </div>
+            </div>
+
+            <div class="col-md-4">
+              <label class="form-label"><span class="text-danger">*</span>Paper Unit:</label>
+              <select class="form-select" aria-label="Default select example" id="paper_unit_id" name="paper_unit_id">
+                <option value="">Select</option>
+                @if ($paperUnits->isNotEmpty())
+                @foreach ($paperUnits as $pu)
+                <option value="{{ $pu->id }}" {{ $pu->id == $papertypes->paper_unit_id ? 'selected' : null }}>{{
+                  $pu->name }}</option>
+                @endforeach
+                @endif
+              </select>
+            </div>
+          </div>
           @endif
         </div>
-      <div class="text-end">
-        <a href="{{ route('papertype.index') }}">
-        <button type="button" class="btn grey-primary">Cancel</button>
-        </a>
-        <button type="submit" class="btn black-btn">Save </button>
-      </div>
+        <div class="text-end">
+          <a href="{{ route('papertype.index') }}">
+            <button type="button" class="btn grey-primary">Cancel</button>
+          </a>
+          <button type="submit" class="btn black-btn">Save </button>
+        </div>
     </form>
   </div>
 </div>
@@ -163,10 +175,10 @@
     });
 
     $('#functional_area_name').on('input', function () {
-        var inputValue = $(this).val();
-        // Remove non-numeric characters
-        var sanitizedValue = inputValue.replace(/[^a-zA-Z\s]/g, '');
-        $(this).val(sanitizedValue); // Update input field with sanitized value
+      var inputValue = $(this).val();
+      // Remove non-numeric characters
+      var sanitizedValue = inputValue.replace(/[^a-zA-Z\s]/g, '');
+      $(this).val(sanitizedValue); // Update input field with sanitized value
     });
 
     $(document).on('submit', '#user-add-form5', function (e) {
@@ -219,6 +231,6 @@
 
   });
 
-  
+
 </script>
 @endsection
