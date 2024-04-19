@@ -559,9 +559,17 @@ a {
     padding: 15px;
 }
 
+.table-sec .table tr th {
+    color: #595c5f;
+}
+
+.table-sec .table tr td {
+    color: #5a6981;
+}
+
 .table-sec .table tr th,
 .table-sec .table tr td {
-    font-size: 12px;
+    font-size: 14px;
     vertical-align: middle;
 }
 
@@ -1799,5 +1807,39 @@ input[type="file"]::file-selector-button {
                 }
             }
         }
+    }
+}
+
+.text-green {
+    color: #18bb6b !important;
+}
+
+.text-red {
+    color: #ff2459 !important;
+}
+
+.paperQuantittyInputWraper {
+    display: flex;
+    align-items: center;
+
+    input {
+        flex-grow: 1;
+        border: none;
+        min-width: 10px;
+
+        &:focus {
+            outline: none;
+        }
+    }
+
+    .left,
+    .right {
+        width: 100px;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: rgba(68, 68, 68, 0.1607843137);
+        white-space: nowrap;
     }
 }

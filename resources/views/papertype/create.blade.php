@@ -25,14 +25,16 @@
         <div class="col-md-6">
           <div class="mb-3">
             <label class="form-label"><span class="text-danger">*</span>Paper Name :</label>
-            <input type="text" class="form-control alphaChar" name="paper_name" id="paper_name" value="{{ old('paper_name') }}"/>
+            <input type="text" class="form-control alphaChar" name="paper_name" id="paper_name"
+              value="{{ old('paper_name') }}" />
             <small class="text-danger error_name"></small>
           </div>
         </div>
         <div class="col-md-6">
           <div class="mb-3">
             <label class="form-label"><span class="text-danger">*</span>Paper Category :</label>
-            <select class="form-select" aria-label="Default select example" id="paper_category_id" name="paper_category_id">
+            <select class="form-select" aria-label="Default select example" id="paper_category_id"
+              name="paper_category_id">
               <option value="">Select</option>
               @if ($paperCategories->isNotEmpty())
               @foreach ($paperCategories as $pc)
@@ -50,12 +52,13 @@
         <div class="col-md-6">
           <div class="mb-3">
             <label class="form-label">Paper Lot Quantity :</label>
-            <select class="form-select paper_size_name" aria-label="Default select example" name="quantity_unit_id" id="quantity_unit_id">
+            <select class="form-select paper_size_name" aria-label="Default select example" name="quantity_unit_id"
+              id="quantity_unit_id">
               <option value="">Select</option>
               @if (!empty($paperQuantityUnit) && $paperQuantityUnit->isNotEmpty())
-                @foreach ($paperQuantityUnit as $unitname)
-                  <option value="{{ $unitname->id }}">{{ $unitname->quantity_unit_name }}</option>
-                @endforeach
+              @foreach ($paperQuantityUnit as $unitname)
+              <option value="{{ $unitname->id }}">{{ $unitname->quantity_unit_name }}</option>
+              @endforeach
               @endif
             </select>
             <small class="text-danger error_quantity_unit"></small>
@@ -81,7 +84,8 @@
         <div class="col-md-6">
           <div class="mb-3">
             <label class="form-label"><span class="text-danger">*</span>Paper Quality :</label></label>
-            <select class="form-select" aria-label="Default select example" id="paper_quality_id" name="paper_quality_id">
+            <select class="form-select" aria-label="Default select example" id="paper_quality_id"
+              name="paper_quality_id">
               <option value="">Select</option>
               @if ($paperQuality->isNotEmpty())
               @foreach ($paperQuality as $pq)
@@ -115,15 +119,16 @@
           </div>
         </div>
 
-        <div class="col-md-6">
+        <div class="">
           <div class="mb-3">
             <label class="form-label">Paper Size :</label>
-            <select class="form-select paper_size_name" aria-label="Default select example" name="paper_size_name" id="paper_size_name">
+            <select class="form-select paper_size_name" aria-label="Default select example" name="paper_size_name"
+              id="paper_size_name">
               <option value="">Select Paper Size</option>
               @if (!empty($paperSizes) && $paperSizes->isNotEmpty())
-                @foreach ($paperSizes as $size)
-                  <option value="{{ $size->id }}">{{ $size->name }}</option>
-                @endforeach
+              @foreach ($paperSizes as $size)
+              <option value="{{ $size->id }}">{{ $size->name }}</option>
+              @endforeach
               @endif
             </select>
             <small class="text-danger error_paper_size_name"></small>
@@ -132,10 +137,10 @@
 
         <div class="size_details_goes_here"></div>
 
-      <div class="text-end">
-        <button type="reset" class="btn grey-primary">Cancel</button>
-        <button type="submit" class="btn black-btn">Save</button>
-      </div>
+        <div class="text-end">
+          <button type="reset" class="btn grey-primary">Cancel</button>
+          <button type="submit" class="btn black-btn">Save</button>
+        </div>
     </form>
   </div>
 </div>
@@ -148,7 +153,7 @@
   var token = "{{ csrf_token() }}";
 
   $(document).ready(function () {
-  
+
     $(".alphaChar").on('input', function () {
       var inputValue = $(this).val();
       // Remove non-numeric characters
@@ -157,10 +162,10 @@
     });
 
     $('#functional_area_name').on('input', function () {
-        var inputValue = $(this).val();
-        // Remove non-numeric characters
-        var sanitizedValue = inputValue.replace(/[^a-zA-Z\s]/g, '');
-        $(this).val(sanitizedValue); // Update input field with sanitized value
+      var inputValue = $(this).val();
+      // Remove non-numeric characters
+      var sanitizedValue = inputValue.replace(/[^a-zA-Z\s]/g, '');
+      $(this).val(sanitizedValue); // Update input field with sanitized value
     });
 
     $.ajaxSetup({
