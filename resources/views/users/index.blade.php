@@ -103,6 +103,7 @@
             url: "{{ route('users.data') }}",
             type: 'POST',
             'data': function(data) {
+              console.log(data);
               return data;
             }
           },

@@ -22,19 +22,19 @@ class PaperSettingController extends Controller
 
     public function catlist()
     {
-        return view('papercategory.index');
+        return view('settings.papercategory.index');
     }
 
     public function createcategory()
     {
-        return view('papercategory.create');
+        return view('settings.papercategory.create');
     }
 
     public function editpapercategory($id)
     {
         $id = decrypt($id);
         $papercategories  = Paper_categories::findOrFail($id);
-        return view('papercategory.edit', [
+        return view('settings.papercategory.edit', [
             'papercategories' => $papercategories
         ]);
     }
@@ -401,7 +401,7 @@ class PaperSettingController extends Controller
 
     public function qualitylist()
     {
-        return view('paperquality.index');
+        return view('settings.paperquality.index');
     }
 
 
@@ -508,7 +508,7 @@ class PaperSettingController extends Controller
 
     public function createquality()
     {
-        return view('paperquality.create');
+        return view('settings.paperquality.create');
     }
 
     public function storepaperquality(Request $request)
@@ -540,7 +540,7 @@ class PaperSettingController extends Controller
     {
         $id = decrypt($id);
         $paperquality  = Paper_quality::findOrFail($id);
-        return view('paperquality.edit', [
+        return view('settings.paperquality.edit', [
             'paperquality' => $paperquality
         ]);
     }
@@ -574,7 +574,7 @@ class PaperSettingController extends Controller
 
     public function colorlist()
     {
-        return view('papercolor.index');
+        return view('settings.papercolor.index');
     }
 
     public function colorlist_data(Request $request)
@@ -679,7 +679,7 @@ class PaperSettingController extends Controller
 
     public function addpapercolor()
     {
-        return view('papercolor.create');
+        return view('settings.papercolor.create');
     }
 
     public function storepapercolor(Request $request)
@@ -712,7 +712,7 @@ class PaperSettingController extends Controller
     {
         $id = decrypt($id);
         $papercolor  = Paper_color::findOrFail($id);
-        return view('papercolor.edit', [
+        return view('settings.papercolor.edit', [
             'papercolor' => $papercolor
         ]);
     }
@@ -747,7 +747,7 @@ class PaperSettingController extends Controller
 
     public function gsmlist()
     {
-        return view('paperweight.index');
+        return view('settings.paperweight.index');
     }
 
     public function gsmlist_data(Request $request)
@@ -853,7 +853,7 @@ class PaperSettingController extends Controller
 
     public function addpapergsm()
     {
-        return view('paperweight.create');
+        return view('settings.paperweight.create');
     }
 
     public function storepapergsm(Request $request)
@@ -886,7 +886,7 @@ class PaperSettingController extends Controller
     {
         $id = decrypt($id);
         $papergsm  = Paper_weights::findOrFail($id);
-        return view('paperweight.edit', [
+        return view('settings.paperweight.edit', [
             'papergsm' => $papergsm
         ]);
     }
