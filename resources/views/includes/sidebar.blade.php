@@ -152,7 +152,7 @@
           <!-- sub-menu -->
 
           <li data-bs-toggle="collapse"
-            class="menu-item sub-menu {{ Route::is('settings.vendor.service-type.index','settings.vendor.service-type.add','settings.vendor.service-type.edit','settings.papersettings.paper_category_list', 'settings.papersettings.add_paper_category','settings.papersettings.edit_paper_category','settings.papersettings.add_paper_color','settings.papersettings.paper_color_list','settings.papersettings.edit_paper_color','settings.papersettings.paper_quality_list','settings.papersettings.add_paper_quality', 'settings.papersettings.edit_paper_quality','settings.papersettings.paper_thickness_list','settings.papersettings.add_paper_thickness', 'settings.papersettings.edit_paper_thickness','settings.papersettings.edit-paper-size','settings.papersettings.add-paper-size','settings.papersettings.paper-size') ? 'open active' : null }}">
+            class="menu-item sub-menu {{ Route::is('settings.vendor.service-type.index','settings.vendor.service-type.add','settings.vendor.service-type.edit','settings.papersettings.paper_category_list', 'settings.papersettings.add_paper_category','settings.papersettings.edit_paper_category','settings.papersettings.add_paper_color','settings.papersettings.paper_color_list','settings.papersettings.edit_paper_color','settings.papersettings.paper_quality_list','settings.papersettings.add_paper_quality', 'settings.papersettings.edit_paper_quality','settings.papersettings.paper_thickness_list','settings.papersettings.add_paper_thickness', 'settings.papersettings.edit_paper_thickness','settings.papersettings.edit-paper-size','settings.papersettings.add-paper-size','settings.papersettings.paper-size','settings.papersettings.quantity-calculation') ? 'open active' : null }}">
             <a data-bs-toggle="collapse">
               <span class="menu-icon">
                 <svg width="21" height="21" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -176,7 +176,7 @@
                   </a>
                 </li>
                 <li
-                  class="menu-item sub-menu {{ Route::is('settings.papersettings.paper_category_list', 'settings.papersettings.add_paper_category','settings.papersettings.edit_paper_category','settings.papersettings.add_paper_color','settings.papersettings.paper_color_list','settings.papersettings.edit_paper_color','settings.papersettings.paper_quality_list','settings.papersettings.add_paper_quality', 'settings.papersettings.edit_paper_quality','settings.papersettings.paper_thickness_list','settings.papersettings.add_paper_thickness', 'settings.papersettings.edit_paper_thickness','settings.papersettings.edit-paper-size','settings.papersettings.add-paper-size','settings.papersettings.paper-size') ? 'open active' : null }}">
+                  class="menu-item sub-menu {{ Route::is('settings.papersettings.paper_category_list', 'settings.papersettings.add_paper_category','settings.papersettings.edit_paper_category','settings.papersettings.add_paper_color','settings.papersettings.paper_color_list','settings.papersettings.edit_paper_color','settings.papersettings.paper_quality_list','settings.papersettings.add_paper_quality', 'settings.papersettings.edit_paper_quality','settings.papersettings.paper_thickness_list','settings.papersettings.add_paper_thickness', 'settings.papersettings.edit_paper_thickness','settings.papersettings.edit-paper-size','settings.papersettings.add-paper-size','settings.papersettings.paper-size','settings.papersettings.quantity-calculation') ? 'open active' : null }}">
                   <a><span class="menu-title">Service Settings</span></a>
                   <div class="sub-menu-list" data-bs-toggle="collapse" data-popper-escaped=""
                     data-popper-placement="right"
@@ -206,12 +206,18 @@
                           <span class="menu-title">Paper Quality</span>
                         </a>
                       </li>
-                      <li
-                        class="menu-item {{ Route::is('settings.papersettings.paper_thickness_list','settings.papersettings.add_paper_thickness', 'settings.papersettings.edit_paper_thickness') ? 'active' : null }}">
+                      <li class="menu-item {{ Route::is('settings.papersettings.paper_thickness_list','settings.papersettings.add_paper_thickness', 'settings.papersettings.edit_paper_thickness') ? 'active' : null }}">
                         <a href="{{ route('settings.papersettings.paper_thickness_list') }}">
                           <span class="menu-title">Paper GSM</span>
                         </a>
                       </li>
+
+                      <li class="menu-item {{ Route::is('settings.papersettings.quantity-calculation') ? 'active' : null }}">
+                        <a href="{{ route('settings.papersettings.quantity-calculation') }}">
+                          <span class="menu-title">Paper Quantity Calculation</span>
+                        </a>
+                      </li>
+
                     </ul>
                   </div>
                 </li>

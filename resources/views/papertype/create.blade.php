@@ -49,6 +49,20 @@
         </div>
         <div class="col-md-6">
           <div class="mb-3">
+            <label class="form-label">Paper Lot Quantity :</label>
+            <select class="form-select paper_size_name" aria-label="Default select example" name="quantity_unit_id" id="quantity_unit_id">
+              <option value="">Select</option>
+              @if (!empty($paperQuantityUnit) && $paperQuantityUnit->isNotEmpty())
+                @foreach ($paperQuantityUnit as $unitname)
+                  <option value="{{ $unitname->id }}">{{ $unitname->quantity_unit_name }}</option>
+                @endforeach
+              @endif
+            </select>
+            <small class="text-danger error_quantity_unit"></small>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="mb-3">
             <label class="form-label"><span class="text-danger">*</span>Paper GSM:</label>
             <select class="form-select" aria-label="Default select example" id="paper_gsm_id" name="paper_gsm_id">
               <option value="">Select</option>

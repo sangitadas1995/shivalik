@@ -8,7 +8,7 @@
     <div class="row justify-content-end">
         <div class="col-md-6">
             <div class="text-end mb-4">
-                <a href="#" class="btn primary-btn">
+                <a href="{{ route('inventory.warehouse.add') }}" class="btn primary-btn">
                     <svg width="24" height="22" viewBox="0 0 24 22" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path
                             d="M21.333 6.74167V19.1667H18.9997V9.83333H4.99967V19.1667H2.66634V6.74167L11.9997 3.00833L21.333 6.74167ZM23.6663 21.5V5.16667L11.9997 0.5L0.333008 5.16667V21.5H7.33301V12.1667H16.6663V21.5H23.6663ZM10.833 19.1667H8.49967V21.5H10.833V19.1667ZM13.1663 15.6667H10.833V18H13.1663V15.6667ZM15.4997 19.1667H13.1663V21.5H15.4997V19.1667Z"
