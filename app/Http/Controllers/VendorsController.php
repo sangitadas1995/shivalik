@@ -6,18 +6,19 @@ use Exception;
 use Carbon\Carbon;
 use App\Models\City;
 use App\Models\State;
-use App\Models\Country;
-use App\Models\PaperTypes;
-use App\Traits\Validate;
+use App\Models\Vendor;
 use App\Traits\Helper;
+use App\Models\Country;
+use App\Traits\Validate;
+use App\Models\PaperTypes;
+use App\Models\Warehouses;
+use App\Models\ServiceType;
+use App\Models\Vendor_type;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use App\Rules\VendorUniqueEmailAddress;
-use App\Rules\VendorUniqueMobileNumber;
-use App\Models\Vendor;
-use App\Models\ServiceType;
-use App\Models\Vendor_type;
 
+use App\Rules\VendorUniqueMobileNumber;
 use Illuminate\Support\Facades\Validator;
 
 class VendorsController extends Controller
@@ -151,6 +152,27 @@ class VendorsController extends Controller
             $vendor->pincode = $request->pincode;
             $vendor->service_type_ids = json_encode($request->service_type_id);
             $save = $vendor->save();
+
+            if ($request->vendor_type_id == 2) {
+                $warehouse = new Warehouses();
+                $warehouse->vendor_type_id = $request->vendor_type_id;
+                $warehouse->company_name = ucwords(strtolower($request->company_name));
+                $warehouse->contact_person = ucwords(strtolower($request->contact_person));
+                $warehouse->mobile_no = $request->mobile_no;
+                $warehouse->alter_mobile_no = $request->alter_mobile_no;
+                $warehouse->gst_no = $request->gst_no;
+                $warehouse->email = $request->email;
+                $warehouse->alternative_email_id = $request->alternative_email_id;
+                $warehouse->phone_no = $request->phone_no;
+                $warehouse->alternative_phone_no = $request->alternative_phone_no;
+                $warehouse->address = $request->address;
+                $warehouse->country_id = $request->country_id;
+                $warehouse->state_id = $request->state_id;
+                $warehouse->city_id = $request->city_id;
+                $warehouse->pincode = $request->pincode;
+                $warehouse->service_type_ids = json_encode($request->service_type_id);
+                $save = $vendor->save();
+            }
 
             if ($save) {
                 if ($request->vendor_type_id == 2) {
