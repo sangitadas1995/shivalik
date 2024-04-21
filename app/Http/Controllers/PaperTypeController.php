@@ -283,7 +283,10 @@ class PaperTypeController extends Controller
         $paperUnits = PaperUnits::where([
             'status' => 'A'
         ])->orderBy('id', 'asc')->get();
+
         $paperSizes = $this->getActiveSizes();
+        $paperQuantityUnit = $this->getQuantityUnits();
+
         return view('papertype.edit', [
             'papertypes'        => $papertypes,
             'paperCategories'   => $paperCategories,
@@ -291,16 +294,15 @@ class PaperTypeController extends Controller
             'paperColor'        => $paperColor,
             'paperGsm'          => $paperGsm,
             'paperUnits'        => $paperUnits,
-            'paperSizes'        => $paperSizes
+            'paperSizes'        => $paperSizes,
+            'paperQuantityUnit' => $paperQuantityUnit
         ]);
     }
 
 
     public function update(Request $request, $id)
     {
-
         $id = decrypt($id);
-
         $request->validate([
             'paper_name' => [
                 'required',
@@ -327,15 +329,16 @@ class PaperTypeController extends Controller
             }
 
             $papertype = PaperTypes::find($id);
-            $papertype->paper_name = $request->paper_name;
-            $papertype->paper_category_id = $request->paper_category_id;
-            $papertype->paper_gsm_id = $request->paper_gsm_id;
-            $papertype->paper_quality_id = $request->paper_quality_id;
-            $papertype->paper_color_id = $request->paper_color_id;
-            $papertype->paper_size_name = $request->paper_size_name;
-            $papertype->paper_height = $request->paper_height;
-            $papertype->paper_width = $request->paper_length;
-            $papertype->paper_unit_id = $request->paper_unit_id;
+            $papertype->paper_name          = $request->paper_name;
+            $papertype->paper_category_id   = $request->paper_category_id;
+            $papertype->paper_gsm_id        = $request->paper_gsm_id;
+            $papertype->paper_quality_id    = $request->paper_quality_id;
+            $papertype->paper_color_id      = $request->paper_color_id;
+            $papertype->paper_size_name     = $request->paper_size_name;
+            $papertype->paper_height        = $request->paper_height;
+            $papertype->paper_width         = $request->paper_length;
+            $papertype->paper_unit_id       = $request->paper_unit_id;
+            $papertype->quantity_unit_id    = $request->quantity_unit_id;
             $update = $papertype->update();
 
             if ($update) {
