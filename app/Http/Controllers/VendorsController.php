@@ -47,7 +47,6 @@ class VendorsController extends Controller
             ->get();
 
 
-
         return view('vendors.create', [
             'countries' => $countries,
             'states' => $states,
@@ -133,6 +132,7 @@ class VendorsController extends Controller
             'service_type_id' => ['required'],
         ]);
 
+
         try {
             DB::beginTransaction();
             $vendor = new Vendor();
@@ -154,9 +154,11 @@ class VendorsController extends Controller
             $vendor->service_type_ids = json_encode($request->service_type_id);
             $vendor->is_warehouse = $request->vendor_type_id == 2 ? 'yes' : 'no';
             $save = $vendor->save();
+            $last_vendor_insert_id = $vendor->id;
 
             if ($request->vendor_type_id == 2) {
                 $warehose = new Warehouses();
+                $warehose->vendor_id = $last_vendor_insert_id;
                 $warehose->vendor_type_id = $request->vendor_type_id;
                 $warehose->company_name = ucwords(strtolower($request->company_name));
                 $warehose->contact_person = ucwords(strtolower($request->contact_person));

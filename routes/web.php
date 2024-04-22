@@ -106,7 +106,7 @@ Route::middleware('auth')->group(function () {
     Route::prefix('inventory')->name('inventory.')->group(function () {
         Route::get('/', [InventoryController::class, 'index'])->name('index');
         Route::prefix('warehouse')->name('warehouse.')->group(function () {
-        Route::get('add', [InventoryController::class, 'create'])->name('add');
+            Route::get('add', [InventoryController::class, 'create'])->name('add');
         });
     });
 
