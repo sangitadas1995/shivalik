@@ -14,8 +14,12 @@
 </div>
 <div class="card add-new-location mt-2">
     <div class="card-body">
-        <form>
+        <form action="{{ route('inventory.warehouse.store') }}" method="POST" id="vendor-add-form">
+            @csrf
             <div class="row">
+                <div class="col-md-12">
+                @include('utils.alert')
+                </div>
                 <div class="col-md-6">
                     <div class="mb-3">
                         <label class="form-label">Company Name :</label>
