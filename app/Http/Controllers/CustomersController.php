@@ -138,7 +138,6 @@ class CustomersController extends Controller
             $customer->city_id = $request->city_id;
             $customer->pincode = $request->pincode;
             $customer->print_margin = $request->print_margin;
-            $customer->collected_from = 'customer form';
             $save = $customer->save();
 
             if ($save) {
