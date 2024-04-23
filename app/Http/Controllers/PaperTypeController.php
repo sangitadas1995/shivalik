@@ -219,7 +219,8 @@ class PaperTypeController extends Controller
             'paper_color_id' => ['required', 'numeric'],
             'quantity_unit_id' => ['required', 'numeric'],
         ]);
-
+       //dd($request->all());
+   
         try {
             if (!empty($request->paper_size_name)) {
                 if (empty($request->paper_height)) {
@@ -240,8 +241,10 @@ class PaperTypeController extends Controller
             $papertype->paper_quality_id = $request->paper_quality_id;
             $papertype->paper_color_id = $request->paper_color_id;
             $papertype->paper_size_name = $request->paper_size_name;
-            $papertype->paper_height = ($request->paper_size_name == 1) ? $request->paper_height : null;
-            $papertype->paper_width = ($request->paper_size_name == 1) ? $request->paper_length : null;
+            /* $papertype->paper_height = ($request->paper_size_name == 1) ? $request->paper_height : null;
+            $papertype->paper_width = ($request->paper_size_name == 1) ? $request->paper_length : null; */
+            $papertype->paper_height = $request->paper_height ;
+            $papertype->paper_width = $request->paper_length ;
             $papertype->paper_unit_id = $request->paper_unit_id;
             $papertype->quantity_unit_id = $request->quantity_unit_id;
             $save = $papertype->save();

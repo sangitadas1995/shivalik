@@ -37,6 +37,7 @@ class InventoryController extends Controller
             'states' => $states
         ]);
     }
+  
     public function store(Request $request)
     {
         $request->validate([
