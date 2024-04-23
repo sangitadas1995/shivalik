@@ -1843,3 +1843,11 @@ input[type="file"]::file-selector-button {
         white-space: nowrap;
     }
 }
+
+.login-border-right {
+    border-right: 1px solid #ddd;
+}
+
+.login-btn-sec {
+    background-color: #edf0f5 !important;
+}
