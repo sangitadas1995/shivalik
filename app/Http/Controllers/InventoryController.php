@@ -100,11 +100,11 @@ class InventoryController extends Controller
             $warehouses->city_id = $request->city_id;
             $warehouses->pincode = $request->pincode;
             $warehouses->print_margin = $request->print_margin;
-            $warehouses->warhouse_type = "stand_alone";
+            $warehouses->warehouse_type = "stand_alone";
             $save = $warehouses->save();
 
             if ($save) {
-                return redirect()->route('inventory.warehouse.add')->with('success', 'The warehouses has been created successfully.');
+                return redirect()->route('inventory.warehouse.list')->with('success', 'The warehouses has been created successfully.');
             } else {
                 return redirect()->back()->with('fail', 'Failed to create the warehouses.');
             }
@@ -129,7 +129,7 @@ class InventoryController extends Controller
             'contact_person',
             'mobile_no',
             'email',
-            'warhouse_type'
+            'warehouse_type'
         ];
 
         $query = Warehouses::where('id', '!=', '0');
@@ -140,7 +140,7 @@ class InventoryController extends Controller
                 $q->where('company_name', 'LIKE', "%" . $request->search['value'] . "%")
                     ->orWhere('contact_person', 'LIKE', "%" . $request->search['value'] . "%")
                     ->orWhere('email', 'LIKE', "%" . $request->search['value'] . "%")
-                    ->orWhere('warhouse_type', 'LIKE', "%" . $request->search['value'] . "%");
+                    ->orWhere('warehouse_type', 'LIKE', "%" . $request->search['value'] . "%");
             });
         }
 
@@ -169,7 +169,7 @@ class InventoryController extends Controller
                 $view_icon = asset('images/lucide_view.png');
                 $edit_icon = asset('images/akar-icons_edit.png');
                 $editLink = route('customers.edit', ['id' => encrypt($value->id)]);
-                $warehouse_type = ($value->warhouse_type == 'stand_alone') ? 'Stand Alone' : 'Printing Warehouse';
+                $warehouse_type = ($value->warehouse_type == 'stand_alone') ? 'Stand Alone' : 'Printing Warehouse';
 
                 $subarray = [];
                 $subarray[] = $value->id;
