@@ -1619,3 +1619,9 @@ input[type="file"]::file-selector-button {
     background-color: rgba(68, 68, 68, 0.1607843137);
     white-space: nowrap;
 } /*# sourceMappingURL=scssconvert.css.map */
+.login-border-right {
+    border-right: 1px solid #ddd;
+}
+.login-btn-sec {
+    background-color: #edf0f5 !important;
+}
