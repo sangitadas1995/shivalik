@@ -37,8 +37,7 @@ class InventoryController extends Controller
             'states' => $states
         ]);
     }
-
-
+    
     public function store(Request $request)
     {
         $request->validate([
@@ -84,11 +83,7 @@ class InventoryController extends Controller
             'print_margin' => ['required', 'numeric'],
         ]);
 
-        //echo "<PRE>";print_r($request->all());echo "</PRE>";exit;
-
-
         try {
-            DB::beginTransaction();
             $warehouses = new Warehouses();
             $warehouses->company_name = ucwords(strtolower($request->company_name));
             $warehouses->contact_person = ucwords(strtolower($request->contact_person));
@@ -107,8 +102,6 @@ class InventoryController extends Controller
             $warehouses->print_margin = $request->print_margin;
             $warehouses->warhouse_type = "stand_alone";
             $save = $warehouses->save();
-            
-            DB::commit();
 
             if ($save) {
                 return redirect()->route('inventory.warehouse.add')->with('success', 'The warehouses has been created successfully.');
@@ -116,9 +109,123 @@ class InventoryController extends Controller
                 return redirect()->back()->with('fail', 'Failed to create the warehouses.');
             }
         } catch (Exception $th) {
-            DB::rollBack();
-            // dd($th);
             return redirect()->back()->with('fail', trans('messages.server_error'));
         }
+    }
+
+    public function warehouseList()
+    {
+        return view('inventory.warehouse.index');
+    }
+
+    public function warehouseDataList(Request $request)
+    {
+        // dd($request->toArray());
+        $column = [
+            'id',
+            'index',
+            'created_at',
+            'company_name',
+            'contact_person',
+            'mobile_no',
+            'email',
+            'warhouse_type'
+        ];
+
+        $query = Warehouses::where('id', '!=', '0');
+
+        /* for search in table */
+        if (isset($request->search['value'])) {
+            $query->where(function ($q) use ($request) {
+                $q->where('company_name', 'LIKE', "%" . $request->search['value'] . "%")
+                    ->orWhere('contact_person', 'LIKE', "%" . $request->search['value'] . "%")
+                    ->orWhere('email', 'LIKE', "%" . $request->search['value'] . "%")
+                    ->orWhere('warhouse_type', 'LIKE', "%" . $request->search['value'] . "%");
+            });
+        }
+
+        /* sorting data in table */
+        if (isset($request->order['0']['dir']) && ($request->order['0']['column'] != 0) && ($request->order['0']['column'] != 5)) {
+            $query->orderBy($column[$request->order['0']['column']], $request->order['0']['dir']);
+        }
+        if (isset($request->order['0']['dir']) && ($request->order['0']['column'] != 0) && ($request->order['0']['column'] == 5)) {
+            $query->whereHas('id', function ($q) use ($request) {
+                return $q->orderBy('id', $request->order['0']['dir']);
+            });
+        } else {
+            $query->orderBy('created_at', 'desc');
+        }
+
+        $number_filtered_row = $query->count();
+
+        if ($request->length != -1) {
+            $query->limit($request->length)->offset($request->start);
+        }
+
+        $result = $query->get();
+        $data = [];
+        if ($result->isNotEmpty()) {
+            foreach ($result as $key => $value) {
+                $view_icon = asset('images/lucide_view.png');
+                $edit_icon = asset('images/akar-icons_edit.png');
+                $editLink = route('customers.edit', ['id' => encrypt($value->id)]);
+                $warehouse_type = ($value->warhouse_type == 'stand_alone') ? 'Stand Alone' : 'Printing Warehouse';
+
+                $subarray = [];
+                $subarray[] = $value->id;
+                $subarray[] = $value->id . '.';
+                $subarray[] = Carbon::parse($value->created_at)->format('d/m/Y h:i A');
+                $subarray[] = $value->company_name;
+                $subarray[] = $value->contact_person;
+                $subarray[] = $value->mobile_no;
+                $subarray[] = $value->email;
+                $subarray[] = $warehouse_type;
+                $subarray[] = '<a href="#" class="view_details" title="View Details" data-id ="' . $value->id .     
+                                '"><img src="' . $view_icon . '" /></a>
+                                <a href="' . $editLink . '" title="Edit"><img src="' . $edit_icon . '" /></a>';
+
+                $data[] = $subarray;
+            }
+        }
+
+        $count = Warehouses::with('id')->count();
+
+        $output = [
+            'draw' => intval($request->draw),
+            'recordsTotal' => $count,
+            'recordsFiltered' => $number_filtered_row,
+            'data' => $data
+        ];
+
+        return response()->json($output);
+    }
+
+    public function edit($id)
+    {
+        $id = decrypt($id);
+        $states = null;
+        $cities = null;
+        $customer = Warehouses::findOrFail($id);
+        $countries = Country::where([
+            'status' => 'A'
+        ])
+            ->orderBy('country_name', 'asc')
+            ->get();
+        if (!empty($customer)) {
+            $states = State::where([
+                'country_id' => $customer->country_id,
+                'status' => 'A',
+            ])->orderBy('state_name', 'ASC')->get();
+            $cities = City::where([
+                'state_id' => $customer->state_id,
+                'status' => 'A',
+            ])->orderBy('city_name', 'ASC')->get();
+        }
+        return view('customers.edit', [
+            'countries' => $countries,
+            'customer' => $customer,
+            'states' => $states,
+            'cities' => $cities
+        ]);
     }
 }
