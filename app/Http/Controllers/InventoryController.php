@@ -37,7 +37,7 @@ class InventoryController extends Controller
             'states' => $states
         ]);
     }
-    
+  
     public function store(Request $request)
     {
         $request->validate([
@@ -198,34 +198,5 @@ class InventoryController extends Controller
         ];
 
         return response()->json($output);
-    }
-
-    public function edit($id)
-    {
-        $id = decrypt($id);
-        $states = null;
-        $cities = null;
-        $customer = Warehouses::findOrFail($id);
-        $countries = Country::where([
-            'status' => 'A'
-        ])
-            ->orderBy('country_name', 'asc')
-            ->get();
-        if (!empty($customer)) {
-            $states = State::where([
-                'country_id' => $customer->country_id,
-                'status' => 'A',
-            ])->orderBy('state_name', 'ASC')->get();
-            $cities = City::where([
-                'state_id' => $customer->state_id,
-                'status' => 'A',
-            ])->orderBy('city_name', 'ASC')->get();
-        }
-        return view('customers.edit', [
-            'countries' => $countries,
-            'customer' => $customer,
-            'states' => $states,
-            'cities' => $cities
-        ]);
     }
 }
