@@ -31,7 +31,7 @@
             </a>
           </li>
           <li>
-            <a href="{{ route('inventory.index') }}" class="{{ Route::is('inventory.index','inventory.warehouse.add') ? 'activeBox' : null }}">
+            <a href="{{ route('inventory.warehouse.list') }}" class="{{ Route::is('inventory.index','inventory.warehouse.add') ? 'activeBox' : null }}">
             <span class="w-100"><img src="{{ asset('images/ic_round-inventory.png') }}" />
             <br />Inventory Management</span></a>
           </li>

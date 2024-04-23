@@ -40,7 +40,7 @@
                     <div class=" row">
                         <div class="col-md-6">
                             <div class="mb-3  d-flex flex-column">
-                                <label class="form-label"><span class="text-danger">*</span>Mobile No:</label>
+                                <label class="form-label">Mobile No:</label>
                                 <input type="tel" id="mobile_code-1" class="form-control mobileNumber" name="mobile_no" value="{{ old('mobile_no') }}"/>
                                 <small class="text-danger error_mobile_no"></small>
                             </div>
@@ -60,7 +60,7 @@
                     <div class=" row">
                         <div class="col-md-6">
                             <div class="mb-3  d-flex flex-column">
-                                <label class="form-label"><span class="text-danger">*</span>Email Id:</label>
+                                <label class="form-label">Email Id:</label>
                                  <input type="text" id="email" class="form-control" name ="email" value="{{ old('email') }}" />
                                 <small class="text-danger error_email"></small>
                             </div>
@@ -94,7 +94,7 @@
 
                         <div class="col-md-6">
                             <div class="mb-3">
-                            <label class="form-label"><span class="text-danger">*</span>GST No. :</label>
+                            <label class="form-label">GST No. :</label>
                             <input type="text" class="form-control alphaNumericChar uppercaseChar" name="gst_no" id="gst_no" value="">
                             <small class="text-danger error_gst_no"></small>
                             </div>
@@ -103,7 +103,7 @@
                 </div>
             </div>
             <div class="mb-3">
-                <label class="form-label"><span class="text-danger">*</span>Address :</label>
+                <label class="form-label">Address :</label>
                 <input type="text" class="form-control" name="address" id="address" value="{{ old('address') }}" />
                 <small class="text-danger error_address"></small>
             </div>
@@ -111,7 +111,7 @@
             <div class="row">
                 <div class="col-md-6">
                     <div class="mb-3">
-                        <label class="form-label"><span class="text-danger">*</span>Country :</label>
+                        <label class="form-label">Country :</label>
                         <select class="form-select" aria-label="Default select example" id="country" name="country_id">
                         {{-- <option value="">Select Country</option> --}}
                         @if ($countries->isNotEmpty())
@@ -125,7 +125,7 @@
                 </div>
                 <div class="col-md-6">
                     <div class="mb-3">
-                        <label class="form-label"><span class="text-danger">*</span>State :</label>
+                        <label class="form-label">State :</label>
                         <select class="form-select" aria-label="Default select example" id="state" name="state_id">
                         <option value="">Select State</option>
                         @if ($states->isNotEmpty())
@@ -139,7 +139,7 @@
                 </div>
                 <div class="col-md-6">
                     <div class="mb-3">
-                        <label class="form-label"><span class="text-danger">*</span>City :</label>
+                        <label class="form-label">City :</label>
                         <select class="form-select" aria-label="Default select example" id="city" name="city_id">
                         <option value="">Select City</option>
                         </select>
@@ -148,21 +148,21 @@
                 </div>
                 <div class="col-md-6">
                     <div class="mb-3">
-                        <label class="form-label"><span class="text-danger">*</span>Pincode :</label>
+                        <label class="form-label">Pincode :</label>
                         <input type="text" class="form-control" name="pincode" id="pincode" value="{{ old('pincode') }}" />
                         <small class="text-danger error_pincode"></small>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="mb-3">
-                        <label class="form-label"><span class="text-danger">*</span>Print Margin :</label>
+                        <label class="form-label">Print Margin :</label>
                         <input type="text" class="form-control onlyNumber" name="print_margin" id="print_margin" value="">
                         <small class="text-danger error_print_margin"></small>
                     </div>
                 </div>
             </div>
             <div class="text-end">
-                <button type="button" class="btn grey-primary reset_add_vendor">Cancel</button>
+                <button type="submit" class="btn grey-primary">Cancel</button>
                 <button type="submit" class="btn black-btn">Save</button>
             </div>
         </form>
@@ -194,6 +194,8 @@
       separateDialCode: true,
       // utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/11.0.4/js/utils.js"
     });
+  
+    
 
     $.ajaxSetup({
       headers: {
@@ -257,30 +259,55 @@
       }
     });
 
-    $(document).on('submit','#vendor-add-form',function(e){
+    $(document).on('submit','#customer-add-form',function(e){
       e.preventDefault();
       var __e = $(this);
       var company_name                  = $('#company_name').val();
+      var gst_no                        = $('#gst_no').val().trim();
       var contact_person                = $('#contact_person').val();
+      var contact_person_designation    = $('#contact_person_designation').val();
       var mobile_no                     = $('#mobile_code-1').val().trim();
       var alter_mobile_no               = $('#mobile_code-2').val().trim();
       var email                         = $('#email').val().trim();
       var alternative_email_id          = $('#alternative_email_id').val().trim();
       var phone_no                      = $('#mobile_code-3').val().trim();
       var alternative_phone_no          = $('#mobile_code-4').val();
-      var gst_no                        = $('#gst_no').val().trim();
+      var customer_website              = $('#customer_website').val().trim();
       var address                       = $('#address').val();
       var country                       = $('#country').val();
       var state                         = $('#state').val();
       var city                          = $('#city').val();
       var pincode                       = $('#pincode').val().trim();
       var print_margin                  = $('#print_margin').val();
+      
             
       if (!company_name.trim()) {
         $('#company_name').focus();
         return $('.error_company_name').html('Company name field is required');
       } else {
           $('.error_company_name').html('');
+      }
+
+      var regex_gst = /^([0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}[Z]{1}[0-9A-Z]{1})$/;
+      if (!gst_no) {
+        $('#gst_no').focus();
+        return $('.error_gst_no').html('GST number field is required.');
+      } else {
+        $('.error_gst_no').html('');
+      }
+
+      if (gst_no && !regex_gst.test(gst_no)) {
+        $('#gst_no').focus();
+        return $('.error_gst_no').html('Please enter a valid GST number');
+      } else {
+        $('.error_gst_no').html('');
+      }
+  
+      if (gst_no && (gst_no.length > 15 || gst_no.length < 15)) {
+        $('#gst_no').focus();
+        return $('.error_gst_no').html('GST number must be 15 digits');
+      } else {
+        $('.error_gst_no').html('');
       }
 
       if (!contact_person.trim()) {
@@ -390,26 +417,12 @@
         $('.error_alternative_phone_no').html('');
       }
 
-      var regex_gst = /^([0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}[Z]{1}[0-9A-Z]{1})$/;
-      if (!gst_no) {
-        $('#gst_no').focus();
-        return $('.error_gst_no').html('GST number field is required.');
+      var regex_website = /^(https?:\/\/)?(www\.)?([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}(\/\S*)?$/;
+      if (customer_website && !regex_website.test(customer_website)) {
+        $('#customer_website').focus();
+        return $('.error_customer_website').html('Please enter a valid website');
       } else {
-        $('.error_gst_no').html('');
-      }
-
-      if (gst_no && !regex_gst.test(gst_no)) {
-        $('#gst_no').focus();
-        return $('.error_gst_no').html('Please enter a valid GST number');
-      } else {
-        $('.error_gst_no').html('');
-      }
-  
-      if (gst_no && (gst_no.length > 15 || gst_no.length < 15)) {
-        $('#gst_no').focus();
-        return $('.error_gst_no').html('GST number must be 15 digits');
-      } else {
-        $('.error_gst_no').html('');
+        $('.error_customer_website').html('');
       }
 
       if (!address.trim()) {
@@ -418,7 +431,7 @@
       } else {
           $('.error_address').html('');
       }
-      
+
       if (!country.trim()) {
         $('#country').focus();
         return $('.error_country').html('Country field is required');
@@ -439,7 +452,7 @@
       } else {
           $('.error_city').html('');
       }
-      
+
       if (!pincode.trim()) {
         $('#pincode').focus();
         return $('.error_pincode').html('Pincode field is required');
@@ -451,7 +464,7 @@
           $('.error_pincode').html('');
         }
       }
-      
+
       if (!print_margin.trim()) {
         $('#print_margin').focus();
         return $('.error_print_margin').html('Print margin field is required');
