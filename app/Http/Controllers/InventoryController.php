@@ -146,10 +146,10 @@ class InventoryController extends Controller
         }
 
         /* sorting data in table */
-        if (isset($request->order['0']['dir']) && ($request->order['0']['column'] != 0) && ($request->order['0']['column'] != 5)) {
+        if (isset($request->order['0']['dir']) && ($request->order['0']['column'] != 0) && ($request->order['0']['column'] != 8)) {
             $query->orderBy($column[$request->order['0']['column']], $request->order['0']['dir']);
         }
-        if (isset($request->order['0']['dir']) && ($request->order['0']['column'] != 0) && ($request->order['0']['column'] == 5)) {
+        if (isset($request->order['0']['dir']) && ($request->order['0']['column'] != 0) && ($request->order['0']['column'] == 8)) {
             $query->whereHas('id', function ($q) use ($request) {
                 return $q->orderBy('id', $request->order['0']['dir']);
             });
@@ -320,7 +320,7 @@ class InventoryController extends Controller
 
         try {
             DB::beginTransaction();
-            $warehouse = Warehouses::find($id);
+            $warehouse = Warehouses::findOrFail($id);
             $warehouse->company_name = ucwords(strtolower($request->company_name));
             $warehouse->contact_person = ucwords(strtolower($request->contact_person));
             $warehouse->mobile_no = $request->mobile_no;
@@ -341,7 +341,7 @@ class InventoryController extends Controller
             if($request->vendor_type_id == 2)
             {
                 $vendor_id = $request->vendor_id;
-                $vendors = Vendor::find($vendor_id);
+                $vendors = Vendor::findOrFail($vendor_id);
                 $vendors->company_name = ucwords(strtolower($request->company_name));
                 $vendors->contact_person = ucwords(strtolower($request->contact_person));
                 $vendors->mobile_no = $request->mobile_no;

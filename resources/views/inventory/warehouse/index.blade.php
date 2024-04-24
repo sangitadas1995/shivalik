@@ -86,7 +86,7 @@
         visible: false,
       },
       {
-        target: [1, 7],
+        target: [1, 8],
         searchable: false,
         sortable: false,
       },
