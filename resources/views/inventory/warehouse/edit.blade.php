@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title','Warehouse Management')
+@section('title','Inventory Management')
 @push('extra_css')
 
 @endpush
@@ -14,7 +14,9 @@
 </div>
 <div class="card add-new-location mt-2">
     <div class="card-body">
-        <form action="{{ route('inventory.warehouse.store') }}" method="POST" id="vendor-add-form">
+        <form action="{{ route('inventory.warehouse.update', ['id' => encrypt($warehouse->id)]) }}" method="POST" id="vendor-edit-form">
+            <input type="hidden" name="vendor_id" value="{{ $warehouse->vendor_id }}">
+            <input type="hidden" name="vendor_type_id" value="{{ $warehouse->vendor_type_id }}">
             @csrf
             <div class="row">
                 <div class="col-md-12">
@@ -23,7 +25,7 @@
                 <div class="col-md-6">
                     <div class="mb-3">
                         <label class="form-label"><span class="text-danger">*</span>Company Name :</label>
-                        <input type="text" class="form-control" name="company_name" id="company_name" value="{{ old('company_name') }}"/>
+                        <input type="text" class="form-control" name="company_name" id="company_name" value="{{ $warehouse->company_name }}"/>
                         <small class="text-danger error_company_name"></small>
                     </div>
                 </div>
@@ -31,7 +33,7 @@
                 <div class="col-md-6">
                     <div class="mb-3">
                         <label class="form-label"><span class="text-danger">*</span>Contact Person:</label>
-                        <input type="text" class="form-control alphaChar" name="contact_person" id="contact_person" value="{{ old('contact_person') }}"/>
+                        <input type="text" class="form-control alphaChar" name="contact_person" id="contact_person" value="{{ $warehouse->contact_person }}"/>
                         <small class="text-danger error_contact_person"></small>
                     </div>
                 </div>
@@ -41,7 +43,7 @@
                         <div class="col-md-6">
                             <div class="mb-3  d-flex flex-column">
                                 <label class="form-label"><span class="text-danger">*</span>Mobile No:</label>
-                                <input type="tel" id="mobile_code-1" class="form-control mobileNumber" name="mobile_no" value="{{ old('mobile_no') }}"/>
+                                <input type="tel" id="mobile_code-1" class="form-control mobileNumber" name="mobile_no" value="{{ $warehouse->mobile_no }}"/>
                                 <small class="text-danger error_mobile_no"></small>
                             </div>
                         </div>
@@ -50,7 +52,7 @@
                                 <label class="form-label">Alternative Mobile No.
                                     :</label>
 
-                                <input type="tel" id="mobile_code-2" class="form-control mobileNumber" name="alter_mobile_no" value="{{ old('alter_mobile_no') }}" />
+                                <input type="tel" id="mobile_code-2" class="form-control mobileNumber" name="alter_mobile_no" value="{{ $warehouse->alter_mobile_no }}" />
                   <small class="text-danger error_alter_mobile_no"></small>
                             </div>
                         </div>
@@ -61,14 +63,14 @@
                         <div class="col-md-6">
                             <div class="mb-3  d-flex flex-column">
                                 <label class="form-label"><span class="text-danger">*</span>Email Id:</label>
-                                 <input type="text" id="email" class="form-control" name ="email" value="{{ old('email') }}" />
+                                 <input type="text" id="email" class="form-control" name ="email" value="{{ $warehouse->email }}" />
                                 <small class="text-danger error_email"></small>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="mb-3 d-flex flex-column">
                                 <label class="form-label">Alternative Email Id :</label>
-                                <input type="text" id="alternative_email_id" class="form-control" name="alternative_email_id" value="{{ old('alternative_email_id') }}" />
+                                <input type="text" id="alternative_email_id" class="form-control" name="alternative_email_id" value="{{ $warehouse->alternative_email_id }}" />
                                 <small class="text-danger error_alternative_email_id"></small>
                             </div>
                         </div>
@@ -80,14 +82,14 @@
                         <div class="col-md-3">
                             <div class="mb-3  d-flex flex-column">
                             <label class="form-label">Phone No :</label>
-                            <input type="tel" id="mobile_code-3" class="form-control onlyNumber phoneNumber" name="phone_no" value="{{ old('phone_no') }}" />
+                            <input type="tel" id="mobile_code-3" class="form-control onlyNumber phoneNumber" name="phone_no" value="{{ $warehouse->phone_no }}" />
                             <small class="text-danger error_phone_no"></small>
                             </div>
                         </div>
                         <div class="col-md-3">
                             <div class="mb-3 d-flex flex-column">
                                 <label class="form-label">Alternative Phone No. :</label>
-                                <input type="tel" id="mobile_code-4" class="form-control onlyNumber phoneNumber" name="alternative_phone_no" value="{{ old('alternative_phone_no') }}" />
+                                <input type="tel" id="mobile_code-4" class="form-control onlyNumber phoneNumber" name="alternative_phone_no" value="{{ $warehouse->alternative_phone_no }}" />
                                 <small class="text-danger error_alternative_phone_no"></small>
                             </div>
                         </div>
@@ -95,7 +97,7 @@
                         <div class="col-md-6">
                             <div class="mb-3">
                             <label class="form-label"><span class="text-danger">*</span>GST No. :</label>
-                            <input type="text" class="form-control alphaNumericChar uppercaseChar" name="gst_no" id="gst_no" value="">
+                            <input type="text" class="form-control alphaNumericChar uppercaseChar" name="gst_no" id="gst_no" value="{{ $warehouse->gst }}">
                             <small class="text-danger error_gst_no"></small>
                             </div>
                         </div>
@@ -104,7 +106,7 @@
             </div>
             <div class="mb-3">
                 <label class="form-label"><span class="text-danger">*</span>Address :</label>
-                <input type="text" class="form-control" name="address" id="address" value="{{ old('address') }}" />
+                <input type="text" class="form-control" name="address" id="address" value="{{ $warehouse->address }}" />
                 <small class="text-danger error_address"></small>
             </div>
             
@@ -116,7 +118,8 @@
                         {{-- <option value="">Select Country</option> --}}
                         @if ($countries->isNotEmpty())
                         @foreach ($countries as $country)
-                        <option value="{{ $country->id }}">{{ $country->country_name }}</option>
+                        <option value="{{ $country->id }}" {{ $country->id == $warehouse->country_id ? 'selected' : null }}>{{
+                            $country->country_name }}</option>
                         @endforeach
                         @endif
                         </select>
@@ -130,7 +133,8 @@
                         <option value="">Select State</option>
                         @if ($states->isNotEmpty())
                         @foreach ($states as $state)
-                        <option value="{{ $state->id }}">{{ $state->state_name }}</option>
+                        <option value="{{ $state->id }}" {{ $state->id == $warehouse->state_id ? 'selected' : null }}>{{
+                            $state->state_name }}</option>
                         @endforeach
                         @endif
                         </select>
@@ -142,6 +146,12 @@
                         <label class="form-label"><span class="text-danger">*</span>City :</label>
                         <select class="form-select" aria-label="Default select example" id="city" name="city_id">
                         <option value="">Select City</option>
+                        @if ($cities->isNotEmpty())
+                        @foreach ($cities as $city)
+                        <option value="{{ $city->id }}" {{ $city->id == $warehouse->city_id ? 'selected' : null }}>{{
+                          $city->city_name }}</option>
+                        @endforeach
+                        @endif
                         </select>
                         <small class="text-danger error_city"></small>
                     </div>
@@ -149,14 +159,14 @@
                 <div class="col-md-6">
                     <div class="mb-3">
                         <label class="form-label"><span class="text-danger">*</span>Pincode :</label>
-                        <input type="text" class="form-control" name="pincode" id="pincode" value="{{ old('pincode') }}" />
+                        <input type="text" class="form-control" name="pincode" id="pincode" value="{{ $warehouse->pincode }}" />
                         <small class="text-danger error_pincode"></small>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="mb-3">
                         <label class="form-label"><span class="text-danger">*</span>Print Margin :</label>
-                        <input type="text" class="form-control onlyNumber" name="print_margin" id="print_margin" value="">
+                        <input type="text" class="form-control onlyNumber" name="print_margin" id="print_margin" value="{{ $warehouse->print_margin }}">
                         <small class="text-danger error_print_margin"></small>
                     </div>
                 </div>
@@ -263,7 +273,7 @@
       }
     });
 
-    $(document).on('submit','#vendor-add-form',function(e){
+    $(document).on('submit','#vendor-edit-form',function(e){
       e.preventDefault();
       var __e = $(this);
       var company_name                  = $('#company_name').val();
@@ -493,8 +503,8 @@
       } 
     });
 
-    $(document).on('click','.reset_add_vendor',function(e){
-      $('#vendor-add-form')[0].reset();
+    $(document).on('click','.reset_edit_vendor',function(e){
+      $('#vendor-edit-form')[0].reset();
     });    
 
     function IsEmail(email) {

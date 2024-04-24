@@ -20,7 +20,7 @@
                             <div class="col-12 child-table-row">
                                 <div>
                                     <p class="title">
-                                        Company Profile Details
+                                        Warehouse Details
                                     </p>
                                 </div>
                             </div>
@@ -62,38 +62,6 @@
     
                                 </div>
                             </div>
-                            <!-- table row end -->
-                            <!-- table row -->
-                            @if (!empty($warehouse->contact_person_designation))
-                                <div class="col-5 child-table-row">
-                                    <div>
-                                        Contact Person Designation
-                                    </div>
-                                </div>
-                                <div class="col-7 child-table-row">
-                                    <div>
-                                        {{ $warehouse->contact_person_designation }}
-        
-                                    </div>
-                                </div>
-                            @endif
-                            <!-- table row end -->
-    
-                            <!-- table row -->
-                            @if (!empty($warehouse->customer_website))
-                                
-                                <div class="col-5 child-table-row">
-                                    <div>
-                                        Customer Website
-                                    </div>
-                                </div>
-                                <div class="col-7 child-table-row">
-                                    <div>
-                                        {{ $warehouse->customer_website }}
-        
-                                    </div>
-                                </div>
-                            @endif
                             <!-- table row end -->
                         </div>
                     </div>
@@ -274,49 +242,7 @@
                         </div>
                     </div>
                 </div>
-    {{--             <div class="child-table">
-</div>
-
-                <div class="container">
-
-                    <div class="row border-gray">
-                        <div class="col-12 child-table-row">
-                            <div>
-                                <p class="title">
-                                    Order Details
-                                </p>
-                            </div>
-                        </div>
-
-                        <!-- table row -->
-                        <div class="col-5 child-table-row">
-                            <div>
-                                No. of Orders
-                            </div>
-                        </div>
-                        <div class="col-7 child-table-row">
-                            <div>
-                                24
-
-                            </div>
-                        </div>
-                        <!-- table row end -->
-                        <!-- table row -->
-                        <div class="col-5 child-table-row">
-                            <div>
-                                Print Margin
-                            </div>
-                        </div>
-                        <div class="col-7 child-table-row">
-                            <div>
-                                2%
-                            </div>
-                        </div>
-                        <!-- table row end -->
-
-                    </div>
-                </div>
-            </div> --}}
+            </div>
         </div>
     </div>
-  </div>
+</div>

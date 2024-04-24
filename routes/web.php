@@ -111,6 +111,9 @@ Route::middleware('auth')->group(function () {
             Route::get('list', [InventoryController::class, 'warehouseList'])->name('list');
             Route::post('getAllWarehouseData', [InventoryController::class, 'warehouseDataList'])->name('getAllWarehouseData');
             Route::post('viewWarehouseDetails', [InventoryController::class, 'viewDetails'])->name('viewWarehouseDetails');
+            Route::post('doupdatestatuswarehouse', [InventoryController::class, 'doupdatestatuswarehouse'])->name('doupdatestatuswarehouse');
+            Route::get('edit/{id}', [InventoryController::class, 'edit'])->name('edit');
+            Route::post('update/{id}', [InventoryController::class, 'update'])->name('update');
 
         });
     });
