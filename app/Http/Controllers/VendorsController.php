@@ -613,7 +613,7 @@ class VendorsController extends Controller
             if($request->vendor_type_id == 2)
             {
                 $vendor_id = $id;
-                $warehouse = Warehouses::find($vendor_id);
+                $warehouse = Warehouses::where(['vendor_id' => $id])->first();
                 $warehouse->company_name = ucwords(strtolower($request->company_name));
                 $warehouse->contact_person = ucwords(strtolower($request->contact_person));
                 $warehouse->mobile_no = $request->mobile_no;
