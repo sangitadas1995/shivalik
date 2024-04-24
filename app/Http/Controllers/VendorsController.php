@@ -590,6 +590,7 @@ class VendorsController extends Controller
         ]);
 
         try {
+            DB::beginTransaction();
             $vendor = Vendor::findOrFail($id);
             $vendor->vendor_type_id = $request->vendor_type_id;
             $vendor->company_name = ucwords(strtolower($request->company_name));
@@ -609,12 +610,30 @@ class VendorsController extends Controller
             $vendor->service_type_ids = json_encode($request->service_type_id);
             $update = $vendor->update();
 
-            if ($update) {
-                return redirect()->route('printing-vendor')->with('success', 'The vendor has been updated successfully.');
-            } else {
-                return redirect()->back()->with('fail', 'Failed to create the vendor.');
+            if($request->vendor_type_id == 2)
+            {
+                $vendor_id = $id;
+                $warehouse = Warehouses::find($vendor_id);
+                $warehouse->company_name = ucwords(strtolower($request->company_name));
+                $warehouse->contact_person = ucwords(strtolower($request->contact_person));
+                $warehouse->mobile_no = $request->mobile_no;
+                $warehouse->alter_mobile_no = $request->alter_mobile_no;
+                $warehouse->email = $request->email;
+                $warehouse->alternative_email_id = $request->alternative_email_id;
+                $warehouse->phone_no = $request->phone_no;
+                $warehouse->alternative_phone_no = $request->alternative_phone_no;
+                $warehouse->gst = $request->gst_no;
+                $warehouse->address = $request->address;
+                $warehouse->country_id = $request->country_id;
+                $warehouse->state_id = $request->state_id;
+                $warehouse->city_id = $request->city_id;
+                $warehouse->pincode = $request->pincode;
+                $warehouse->update();
             }
+            DB::commit();
+            return redirect()->route('printing-vendor')->with('success', 'The vendor has been updated successfully.');
         } catch (Exception $th) {
+            DB::rollBack();
             return redirect()->back()->with('fail', trans('messages.server_error'));
         }
     }

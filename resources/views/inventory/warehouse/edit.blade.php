@@ -14,7 +14,7 @@
 </div>
 <div class="card add-new-location mt-2">
     <div class="card-body">
-        <form action="{{ route('inventory.warehouse.update', ['id' => encrypt($warehouse->id)]) }}" method="POST" id="vendor-edit-form">
+        <form action="{{ route('inventory.warehouse.update', ['id' => encrypt($warehouse->id)]) }}" method="POST" id="warehouse-edit-form">
             <input type="hidden" name="vendor_id" value="{{ $warehouse->vendor_id }}">
             <input type="hidden" name="vendor_type_id" value="{{ $warehouse->vendor_type_id }}">
             @csrf
@@ -172,7 +172,7 @@
                 </div>
             </div>
             <div class="text-end">
-                <button type="button" class="btn grey-primary reset_add_vendor">Cancel</button>
+                <button type="button" class="btn grey-primary reset_add_warehouse">Cancel</button>
                 <button type="submit" class="btn black-btn">Save</button>
             </div>
         </form>
@@ -273,7 +273,7 @@
       }
     });
 
-    $(document).on('submit','#vendor-edit-form',function(e){
+    $(document).on('submit','#warehouse-edit-form',function(e){
       e.preventDefault();
       var __e = $(this);
       var company_name                  = $('#company_name').val();
@@ -503,8 +503,8 @@
       } 
     });
 
-    $(document).on('click','.reset_edit_vendor',function(e){
-      $('#vendor-edit-form')[0].reset();
+    $(document).on('click','.reset_add_warehouse',function(e){
+      $('#warehouse-edit-form')[0].reset();
     });    
 
     function IsEmail(email) {

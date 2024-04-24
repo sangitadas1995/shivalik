@@ -15,7 +15,7 @@
 </div>
 <div class="card add-new-location mt-2">
   <div class="card-body">
-    <form action="{{ route('vendors.printing.update', request()->id) }}" method="POST" id="vendor-add-form">
+    <form action="{{ route('vendors.printing.update', request()->id) }}" method="POST" id="vendor-edit-form">
       @csrf
       <div class="row">
         <div class="col-md-12">
@@ -306,27 +306,37 @@
       }
     });
 
-    $(document).on('submit', '#customer-add-form', function (e) {
+    $(document).on('submit', '#vendor-edit-form', function (e) {
       e.preventDefault();
       var __e = $(this);
       var company_name = $('#company_name').val();
-      var gst_no = $('#gst_no').val().trim();
       var contact_person = $('#contact_person').val();
-      var contact_person_designation = $('#contact_person_designation').val();
       var mobile_no = $('#mobile_code-1').val().trim();
       var alter_mobile_no = $('#mobile_code-2').val().trim();
       var email = $('#email').val().trim();
       var alternative_email_id = $('#alternative_email_id').val().trim();
       var phone_no = $('#mobile_code-3').val().trim();
       var alternative_phone_no = $('#mobile_code-4').val();
-      var customer_website = $('#customer_website').val().trim();
+      var gst_no = $('#gst_no').val().trim();
       var address = $('#address').val();
       var country = $('#country').val();
       var state = $('#state').val();
       var city = $('#city').val();
       var pincode = $('#pincode').val().trim();
-      var print_margin = $('#print_margin').val();
-
+      console.log(company_name);
+      console.log(contact_person);
+      console.log(mobile_no);
+      console.log(alter_mobile_no);
+      console.log(email);
+      console.log(alternative_email_id);
+      console.log(phone_no);
+      console.log(alternative_phone_no);
+      console.log(gst_no);
+      console.log(address);
+      console.log(country);
+      console.log(state);
+      console.log(city);
+      console.log(pincode);
 
       if (!company_name.trim()) {
         $('#company_name').focus();
@@ -464,13 +474,13 @@
         $('.error_alternative_phone_no').html('');
       }
 
-      var regex_website = /^(https?:\/\/)?(www\.)?([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}(\/\S*)?$/;
-      if (customer_website && !regex_website.test(customer_website)) {
-        $('#customer_website').focus();
-        return $('.error_customer_website').html('Please enter a valid website');
-      } else {
-        $('.error_customer_website').html('');
-      }
+      // var regex_website = /^(https?:\/\/)?(www\.)?([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}(\/\S*)?$/;
+      // if (customer_website && !regex_website.test(customer_website)) {
+      //   $('#customer_website').focus();
+      //   return $('.error_customer_website').html('Please enter a valid website');
+      // } else {
+      //   $('.error_customer_website').html('');
+      // }
 
       if (!address.trim()) {
         $('#address').focus();
@@ -510,13 +520,6 @@
         } else {
           $('.error_pincode').html('');
         }
-      }
-
-      if (!print_margin.trim()) {
-        $('#print_margin').focus();
-        return $('.error_print_margin').html('Print margin field is required');
-      } else {
-        $('.error_print_margin').html('');
       }
 
       __e[0].submit();
