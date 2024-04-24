@@ -14,7 +14,7 @@
 </div>
 <div class="card add-new-location mt-2">
     <div class="card-body">
-        <form action="{{ route('inventory.warehouse.store') }}" method="POST" id="vendor-add-form">
+        <form action="{{ route('inventory.warehouse.store') }}" method="POST" id="warehouse-add-form">
             @csrf
             <div class="row">
                 <div class="col-md-12">
@@ -162,7 +162,7 @@
                 </div>
             </div>
             <div class="text-end">
-                <button type="button" class="btn grey-primary reset_add_vendor">Cancel</button>
+                <button type="button" class="btn grey-primary reset_add_warehouse">Cancel</button>
                 <button type="submit" class="btn black-btn">Save</button>
             </div>
         </form>
@@ -263,7 +263,7 @@
       }
     });
 
-    $(document).on('submit','#vendor-add-form',function(e){
+    $(document).on('submit','#warehouse-add-form',function(e){
       e.preventDefault();
       var __e = $(this);
       var company_name                  = $('#company_name').val();
@@ -493,8 +493,8 @@
       } 
     });
 
-    $(document).on('click','.reset_add_vendor',function(e){
-      $('#vendor-add-form')[0].reset();
+    $(document).on('click','.reset_add_warehouse',function(e){
+      $('#warehouse-add-form')[0].reset();
     });    
 
     function IsEmail(email) {
