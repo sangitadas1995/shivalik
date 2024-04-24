@@ -31,7 +31,7 @@
                 <div class="col-md-6">
                     <div class="mb-3">
                         <label class="form-label"><span class="text-danger">*</span>Contact Person:</label>
-                        <input type="text" class="form-control" name="contact_person" id="contact_person" value="{{ old('contact_person') }}"/>
+                        <input type="text" class="form-control alphaChar" name="contact_person" id="contact_person" value="{{ old('contact_person') }}"/>
                         <small class="text-danger error_contact_person"></small>
                     </div>
                 </div>
@@ -174,6 +174,12 @@
 <script src="{{ asset('js/select2.min.js') }}"></script>
 <script>
   $(document).ready(function() {
+    $(".alphaChar").on('input', function () {
+      var inputValue = $(this).val();
+      // Remove non-numeric characters
+      var sanitizedValue = inputValue.replace(/[^a-zA-Z\s]/g, '');
+      $(this).val(sanitizedValue); // Update input field with sanitized value
+    });
     $("#mobile_code-1").intlTelInput({
       initialCountry: "in",
       separateDialCode: true,

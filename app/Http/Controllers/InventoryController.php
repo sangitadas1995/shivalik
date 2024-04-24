@@ -120,7 +120,6 @@ class InventoryController extends Controller
 
     public function warehouseDataList(Request $request)
     {
-        // dd($request->toArray());
         $column = [
             'id',
             'index',
@@ -140,7 +139,8 @@ class InventoryController extends Controller
                 $q->where('company_name', 'LIKE', "%" . $request->search['value'] . "%")
                     ->orWhere('contact_person', 'LIKE', "%" . $request->search['value'] . "%")
                     ->orWhere('email', 'LIKE', "%" . $request->search['value'] . "%")
-                    ->orWhere('warehouse_type', 'LIKE', "%" . $request->search['value'] . "%");
+                    ->orWhere('warehouse_type', 'LIKE', "%" . $request->search['value'] . "%")
+                    ->orWhere('mobile_no', 'LIKE', "%" . $request->search['value'] . "%");
             });
         }
 
@@ -180,7 +180,7 @@ class InventoryController extends Controller
                 $subarray[] = $value->mobile_no;
                 $subarray[] = $value->email;
                 $subarray[] = $warehouse_type;
-                $subarray[] = '<a href="#" class="view_details" title="View Details" data-id ="' . $value->id .     
+                $subarray[] = '<a href="#" class="view_warehouse_details" title="View Details" data-id ="' . $value->id .     
                                 '"><img src="' . $view_icon . '" /></a>
                                 <a href="' . $editLink . '" title="Edit"><img src="' . $edit_icon . '" /></a>';
 
@@ -198,5 +198,13 @@ class InventoryController extends Controller
         ];
 
         return response()->json($output);
+    }
+
+    public function viewDetails(Request $request)
+    {
+        $warehouse = Warehouses::with('city', 'state', 'country')->findOrFail($request->rowid);
+
+        $html = view('inventory.warehouse.details', ['warehouse' => $warehouse])->render();
+        return response()->json($html);
     }
 }

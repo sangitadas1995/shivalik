@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title','Inventory Management')
+@section('title','Warehouse Management')
 @push('extra_css')
 
 @endpush
@@ -7,16 +7,16 @@
 <div class="page-name">
   <div class="row justify-content-between align-items-center">
     <div class="col-md-4">
-      <h2><i class="ri-arrow-left-line"></i> Inventory Management</h2>
+      <h2><i class="ri-arrow-left-line"></i> Warehouse Management</h2>
     </div>
     <div class="col-md-6">
       <div class="text-end mb-4">
         <a href="{{ route('inventory.warehouse.add') }}" class="btn primary-btn"><img
             src="{{ asset('images/add-accoun-1t.png') }}" /> Add Warehouse</a>
-        <a href="javascript:void(0);" class="btn primary-btn bulk_upload modal-dialog-centered" data-bs-toggle="modal"
+        {{-- <a href="javascript:void(0);" class="btn primary-btn bulk_upload modal-dialog-centered" data-bs-toggle="modal"
           data-bs-target="#bulk_upload_modal">
           <img src="{{ asset('images/upload-1.png') }}" />Add Product Stock
-        </a>
+        </a> --}}
       </div>
     </div>
   </div>
@@ -51,9 +51,9 @@
 <!-- 
   Cutomer view details modal
 -->
-<div class="modal fade" id="customarDetailsModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+<div class="modal fade" id="warehouseDetailsModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
   aria-labelledby="staticBackdropLabel" aria-hidden="true">
-  <div class="render_customer_details"></div>
+  <div class="render_warehouse_details"></div>
   <div class="modal-dialog modal-dialog-scrollable  modal-dialog-centered">
   </div>
 </div>
@@ -94,23 +94,23 @@
       ]
     });
 
-    // $(document).on('click', '.view_details', function (e) {
-    //   e.preventDefault();
-    //   var __e = $(this);
-    //   var rowid = __e.data('id');
-    //   if (rowid) {
-    //     $.ajax({
-    //       type: "post",
-    //       url: "{{ route('customers.view') }}",
-    //       data: { rowid },
-    //       dataType: "json",
-    //       success: function (response) {
-    //         $('.render_customer_details').html(response);
-    //         $('#customarDetailsModal').modal('show');
-    //       }
-    //     });
-    //   }
-    // });
+    $(document).on('click', '.view_warehouse_details', function (e) {
+      e.preventDefault();
+      var __e = $(this);
+      var rowid = __e.data('id');
+      if (rowid) {
+        $.ajax({
+          type: "post",
+          url: "{{ route('inventory.warehouse.viewWarehouseDetails') }}",
+          data: { rowid },
+          dataType: "json",
+          success: function (response) {
+            $('.render_warehouse_details').html(response);
+            $('#warehouseDetailsModal').modal('show');
+          }
+        });
+      }
+    });
   });
 
 </script>

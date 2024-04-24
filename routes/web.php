@@ -110,6 +110,7 @@ Route::middleware('auth')->group(function () {
             Route::post('store', [InventoryController::class, 'store'])->name('store');
             Route::get('list', [InventoryController::class, 'warehouseList'])->name('list');
             Route::post('getAllWarehouseData', [InventoryController::class, 'warehouseDataList'])->name('getAllWarehouseData');
+            Route::post('viewWarehouseDetails', [InventoryController::class, 'viewDetails'])->name('viewWarehouseDetails');
 
         });
     });
