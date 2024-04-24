@@ -226,17 +226,26 @@ class InventoryController extends Controller
         ]);
 
         try {
+            DB::beginTransaction();
             $id = $request->rowid;
             $status = $request->rowstatus == 'lock' ? 'I' : 'A';
 
             $warehouse = Warehouses::findOrFail($id);
             $warehouse->status = $status;
-            $warehouse->update();
-
+            $update = $warehouse->update();
+            $warehouse_data = Warehouses::where(['id' => $id])->first();
+            if($update && $warehouse_data->vendor_id != null)
+            {
+                $vendor = Vendor::findOrFail($warehouse_data->vendor_id);
+                $vendor->status = $status;
+                $vendor->update();
+            }
+            DB::commit();
             return response()->json([
                 'message' => 'Warehouse has been ' . $request->rowstatus . ' successfully.'
             ]);
         } catch (Exception $th) {
+            DB::rollBack();
             return response()->json([
                 'message' => trans('messages.server_error')
             ], 500);
