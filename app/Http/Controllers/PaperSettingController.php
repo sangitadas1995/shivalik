@@ -925,6 +925,7 @@ class PaperSettingController extends Controller
 
     public function addPaperQuantity()
     {
+        
         return view('settings.lotcalculation.create');
     }
 }
