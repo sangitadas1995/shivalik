@@ -973,7 +973,7 @@ class PaperSettingController extends Controller
             foreach ($result as $key => $value) {
                 $view_icon = asset('images/lucide_view.png');
                 $edit_icon = asset('images/akar-icons_edit.png');
-                $editLink = route('inventory.warehouse.edit', ['id' => encrypt($value->id)]);
+                $editLink = route('settings.papersettings.edit-paper-quantity', ['id' => encrypt($value->id)]);
 
                 $subarray = [];
                 $subarray[] = $value->id;
@@ -982,7 +982,7 @@ class PaperSettingController extends Controller
                 $subarray[] = $value->packaging_title;
                 $subarray[] = $value->unit_type?->measurement_unuit ?? null;
                 $subarray[] = $value->no_of_sheet;
-                $subarray[] = '<a href="#" class="view_warehouse_details" title="View Details" data-id ="' . $value->id .     
+                $subarray[] = '<a href="#" class="view_measurement_details" title="View Details" data-id ="' . $value->id .     
                                 '"><img src="' . $view_icon . '" /></a>
                                 <a href="' . $editLink . '" title="Edit"><img src="' . $edit_icon . '" /></a>';
                 $data[] = $subarray;
@@ -1063,5 +1063,32 @@ class PaperSettingController extends Controller
         } catch (Exception $th) {
             return redirect()->back()->with('fail', trans('messages.server_error'));
         }
+    }
+
+    public function viewDetails(Request $request)
+    {
+        $unitMeasure = PaperQuantityCalculation::with('unit_type')->findOrFail($request->rowid);
+
+        $html = view('settings.lotcalculation.details', ['unitMeasure' => $unitMeasure])->render();
+        return response()->json($html);
+    }
+
+    public function editPaperQuantity($id)
+    {
+        $id = decrypt($id);
+        $quantity = PaperQuantityCalculation::findOrFail($id);
+        $unitMeasure = $this->fetchUnitMeasure();
+
+        $unit_type_name = PaperunitMeasument::where([
+            'status' => 'A',
+            'id' => $quantity->measurement_type_unit
+        ])
+        ->get();
+
+        return view('settings.lotcalculation.edit', [
+            'unitMeasure' => $unitMeasure,
+            'quantity' => $quantity,
+            'unit_type_name' => $unit_type_name
+        ]);
     }
 }

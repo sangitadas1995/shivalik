@@ -49,9 +49,9 @@
 <!-- 
   Cutomer view details modal
 -->
-<div class="modal fade" id="warehouseDetailsModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+<div class="modal fade" id="paperMeasurementDetailsModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
   aria-labelledby="staticBackdropLabel" aria-hidden="true">
-  <div class="render_warehouse_details"></div>
+  <div class="render_paper_measurement_details"></div>
   <div class="modal-dialog modal-dialog-scrollable  modal-dialog-centered">
   </div>
 </div>
@@ -92,9 +92,23 @@
       ]
     });
 
-
-
-    
-});
+    $(document).on('click', '.view_measurement_details', function (e) {
+      e.preventDefault();
+      var __e = $(this);
+      var rowid = __e.data('id');
+      if (rowid) {
+        $.ajax({
+          type: "post",
+          url: "{{ route('settings.papersettings.viewMeasurementCalculationDetails') }}",
+          data: { rowid },
+          dataType: "json",
+          success: function (response) {
+            $('.render_paper_measurement_details').html(response);
+            $('#paperMeasurementDetailsModal').modal('show');
+          }
+        });
+      }
+    });
+  });
 </script>
 @endsection

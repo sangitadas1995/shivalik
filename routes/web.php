@@ -190,6 +190,9 @@ Route::middleware('auth')->group(function () {
             Route::get('add-quantity', [PaperSettingController::class, 'addPaperQuantity'])->name('add-quantity');
             Route::post('add-new-measurement-type', [PaperSettingController::class, 'addNewMeasurementType'])->name('add-new-measurement-type');
             Route::post('store-paper-quantity', [PaperSettingController::class, 'storePaperQuantity'])->name('store-paper-quantity');
+            Route::post('viewMeasurementCalculationDetails', [PaperSettingController::class, 'viewDetails'])->name('viewMeasurementCalculationDetails');
+            Route::get('edit-paper-quantity/{id}', [PaperSettingController::class, 'editPaperQuantity'])->name('edit-paper-quantity');
+            Route::post('update-paper-quantity/{id}', [InventoryController::class, 'updatePaperQuantity'])->name('update-paper-quantity');
         });
     });
 
