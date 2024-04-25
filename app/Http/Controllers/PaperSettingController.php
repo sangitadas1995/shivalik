@@ -12,6 +12,7 @@ use App\Models\Paper_quality;
 use App\Models\Paper_weights;
 use Illuminate\Validation\Rule;
 use App\Models\Paper_categories;
+use App\Models\PaperunitMeasument;
 use App\Models\PaperQuantityCalculation;
 use App\Traits\QuantityCalculationTrait;
 use App\Rules\PaperSettingUniqueValueCheck;
@@ -918,14 +919,149 @@ class PaperSettingController extends Controller
         }
     }
 
-    public function paperQuantityListing()
+    public function paperQuantity()
     {
         return view('settings.lotcalculation.index');
+    }
+
+    public function paperQuantityDataList(Request $request)
+    {
+        $column = [
+            'id',
+            'index',
+            'created_at',
+            'packaging_title',
+            'measurement_type_unit',
+            'no_of_sheet',
+        ];
+
+        $query = PaperQuantityCalculation::with('unit_type');
+
+        /* for search in table */
+        if (isset($request->search['value'])) {
+            $query->where(function ($q) use ($request) {
+                $q->where('packaging_title', 'LIKE', "%" . $request->search['value'] . "%")
+                    ->orWhere('contact_person', 'LIKE', "%" . $request->search['value'] . "%")
+                    ->orWhere('no_of_sheet', 'LIKE', "%" . $request->search['value'] . "%")
+                    ->orWhereHas('measurement_type_unit', function ($q) use ($request) {
+                        $q->where('measurement_unuit', 'LIKE', "%" . $request->search['value'] . "%");
+                    });
+            });
+        }
+
+        /* sorting data in table */
+        if (isset($request->order['0']['dir']) && ($request->order['0']['column'] != 0) && ($request->order['0']['column'] != 8)) {
+            $query->orderBy($column[$request->order['0']['column']], $request->order['0']['dir']);
+        }
+        if (isset($request->order['0']['dir']) && ($request->order['0']['column'] != 0) && ($request->order['0']['column'] == 8)) {
+            $query->whereHas('id', function ($q) use ($request) {
+                return $q->orderBy('id', $request->order['0']['dir']);
+            });
+        } else {
+            $query->orderBy('created_at', 'desc');
+        }
+
+        $number_filtered_row = $query->count();
+
+        if ($request->length != -1) {
+            $query->limit($request->length)->offset($request->start);
+        }
+
+        $result = $query->get();
+        $data = [];
+        if ($result->isNotEmpty()) {
+            foreach ($result as $key => $value) {
+                $view_icon = asset('images/lucide_view.png');
+                $edit_icon = asset('images/akar-icons_edit.png');
+                $editLink = route('inventory.warehouse.edit', ['id' => encrypt($value->id)]);
+
+                $subarray = [];
+                $subarray[] = $value->id;
+                $subarray[] = $value->id . '.';
+                $subarray[] = Carbon::parse($value->created_at)->format('d/m/Y h:i A');
+                $subarray[] = $value->packaging_title;
+                $subarray[] = $value->unit_type?->measurement_unuit ?? null;
+                $subarray[] = $value->no_of_sheet;
+                $subarray[] = '<a href="#" class="view_warehouse_details" title="View Details" data-id ="' . $value->id .     
+                                '"><img src="' . $view_icon . '" /></a>
+                                <a href="' . $editLink . '" title="Edit"><img src="' . $edit_icon . '" /></a>';
+                $data[] = $subarray;
+            }
+        }
+
+        $count = PaperQuantityCalculation::with('id')->count();
+
+        $output = [
+            'draw' => intval($request->draw),
+            'recordsTotal' => $count,
+            'recordsFiltered' => $number_filtered_row,
+            'data' => $data
+        ];
+
+        return response()->json($output);
     }
 
     public function addPaperQuantity()
     {
         $unitMeasure = $this->fetchUnitMeasure();
-        return view('settings.lotcalculation.create',array(['unitMeasure'=>$unitMeasure]));
+        return view('settings.lotcalculation.create', [
+            'unitMeasure' => $unitMeasure
+        ]);
+    }
+
+    public function addNewMeasurementType(Request $request)
+    {
+        $request->validate([
+            'measurement_unuit' => 'required|unique:paperunit_measuments,measurement_unuit'
+        ]);
+
+        try 
+        {
+            $measurement = new PaperunitMeasument();
+            $measurement->measurement_unuit = $request->measurement_unuit;
+            $save = $measurement->save();
+
+            if ($save) {
+               $res = array(
+                'status'=>'success'
+                );
+            } else {
+                $res = array(
+                'status'=>'fail'
+                );
+            }
+        } 
+        catch (Exception $th) 
+        {
+            $res = array(
+                'status'=>'fail'
+            );
+        }
+        echo json_encode($res);
+    }
+
+    public function storePaperQuantity(Request $request)
+    {
+        $request->validate([
+            'packaging_title' => ['required', 'string'],
+            'measurement_type_unit' => ['required'],
+            'no_of_sheet' => ['required', 'numeric'],
+        ]);
+
+        try {
+            $paperquantity = new PaperQuantityCalculation();
+            $paperquantity->packaging_title = $request->packaging_title;
+            $paperquantity->measurement_type_unit = $request->measurement_type_unit;
+            $paperquantity->no_of_sheet = $request->no_of_sheet;
+            $save = $paperquantity->save();
+
+            if ($save) {
+                return redirect()->route('settings.papersettings.quantity-calculation')->with('success', 'The paper quantity has been created successfully.');
+            } else {
+                return redirect()->back()->with('fail', 'Failed to create the paper quantity.');
+            }
+        } catch (Exception $th) {
+            return redirect()->back()->with('fail', trans('messages.server_error'));
+        }
     }
 }

@@ -185,9 +185,11 @@ Route::middleware('auth')->group(function () {
             Route::get('edit_paper_thickness/{id}', [PaperSettingController::class, 'editpapergsm'])->name('edit_paper_thickness');
             Route::post('updatepapergsm/{id}', [PaperSettingController::class, 'updatepapergsm'])->name('updatepapergsm');
 
-            Route::get('quantity-calculation', [PaperSettingController::class, 'paperQuantityListing'])->name('quantity-calculation');
+            Route::get('quantity-calculation', [PaperSettingController::class, 'paperQuantity'])->name('quantity-calculation');
+            Route::post('paper-quantity-data-listing', [PaperSettingController::class, 'paperQuantityDataList'])->name('paper-quantity-data-listing');
             Route::get('add-quantity', [PaperSettingController::class, 'addPaperQuantity'])->name('add-quantity');
-            Route::post('store-calculation', [PaperSettingController::class, 'storeQuantity'])->name('store-calculation');
+            Route::post('add-new-measurement-type', [PaperSettingController::class, 'addNewMeasurementType'])->name('add-new-measurement-type');
+            Route::post('store-paper-quantity', [PaperSettingController::class, 'storePaperQuantity'])->name('store-paper-quantity');
         });
     });
 

@@ -28,17 +28,15 @@
 </div>
 <div class="row">
   <div class="table-responsive table-sec mb-4">
-    <table class="table table-striped" id="inventory_list_table">
+    <table class="table table-striped" id="unit_type_list_table">
       <thead>
         <tr>
           <th>Row ID</th>
           <th style="text-align: center">ID</th>
           <th style="text-align: center">Date</th>
-          <th style="text-align: center">Company Name</th>
-          <th style="text-align: center">Contact Person</th>
-          <th style="text-align: center">Mobile No</th>
-          <th style="text-align: center">Email</th>
-          <th style="text-align: center">Warehouse Type</th>
+          <th style="text-align: center">Title</th>
+          <th style="text-align: center">Unit Type</th>
+          <th style="text-align: center">No of Sheet</th>
           <th style="text-align: center">Action</th>
         </tr>
       </thead>
@@ -68,12 +66,12 @@
       }
     });
      
-    let inventory_list_table = $('#inventory_list_table').DataTable({
+    let unit_type_list_table = $('#unit_type_list_table').DataTable({
       processing: true,
       serverSide: true,
       pageLength: 10,
       ajax: {
-        url: "{{ route('inventory.warehouse.getAllWarehouseData') }}",
+        url: "{{ route('settings.papersettings.paper-quantity-data-listing') }}",
         type: 'POST',
         'data': function (data) {
           return data;
@@ -86,7 +84,7 @@
         visible: false,
       },
       {
-        target: [1, 8],
+        target: [1, 6],
         searchable: false,
         sortable: false,
       },
@@ -94,61 +92,9 @@
       ]
     });
 
-    $(document).on('click', '.view_warehouse_details', function (e) {
-      e.preventDefault();
-      var __e = $(this);
-      var rowid = __e.data('id');
-      if (rowid) {
-        $.ajax({
-          type: "post",
-          url: "{{ route('inventory.warehouse.viewWarehouseDetails') }}",
-          data: { rowid },
-          dataType: "json",
-          success: function (response) {
-            $('.render_warehouse_details').html(response);
-            $('#warehouseDetailsModal').modal('show');
-          }
-        });
-      }
-    });
 
-    $(document).on('click','.updateStatus',function(e){
-        e.preventDefault();
-        var __e = $(this);
-        var rowid = __e.data('id');
-        var rowstatus = __e.data('status');
-        var currentPage = inventory_list_table.page();
-        if (rowid) {
-          Swal.fire({
-            icon: "warning",
-            text: `Are you sure, you want to ${rowstatus} this warehouse?`,
-            showDenyButton: false,
-            showCancelButton: true,
-            confirmButtonText: "Yes",
-            cancelButtonText: "No",
-            cancelButtonColor: "crimson",
-          }).then((result) => {
-            if (result.isConfirmed) {
-              $.ajax({
-                type: "post",
-                url: "{{ route('inventory.warehouse.doupdatestatuswarehouse') }}",
-                data: {
-                  rowid,
-                  rowstatus
-                },
-                dataType: "json",
-                success: function (response) {
-                    inventory_list_table.page(currentPage).draw(false);
-                    return Swal.fire('Success!', response.message, 'success');
-                },
-                error: function(xhr, status, error) {
-                  return Swal.fire('Error!', 'Something went wrong, please try again.', 'error');
-                }
-              });
-            }
-          });
-        }
-      });
+
+    
 });
 </script>
 @endsection
