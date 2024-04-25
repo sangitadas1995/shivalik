@@ -136,12 +136,14 @@ class InventoryController extends Controller
 
         /* for search in table */
         if (isset($request->search['value'])) {
-            $query->where(function ($q) use ($request) {
-                $q->where('company_name', 'LIKE', "%" . $request->search['value'] . "%")
-                    ->orWhere('contact_person', 'LIKE', "%" . $request->search['value'] . "%")
-                    ->orWhere('email', 'LIKE', "%" . $request->search['value'] . "%")
-                    ->orWhere('warehouse_type', 'LIKE', "%" . $request->search['value'] . "%")
-                    ->orWhere('mobile_no', 'LIKE', "%" . $request->search['value'] . "%");
+            $searchValue = str_replace(' ', '_', $request->search['value']); // Replace spaces with underscores
+        
+            $query->where(function ($q) use ($searchValue) {
+                $q->where('company_name', 'LIKE', "%" . $searchValue . "%")
+                    ->orWhere('contact_person', 'LIKE', "%" . $searchValue . "%")
+                    ->orWhere('email', 'LIKE', "%" . $searchValue . "%")
+                    ->orWhere('warehouse_type', 'LIKE', "%" . $searchValue . "%")
+                    ->orWhere('mobile_no', 'LIKE', "%" . $searchValue . "%");
             });
         }
 

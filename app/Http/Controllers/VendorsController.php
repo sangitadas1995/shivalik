@@ -234,6 +234,15 @@ class VendorsController extends Controller
                 $view_icon = asset('images/lucide_view.png');
                 $edit_icon = asset('images/akar-icons_edit.png');
                 $editLink = route('vendors.printing.edit', encrypt($value->id));
+                $lock_icon =  asset('images/eva_lock-outline.png');
+                $unlock_icon =  asset('images/lock-open-right-outline.png');
+
+                if ($value->status == "A") {
+                    $status = '<a href="#" class="updateStatus" data-id ="' . $value->id . '" data-status="lock" title="Unlock"><img src="' . $unlock_icon . '" /></a>';
+                }
+                if ($value->status == "I") {
+                    $status = '<a href="#" class="updateStatus" data-id ="' . $value->id . '" data-status="unlock" title="Lock"><img src="' . $lock_icon . '" /></a>';
+                }
 
                 $service_types_ids = json_decode($value->service_type_ids);
 
@@ -260,7 +269,9 @@ class VendorsController extends Controller
                 $subarray[] = $value->contact_person;
                 $subarray[] = $value->mobile_no;
                 $subarray[] = $service_types;
-                $subarray[] = '<a href="#" class="view_details" title="View Details" data-id ="' . $value->id . '"><img src="' . $view_icon . '" /></a> <a href="' . $editLink . '" title="Edit"><img src="' . $edit_icon . '" /></a>';
+                $subarray[] = '<a href="#" class="view_details" title="View Details" data-id ="' . $value->id . '"><img src="' . $view_icon . '" /></a> <a href="' . $editLink . '" title="Edit"><img src="' . $edit_icon . '" /></a>'.
+                $status . '</div>';
+
                 $data[] = $subarray;
             }
         }
@@ -277,6 +288,39 @@ class VendorsController extends Controller
         return response()->json($output);
     }
 
+    public function doupdatestatusvendor(Request $request)
+    {
+        $request->validate([
+            'rowid' => ['required'],
+            'rowstatus' => ['required']
+        ]);
+
+        try {
+            DB::beginTransaction();
+            $id = $request->rowid;
+            $status = $request->rowstatus == 'lock' ? 'I' : 'A';
+
+            $vendors = Vendor::findOrFail($id);
+            $vendors->status = $status;
+            $update = $vendors->update();
+            $warehouse_data = Warehouses::where(['vendor_id' => $id])->first();
+            if($update)
+            {
+                $warehouse = Warehouses::findOrFail($warehouse_data->id);
+                $warehouse->status = $status;
+                $warehouse->update();
+            }
+            DB::commit();
+            return response()->json([
+                'message' => 'Vendor has been ' . $request->rowstatus . ' successfully.'
+            ]);
+        } catch (Exception $th) {
+            DB::rollBack();
+            return response()->json([
+                'message' => trans('messages.server_error')
+            ], 500);
+        }
+    }
 
     public function view(Request $request)
     {
