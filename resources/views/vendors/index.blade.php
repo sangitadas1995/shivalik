@@ -90,6 +90,44 @@
       ]
     });
 
+    $(document).on('click','.updateStatus',function(e){
+      e.preventDefault();
+      var __e = $(this);
+      var rowid = __e.data('id');
+      var rowstatus = __e.data('status');
+      var currentPage = vendors_list_table.page();
+      if (rowid) {
+        Swal.fire({
+          icon: "warning",
+          text: `Are you sure, you want to ${rowstatus} this vendor?`,
+          showDenyButton: false,
+          showCancelButton: true,
+          confirmButtonText: "Yes",
+          cancelButtonText: "No",
+          cancelButtonColor: "crimson",
+        }).then((result) => {
+          if (result.isConfirmed) {
+            $.ajax({
+              type: "post",
+              url: "{{ route('doupdatestatusvendor') }}",
+              data: {
+                rowid,
+                rowstatus
+              },
+              dataType: "json",
+              success: function (response) {
+                vendors_list_table.page(currentPage).draw(false);
+                  return Swal.fire('Success!', response.message, 'success');
+              },
+              error: function(xhr, status, error) {
+                return Swal.fire('Error!', 'Something went wrong, please try again.', 'error');
+              }
+            });
+          }
+        });
+      }
+    });
+
     $(document).on('click', '.view_details', function (e) {
       e.preventDefault();
       var __e = $(this);
