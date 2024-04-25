@@ -94,6 +94,7 @@ Route::middleware('auth')->group(function () {
     });
 
     Route::get('printing-vendor', [VendorsController::class, 'index'])->name('printing-vendor');
+    Route::post('doupdatestatusvendor', [VendorsController::class, 'doupdatestatusvendor'])->name('doupdatestatusvendor');
     Route::get('paper-vendor', [VendorsController::class, 'papervendors'])->name('paper-vendor');
     Route::post('paper-vendors', [VendorsController::class, 'papervendorsList'])->name('paper-vendor-list');
 
