@@ -925,7 +925,7 @@ class PaperSettingController extends Controller
 
     public function addPaperQuantity()
     {
-        
-        return view('settings.lotcalculation.create');
+        $unitMeasure = $this->fetchUnitMeasure();
+        return view('settings.lotcalculation.create',array(['unitMeasure'=>$unitMeasure]));
     }
 }
