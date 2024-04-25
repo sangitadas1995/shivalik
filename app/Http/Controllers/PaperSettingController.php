@@ -982,8 +982,8 @@ class PaperSettingController extends Controller
                 $subarray[] = $value->packaging_title;
                 $subarray[] = $value->unit_type?->measurement_unuit ?? null;
                 $subarray[] = $value->no_of_sheet;
-                $subarray[] = '<a href="#" class="view_measurement_details" title="View Details" data-id ="' . $value->id .     
-                                '"><img src="' . $view_icon . '" /></a>
+                $subarray[] = '<a href="#" class="view_measurement_details" title="View Details" data-id ="' . $value->id .
+                    '"><img src="' . $view_icon . '" /></a>
                                 <a href="' . $editLink . '" title="Edit"><img src="' . $edit_icon . '" /></a>';
                 $data[] = $subarray;
             }
@@ -1015,26 +1015,23 @@ class PaperSettingController extends Controller
             'measurement_unuit' => 'required|unique:paperunit_measuments,measurement_unuit'
         ]);
 
-        try 
-        {
+        try {
             $measurement = new PaperunitMeasument();
             $measurement->measurement_unuit = $request->measurement_unuit;
             $save = $measurement->save();
 
             if ($save) {
-               $res = array(
-                'status'=>'success'
+                $res = array(
+                    'status' => 'success'
                 );
             } else {
                 $res = array(
-                'status'=>'fail'
+                    'status' => 'fail'
                 );
             }
-        } 
-        catch (Exception $th) 
-        {
+        } catch (Exception $th) {
             $res = array(
-                'status'=>'fail'
+                'status' => 'fail'
             );
         }
         echo json_encode($res);
@@ -1083,12 +1080,126 @@ class PaperSettingController extends Controller
             'status' => 'A',
             'id' => $quantity->measurement_type_unit
         ])
-        ->get();
+            ->get();
 
         return view('settings.lotcalculation.edit', [
             'unitMeasure' => $unitMeasure,
             'quantity' => $quantity,
             'unit_type_name' => $unit_type_name
+        ]);
+    }
+
+    public function quantityUnit()
+    {
+        return view('settings.paperquantityunit.index');
+    }
+
+    public function quantityunitsListData(Request $request)
+    {
+        $column = [
+            'id',
+            'measurement_unuit'
+        ];
+
+        $query = PaperunitMeasument::where('id', '!=', '0');
+
+        if (isset($request->search['value'])) {
+            $query->where(function ($q) use ($request) {
+                $q->where('measurement_unuit', 'LIKE', "%" . $request->search['value'] . "%");
+            });
+        }
+
+        if (isset($request->order['0']['dir']) && ($request->order['0']['column'] != 0) && ($request->order['0']['column'] == 2)) {
+            $query->orderBy('name', $request->order['0']['dir']);
+        } else if (isset($request->order['0']['dir']) && ($request->order['0']['column'] != 0) && ($request->order['0']['column'] == 3)) {
+            $query->orderBy('status', $request->order['0']['dir']);
+        } else {
+            $query->orderBy('created_at', 'desc');
+        }
+
+        $number_filtered_row = $query->count();
+
+        if ($request->length != -1) {
+            $query->limit($request->length)->offset($request->start);
+        }
+
+        $result = $query->get();
+
+        $data = [];
+        if ($result->isNotEmpty()) {
+            //dd($result);
+            foreach ($result as $key => $value) {
+
+                $delete_icon = asset('images/lucide_view.png');
+                $edit_icon = asset('images/akar-icons_edit.png');
+
+                $inactive_icon =  asset('images/eva_lock-outline.png');
+                $active_icon =  asset('images/lock-open-right-outline.png');
+
+                if ($value->status == "A") {
+                    $status = '<a href="#" class="updateStatus" data-id ="' . $value->id . '" data-status="lock" title="Unlock"><img src="' . $active_icon . '" /></a>';
+                    $presentStatus = '<span style="color:green">Active</span>';
+                }
+                if ($value->status == "I") {
+                    $status = '<a href="#" class="updateStatus" data-id ="' . $value->id . '" data-status="unlock" title="Lock"><img src="' . $inactive_icon . '" /></a>';
+                    $presentStatus = '<span style="color:red">Inactive</span>';
+                }
+
+                $editLink = route('settings.papersettings.edit_paper_thickness', encrypt($value->id));
+                $subarray = [];
+                $subarray[] = ++$key . '.';
+                $subarray[] = $value->id;
+                $subarray[] = $value->measurement_unuit;
+                $subarray[] = $presentStatus;
+                $subarray[] = '<div class="align-items-center d-flex dt-center justify-content-center">
+                <a href="' . $editLink . '" title="Edit"><img src="' . $edit_icon . '" /></a>' . $status . '</div>';
+                $data[] = $subarray;
+            }
+        }
+
+        $count = PaperunitMeasument::where('id', '!=', '0')->count();
+
+        $output = [
+            'draw' => intval($request->draw),
+            'recordsTotal' => $count,
+            'recordsFiltered' => $number_filtered_row,
+            'data' => $data
+        ];
+
+        return response()->json($output);
+    }
+
+    public function quantityUnitStatusUpdate(Request $request)
+    {
+        $request->validate([
+            'rowid' => ['required'],
+            'rowstatus' => ['required']
+        ]);
+
+        try {
+            $id = $request->rowid;
+            $status = $request->rowstatus == 'lock' ? 'I' : 'A';
+
+            $quantity_units = PaperunitMeasument::findOrFail($id);
+            $quantity_units->status = $status;
+            $quantity_units->update();
+
+            return response()->json([
+                'message' => 'Paper Quantity measure has been ' . $request->rowstatus . ' successfully.'
+            ]);
+        } catch (Exception $th) {
+            return response()->json([
+                'message' => trans('messages.server_error')
+            ], 500);
+        }
+    }
+
+    public function editPaperQuantityUnit($id)
+    {
+        $id = decrypt($id);
+        $papergsm  = PaperunitMeasument::findOrFail($id);
+        return view('settings.paperweight.edit', [
+            'papergsm' => $papergsm
         ]);
     }
 }

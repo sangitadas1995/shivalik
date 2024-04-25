@@ -115,7 +115,6 @@ Route::middleware('auth')->group(function () {
             Route::post('doupdatestatuswarehouse', [InventoryController::class, 'doupdatestatuswarehouse'])->name('doupdatestatuswarehouse');
             Route::get('edit/{id}', [InventoryController::class, 'edit'])->name('edit');
             Route::post('update/{id}', [InventoryController::class, 'update'])->name('update');
-
         });
     });
 
@@ -193,6 +192,10 @@ Route::middleware('auth')->group(function () {
             Route::post('viewMeasurementCalculationDetails', [PaperSettingController::class, 'viewDetails'])->name('viewMeasurementCalculationDetails');
             Route::get('edit-paper-quantity/{id}', [PaperSettingController::class, 'editPaperQuantity'])->name('edit-paper-quantity');
             Route::post('update-paper-quantity/{id}', [InventoryController::class, 'updatePaperQuantity'])->name('update-paper-quantity');
+
+            Route::get('quantity-units', [PaperSettingController::class, 'quantityUnit'])->name('quantity-units');
+            Route::post('quantityunits-listData', [PaperSettingController::class, 'quantityunitsListData'])->name('quantityunits-listData');
+            Route::post('quantityunits-status', [PaperSettingController::class, 'quantityUnitStatusUpdate'])->name('quantityunits-status');
         });
     });
 

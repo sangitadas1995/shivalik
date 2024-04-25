@@ -219,6 +219,12 @@
                         </a>
                       </li>
 
+                      <li class="menu-item {{ Route::is('settings.papersettings.quantity-units') ? 'active' : null }}">
+                        <a href="{{ route('settings.papersettings.quantity-units') }}">
+                          <span class="menu-title">Paper Quantity Units</span>
+                        </a>
+                      </li>
+
                     </ul>
                   </div>
                 </li>
