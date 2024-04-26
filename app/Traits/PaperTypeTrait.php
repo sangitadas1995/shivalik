@@ -4,6 +4,7 @@ namespace App\Traits;
 
 use App\Models\PaperSize;
 use App\Models\PaperTypes;
+use App\Models\PaperQuantityCalculation;
 
 trait PaperTypeTrait
 {
@@ -15,4 +16,27 @@ trait PaperTypeTrait
 
         return $type_details;
     }
+
+    // public function getPackagingDetailsById($id)
+    // {
+    //     $packaging_details = PaperQuantityCalculation::where([
+    //         'status' => 'A',
+    //         'id' => $id
+    //     ])->first();
+
+    //     return $packaging_details;
+    // }
+
+
+    public function getPackagingDetailsById($id)
+    {
+        $packaging_details = PaperQuantityCalculation::where([
+            'status' => 'A',
+            'id' => $id
+        ])->first();
+
+        return $packaging_details;
+    }
+
+
 }

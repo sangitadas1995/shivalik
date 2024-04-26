@@ -216,6 +216,7 @@ Route::middleware('auth')->group(function () {
         Route::get('edit/{id}', [PaperTypeController::class, 'edit'])->name('edit');
         Route::post('update/{id}', [PaperTypeController::class, 'update'])->name('update');
         Route::post('get-size-details', [PaperTypeController::class, 'get_size_details'])->name('get-size-details');
+        Route::post('get-packaging-details', [PaperTypeController::class, 'get_packaging_details'])->name('get-packaging-details');
     });
 });
 
