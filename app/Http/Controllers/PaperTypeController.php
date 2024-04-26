@@ -262,7 +262,7 @@ class PaperTypeController extends Controller
     }
 
 
-    public function edit($id)
+   /*  public function edit($id)
     {
         $id = decrypt($id);
         $states = null;
@@ -306,6 +306,51 @@ class PaperTypeController extends Controller
             'paperQuantityUnit' => $paperQuantityUnit,
             'unitName'          => $unitName,
             'noOfSheet'         => $noOfSheet
+        ]);
+    } */
+
+    public function edit($id){
+        $id = decrypt($id);
+        
+        $papertypes  = PaperTypes::findOrFail($id);
+        $paperCategories = Paper_categories::where([
+            'status' => 'A'
+        ])->orderBy('id', 'asc')->get();
+
+        $paperGsm = Paper_weights::where([
+            'status' => 'A'
+        ])->orderBy('id', 'asc')->get();
+
+        $paperQuality = Paper_quality::where([
+            'status' => 'A'
+        ])->orderBy('id', 'asc')->get();
+
+        $paperColor = Paper_color::where([
+            'status' => 'A'
+        ])->orderBy('id', 'asc')->get();
+
+        $paperGsm = Paper_weights::where([
+            'status' => 'A'
+        ])->orderBy('id', 'asc')->get();
+        $paperUnits = PaperUnits::where([
+            'status' => 'A'
+        ])->orderBy('id', 'asc')->get();
+        $paperSizes = $this->getActiveSizes();
+        $paperQuantityUnit = $this->fetchPackagingTitle();
+        $unitName = PaperunitMeasument::findOrFail($papertypes->quantity_unit_id);
+      //  $no_OfSheet = PaperQuantityCalculation::findOrFail($papertypes->quantity_unit_id);
+
+        return view('papertype.edit',[
+            'papertypes'        => $papertypes,
+            'paperCategories'   => $paperCategories,
+            'paperGsm'          => $paperGsm,
+            'paperQuality'      => $paperQuality,
+            'paperColor'        => $paperColor,
+            'paperSizes'        => $paperSizes,
+            'paperUnits'        => $paperUnits,
+            'paperQuantityUnit' => $paperQuantityUnit,
+            'unitName'          => $unitName,
+            //'noOfSheet'         => $no_OfSheet
         ]);
     }
 
