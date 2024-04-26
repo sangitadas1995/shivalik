@@ -14,10 +14,12 @@ use App\Models\Paper_quality;
 use App\Models\Paper_weights;
 use App\Traits\PaperSizeTrait;
 use App\Traits\PaperTypeTrait;
-use App\Traits\QuantityCalculationTrait;
 use Illuminate\Validation\Rule;
 use App\Models\Paper_categories;
+use App\Models\PaperunitMeasument;
+use App\Models\PaperQuantityCalculation;
 use App\Rules\PaperTypeUniqueValueCheck;
+use App\Traits\QuantityCalculationTrait;
 
 class PaperTypeController extends Controller
 {
@@ -191,7 +193,7 @@ class PaperTypeController extends Controller
         ])->orderBy('id', 'asc')->get();
 
         $paperSizes = $this->getActiveSizes();
-        $paperQuantityUnit = $this->getQuantityUnits();
+        $paperQuantityUnit = $this->fetchPackagingTitle();
 
         return view('papertype.create', [
             'paperCategories' => $paperCategories,
@@ -288,7 +290,10 @@ class PaperTypeController extends Controller
         ])->orderBy('id', 'asc')->get();
 
         $paperSizes = $this->getActiveSizes();
-        $paperQuantityUnit = $this->getQuantityUnits();
+        $paperQuantityUnit = $this->fetchPackagingTitle();
+
+        $unitName = PaperunitMeasument::findOrFail($papertypes->quantity_unit_id);
+        $noOfSheet = PaperQuantityCalculation::findOrFail($papertypes->quantity_unit_id);
 
         return view('papertype.edit', [
             'papertypes'        => $papertypes,
@@ -298,7 +303,9 @@ class PaperTypeController extends Controller
             'paperGsm'          => $paperGsm,
             'paperUnits'        => $paperUnits,
             'paperSizes'        => $paperSizes,
-            'paperQuantityUnit' => $paperQuantityUnit
+            'paperQuantityUnit' => $paperQuantityUnit,
+            'unitName'          => $unitName,
+            'noOfSheet'         => $noOfSheet
         ]);
     }
 
@@ -369,6 +376,22 @@ class PaperTypeController extends Controller
         $html = view('papertype.size-details', [
             'size_details' => $size_details,
             'paperUnits' => $paperUnits
+        ])->render();
+
+        return response()->json(['html' => $html]);
+    }
+
+    public function get_packaging_details(Request $request)
+    {
+        $packaging_id = $request->packaging_val;
+
+        $packaging_details = $this->getPackagingDetailsById($packaging_id);
+
+        $unitName = PaperunitMeasument::findOrFail($packaging_details->measurement_type_unit);
+        
+        $html = view('papertype.packaging_details', [
+            'packaging_details' => $packaging_details,
+            'unitName' => $unitName
         ])->render();
 
         return response()->json(['html' => $html]);

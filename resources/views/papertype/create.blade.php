@@ -49,21 +49,24 @@
             <small class="text-danger error_manager"></small>
           </div>
         </div>
-        <div class="col-md-6">
+        <div class="">
           <div class="mb-3">
-            <label class="form-label">Paper Lot Quantity :</label>
-            <select class="form-select paper_size_name" aria-label="Default select example" name="quantity_unit_id"
+            <label class="form-label">Packaging Details :</label>
+            <select class="form-select packaging_details_name" aria-label="Default select example" name="quantity_unit_id"
               id="quantity_unit_id">
               <option value="">Select</option>
               @if (!empty($paperQuantityUnit) && $paperQuantityUnit->isNotEmpty())
               @foreach ($paperQuantityUnit as $unitname)
-              <option value="{{ $unitname->id }}">{{ $unitname->quantity_unit_name }}</option>
+              <option value="{{ $unitname->id }}">{{ $unitname->packaging_title }}</option>
               @endforeach
               @endif
             </select>
             <small class="text-danger error_quantity_unit"></small>
           </div>
         </div>
+
+        <div class="packaging_details_goes_here"></div>
+
         <div class="col-md-6">
           <div class="mb-3">
             <label class="form-label"><span class="text-danger">*</span>Paper GSM:</label>
@@ -219,6 +222,31 @@
         });
       } else {
         $('.size_details_goes_here').html('');
+      }
+    });
+
+    
+    $(document).on('change', '#quantity_unit_id', function () {
+      let __e = $(this);
+      let packaging_val = __e.val();
+
+      if (packaging_val) {
+        $.ajax({
+          type: "POST",
+          url: "{{ route('papertype.get-packaging-details') }}",
+          data: {
+            packaging_val
+          },
+          dataType: "json",
+          success: function (response) {
+            $('.packaging_details_goes_here').html(response.html);
+          },
+          error: function () {
+            return Swal.fire('Error!', 'Something went wrong, please try again.', 'error');
+          }
+        });
+      } else {
+        $('.packaging_details_goes_here').html('');
       }
     });
 
