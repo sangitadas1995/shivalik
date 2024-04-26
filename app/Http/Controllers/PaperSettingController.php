@@ -941,9 +941,8 @@ class PaperSettingController extends Controller
         if (isset($request->search['value'])) {
             $query->where(function ($q) use ($request) {
                 $q->where('packaging_title', 'LIKE', "%" . $request->search['value'] . "%")
-                    ->orWhere('contact_person', 'LIKE', "%" . $request->search['value'] . "%")
                     ->orWhere('no_of_sheet', 'LIKE', "%" . $request->search['value'] . "%")
-                    ->orWhereHas('measurement_type_unit', function ($q) use ($request) {
+                    ->orWhereHas('unit_type', function ($q) use ($request) {
                         $q->where('measurement_unuit', 'LIKE', "%" . $request->search['value'] . "%");
                     });
             });
@@ -1007,7 +1006,7 @@ class PaperSettingController extends Controller
             'recordsFiltered' => $number_filtered_row,
             'data' => $data
         ];
-
+        // $result->toSql();
         return response()->json($output);
     }
 
@@ -1169,7 +1168,7 @@ class PaperSettingController extends Controller
         }
 
         if (isset($request->order['0']['dir']) && ($request->order['0']['column'] != 0) && ($request->order['0']['column'] == 2)) {
-            $query->orderBy('name', $request->order['0']['dir']);
+            $query->orderBy('measurement_unuit', $request->order['0']['dir']);
         } else if (isset($request->order['0']['dir']) && ($request->order['0']['column'] != 0) && ($request->order['0']['column'] == 3)) {
             $query->orderBy('status', $request->order['0']['dir']);
         } else {
