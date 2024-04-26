@@ -104,10 +104,9 @@
     $(document).on('submit','#paper-quantity-edit-form',function(e){
         e.preventDefault();
         var __e = $(this);
-        var packaging_title                  = $('#packaging_title').val();
-        var measurement_type_unit                = $('#measurement_type_unit').val();
+        var packaging_title                 = $('#packaging_title').val();
+        var measurement_type_unit           = $('#measurement_type_unit').val();
         var no_of_sheet                     = $('#no_of_sheet').val().trim();
-        //   var alter_mobile_no               = $('#mobile_code-2').val().trim();
             
         if (!packaging_title.trim()) {
             $('#packaging_title').focus();

@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title','Edit Paper Quantity Units')
+@section('title','Add Paper Quantity Units')
 @push('extra_css')
 
 @endpush
@@ -8,14 +8,15 @@
   <div class="row justify-content-between align-items-center">
     <div class="col-md-4">
       <h2>
-        <a href="{{ route('settings.papersettings.quantity-units') }}"><i class="ri-arrow-left-line"></i></a> Edit Paper Quantity Units
+        <a href="{{ route('settings.papersettings.add-new-quantityunits') }}"><i class="ri-arrow-left-line"></i></a> Add Paper Quantity Units
       </h2>
     </div>
   </div>
 </div>
 <div class="card add-new-location mt-2">
   <div class="card-body">
-    <form action="{{ route('settings.papersettings.update-quantityunits', encrypt($quantityUnit->id)) }}" method="POST" id="quantity-unit-edit-form">
+    {{-- {{ route('settings.papersettings') }} --}}
+    <form action="{{ route('settings.papersettings.add-new-quantityunits') }}" method="POST" id="quantity-unit-add-form">
       @csrf
       <div class="row">
         <div class="col-md-12">
@@ -24,7 +25,7 @@
         <div class="col-md-12">
           <div class="mb-3">
             <label class="form-label"><span class="text-danger">*</span>Quantity Name :</label>
-            <input type="text" class="form-control alphaChar" name="measurement_unuit" id="measurement_unuit" value="{{ $quantityUnit->measurement_unuit }}" />
+            <input type="text" class="form-control alphaChar" name="measurement_unuit" id="measurement_unuit" value="" />
             <small class="text-danger error_name"></small>
           </div>
         </div>
@@ -53,14 +54,14 @@
   });
 
   $(document).ready(function () {
-    $(document).on('submit', '#quantity-unit-edit-form', function (e) {
+    $(document).on('submit', '#quantity-unit-add-form', function (e) {
       e.preventDefault();
       var __e = $(this);
       var measurement_unuit = $('#measurement_unuit').val();
 
       if (!measurement_unuit.trim()) {
         $('#measurement_unuit').focus();
-        return $('.error_name').html('Quantity Name field is required');
+        return $('.error_name').html('Quantity name field is required');
       } else {
         $('.error_name').html('');
       }

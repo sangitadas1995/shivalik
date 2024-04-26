@@ -11,7 +11,7 @@
         </div>
         <div class="col-md-6">
             <div class="text-end mb-4">
-                <a href="{{ route('settings.papersettings.add_paper_color') }}" class="btn primary-btn"><img src="{{ asset('images/add-accoun-1t.png') }}" /> Add Paper Color</a>
+                <a href="{{ route('settings.papersettings.add-quantityunits') }}" class="btn primary-btn"><img src="{{ asset('images/add-accoun-1t.png') }}" /> Add Quantity Units</a>
             </div>
         </div>
     </div>
