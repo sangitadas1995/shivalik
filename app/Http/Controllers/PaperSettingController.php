@@ -1050,7 +1050,7 @@ class PaperSettingController extends Controller
     public function storePaperQuantity(Request $request)
     {
         $request->validate([
-            'packaging_title' => ['required', 'string'],
+            'packaging_title' => ['required','string'],
             'measurement_type_unit' => ['required'],
             'no_of_sheet' => ['required', 'numeric'],
         ]);

@@ -62,4 +62,11 @@ $(document).ready(function () {
         $(this).val(sanitizedValue); // Update input field with sanitized value
     });
 
+    $(".charNumCommaSpace").on('input', function () {
+        var inputValue = $(this).val();
+        // Remove non-numeric characters
+        var sanitizedValue = inputValue.replace(/[^a-zA-Z0-9,\s]/g, '');
+        $(this).val(sanitizedValue); // Update input field with sanitized value
+      });
+
 });

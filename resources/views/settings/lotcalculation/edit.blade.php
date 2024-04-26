@@ -23,7 +23,7 @@
                 <div class="col-md-6">
                     <div class="mb-3">
                         <label class="form-label"><span class="text-danger">*</span>Paper Packaging Title:</label>
-                        <input type="text" class="form-control alphaChar" name="packaging_title" id="packaging_title" value="{{ $quantity->packaging_title }}"/>
+                        <input type="text" class="form-control charNumCommaSpace" name="packaging_title" id="packaging_title" value="{{ $quantity->packaging_title }}"/>
                         <small class="text-danger error_packaging_title"></small>
                     </div>
                 </div>
