@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Validator;
 
 class InventoryController extends Controller
 {
-	use Validate, Helper;
+    use Validate, Helper;
     public function index()
     {
         return view('inventory.index');
@@ -25,7 +25,7 @@ class InventoryController extends Controller
 
     public function create()
     {
-    	$countries = Country::where([
+        $countries = Country::where([
             'status' => 'A'
         ])
             ->orderBy('country_name', 'asc')
@@ -38,7 +38,7 @@ class InventoryController extends Controller
             'states' => $states
         ]);
     }
-  
+
     public function store(Request $request)
     {
         $request->validate([
@@ -84,7 +84,8 @@ class InventoryController extends Controller
             'print_margin' => ['required', 'numeric'],
         ]);
 
-        try {
+        try
+        {
             $warehouses = new Warehouses();
             $warehouses->company_name = ucwords(strtolower($request->company_name));
             $warehouses->contact_person = ucwords(strtolower($request->contact_person));
@@ -104,12 +105,15 @@ class InventoryController extends Controller
             $warehouses->warehouse_type = "stand_alone";
             $save = $warehouses->save();
 
-            if ($save) {
+            if ($save)
+            {
                 return redirect()->route('inventory.warehouse.list')->with('success', 'The warehouses has been created successfully.');
-            } else {
+            } else
+            {
                 return redirect()->back()->with('fail', 'Failed to create the warehouses.');
             }
-        } catch (Exception $th) {
+        } catch (Exception $th)
+        {
             return redirect()->back()->with('fail', trans('messages.server_error'));
         }
     }
@@ -135,9 +139,10 @@ class InventoryController extends Controller
         $query = Warehouses::where('id', '!=', '0');
 
         /* for search in table */
-        if (isset($request->search['value'])) {
+        if (isset($request->search['value']))
+        {
             $searchValue = str_replace(' ', '_', $request->search['value']); // Replace spaces with underscores
-        
+
             $query->where(function ($q) use ($searchValue) {
                 $q->where('company_name', 'LIKE', "%" . $searchValue . "%")
                     ->orWhere('contact_person', 'LIKE', "%" . $searchValue . "%")
@@ -148,38 +153,46 @@ class InventoryController extends Controller
         }
 
         /* sorting data in table */
-        if (isset($request->order['0']['dir']) && ($request->order['0']['column'] != 0) && ($request->order['0']['column'] != 8)) {
+        if (isset($request->order['0']['dir']) && ($request->order['0']['column'] != 0) && ($request->order['0']['column'] != 8))
+        {
             $query->orderBy($column[$request->order['0']['column']], $request->order['0']['dir']);
         }
-        if (isset($request->order['0']['dir']) && ($request->order['0']['column'] != 0) && ($request->order['0']['column'] == 8)) {
+        if (isset($request->order['0']['dir']) && ($request->order['0']['column'] != 0) && ($request->order['0']['column'] == 8))
+        {
             $query->whereHas('id', function ($q) use ($request) {
                 return $q->orderBy('id', $request->order['0']['dir']);
             });
-        } else {
+        } else
+        {
             $query->orderBy('created_at', 'desc');
         }
 
         $number_filtered_row = $query->count();
 
-        if ($request->length != -1) {
+        if ($request->length != -1)
+        {
             $query->limit($request->length)->offset($request->start);
         }
 
         $result = $query->get();
         $data = [];
-        if ($result->isNotEmpty()) {
-            foreach ($result as $key => $value) {
+        if ($result->isNotEmpty())
+        {
+            foreach ($result as $key => $value)
+            {
                 $view_icon = asset('images/lucide_view.png');
                 $edit_icon = asset('images/akar-icons_edit.png');
                 $editLink = route('inventory.warehouse.edit', ['id' => encrypt($value->id)]);
-                $lock_icon =  asset('images/eva_lock-outline.png');
-                $unlock_icon =  asset('images/lock-open-right-outline.png');
+                $lock_icon = asset('images/eva_lock-outline.png');
+                $unlock_icon = asset('images/lock-open-right-outline.png');
                 $warehouse_type = ($value->warehouse_type == 'stand_alone') ? 'Stand Alone' : 'Printing Warehouse';
 
-                if ($value->status == "A") {
+                if ($value->status == "A")
+                {
                     $status = '<a href="#" class="updateStatus" data-id ="' . $value->id . '" data-status="lock" title="Unlock"><img src="' . $unlock_icon . '" /></a>';
                 }
-                if ($value->status == "I") {
+                if ($value->status == "I")
+                {
                     $status = '<a href="#" class="updateStatus" data-id ="' . $value->id . '" data-status="unlock" title="Lock"><img src="' . $lock_icon . '" /></a>';
                 }
 
@@ -192,10 +205,10 @@ class InventoryController extends Controller
                 $subarray[] = $value->mobile_no;
                 $subarray[] = $value->email;
                 $subarray[] = $warehouse_type;
-                $subarray[] = '<a href="#" class="view_warehouse_details" title="View Details" data-id ="' . $value->id .     
-                                '"><img src="' . $view_icon . '" /></a>
-                                <a href="' . $editLink . '" title="Edit"><img src="' . $edit_icon . '" /></a>'.
-                $status . '</div>';
+                $subarray[] = '<div class="d-flex align-items-center"><a href="#" class="view_warehouse_details" title="View Details" data-id ="' . $value->id .
+                    '"><img src="' . $view_icon . '" /></a>
+                                <a href="' . $editLink . '" title="Edit"><img src="' . $edit_icon . '" /></a>' .
+                    $status . '</div>';
                 $data[] = $subarray;
             }
         }
@@ -227,7 +240,8 @@ class InventoryController extends Controller
             'rowstatus' => ['required']
         ]);
 
-        try {
+        try
+        {
             DB::beginTransaction();
             $id = $request->rowid;
             $status = $request->rowstatus == 'lock' ? 'I' : 'A';
@@ -236,7 +250,7 @@ class InventoryController extends Controller
             $warehouse->status = $status;
             $update = $warehouse->update();
             $warehouse_data = Warehouses::where(['id' => $id])->first();
-            if($update && $warehouse_data->vendor_id != null)
+            if ($update && $warehouse_data->vendor_id != null)
             {
                 $vendor = Vendor::findOrFail($warehouse_data->vendor_id);
                 $vendor->status = $status;
@@ -246,7 +260,8 @@ class InventoryController extends Controller
             return response()->json([
                 'message' => 'Warehouse has been ' . $request->rowstatus . ' successfully.'
             ]);
-        } catch (Exception $th) {
+        } catch (Exception $th)
+        {
             DB::rollBack();
             return response()->json([
                 'message' => trans('messages.server_error')
@@ -265,7 +280,8 @@ class InventoryController extends Controller
         ])
             ->orderBy('country_name', 'asc')
             ->get();
-        if (!empty($warehouse)) {
+        if (!empty($warehouse))
+        {
             $states = State::where([
                 'country_id' => $warehouse->country_id,
                 'status' => 'A',
@@ -329,7 +345,8 @@ class InventoryController extends Controller
             'print_margin' => ['required', 'numeric'],
         ]);
 
-        try {
+        try
+        {
             DB::beginTransaction();
             $warehouse = Warehouses::findOrFail($id);
             $warehouse->company_name = ucwords(strtolower($request->company_name));
@@ -349,7 +366,7 @@ class InventoryController extends Controller
             $warehouse->print_margin = $request->print_margin;
             $warehouse->update();
 
-            if($request->vendor_type_id == 2)
+            if ($request->vendor_type_id == 2)
             {
                 $vendor_id = $request->vendor_id;
                 $vendors = Vendor::findOrFail($vendor_id);
@@ -372,7 +389,8 @@ class InventoryController extends Controller
             DB::commit();
 
             return redirect()->route('inventory.warehouse.list')->with('success', 'The warehouse has been updated successfully.');
-        } catch (Exception $th) {
+        } catch (Exception $th)
+        {
             DB::rollBack();
             return redirect()->back()->with('fail', trans('messages.server_error'));
         }
