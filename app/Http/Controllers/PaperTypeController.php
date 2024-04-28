@@ -135,7 +135,6 @@ class PaperTypeController extends Controller
         return response()->json($output);
     }
 
-
     public function view(Request $request)
     {
         $papertype = $this->getTypeDetailsById($request->rowid);
@@ -261,58 +260,11 @@ class PaperTypeController extends Controller
         }
     }
 
-
-   /*  public function edit($id)
-    {
-        $id = decrypt($id);
-        $states = null;
-        $cities = null;
-        $papertypes  = PaperTypes::findOrFail($id);
-
-        $paperCategories = Paper_categories::where([
-            'status' => 'A'
-        ])->orderBy('id', 'asc')->get();
-
-        $paperQuality = Paper_quality::where([
-            'status' => 'A'
-        ])->orderBy('id', 'asc')->get();
-
-        $paperColor = Paper_color::where([
-            'status' => 'A'
-        ])->orderBy('id', 'asc')->get();
-
-        $paperGsm = Paper_weights::where([
-            'status' => 'A'
-        ])->orderBy('id', 'asc')->get();
-
-        $paperUnits = PaperUnits::where([
-            'status' => 'A'
-        ])->orderBy('id', 'asc')->get();
-
-        $paperSizes = $this->getActiveSizes();
-        $paperQuantityUnit = $this->fetchPackagingTitle();
-
-        $unitName = PaperunitMeasument::findOrFail($papertypes->quantity_unit_id);
-        $noOfSheet = PaperQuantityCalculation::findOrFail($papertypes->quantity_unit_id);
-
-        return view('papertype.edit', [
-            'papertypes'        => $papertypes,
-            'paperCategories'   => $paperCategories,
-            'paperQuality'      => $paperQuality,
-            'paperColor'        => $paperColor,
-            'paperGsm'          => $paperGsm,
-            'paperUnits'        => $paperUnits,
-            'paperSizes'        => $paperSizes,
-            'paperQuantityUnit' => $paperQuantityUnit,
-            'unitName'          => $unitName,
-            'noOfSheet'         => $noOfSheet
-        ]);
-    } */
-
     public function edit($id){
         $id = decrypt($id);
         
         $papertypes  = PaperTypes::findOrFail($id);
+
         $paperCategories = Paper_categories::where([
             'status' => 'A'
         ])->orderBy('id', 'asc')->get();
@@ -337,8 +289,6 @@ class PaperTypeController extends Controller
         ])->orderBy('id', 'asc')->get();
         $paperSizes = $this->getActiveSizes();
         $paperQuantityUnit = $this->fetchPackagingTitle();
-        $unitName = PaperunitMeasument::findOrFail($papertypes->quantity_unit_id);
-      //  $no_OfSheet = PaperQuantityCalculation::findOrFail($papertypes->quantity_unit_id);
 
         return view('papertype.edit',[
             'papertypes'        => $papertypes,
@@ -348,12 +298,9 @@ class PaperTypeController extends Controller
             'paperColor'        => $paperColor,
             'paperSizes'        => $paperSizes,
             'paperUnits'        => $paperUnits,
-            'paperQuantityUnit' => $paperQuantityUnit,
-            'unitName'          => $unitName,
-            //'noOfSheet'         => $no_OfSheet
+            'paperQuantityUnit' => $paperQuantityUnit
         ]);
     }
-
 
     public function update(Request $request, $id)
     {
@@ -431,12 +378,9 @@ class PaperTypeController extends Controller
         $packaging_id = $request->packaging_val;
 
         $packaging_details = $this->getPackagingDetailsById($packaging_id);
-
-        $unitName = PaperunitMeasument::findOrFail($packaging_details->measurement_type_unit);
         
         $html = view('papertype.packaging_details', [
-            'packaging_details' => $packaging_details,
-            'unitName' => $unitName
+            'packaging_details' => $packaging_details
         ])->render();
 
         return response()->json(['html' => $html]);

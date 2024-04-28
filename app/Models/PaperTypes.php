@@ -46,4 +46,14 @@ class PaperTypes extends Model
     {
         return $this->belongsTo(PaperSize::class, 'paper_size_name');
     }
+
+    /**
+     * Get the user that owns the PaperTypes
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function paper_qty(): BelongsTo
+    {
+        return $this->belongsTo(PaperQuantityCalculation::class, 'quantity_unit_id');
+    }
 }
