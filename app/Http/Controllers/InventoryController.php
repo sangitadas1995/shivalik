@@ -102,7 +102,7 @@ class InventoryController extends Controller
             $warehouses->city_id = $request->city_id;
             $warehouses->pincode = $request->pincode;
             $warehouses->print_margin = $request->print_margin;
-            $warehouses->warehouse_type = "stand_alone";
+            $warehouses->warehouse_type = "others_warehouse";
             $save = $warehouses->save();
 
             if ($save)
@@ -185,7 +185,7 @@ class InventoryController extends Controller
                 $editLink = route('inventory.warehouse.edit', ['id' => encrypt($value->id)]);
                 $lock_icon = asset('images/eva_lock-outline.png');
                 $unlock_icon = asset('images/lock-open-right-outline.png');
-                $warehouse_type = ($value->warehouse_type == 'stand_alone') ? 'Stand Alone' : 'Printing Warehouse';
+                $warehouse_type = ($value->warehouse_type == 'others_warehouse') ? 'Others Warehouse' : 'Printing Warehouse';
 
                 $view_inventory_icon = asset('images/inventoryIcon-3.png');
                 $viewInventoryLink = route('inventory.index');
