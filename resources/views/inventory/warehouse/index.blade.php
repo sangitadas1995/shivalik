@@ -11,8 +11,7 @@
     </div>
     <div class="col-md-6">
       <div class="text-end mb-4">
-        <a href="{{ route('inventory.warehouse.add') }}" class="btn primary-btn"><img
-            src="{{ asset('images/add-accoun-1t.png') }}" /> Add Warehouse</a>
+        <a href="{{ route('inventory.warehouse.add') }}" class="btn primary-btn"><img src="{{ asset('images/add-accoun-1t.png') }}" /> Add Warehouse</a>
         {{-- <a href="javascript:void(0);" class="btn primary-btn bulk_upload modal-dialog-centered" data-bs-toggle="modal"
           data-bs-target="#bulk_upload_modal">
           <img src="{{ asset('images/upload-1.png') }}" />Add Product Stock

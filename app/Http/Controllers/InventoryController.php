@@ -187,6 +187,9 @@ class InventoryController extends Controller
                 $unlock_icon = asset('images/lock-open-right-outline.png');
                 $warehouse_type = ($value->warehouse_type == 'stand_alone') ? 'Stand Alone' : 'Printing Warehouse';
 
+                $view_inventory_icon = asset('images/inventoryIcon-3.png');
+                $viewInventoryLink = route('inventory.index');
+
                 if ($value->status == "A")
                 {
                     $status = '<a href="#" class="updateStatus" data-id ="' . $value->id . '" data-status="lock" title="Unlock"><img src="' . $unlock_icon . '" /></a>';
@@ -205,10 +208,10 @@ class InventoryController extends Controller
                 $subarray[] = $value->mobile_no;
                 $subarray[] = $value->email;
                 $subarray[] = $warehouse_type;
-                $subarray[] = '<div class="d-flex align-items-center"><a href="#" class="view_warehouse_details" title="View Details" data-id ="' . $value->id .
-                    '"><img src="' . $view_icon . '" /></a>
-                                <a href="' . $editLink . '" title="Edit"><img src="' . $edit_icon . '" /></a>' .
-                    $status . '</div>';
+                $subarray[] = '<div class="d-flex align-items-center">
+                <a href="#" class="view_warehouse_details" title="View Details" data-id ="' . $value->id . '"><img src="' . $view_icon . '" /></a>
+                <a href="' . $editLink . '" title="Edit"><img src="' . $edit_icon . '" /></a>' .
+                    $status . '<a href="' . $viewInventoryLink . '" title="View Inventory"><img src="' . $view_inventory_icon . '" /></a></div>';
                 $data[] = $subarray;
             }
         }
