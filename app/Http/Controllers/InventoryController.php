@@ -188,7 +188,7 @@ class InventoryController extends Controller
                 $warehouse_type = ($value->warehouse_type == 'others_warehouse') ? 'Others Warehouse' : 'Printing Warehouse';
 
                 $view_inventory_icon = asset('images/inventoryIcon-3.png');
-                $viewInventoryLink = route('inventory.index');
+                $viewInventoryLink = route('inventory.index', ['id' => encrypt($value->id)]);
 
                 if ($value->status == "A")
                 {
@@ -397,5 +397,9 @@ class InventoryController extends Controller
             DB::rollBack();
             return redirect()->back()->with('fail', trans('messages.server_error'));
         }
+    }
+
+    public function createProductStock(){
+        return view('inventory.createproductstock');
     }
 }
