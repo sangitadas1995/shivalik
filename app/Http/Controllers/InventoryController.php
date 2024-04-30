@@ -403,4 +403,8 @@ class InventoryController extends Controller
         return view('inventory.createproductstock');
     }
 
+    public function inventorydetails(){
+        return view('inventory.inventory-management-details');
+    }
+
 }

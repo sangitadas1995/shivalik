@@ -87,7 +87,7 @@
                     <td style="text-align: center">
                         <a href="#"><img src="{{ asset('images/inventoryIcon-1.png') }}" /></a>
                         <a href="#" class="stock_in"><img src="{{ asset('images/inventoryIcon-2.png') }}" /></a>
-                        <a href="#"><img src="{{ asset('images/inventoryIcon-3.png') }}" /></a>
+                        <a href="{{ route('inventory.details') }}"><img src="{{ asset('images/inventoryIcon-3.png') }}" /></a>
                     </td>
                 </tr>
                 <tr>
@@ -99,7 +99,7 @@
                     <td style="text-align: center">
                         <a href="#"><img src="{{ asset('images/inventoryIcon-1.png') }}" /></a>
                         <a href="#" class="stock_in"><img src="{{ asset('images/inventoryIcon-2.png') }}" /></a>
-                        <a href="#"><img src="{{ asset('images/inventoryIcon-3.png') }}" /></a>
+                        <a href="{{ route('inventory.details') }}"><img src="{{ asset('images/inventoryIcon-3.png') }}" /></a>
                     </td>
                 </tr>
                 <tr>
@@ -111,7 +111,7 @@
                     <td style="text-align: center">
                         <a href="#"><img src="{{ asset('images/inventoryIcon-1.png') }}" /></a>
                         <a href="#" class="stock_in"><img src="{{ asset('images/inventoryIcon-2.png') }}" /></a>
-                        <a href="#"><img src="{{ asset('images/inventoryIcon-3.png') }}" /></a>
+                        <a href="{{ route('inventory.details') }}"><img src="{{ asset('images/inventoryIcon-3.png') }}" /></a>
                     </td>
                 </tr>
             </tbody>
