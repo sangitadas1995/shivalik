@@ -1364,6 +1364,12 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     font-weight: 700;
     margin-bottom: 12px;
     color: #000;
+
+    h4 {
+        font-size: 14px;
+        font-weight: 700;
+        color: #000;
+    }
 }
 
 .tableBox {

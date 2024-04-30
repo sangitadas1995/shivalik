@@ -1218,6 +1218,11 @@ input[type=date]::-webkit-calendar-picker-indicator {
   margin-bottom: 12px;
   color: #000;
 }
+.table-title h4 {
+  font-size: 14px;
+  font-weight: 700;
+  color: #000;
+}
 
 .tableBox {
   overflow: auto;
