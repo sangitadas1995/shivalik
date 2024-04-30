@@ -36,11 +36,7 @@
                         <option value="3">All</option>
                     </select>
                 </div>
-
-
             </div>
-
-
         </div>
     </div>
 </div>
@@ -121,12 +117,7 @@
                     <td class="border-left-table-td">500</td>
                     <td>-</td>
                     <td class="txt-green">500</td>
-
-
                 </tr>
-
-
-
             </tbody>
         </table>
     </div>
