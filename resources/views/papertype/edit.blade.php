@@ -48,7 +48,7 @@
                     </div>
 
 
-                <div class="col-md-12">
+<!--                 <div class="col-md-12">
                     <div class="mb-3">
                         <label class="form-label"><span class="text-danger">*</span>Unit of Measurement Type:</label>
                         <select class="form-select" aria-label="Default select example" id="quantity_unit_id" name="quantity_unit_id">
@@ -73,11 +73,11 @@
                         </div>
                     </div>
                     <?php } ?>
-                </div>
+                </div> -->
 
 
 
-                <!--  <div class="">
+                 <div class="">
                         <div class="mb-3">
                             <label class="form-label">Packaging Details :</label>
                             <select class="form-select packaging_details_name" aria-label="Default select example"
@@ -93,9 +93,9 @@
                             </select>
                             <small class="text-danger error_quantity_unit"></small>
                         </div>
-                    </div> -->
+                    </div>
 
-<!--                     <div class="packaging_details_goes_here">
+                    <div class="packaging_details_goes_here">
                         @if (!empty($papertypes->paper_qty->unit_type))
                             <div class="row">
                                 <div class="col-md-6">
@@ -119,7 +119,7 @@
                                 </div>
                             </div>
                         @endif
-                    </div> -->
+                    </div>
 
 
                     <div class="col-md-6">
@@ -314,32 +314,6 @@
                 }
             });
 
-            // $(document).on('change', '#quantity_unit_id', function() {
-            //     let __e = $(this);
-            //     let packaging_val = __e.val();
-
-            //     if (packaging_val) {
-            //         $.ajax({
-            //             type: "POST",
-            //             url: "{{ route('papertype.get-packaging-details') }}",
-            //             data: {
-            //                 packaging_val
-            //             },
-            //             dataType: "json",
-            //             success: function(response) {
-            //                 $('.packaging_details_goes_here').html(response.html);
-            //             },
-            //             error: function() {
-            //                 return Swal.fire('Error!',
-            //                     'Something went wrong, please try again.', 'error');
-            //             }
-            //         });
-            //     } else {
-            //         $('.packaging_details_goes_here').html('');
-            //     }
-            // });
-
-
             $(document).on('change', '#quantity_unit_id', function() {
                 let __e = $(this);
                 let packaging_val = __e.val();
@@ -347,7 +321,7 @@
                 if (packaging_val) {
                     $.ajax({
                         type: "POST",
-                        url: "{{ route('papertype.get-no-of-sheet-by-unitid') }}",
+                        url: "{{ route('papertype.get-packaging-details') }}",
                         data: {
                             packaging_val
                         },
@@ -364,6 +338,32 @@
                     $('.packaging_details_goes_here').html('');
                 }
             });
+
+
+            // $(document).on('change', '#quantity_unit_id', function() {
+            //     let __e = $(this);
+            //     let packaging_val = __e.val();
+
+            //     if (packaging_val) {
+            //         $.ajax({
+            //             type: "POST",
+            //             url: "{{ route('papertype.get-no-of-sheet-by-unitid') }}",
+            //             data: {
+            //                 packaging_val
+            //             },
+            //             dataType: "json",
+            //             success: function(response) {
+            //                 $('.packaging_details_goes_here').html(response.html);
+            //             },
+            //             error: function() {
+            //                 return Swal.fire('Error!',
+            //                     'Something went wrong, please try again.', 'error');
+            //             }
+            //         });
+            //     } else {
+            //         $('.packaging_details_goes_here').html('');
+            //     }
+            // });
 
         });
     </script>
