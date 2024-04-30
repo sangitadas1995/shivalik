@@ -22,7 +22,7 @@
                             </div>
     
                             <!-- table row -->
-                            <div class="col-5 child-table-row">
+<!--                             <div class="col-5 child-table-row">
                                 <div>
                                     Packaging Title
                                 </div>
@@ -32,7 +32,7 @@
                                     {{ $unitMeasure->packaging_title }}
     
                                 </div>
-                            </div>
+                            </div> -->
                             <!-- table row end -->
                             <!-- table row -->
                             <div class="col-5 child-table-row">

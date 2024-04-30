@@ -930,7 +930,7 @@ class PaperSettingController extends Controller
             'id',
             'index',
             'created_at',
-            'packaging_title',
+            // 'packaging_title',
             'measurement_type_unit',
             'no_of_sheet',
         ];
@@ -987,7 +987,7 @@ class PaperSettingController extends Controller
                 $subarray[] = $value->id;
                 $subarray[] = $value->id . '.';
                 $subarray[] = Carbon::parse($value->created_at)->format('d/m/Y h:i A');
-                $subarray[] = $value->packaging_title;
+                //$subarray[] = $value->packaging_title;
                 $subarray[] = $value->unit_type?->measurement_unuit ?? null;
                 $subarray[] = $value->no_of_sheet;
                 $subarray[] = '<a href="#" class="view_measurement_details" title="View Details" data-id ="' . $value->id .
@@ -1049,14 +1049,14 @@ class PaperSettingController extends Controller
     public function storePaperQuantity(Request $request)
     {
         $request->validate([
-            'packaging_title' => ['required','string'],
-            'measurement_type_unit' => ['required'],
+            //'packaging_title' => ['required','string'],
+            'measurement_type_unit' => 'required|unique:paper_quantity_calculations,measurement_type_unit',
             'no_of_sheet' => ['required', 'numeric'],
         ]);
 
         try {
             $paperquantity = new PaperQuantityCalculation();
-            $paperquantity->packaging_title = $request->packaging_title;
+            //$paperquantity->packaging_title = $request->packaging_title;
             $paperquantity->measurement_type_unit = $request->measurement_type_unit;
             $paperquantity->no_of_sheet = $request->no_of_sheet;
             $save = $paperquantity->save();
@@ -1128,14 +1128,15 @@ class PaperSettingController extends Controller
         $id = decrypt($id);
 
         $request->validate([
-            'packaging_title' => ['required', 'string'],
-            'measurement_type_unit' => ['required'],
+            //'packaging_title' => ['required', 'string'],
+            //'measurement_type_unit' => ['required'],
+            'measurement_type_unit' => 'required|unique:paper_quantity_calculations,measurement_type_unit,'.$id,
             'no_of_sheet' => ['required', 'numeric'],
         ]);
 
         try {
             $paperquantity = PaperQuantityCalculation::findOrFail($id);
-            $paperquantity->packaging_title = $request->packaging_title;
+            //$paperquantity->packaging_title = $request->packaging_title;
             $paperquantity->measurement_type_unit = $request->measurement_type_unit;
             $paperquantity->no_of_sheet = $request->no_of_sheet;
 
