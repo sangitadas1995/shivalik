@@ -153,7 +153,7 @@
           <!-- sub-menu -->
 
           <li data-bs-toggle="collapse"
-            class="menu-item sub-menu {{ Route::is('settings.vendor.service-type.index','settings.vendor.service-type.add','settings.vendor.service-type.edit','settings.papersettings.paper_category_list', 'settings.papersettings.add_paper_category','settings.papersettings.edit_paper_category','settings.papersettings.add_paper_color','settings.papersettings.paper_color_list','settings.papersettings.edit_paper_color','settings.papersettings.paper_quality_list','settings.papersettings.add_paper_quality', 'settings.papersettings.edit_paper_quality','settings.papersettings.paper_thickness_list','settings.papersettings.add_paper_thickness', 'settings.papersettings.edit_paper_thickness','settings.papersettings.edit-paper-size','settings.papersettings.add-paper-size','settings.papersettings.paper-size','settings.papersettings.quantity-calculation','settings.papersettings.add-quantity','settings.papersettings.edit-paper-quantity','settings.papersettings.quantity-units','settings.papersettings.add-quantityunits','settings.papersettings.edit-quantityunits') ? 'open active' : null }}">
+            class="menu-item sub-menu {{ Route::is('settings.vendor.service-type.index','settings.vendor.service-type.add','settings.vendor.service-type.edit','settings.papersettings.paper_category_list', 'settings.papersettings.add_paper_category','settings.papersettings.edit_paper_category','settings.papersettings.add_paper_color','settings.papersettings.paper_color_list','settings.papersettings.edit_paper_color','settings.papersettings.paper_quality_list','settings.papersettings.add_paper_quality', 'settings.papersettings.edit_paper_quality','settings.papersettings.paper_thickness_list','settings.papersettings.add_paper_thickness', 'settings.papersettings.edit_paper_thickness','settings.papersettings.edit-paper-size','settings.papersettings.add-paper-size','settings.papersettings.paper-size','settings.papersettings.quantity-calculation','settings.papersettings.add-quantity','settings.papersettings.edit-paper-quantity','settings.papersettings.quantity-units','settings.papersettings.add-quantityunits','settings.papersettings.edit-quantityunits','settings.papersettings.size-units','settings.papersettings.add-sizeunits','settings.papersettings.edit-sizeunits') ? 'open active' : null }}">
             <a data-bs-toggle="collapse">
               <span class="menu-icon">
                 <svg width="21" height="21" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -177,7 +177,7 @@
                   </a>
                 </li>
                 <li
-                  class="menu-item sub-menu {{ Route::is('settings.papersettings.paper_category_list', 'settings.papersettings.add_paper_category','settings.papersettings.edit_paper_category','settings.papersettings.add_paper_color','settings.papersettings.paper_color_list','settings.papersettings.edit_paper_color','settings.papersettings.paper_quality_list','settings.papersettings.add_paper_quality', 'settings.papersettings.edit_paper_quality','settings.papersettings.paper_thickness_list','settings.papersettings.add_paper_thickness', 'settings.papersettings.edit_paper_thickness','settings.papersettings.edit-paper-size','settings.papersettings.add-paper-size','settings.papersettings.paper-size','settings.papersettings.quantity-calculation','settings.papersettings.add-quantity','settings.papersettings.edit-paper-quantity','settings.papersettings.quantity-units','settings.papersettings.add-quantityunits','settings.papersettings.edit-quantityunits') ? 'open active' : null }}">
+                  class="menu-item sub-menu {{ Route::is('settings.papersettings.paper_category_list', 'settings.papersettings.add_paper_category','settings.papersettings.edit_paper_category','settings.papersettings.add_paper_color','settings.papersettings.paper_color_list','settings.papersettings.edit_paper_color','settings.papersettings.paper_quality_list','settings.papersettings.add_paper_quality', 'settings.papersettings.edit_paper_quality','settings.papersettings.paper_thickness_list','settings.papersettings.add_paper_thickness', 'settings.papersettings.edit_paper_thickness','settings.papersettings.edit-paper-size','settings.papersettings.add-paper-size','settings.papersettings.paper-size','settings.papersettings.quantity-calculation','settings.papersettings.add-quantity','settings.papersettings.edit-paper-quantity','settings.papersettings.quantity-units','settings.papersettings.add-quantityunits','settings.papersettings.edit-quantityunits','settings.papersettings.size-units','settings.papersettings.add-sizeunits','settings.papersettings.edit-sizeunits') ? 'open active' : null }}">
                   <a><span class="menu-title">Service Settings</span></a>
                   <div class="sub-menu-list" data-bs-toggle="collapse" data-popper-escaped=""
                     data-popper-placement="right"
@@ -193,6 +193,11 @@
                         class="menu-item {{ Route::is('settings.papersettings.paper-size','settings.papersettings.add-paper-size', 'settings.papersettings.edit-paper-size','settings.papersettings.edit-paper-size','settings.papersettings.add-paper-size','settings.papersettings.paper-size') ? 'active' : null }}">
                         <a href="{{ route('settings.papersettings.paper-size') }}">
                           <span class="menu-title">Paper Size</span>
+                        </a>
+                      </li>
+                      <li class="menu-item {{ Route::is('settings.papersettings.size-units', 'settings.papersettings.add-sizeunits', 'settings.papersettings.edit-sizeunits') ? 'active' : null }}">
+                        <a href="{{ route('settings.papersettings.size-units') }}">
+                          <span class="menu-title">Paper Size Units</span>
                         </a>
                       </li>
                       <li
