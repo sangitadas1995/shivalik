@@ -87,7 +87,7 @@
                         <td>50</td>
                         <td style="text-align: center">
                             <a href="#"><img src="{{ asset('images/inventoryIcon-1.png') }}" /></a>
-                            <a href="#"><img src="{{ asset('images/inventoryIcon-2.png') }}" /></a>
+                            <a href="#" class="stock_in"><img src="{{ asset('images/inventoryIcon-2.png') }}" /></a>
                             <a href="#"><img src="{{ asset('images/inventoryIcon-3.png') }}" /></a>
                         </td>
                     </tr>
@@ -99,7 +99,7 @@
                         <td class="">40</td>
                         <td style="text-align: center">
                             <a href="#"><img src="{{ asset('images/inventoryIcon-1.png') }}" /></a>
-                            <a href="#"><img src="{{ asset('images/inventoryIcon-2.png') }}" /></a>
+                            <a href="#" class="stock_in"><img src="{{ asset('images/inventoryIcon-2.png') }}" /></a>
                             <a href="#"><img src="{{ asset('images/inventoryIcon-3.png') }}" /></a>
                         </td>
                     </tr>
@@ -111,7 +111,7 @@
                         <td>100</td>
                         <td style="text-align: center">
                             <a href="#"><img src="{{ asset('images/inventoryIcon-1.png') }}" /></a>
-                            <a href="#"><img src="{{ asset('images/inventoryIcon-2.png') }}" /></a>
+                            <a href="#" class="stock_in"><img src="{{ asset('images/inventoryIcon-2.png') }}" /></a>
                             <a href="#"><img src="{{ asset('images/inventoryIcon-3.png') }}" /></a>
                         </td>
                     </tr>
@@ -119,8 +119,180 @@
             </table>
         </div>
     </div>
+
+    {{-- Inventory manual Stock In Modal --}}
+    <div class="modal" tabindex="-1" id="inventory_manual_stockin">
+        <div class="modal-background-blur">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Inventory Manual StockIn</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="" method="POST" id="manual_stock_in" enctype="multipart/form-data">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label"><span class="text-danger">*</span>Product :</label>
+                                        <select name="paper_id" id="paper_id" class="form-control">
+                                            <option value="">--Select--</option>
+                                            <option value="1">Paper 1</option>
+                                            <option value="2">Art Paper</option>
+                                            <option value="3">White Art Paper </option>
+                                        </select>
+                                        <small class="text-danger error_warehouse_name"></small>
+                                    </div>
+                                </div>
+            
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label"><span class="text-danger">*</span>Warehouse :</label>
+                                        <select name="warehouse_id" id="warehouse_id" class="form-control">
+                                            <option value="">-- Select--</option>
+                                            <option value="1">ABC Pvt Ltd</option>
+                                            <option value="2">Alex Warehouse</option>
+                                            <option value="3">Jhone Pvt Warehouse</option>
+                                        </select>
+                                        <small class="text-danger error_warehouse_name"></small>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">Stockin Date<span class="text-danger">*</span></label>
+                                        <input type="date" class="form-control" name="stock_in_date" id="stock_in_date"
+                                            value="" />
+                                        <small class="text-danger error_stock_in_date"></small>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label"><span class="text-danger">*</span>Quantity:</label>
+                                        <input type="text" class="form-control" name="stock_qty" id="stock_qty"
+                                            value="" />
+                                        <small class="text-danger error_opening_stock"></small>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label"><span class="text-danger">*</span>Measurement Unit :</label>
+                                        <select name="measurement_unit_id" id="measurement_unit_id" class="form-control">
+                                            <option value="">-- Select--</option>
+                                            <option value="1">Ream</option>
+                                            <option value="2">Bundle</option>
+                                            <option value="3">Carton</option>
+                                        </select>
+                                        <small class="text-danger error_measurement_unit_id"></small>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label"><span class="text-danger">*</span>Units:</label>
+                                        <select name="measure_units_id" id="measure_units_id" class="form-control">
+                                            <option value="">--- Select --</option>
+                                            <option value="1">Ream</option>
+                                            <option value="2">Bindle</option>
+                                            <option value="3">Cartoon</option>
+                                        </select>
+                                        <small class="text-danger error_measure_units_id"></small>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">P.O No :</label>
+                                        <select name="purchase_order" id="purchase_order_id" class="form-control">
+                                            <option value="">--- Select --</option>
+                                            <option value="1">PAPER-PO-1234</option>
+                                            <option value="2">PAPER-PO-5678</option>
+                                            <option value="3">PAPER-PO-9745</option>
+                                            <option value="3">PAPER-PO-2589</option>
+                                        </select>
+                                        <small class="text-danger error_low_stock"></small>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">P.O Date<span class="text-danger">*</span></label>
+                                        <input type="date" class="form-control" name="purchase_order_date" id="purchase_order_date"
+                                            value="" />
+                                        <small class="text-danger error_purchase_order_date"></small>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">P.O Amount<span class="text-danger">*</span></label>
+                                        <input type="date" class="form-control" name="purchase_order_amount" id="purchase_order_amount"
+                                            value="" />
+                                        <small class="text-danger error_purchase_order_amount"></small>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">Ordered By<span class="text-danger">*</span></label>
+                                        <input type="date" class="form-control" name="order_by" id="order_by"
+                                            value="" />
+                                        <small class="text-danger error_order_by"></small>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">Ordered Date<span class="text-danger">*</span></label>
+                                        <input type="date" class="form-control" name="orders_date" id="orders_date"
+                                            value="" />
+                                        <small class="text-danger error_orders_date"></small>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">Delivery Date<span class="text-danger">*</span></label>
+                                        <input type="date" class="form-control" name="delivery_date" id="delivery_date"
+                                            value="" />
+                                        <small class="text-danger error_delivery_date"></small>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">Attachment<span class="text-danger">*</span></label>
+                                        <input type="date" class="form-control" name="upload_file" id="upload_file"
+                                            value="" />
+                                        <small class="text-danger error_upload_file"></small>
+                                    </div>
+                                </div>
+
+                                <div class="text-end">
+                                    <button type="button" class="btn grey-primary reset_add_customer">Cancel</button>
+                                    <button type="submit" class="btn black-btn">Save</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 
 @section('scripts')
+<script>
+    $(document).on('click', '.stock_in', function (e) {
+        e.preventDefault();
+        $('#stock_in_date').val(new Date().toDateInputValue());
+        $('#purchase_order_date').val(new Date().toDateInputValue());
+        $('#orders_date').val(new Date().toDateInputValue());
+        $('#delivery_date').val(new Date().toDateInputValue());
+        $('#inventory_manual_stockin').modal('show');
+    });
 
+    Date.prototype.toDateInputValue = (function() {
+        var local = new Date(this);
+        local.setMinutes(this.getMinutes() - this.getTimezoneOffset());
+        return local.toJSON().slice(0,10);
+    });
+</script>
 @endsection

@@ -402,4 +402,5 @@ class InventoryController extends Controller
     public function createProductStock(){
         return view('inventory.createproductstock');
     }
+
 }
