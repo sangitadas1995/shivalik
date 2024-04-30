@@ -1907,7 +1907,7 @@ p.subtableHeading {
         }
 
         .naration-colum {
-            min-width: 300px;
+            min-width: 200px;
         }
     }
 
@@ -1927,6 +1927,10 @@ p.subtableHeading {
     min-width: 150px;
     border: 2px solid #595C5F;
     color: #595C5F;
+}
+
+.inventory-management-details-page-content {
+    padding-right: 56px;
 }
 
 // inventory management details end
