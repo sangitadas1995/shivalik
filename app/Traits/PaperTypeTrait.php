@@ -39,7 +39,6 @@ trait PaperTypeTrait
         return $packaging_details;
     }
 
-
     public function getNoOfSheetDetailsByUnitId($unitid)
     {
         $packaging_details = PaperQuantityCalculation::with('unit_type')->where([
@@ -47,11 +46,10 @@ trait PaperTypeTrait
             'measurement_type_unit' => $unitid
         ])
         ->first();
-        if(!empty($packaging_details['no_of_sheet']))
-        {
-            return $packaging_details['no_of_sheet'];
-        }
+        return $packaging_details;
+        // if(!empty($packaging_details['no_of_sheet']))
+        // {
+        //     return $packaging_details['no_of_sheet'];
+        // }
     }
-
-
 }

@@ -58,7 +58,7 @@
                             <option value="">Select</option>
                             @if (!empty($paperQuantityUnit) && $paperQuantityUnit->isNotEmpty())
                             @foreach ($paperQuantityUnit as $unitname)
-                            <option value="{{ $unitname->id }}">{{ $unitname->unit_type?->measurement_unuit }}</option>
+                            <option value="{{ $unitname->measurement_type_unit }}">{{ $unitname->unit_type?->measurement_unuit }}</option>
                             @endforeach
                             @endif
                             </select>

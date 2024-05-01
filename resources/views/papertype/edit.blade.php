@@ -57,8 +57,8 @@
                                 <option value="">Select</option>
                                 @if (!empty($paperQuantityUnit) && $paperQuantityUnit->isNotEmpty())
                                 @foreach ($paperQuantityUnit as $unitname)
-                                <option value="{{ $unitname->id }}"
-                                {{ $unitname->id == $papertypes->quantity_unit_id ? 'selected' : null }}>
+                                <option value="{{ $unitname->measurement_type_unit }}"
+                                {{ $unitname->measurement_type_unit == $papertypes->quantity_unit_id ? 'selected' : null }}>
                                 {{ $unitname->unit_type?->measurement_unuit }}</option>
                                 @endforeach
                                 @endif
@@ -68,16 +68,16 @@
                     </div>
 
                     <div class="col-md-6 packaging_details_goes_here">
-                        @if (!empty($papertypes->paper_qty->unit_type))
+                        <?php if(!empty($papertypes->quantity_unit_id)){?>
                             <div class="row">
                                 <div class="mb-3">
                                     <label class="form-label"><span class="text-danger">*</span>No of Sheet :</label>
                                     <input type="text" class="form-control" name="no_of_sheet" id="no_of_sheet"
-                                        value="{{ $papertypes?->paper_qty?->no_of_sheet ?? null }}" readonly />
+                                        value="{{ $no_of_sheet?->no_of_sheet ?? null }}" readonly />
                                     <small class="text-danger error_no_of_sheet"></small>
                                 </div>
                             </div>
-                        @endif
+                        <?php } ?>    
                     </div>
 
 

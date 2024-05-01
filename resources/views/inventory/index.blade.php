@@ -23,7 +23,7 @@
             <h2><a href="{{ route('inventory.warehouse.list') }}"><i class="ri-arrow-left-line"></i></a> Inventory
                 Management</h2>
         </div>
-        <div class="col-md-6">
+<!--         <div class="col-md-6">
             <div class="d-flex justify-content-end">
                 <div class="searchBox">
                     <span>
@@ -52,23 +52,31 @@
 
                 </div>
             </div>
-        </div>
+        </div> -->
     </div>
 </div>
+
+<div class="row">
+  <div class="col-md-12">
+    @include('utils.alert')
+  </div>
+</div>
+
 <div class="">
     <div class="d-flex gap-2 table-title align-items-center">
 
         <h4 class="mb-0">
-            Warehouse: ABC Printing Company, Mayur vihar, Delhi
+            Warehouse: {{$warehouseDetails->company_name}}, {{$warehouseDetails->address}}
         </h4>
         <span>
             <img src="{{ asset('images/oui_tag.png') }}" />
         </span>
     </div>
-    <div class="table-responsive p-0 table-sec mb-4">
-        <table class="table table-normal mb-0">
+    <div class="table-responsive table-sec mb-4">
+        <table class="table table-striped" id="product_stock_list_table">
             <thead>
                 <tr>
+                    <th>Row ID</th>
                     <th>Product</th>
                     <th>Last Updated</th>
                     <th>Opening Stock</th>
@@ -78,42 +86,6 @@
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>80GSM</td>
-                    <td>29-Feb-24</td>
-                    <td>200</td>
-                    <td class="text-green">55</td>
-                    <td>50</td>
-                    <td style="text-align: center">
-                        <a href="#"><img src="{{ asset('images/inventoryIcon-1.png') }}" /></a>
-                        <a href="#" class="stock_in"><img src="{{ asset('images/inventoryIcon-2.png') }}" /></a>
-                        <a href="{{ route('inventory.details') }}"><img src="{{ asset('images/inventoryIcon-3.png') }}" /></a>
-                    </td>
-                </tr>
-                <tr>
-                    <td>70GSM</td>
-                    <td>25-Feb-24</td>
-                    <td>400</td>
-                    <td class="text-red">50</td>
-                    <td class="">40</td>
-                    <td style="text-align: center">
-                        <a href="#"><img src="{{ asset('images/inventoryIcon-1.png') }}" /></a>
-                        <a href="#" class="stock_in"><img src="{{ asset('images/inventoryIcon-2.png') }}" /></a>
-                        <a href="{{ route('inventory.details') }}"><img src="{{ asset('images/inventoryIcon-3.png') }}" /></a>
-                    </td>
-                </tr>
-                <tr>
-                    <td>100GSM</td>
-                    <td>29-March-24</td>
-                    <td>400</td>
-                    <td>200</td>
-                    <td>100</td>
-                    <td style="text-align: center">
-                        <a href="#"><img src="{{ asset('images/inventoryIcon-1.png') }}" /></a>
-                        <a href="#" class="stock_in"><img src="{{ asset('images/inventoryIcon-2.png') }}" /></a>
-                        <a href="{{ route('inventory.details') }}"><img src="{{ asset('images/inventoryIcon-3.png') }}" /></a>
-                    </td>
-                </tr>
             </tbody>
         </table>
     </div>
@@ -125,7 +97,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Inventory Manual StockIn</h5>
+                    <h5 class="modal-title">Inventory Manual Stock In</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -166,7 +138,7 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label class="form-label"><span class="text-danger">*</span>Quantity:</label>
+                                    <label class="form-label"><span class="text-danger">*</span>Stock In Quantity:</label>
                                     <input type="text" class="form-control" name="stock_qty" id="stock_qty" value="" />
                                     <small class="text-danger error_opening_stock"></small>
                                 </div>
@@ -182,18 +154,6 @@
                                         <option value="3">Carton</option>
                                     </select>
                                     <small class="text-danger error_measurement_unit_id"></small>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label class="form-label"><span class="text-danger">*</span>Units:</label>
-                                    <select name="measure_units_id" id="measure_units_id" class="form-control">
-                                        <option value="">--- Select --</option>
-                                        <option value="1">Ream</option>
-                                        <option value="2">Bindle</option>
-                                        <option value="3">Cartoon</option>
-                                    </select>
-                                    <small class="text-danger error_measure_units_id"></small>
                                 </div>
                             </div>
                             <div class="col-md-6">
@@ -278,6 +238,44 @@
 
 @section('scripts')
 <script>
+var warehouseId = "<?php echo $id;?>";
+$(document).ready(function () {
+        $.ajaxSetup({
+          headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+          }
+        });
+
+        let product_stock_list_table = $('#product_stock_list_table').DataTable({
+          stateSave: true,
+          processing: true,
+          serverSide: true,
+          pageLength: 10,
+          ajax: {
+            url: "{{ route('inventory.productstocklist-data') }}",
+            type: 'POST',
+            data: {id:warehouseId},
+            // 'data': function(data) {
+            //   return data;
+            // }
+          },
+          columnDefs: [{
+              target: 0,
+              searchable: false,
+              sortable: false,
+              visible: false,
+            },
+            {
+              target: [6],
+              searchable: false,
+              sortable: false,
+            },
+            {"className": "dt-center", "targets": "_all"}
+          ]
+    });     
+});
+
+
     $(document).on('click', '.stock_in', function (e) {
         e.preventDefault();
         $('#stock_in_date').val(new Date().toDateInputValue());

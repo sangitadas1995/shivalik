@@ -23,8 +23,101 @@ class InventoryController extends Controller
     use Validate, Helper, InventoryTrait,QuantityCalculationTrait;
     public function index($id)
     {
-        return view('inventory.index',['id'=>$id]);
+        $warehouseDetails = $this->fetchWarehouseById(decrypt($id));
+        return view('inventory.index',[
+            'id'=>$id,
+            'warehouseDetails' => $warehouseDetails
+        ]);
     }
+
+
+    public function productstocklist_data(Request $request)
+    {
+        $id = decrypt($request->id);
+        $column = [
+            'index',
+            'id'
+        ];
+
+        $query = Inventory::with('unit_type','paper_type');
+        $query->where('warehouse_id', '=' , $id);
+
+
+        if (isset($request->search['value'])) {
+            $query->where(function ($q) use ($request) {
+            $q->where('opening_stock', 'LIKE', "%" . $request->search['value'] . "%")
+            ->orWhere('current_stock', 'LIKE', "%" . $request->search['value'] . "%")
+            ->orWhere('low_atock', 'LIKE', "%" . $request->search['value'] . "%")
+            ->orWhereHas('paper_type', function ($q) use ($request) {
+                $q->where('paper_name', 'LIKE', "%" . $request->search['value'] . "%");
+                });
+            });
+        }
+
+
+       
+        if (isset($request->order['0']['dir']) && ($request->order['0']['column'] == 0)) {
+            $query->whereHas('paper_type', function ($q) use ($request) {
+                return $q->orderBy('paper_name', $request->order['0']['dir']);
+            });
+        }
+        else if (isset($request->order['0']['dir']) && ($request->order['0']['column'] == 1)) {
+            $query->orderBy('updated_at', $request->order['0']['dir']);
+        }
+        else if (isset($request->order['0']['dir']) && ($request->order['0']['column'] == 2)) {
+            $query->orderBy('opening_stock', $request->order['0']['dir']);
+        }
+        else if (isset($request->order['0']['dir']) && ($request->order['0']['column'] == 3)) {
+            $query->orderBy('current_stock', $request->order['0']['dir']);
+        }
+        else if (isset($request->order['0']['dir']) && ($request->order['0']['column'] == 4)) {
+            $query->orderBy('low_atock', $request->order['0']['dir']);
+        }
+        else {
+            $query->orderBy('created_at', 'desc');
+        }
+
+        $number_filtered_row = $query->count();
+
+        if ($request->length != -1) {
+            $query->limit($request->length)->offset($request->start);
+        }
+
+        $result = $query->get();
+
+        $data = [];
+        if ($result->isNotEmpty()) {
+            foreach ($result as $key => $value) {
+                $stock_out_icon = asset('images/inventoryIcon-1.png');
+                $stock_in_icon = asset('images/inventoryIcon-2.png');
+                $details_icon = asset('images/inventoryIcon-3.png');
+
+                $detailsLink = route('inventory.details');
+
+                $subarray = [];
+                $subarray[] = ++$key . '.';
+                $subarray[] = $value->paper_type?->paper_name;
+                $subarray[] = Carbon::parse($value->updated_at)->format('d/m/Y h:i A');
+                $subarray[] = $value->opening_stock;
+                $subarray[] = $value->current_stock;
+                $subarray[] = $value->low_atock;
+                $subarray[] = '<div class="align-items-center d-flex dt-center"><a href="#" title="Stock Out"><img src="' . $stock_out_icon . '" /></a> <a href="#" title="Stock In" class="stock_in"><img src="' . $stock_in_icon . '" /></a> <a href="'. $detailsLink .'" title="Stock In"><img src="' . $details_icon . '" /></a></div>';
+                $data[] = $subarray;
+            }
+        }
+
+        $count = Inventory::with('unit_type','paper_type')->where('warehouse_id', '=' , $id)->count();
+
+        $output = [
+            'draw' => intval($request->draw),
+            'recordsTotal' => $count,
+            'recordsFiltered' => $number_filtered_row,
+            'data' => $data
+        ];
+
+        return response()->json($output);
+    }
+
 
     public function create()
     {
@@ -437,9 +530,9 @@ class InventoryController extends Controller
 
             if ($save)
             {
-                return redirect()->route('inventory.index',$warehouse_get_id)->with('success', 'The warehouses has been created successfully.');
+                return redirect()->route('inventory.index',$warehouse_get_id)->with('success', 'The product stock has been created successfully.');
             } else {
-                return redirect()->back()->with('fail', 'Failed to create the warehouses.');
+                return redirect()->back()->with('fail', 'Failed to create the product stock.');
             }
         } catch (Exception $th){
             return redirect()->back()->with('fail', trans('messages.server_error'));
