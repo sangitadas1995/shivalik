@@ -1,18 +1,24 @@
-<header class="header">
+<header class="header" id="header">
   <a id="btn-collapse" class="header-bar" href="#">
     <!-- <i class="ri-bar-chart-horizontal-line"></i> -->
   </a>
   <a id="btn-toggle" href="#" class="sidebar-toggler break-point-lg">
     <i class="ri-bar-chart-horizontal-line"></i>
   </a>
+  <button id="sidebar-toggler-small" class=" sidebar-toggler-small break-point-lg"
+    onclick="onSidebarSmallTogglerClick(event)">
+    <i class="ri-bar-chart-horizontal-line"></i>
+  </button>
   <div class="dropdown navbar-nav-right profile-img-text">
     <a class="dropdown-toggle align-items-center" class="btn btn-secondary dropdown-toggle" type="button"
       id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
       <span class="d-flex">
         <span><img class="img-xs rounded-circle" src="{{ asset('images/face15.jpg') }}" alt="" /></span>
         <span class="profile-text ms-2">
-          {{-- <b>Welcome to<br /></b> <?php //echo Helper::userDetails(session('user_auto_id'));?></span> --}}
-          <b>Welcome to<br /></b> {{ auth('web')->user()->name }}</span>
+          {{-- <b>Welcome to<br /></b>
+          <?php //echo Helper::userDetails(session('user_auto_id'));?>
+        </span> --}}
+        <b>Welcome to<br /></b> {{ auth('web')->user()->name }}</span>
       </span>
     </a>
     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
@@ -35,7 +41,9 @@
         <a href="#"><i class="ri-home-4-line"></i></a>
       </li>
       <li class="breadcrumb-item">
-        <a href="#" class="d-flex align-items-center">Welcome Back, <?php echo Helper::userDetails(session('user_auto_id'));?></a>
+        <a href="#" class="d-flex align-items-center">Welcome Back,
+          <?php echo Helper::userDetails(session('user_auto_id'));?>
+        </a>
       </li>
     </ol>
   </nav>

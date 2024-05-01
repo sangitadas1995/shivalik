@@ -268,7 +268,10 @@
                     <a id="btn-collapse" class="header-bar" href="#">
                         <!-- <i class="ri-bar-chart-horizontal-line"></i> -->
                     </a>
-                    <a id="btn-toggle" href="#" class="sidebar-toggler break-point-lg">
+                    <a id="btn-toggle" href="#" class="sidebar-toggler  break-point-lg">
+                        <i class="ri-bar-chart-horizontal-line"></i>
+                    </a>
+                    <a href="#" class="  break-point-lg">
                         <i class="ri-bar-chart-horizontal-line"></i>
                     </a>
                     <div class="dropdown navbar-nav-right profile-img-text">
