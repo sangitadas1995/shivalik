@@ -115,7 +115,7 @@
                     <div class="mb-3">
                         <label class="form-label"><span class="text-danger">*</span>Country :</label>
                         <select class="form-select" aria-label="Default select example" id="country" name="country_id">
-                        {{-- <option value="">Select Country</option> --}}
+                        
                         @if ($countries->isNotEmpty())
                         @foreach ($countries as $country)
                         <option value="{{ $country->id }}" {{ $country->id == $warehouse->country_id ? 'selected' : null }}>{{

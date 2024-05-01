@@ -27,7 +27,5 @@ trait QuantityCalculationTrait
         return $title;
     }
 
-    
-
   
 }
