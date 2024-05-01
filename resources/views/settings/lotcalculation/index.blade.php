@@ -34,7 +34,7 @@
           <th>Row ID</th>
           <th style="text-align: center">ID</th>
           <th style="text-align: center">Date</th>
-          <th style="text-align: center">Title</th>
+          <!-- <th style="text-align: center">Title</th> -->
           <th style="text-align: center">Unit Type</th>
           <th style="text-align: center">No of Sheet</th>
           <th style="text-align: center">Action</th>
@@ -84,7 +84,7 @@
         visible: false,
       },
       {
-        target: [1, 6],
+        target: [1, 5],
         searchable: false,
         sortable: false,
       },

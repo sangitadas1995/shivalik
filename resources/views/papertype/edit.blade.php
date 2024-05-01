@@ -48,36 +48,45 @@
                     </div>
 
 
-                <div class="col-md-12">
-                    <div class="mb-3">
-                        <label class="form-label"><span class="text-danger">*</span>Unit of Measurement Type:</label>
-                        <select class="form-select" aria-label="Default select example" id="quantity_unit_id" name="quantity_unit_id">
-                            <option value="">Select</option>
-                            @if ($fetchUnitMeasureList->isNotEmpty())
-                            @foreach ($fetchUnitMeasureList as $unit)
-                            <option value="{{ $unit->id }}" {{ $unit->id == $papertypes->quantity_unit_id ? 'selected' : null }}> {{ $unit->measurement_unuit }}</option>
-                            @endforeach
-                            @endif
-                        </select>
-                        <small class="text-danger error_measurement_type_unit"></small>
-                    </div>
-                </div>
 
-                <div class="packaging_details_goes_here">
-                    <?php if(!empty($no_of_sheet)){?>
-                    <div class="col-md-12">
+                 <div class="">
                         <div class="mb-3">
-                            <label class="form-label"><span class="text-danger">*</span>No of Sheet :</label>
-                            <input type="text" class="form-control" name="no_of_sheet" id="no_of_sheet" value="{{ $no_of_sheet }}" readonly="" />
-                            <small class="text-danger error_no_of_sheet"></small>
+                            <label class="form-label"><span class="text-danger">*</span>Unit of Measurement Type :</label>
+                            <select class="form-select packaging_details_name" aria-label="Default select example"
+                                name="quantity_unit_id" id="quantity_unit_id">
+                                <option value="">Select</option>
+                                @if (!empty($paperQuantityUnit) && $paperQuantityUnit->isNotEmpty())
+                                    @foreach ($paperQuantityUnit as $unitname)
+                                        <option value="{{ $unitname->id }}"
+                                            {{ $unitname->id == $papertypes->quantity_unit_id ? 'selected' : null }}>
+                                            {{ $unitname->unit_type?->measurement_unuit }}</option>
+                                    @endforeach
+                                @endif
+                            </select>
+                            <small class="text-danger error_quantity_unit"></small>
                         </div>
                     </div>
-                    <?php } ?>
-                </div>
+
+                    <div class="packaging_details_goes_here">
+                        @if (!empty($papertypes->paper_qty->unit_type))
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="mb-3">
+                                        <label class="form-label"><span class="text-danger">*</span>No of Sheet :</label>
+                                        <input type="text" class="form-control" name="no_of_sheet" id="no_of_sheet"
+                                            value="{{ $papertypes?->paper_qty?->no_of_sheet ?? null }}" readonly />
+                                        <small class="text-danger error_no_of_sheet"></small>
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
+                    </div>
 
 
 
-                <!--  <div class="">
+
+
+<!--                  <div class="">
                         <div class="mb-3">
                             <label class="form-label">Packaging Details :</label>
                             <select class="form-select packaging_details_name" aria-label="Default select example"
@@ -93,9 +102,9 @@
                             </select>
                             <small class="text-danger error_quantity_unit"></small>
                         </div>
-                    </div> -->
+                    </div>
 
-<!--                     <div class="packaging_details_goes_here">
+                    <div class="packaging_details_goes_here">
                         @if (!empty($papertypes->paper_qty->unit_type))
                             <div class="row">
                                 <div class="col-md-6">
@@ -314,32 +323,6 @@
                 }
             });
 
-            // $(document).on('change', '#quantity_unit_id', function() {
-            //     let __e = $(this);
-            //     let packaging_val = __e.val();
-
-            //     if (packaging_val) {
-            //         $.ajax({
-            //             type: "POST",
-            //             url: "{{ route('papertype.get-packaging-details') }}",
-            //             data: {
-            //                 packaging_val
-            //             },
-            //             dataType: "json",
-            //             success: function(response) {
-            //                 $('.packaging_details_goes_here').html(response.html);
-            //             },
-            //             error: function() {
-            //                 return Swal.fire('Error!',
-            //                     'Something went wrong, please try again.', 'error');
-            //             }
-            //         });
-            //     } else {
-            //         $('.packaging_details_goes_here').html('');
-            //     }
-            // });
-
-
             $(document).on('change', '#quantity_unit_id', function() {
                 let __e = $(this);
                 let packaging_val = __e.val();
@@ -347,7 +330,7 @@
                 if (packaging_val) {
                     $.ajax({
                         type: "POST",
-                        url: "{{ route('papertype.get-no-of-sheet-by-unitid') }}",
+                        url: "{{ route('papertype.get-packaging-details') }}",
                         data: {
                             packaging_val
                         },
@@ -364,6 +347,32 @@
                     $('.packaging_details_goes_here').html('');
                 }
             });
+
+
+            // $(document).on('change', '#quantity_unit_id', function() {
+            //     let __e = $(this);
+            //     let packaging_val = __e.val();
+
+            //     if (packaging_val) {
+            //         $.ajax({
+            //             type: "POST",
+            //             url: "{{ route('papertype.get-no-of-sheet-by-unitid') }}",
+            //             data: {
+            //                 packaging_val
+            //             },
+            //             dataType: "json",
+            //             success: function(response) {
+            //                 $('.packaging_details_goes_here').html(response.html);
+            //             },
+            //             error: function() {
+            //                 return Swal.fire('Error!',
+            //                     'Something went wrong, please try again.', 'error');
+            //             }
+            //         });
+            //     } else {
+            //         $('.packaging_details_goes_here').html('');
+            //     }
+            // });
 
         });
     </script>
