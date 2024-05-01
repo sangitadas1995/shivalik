@@ -1940,7 +1940,12 @@ p.subtableHeading {
 
 
 .sidebar-wraper {
-    width: 280px;
+    @include breakpoint-up("lg") {
+
+        width: 280px;
+    }
+
+    width: 0;
     overflow: hidden;
     flex-shrink: 0;
     transition-property: all;
@@ -2066,7 +2071,11 @@ p.subtableHeading {
 
 .layout.fixed-header.fixed-sidebar {
     .header {
-        width: calc(100% - 280px);
+        @include breakpoint-up("lg") {
+
+            width: calc(100% - 280px);
+        }
+
         transition-property: all;
         transition-duration: 300ms;
         transition-timing-function: linear;

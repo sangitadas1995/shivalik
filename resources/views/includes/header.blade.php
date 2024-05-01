@@ -2,10 +2,10 @@
   <a id="btn-collapse" class="header-bar" href="#">
     <!-- <i class="ri-bar-chart-horizontal-line"></i> -->
   </a>
-  <a id="btn-toggle" href="#" class="sidebar-toggler break-point-lg">
+  <a id="btn-toggle" class="sidebar-toggler break-point-lg">
     <i class="ri-bar-chart-horizontal-line"></i>
   </a>
-  <button id="sidebar-toggler-small" class=" sidebar-toggler-small break-point-lg"
+  <button id="sidebar-toggler-small" class="d-none d-lg-block sidebar-toggler-small break-point-lg"
     onclick="onSidebarSmallTogglerClick(event)">
     <i class="ri-bar-chart-horizontal-line"></i>
   </button>

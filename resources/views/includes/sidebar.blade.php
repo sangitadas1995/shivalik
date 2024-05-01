@@ -243,6 +243,7 @@
       </div>
     </div>
   </aside>
+  <div id="overlay" class="overlay"></div>
 </div>
 <div id="sidebar-hover-showBox" style="height: fit-content;"
   class="sidebar sidebar-hover-showBox sidebar-wraper-small sidebar-wraper overflow-visible">

@@ -1654,12 +1654,17 @@ p.subtableHeading {
 }
 
 .sidebar-wraper {
-  width: 280px;
+  width: 0;
   overflow: hidden;
   flex-shrink: 0;
   transition-property: all;
   transition-duration: 300ms;
   transition-timing-function: linear;
+}
+@media (min-width: 992px) {
+  .sidebar-wraper {
+    width: 280px;
+  }
 }
 
 .top-squar-links,
@@ -1749,10 +1754,14 @@ p.subtableHeading {
 }
 
 .layout.fixed-header.fixed-sidebar .header {
-  width: calc(100% - 280px);
   transition-property: all;
   transition-duration: 300ms;
   transition-timing-function: linear;
+}
+@media (min-width: 992px) {
+  .layout.fixed-header.fixed-sidebar .header {
+    width: calc(100% - 280px);
+  }
 }
 .layout.fixed-header.fixed-sidebar .collepse-header {
   width: calc(100% - 55px);
