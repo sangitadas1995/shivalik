@@ -7,7 +7,7 @@
 <div class="page-name">
     <div class="row justify-content-between align-items-center">
         <div class="col-md-4">
-            <h2><i class="ri-arrow-left-line"></i> Add Warehouse</h2>
+            <h2><i class="ri-arrow-left-line"></i> Edit Warehouse</h2>
         </div>
 
     </div>
@@ -49,11 +49,9 @@
                         </div>
                         <div class="col-md-6">
                             <div class="mb-3 d-flex flex-column">
-                                <label class="form-label">Alternative Mobile No.
-                                    :</label>
-
-                                <input type="tel" id="mobile_code-2" class="form-control mobileNumber" name="alter_mobile_no" value="{{ $warehouse->alter_mobile_no }}" />
-                  <small class="text-danger error_alter_mobile_no"></small>
+                            <label class="form-label">Alternative Mobile No.:</label>
+                            <input type="tel" id="mobile_code-2" class="form-control mobileNumber" name="alter_mobile_no" value="{{ $warehouse->alter_mobile_no }}" />
+                            <small class="text-danger error_alter_mobile_no"></small>
                             </div>
                         </div>
                     </div>
@@ -172,7 +170,9 @@
                 </div>
             </div>
             <div class="text-end">
+                <a href="{{ route('inventory.warehouse.list') }}">
                 <button type="button" class="btn grey-primary reset_add_warehouse">Cancel</button>
+                </a>
                 <button type="submit" class="btn black-btn">Save</button>
             </div>
         </form>

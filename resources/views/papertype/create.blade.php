@@ -51,43 +51,23 @@
 
 
 
-                    <div class="">
+                    <div class="col-md-6">
                         <div class="mb-3">
                             <label class="form-label"><span class="text-danger">*</span>Unit of Measurement Type :</label>
-                            <select class="form-select packaging_details_name" aria-label="Default select example"
-                                name="quantity_unit_id" id="quantity_unit_id">
-                                <option value="">Select</option>
-                                @if (!empty($paperQuantityUnit) && $paperQuantityUnit->isNotEmpty())
-                                    @foreach ($paperQuantityUnit as $unitname)
-                                        <option value="{{ $unitname->id }}">{{ $unitname->unit_type?->measurement_unuit }}</option>
-                                    @endforeach
-                                @endif
+                            <select class="form-select packaging_details_name" aria-label="Default select example" name="quantity_unit_id" id="quantity_unit_id">
+                            <option value="">Select</option>
+                            @if (!empty($paperQuantityUnit) && $paperQuantityUnit->isNotEmpty())
+                            @foreach ($paperQuantityUnit as $unitname)
+                            <option value="{{ $unitname->id }}">{{ $unitname->unit_type?->measurement_unuit }}</option>
+                            @endforeach
+                            @endif
                             </select>
                             <small class="text-danger error_quantity_unit"></small>
                         </div>
                     </div>
 
-                    <div class="packaging_details_goes_here"></div>
+                    <div class="col-md-6 packaging_details_goes_here"></div>
 
-
-
-<!--                     <div class="">
-                        <div class="mb-3">
-                            <label class="form-label">Packaging Details :</label>
-                            <select class="form-select packaging_details_name" aria-label="Default select example"
-                                name="quantity_unit_id" id="quantity_unit_id">
-                                <option value="">Select</option>
-                                @if (!empty($paperQuantityUnit) && $paperQuantityUnit->isNotEmpty())
-                                    @foreach ($paperQuantityUnit as $unitname)
-                                        <option value="{{ $unitname->id }}">{{ $unitname->packaging_title }}</option>
-                                    @endforeach
-                                @endif
-                            </select>
-                            <small class="text-danger error_quantity_unit"></small>
-                        </div>
-                    </div>
-
-                    <div class="packaging_details_goes_here"></div> -->
 
                     <div class="col-md-6">
                         <div class="mb-3">

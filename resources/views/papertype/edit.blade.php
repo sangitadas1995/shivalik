@@ -49,34 +49,32 @@
 
 
 
-                 <div class="">
+                    <div class="col-md-6">
                         <div class="mb-3">
                             <label class="form-label"><span class="text-danger">*</span>Unit of Measurement Type :</label>
                             <select class="form-select packaging_details_name" aria-label="Default select example"
                                 name="quantity_unit_id" id="quantity_unit_id">
                                 <option value="">Select</option>
                                 @if (!empty($paperQuantityUnit) && $paperQuantityUnit->isNotEmpty())
-                                    @foreach ($paperQuantityUnit as $unitname)
-                                        <option value="{{ $unitname->id }}"
-                                            {{ $unitname->id == $papertypes->quantity_unit_id ? 'selected' : null }}>
-                                            {{ $unitname->unit_type?->measurement_unuit }}</option>
-                                    @endforeach
+                                @foreach ($paperQuantityUnit as $unitname)
+                                <option value="{{ $unitname->id }}"
+                                {{ $unitname->id == $papertypes->quantity_unit_id ? 'selected' : null }}>
+                                {{ $unitname->unit_type?->measurement_unuit }}</option>
+                                @endforeach
                                 @endif
                             </select>
                             <small class="text-danger error_quantity_unit"></small>
                         </div>
                     </div>
 
-                    <div class="packaging_details_goes_here">
+                    <div class="col-md-6 packaging_details_goes_here">
                         @if (!empty($papertypes->paper_qty->unit_type))
                             <div class="row">
-                                <div class="col-md-12">
-                                    <div class="mb-3">
-                                        <label class="form-label"><span class="text-danger">*</span>No of Sheet :</label>
-                                        <input type="text" class="form-control" name="no_of_sheet" id="no_of_sheet"
-                                            value="{{ $papertypes?->paper_qty?->no_of_sheet ?? null }}" readonly />
-                                        <small class="text-danger error_no_of_sheet"></small>
-                                    </div>
+                                <div class="mb-3">
+                                    <label class="form-label"><span class="text-danger">*</span>No of Sheet :</label>
+                                    <input type="text" class="form-control" name="no_of_sheet" id="no_of_sheet"
+                                        value="{{ $papertypes?->paper_qty?->no_of_sheet ?? null }}" readonly />
+                                    <small class="text-danger error_no_of_sheet"></small>
                                 </div>
                             </div>
                         @endif
