@@ -4,23 +4,26 @@ namespace App\Http\Controllers;
 
 use Exception;
 use Carbon\Carbon;
-use Illuminate\Http\Request;
 use App\Models\City;
 use App\Models\State;
-use App\Models\Country;
 use App\Models\Vendor;
-use App\Traits\Validate;
 use App\Traits\Helper;
+use App\Models\Country;
+use App\Models\Inventory;
+use App\Traits\Validate;
 use App\Models\Warehouses;
+use Illuminate\Http\Request;
+use App\Traits\InventoryTrait;
 use Illuminate\Support\Facades\DB;
+use App\Traits\QuantityCalculationTrait;
 use Illuminate\Support\Facades\Validator;
 
 class InventoryController extends Controller
 {
-    use Validate, Helper;
-    public function index()
+    use Validate, Helper, InventoryTrait,QuantityCalculationTrait;
+    public function index($id)
     {
-        return view('inventory.index');
+        return view('inventory.index',['id'=>$id]);
     }
 
     public function create()
@@ -399,8 +402,49 @@ class InventoryController extends Controller
         }
     }
 
-    public function createProductStock(){
-        return view('inventory.createproductstock');
+    public function createProductStock($id){
+        
+       $papertypes           = $this->fetchPaperTypes();
+       $warehouses           = $this->fetchWarehouse();
+       $warehousebyId        = $this->fetchWarehouseById(decrypt($id));
+       $paperQuantityUnit    = $this->fetchPackagingTitle();
+       $fetchUnitMeasureList = $this->fetchUnitMeasure();
+
+        return view('inventory.createproductstock',
+        [   'id'=>$id,
+            'papertypes'        => $papertypes ,
+            'warehouses'        => $warehouses,
+            'warehousebyId'     => $warehousebyId,
+            'paperQuantityUnit' => $paperQuantityUnit,
+            'fetchUnitMeasureList' => $fetchUnitMeasureList
+        ]); 
+
+    }
+
+    public function storeInventoryProductStock(Request $request){
+        try
+        {
+            $warehouse_get_id = $request->warehouse_get_id;
+
+            $inventory = new Inventory();
+            $inventory->papertype_id        = $request->paper_id;
+            $inventory->warehouse_id        = $request->warehouse_id;
+            $inventory->opening_stock       = $request->opening_stock;
+            $inventory->current_stock       = $request->opening_stock;
+            $inventory->low_atock           = $request->low_stock;
+            $inventory->measurement_unit_id = $request->measure_units_id;
+            $save = $inventory->save();
+
+            if ($save)
+            {
+                return redirect()->route('inventory.index',$warehouse_get_id)->with('success', 'The warehouses has been created successfully.');
+            } else {
+                return redirect()->back()->with('fail', 'Failed to create the warehouses.');
+            }
+        } catch (Exception $th){
+            return redirect()->back()->with('fail', trans('messages.server_error'));
+        }
+
     }
 
     public function inventorydetails(){

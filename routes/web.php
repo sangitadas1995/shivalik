@@ -107,7 +107,9 @@ Route::middleware('auth')->group(function () {
     Route::prefix('inventory')->name('inventory.')->group(function () {
         Route::get('/view/{id}', [InventoryController::class, 'index'])->name('index');
         Route::get('details', [InventoryController::class, 'inventorydetails'])->name('details');
-        Route::get('add-product-stock', [InventoryController::class, 'createProductStock'])->name('add-product-stock');
+        Route::get('add-product-stock/{id}', [InventoryController::class, 'createProductStock'])->name('add-product-stock');
+        Route::post('store-product-stock', [InventoryController::class, 'storeInventoryProductStock'])->name('store-product-stock');
+
         Route::prefix('warehouse')->name('warehouse.')->group(function () {
             Route::get('add', [InventoryController::class, 'create'])->name('add');
             Route::post('store', [InventoryController::class, 'store'])->name('store');
