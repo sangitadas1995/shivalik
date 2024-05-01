@@ -203,6 +203,15 @@ Route::middleware('auth')->group(function () {
             Route::post('add-new-quantityunits', [PaperSettingController::class, 'storePaperQuantityUnit'])->name('add-new-quantityunits');
             Route::get('edit-quantityunits/{id}', [PaperSettingController::class, 'editPaperQuantityUnit'])->name('edit-quantityunits');
             Route::post('update-quantityunits/{id}', [PaperSettingController::class, 'updatePaperQuantityUnit'])->name('update-quantityunits');
+
+
+            Route::get('size-units', [PaperSettingController::class, 'sizeUnit'])->name('size-units');
+            Route::post('sizeunits-listData', [PaperSettingController::class, 'sizeunitsListData'])->name('sizeunits-listData');
+            Route::post('sizeunits-status', [PaperSettingController::class, 'sizeUnitStatusUpdate'])->name('sizeunits-status');
+            Route::get('add-sizeunits', [PaperSettingController::class, 'addPaperSizeUnit'])->name('add-sizeunits');
+            Route::post('add-new-sizeunits', [PaperSettingController::class, 'storePaperSizeUnit'])->name('add-new-sizeunits');
+            Route::get('edit-sizeunits/{id}', [PaperSettingController::class, 'editPaperSizeUnit'])->name('edit-sizeunits');
+            Route::post('update-sizeunits/{id}', [PaperSettingController::class, 'updatePaperSizeUnit'])->name('update-sizeunits');
         });
     });
 
@@ -219,6 +228,10 @@ Route::middleware('auth')->group(function () {
         Route::post('update/{id}', [PaperTypeController::class, 'update'])->name('update');
         Route::post('get-size-details', [PaperTypeController::class, 'get_size_details'])->name('get-size-details');
         Route::post('get-packaging-details', [PaperTypeController::class, 'get_packaging_details'])->name('get-packaging-details');
+
+
+
+        Route::post('get-no-of-sheet-by-unitid', [PaperTypeController::class, 'get_no_of_sheet_by_unitid'])->name('get-no-of-sheet-by-unitid');
     });
 });
 

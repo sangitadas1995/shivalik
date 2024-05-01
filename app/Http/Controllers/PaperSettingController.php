@@ -930,7 +930,7 @@ class PaperSettingController extends Controller
             'id',
             'index',
             'created_at',
-            'packaging_title',
+            // 'packaging_title',
             'measurement_type_unit',
             'no_of_sheet',
         ];
@@ -987,7 +987,7 @@ class PaperSettingController extends Controller
                 $subarray[] = $value->id;
                 $subarray[] = $value->id . '.';
                 $subarray[] = Carbon::parse($value->created_at)->format('d/m/Y h:i A');
-                $subarray[] = $value->packaging_title;
+                //$subarray[] = $value->packaging_title;
                 $subarray[] = $value->unit_type?->measurement_unuit ?? null;
                 $subarray[] = $value->no_of_sheet;
                 $subarray[] = '<a href="#" class="view_measurement_details" title="View Details" data-id ="' . $value->id .
@@ -1049,14 +1049,14 @@ class PaperSettingController extends Controller
     public function storePaperQuantity(Request $request)
     {
         $request->validate([
-            'packaging_title' => ['required','string'],
-            'measurement_type_unit' => ['required'],
+            //'packaging_title' => ['required','string'],
+            'measurement_type_unit' => 'required|unique:paper_quantity_calculations,measurement_type_unit',
             'no_of_sheet' => ['required', 'numeric'],
         ]);
 
         try {
             $paperquantity = new PaperQuantityCalculation();
-            $paperquantity->packaging_title = $request->packaging_title;
+            //$paperquantity->packaging_title = $request->packaging_title;
             $paperquantity->measurement_type_unit = $request->measurement_type_unit;
             $paperquantity->no_of_sheet = $request->no_of_sheet;
             $save = $paperquantity->save();
@@ -1128,14 +1128,15 @@ class PaperSettingController extends Controller
         $id = decrypt($id);
 
         $request->validate([
-            'packaging_title' => ['required', 'string'],
-            'measurement_type_unit' => ['required'],
+            //'packaging_title' => ['required', 'string'],
+            //'measurement_type_unit' => ['required'],
+            'measurement_type_unit' => 'required|unique:paper_quantity_calculations,measurement_type_unit,'.$id,
             'no_of_sheet' => ['required', 'numeric'],
         ]);
 
         try {
             $paperquantity = PaperQuantityCalculation::findOrFail($id);
-            $paperquantity->packaging_title = $request->packaging_title;
+            //$paperquantity->packaging_title = $request->packaging_title;
             $paperquantity->measurement_type_unit = $request->measurement_type_unit;
             $paperquantity->no_of_sheet = $request->no_of_sheet;
 
@@ -1304,6 +1305,171 @@ class PaperSettingController extends Controller
             $quantityunit->update();
 
             return redirect()->route('settings.papersettings.quantity-units')->with('success', 'The paper quantity unit has been updated successfully.');
+        } catch (Exception $th) {
+            return redirect()->back()->with('fail', trans('messages.server_error'));
+        }
+    }
+
+
+
+
+    public function sizeUnit()
+    {
+        return view('settings.papersizeunit.index');
+    }
+
+    public function sizeunitsListData(Request $request)
+    {
+        $column = [
+            'id',
+            'name'
+        ];
+
+        $query = PaperUnits::where('id', '!=', '0');
+
+        if (isset($request->search['value'])) {
+            $query->where(function ($q) use ($request) {
+                $q->where('name', 'LIKE', "%" . $request->search['value'] . "%");
+            });
+        }
+
+        if (isset($request->order['0']['dir']) && ($request->order['0']['column'] != 0) && ($request->order['0']['column'] == 2)) {
+            $query->orderBy('name', $request->order['0']['dir']);
+        } else if (isset($request->order['0']['dir']) && ($request->order['0']['column'] != 0) && ($request->order['0']['column'] == 3)) {
+            $query->orderBy('status', $request->order['0']['dir']);
+        } else {
+            $query->orderBy('created_at', 'desc');
+        }
+
+        $number_filtered_row = $query->count();
+
+        if ($request->length != -1) {
+            $query->limit($request->length)->offset($request->start);
+        }
+
+        $result = $query->get();
+
+        $data = [];
+        if ($result->isNotEmpty()) {
+            //dd($result);
+            foreach ($result as $key => $value) {
+
+                $delete_icon = asset('images/lucide_view.png');
+                $edit_icon = asset('images/akar-icons_edit.png');
+                $editLink = route('settings.papersettings.edit-sizeunits', ['id' => encrypt($value->id)]);
+                $inactive_icon =  asset('images/eva_lock-outline.png');
+                $active_icon =  asset('images/lock-open-right-outline.png');
+
+                if ($value->status == "A") {
+                    $status = '<a href="#" class="updateStatus" data-id ="' . $value->id . '" data-status="lock" title="Unlock"><img src="' . $active_icon . '" /></a>';
+                    $presentStatus = '<span style="color:green">Active</span>';
+                }
+                if ($value->status == "I") {
+                    $status = '<a href="#" class="updateStatus" data-id ="' . $value->id . '" data-status="unlock" title="Lock"><img src="' . $inactive_icon . '" /></a>';
+                    $presentStatus = '<span style="color:red">Inactive</span>';
+                }
+
+                $editLink = route('settings.papersettings.edit-sizeunits', encrypt($value->id));
+                $subarray = [];
+                $subarray[] = ++$key . '.';
+                $subarray[] = $value->id;
+                $subarray[] = $value->name;
+                $subarray[] = $presentStatus;
+                $subarray[] = '<div class="align-items-center d-flex dt-center justify-content-center">
+                <a href="' . $editLink . '" title="Edit"><img src="' . $edit_icon . '" /></a>' . $status . '</div>';
+                $data[] = $subarray;
+            }
+        }
+
+        $count = PaperUnits::where('id', '!=', '0')->count();
+
+        $output = [
+            'draw' => intval($request->draw),
+            'recordsTotal' => $count,
+            'recordsFiltered' => $number_filtered_row,
+            'data' => $data
+        ];
+
+        return response()->json($output);
+    }
+
+
+    public function sizeUnitStatusUpdate(Request $request)
+    {
+        $request->validate([
+            'rowid' => ['required'],
+            'rowstatus' => ['required']
+        ]);
+
+        try {
+            $id = $request->rowid;
+            $status = $request->rowstatus == 'lock' ? 'I' : 'A';
+
+            $quantity_units = PaperUnits::findOrFail($id);
+            $quantity_units->status = $status;
+            $quantity_units->update();
+
+            return response()->json([
+                'message' => 'Paper Size measure has been ' . $request->rowstatus . ' successfully.'
+            ]);
+        } catch (Exception $th) {
+            return response()->json([
+                'message' => trans('messages.server_error')
+            ], 500);
+        }
+    }
+
+
+    public function addPaperSizeUnit()
+    {
+        return view('settings.papersizeunit.add');
+    }
+
+    public function storePaperSizeUnit(Request $request)
+    {
+        $request->validate([
+            'name' => ['required', 'string'],
+        ]);
+
+        try {
+            $sizeunit = new PaperUnits();
+            $sizeunit->name = $request->name;
+
+            $save = $sizeunit->save();
+
+            if ($save) {
+                return redirect()->route('settings.papersettings.size-units')->with('success', 'The paper size unit has been created successfully.');
+            } else {
+                return redirect()->back()->with('fail', 'Failed to create the paper size unit.');
+            }
+        } catch (Exception $th) {
+            return redirect()->back()->with('fail', trans('messages.server_error'));
+        }
+    }
+
+    public function editPaperSizeUnit($id)
+    {
+        $id = decrypt($id);
+        $size_unit  = PaperUnits::findOrFail($id);
+        return view('settings.papersizeunit.edit', [
+            'size_unit' => $size_unit
+        ]);
+    }
+
+    public function updatePaperSizeUnit(Request $request, $id)
+    {
+        $id = decrypt($id);
+
+        $request->validate([
+            'name' => ['required', 'string']
+        ]);
+
+        try {
+            $sizeunit = PaperUnits::findOrFail($id);
+            $sizeunit->name = $request->name;
+            $sizeunit->update();
+
+            return redirect()->route('settings.papersettings.size-units')->with('success', 'The paper size unit has been updated successfully.');
         } catch (Exception $th) {
             return redirect()->back()->with('fail', trans('messages.server_error'));
         }

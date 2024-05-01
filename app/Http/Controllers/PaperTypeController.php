@@ -194,6 +194,9 @@ class PaperTypeController extends Controller
         $paperSizes = $this->getActiveSizes();
         $paperQuantityUnit = $this->fetchPackagingTitle();
 
+
+        $fetchUnitMeasureList = $this->fetchUnitMeasure();
+
         return view('papertype.create', [
             'paperCategories' => $paperCategories,
             'paperQuality' => $paperQuality,
@@ -201,7 +204,8 @@ class PaperTypeController extends Controller
             'paperGsm' => $paperGsm,
             'paperUnits' => $paperUnits,
             'paperSizes' => $paperSizes,
-            'paperQuantityUnit' => $paperQuantityUnit
+            'paperQuantityUnit' => $paperQuantityUnit,
+            'fetchUnitMeasureList' => $fetchUnitMeasureList
         ]);
     }
 
@@ -289,6 +293,9 @@ class PaperTypeController extends Controller
         ])->orderBy('id', 'asc')->get();
         $paperSizes = $this->getActiveSizes();
         $paperQuantityUnit = $this->fetchPackagingTitle();
+        $fetchUnitMeasureList = $this->fetchUnitMeasure();
+
+        $no_of_sheet = $this->getNoOfSheetDetailsByUnitId($papertypes->quantity_unit_id);
 
         return view('papertype.edit',[
             'papertypes'        => $papertypes,
@@ -298,7 +305,9 @@ class PaperTypeController extends Controller
             'paperColor'        => $paperColor,
             'paperSizes'        => $paperSizes,
             'paperUnits'        => $paperUnits,
-            'paperQuantityUnit' => $paperQuantityUnit
+            'paperQuantityUnit' => $paperQuantityUnit,
+            'fetchUnitMeasureList' => $fetchUnitMeasureList,
+            'no_of_sheet' => $no_of_sheet
         ]);
     }
 
@@ -315,6 +324,7 @@ class PaperTypeController extends Controller
             'paper_gsm_id' => ['required', 'numeric'],
             'paper_quality_id' => ['required', 'numeric'],
             'paper_color_id' => ['required', 'numeric'],
+            'quantity_unit_id' => ['required', 'numeric'],
         ]);
 
         try {
@@ -384,5 +394,26 @@ class PaperTypeController extends Controller
         ])->render();
 
         return response()->json(['html' => $html]);
+    }
+
+
+    public function get_no_of_sheet_by_unitid(Request $request)
+    {
+        $packaging_id = $request->packaging_val;
+
+        $packaging_details = $this->getNoOfSheetDetailsByUnitId($packaging_id);
+
+        $html = view('papertype.noofsheet_details', [
+            'packaging_details' => $packaging_details
+        ])->render();
+
+        if(!empty($packaging_details))
+        {
+            return response()->json(['html' => $html]);
+        }
+        else
+        {
+            return response()->json(['html' => '']);
+        }
     }
 }
