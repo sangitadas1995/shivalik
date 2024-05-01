@@ -194,7 +194,6 @@ class PaperTypeController extends Controller
         $paperSizes = $this->getActiveSizes();
         $paperQuantityUnit = $this->fetchPackagingTitle();
 
-
         $fetchUnitMeasureList = $this->fetchUnitMeasure();
 
         return view('papertype.create', [
@@ -296,6 +295,7 @@ class PaperTypeController extends Controller
         $fetchUnitMeasureList = $this->fetchUnitMeasure();
 
         $no_of_sheet = $this->getNoOfSheetDetailsByUnitId($papertypes->quantity_unit_id);
+        //echo $no_of_sheet;exit;
 
         return view('papertype.edit',[
             'papertypes'        => $papertypes,
@@ -387,7 +387,8 @@ class PaperTypeController extends Controller
     {
         $packaging_id = $request->packaging_val;
 
-        $packaging_details = $this->getPackagingDetailsById($packaging_id);
+        //$packaging_details = $this->getPackagingDetailsById($packaging_id);
+        $packaging_details = $this->getNoOfSheetDetailsByUnitId($packaging_id);
         
         $html = view('papertype.packaging_details', [
             'packaging_details' => $packaging_details
