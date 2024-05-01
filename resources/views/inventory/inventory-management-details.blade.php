@@ -40,8 +40,6 @@
 
 
                 </div>
-
-
             </div>
         </div>
     </div>
@@ -108,29 +106,20 @@
                         <td class="border-left-table-td">-</td>
                         <td>2000</td>
                         <td class="txt-green">300</td>
-
-
                     </tr>
-
-                    <tr>
-                        <td>20.04.2024</td>
-                        <td>-</td>
-                        <td>XYZ123</td>
-                        <td>-</td>
-                        <td>-</td>
-                        <td class="naration-colum">Opening Balance</td>
-                        <td class="border-left-table-td">500</td>
-                        <td>-</td>
-                        <td class="txt-green">500</td>
-
-
-                    </tr>
-
-
-
-                </tbody>
-            </table>
-        </div>
+                <tr>
+                    <td>20.04.2024</td>
+                    <td>-</td>
+                    <td>XYZ123</td>
+                    <td>-</td>
+                    <td>-</td>
+                    <td class="naration-colum">Opening Balance</td>
+                    <td class="border-left-table-td">500</td>
+                    <td>-</td>
+                    <td class="txt-green">500</td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 </div>
 @endsection

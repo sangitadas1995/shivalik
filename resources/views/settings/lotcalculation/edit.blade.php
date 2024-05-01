@@ -7,7 +7,7 @@
     <div class="row justify-content-between align-items-center">
         <div class="col-md-4">
             <h2>
-                <a href="{{ route('settings.papersettings.quantity-calculation') }}"><i class="ri-arrow-left-line"></i></a> Add Paper Quantity
+                <a href="{{ route('settings.papersettings.quantity-calculation') }}"><i class="ri-arrow-left-line"></i></a> Edit Paper Quantity
             </h2>
         </div>
     </div>
@@ -20,13 +20,13 @@
                 <div class="col-md-12">
                     @include('utils.alert')
                 </div>
-                <div class="col-md-6">
+                <!-- <div class="col-md-6">
                     <div class="mb-3">
                         <label class="form-label"><span class="text-danger">*</span>Paper Packaging Title:</label>
                         <input type="text" class="form-control charNumCommaSpace" name="packaging_title" id="packaging_title" value="{{ $quantity->packaging_title }}"/>
                         <small class="text-danger error_packaging_title"></small>
                     </div>
-                </div>
+                </div> -->
                 <div class="col-md-6">
                     <div class="mb-3">
                         <label class="form-label"><span class="text-danger">*</span>Unit of Measurement Type:</label><a href="#" class="add_measurement_type_unit_modal"><i class="fas fa-plus-circle blue-text"></i></a>
@@ -108,12 +108,12 @@
         var measurement_type_unit           = $('#measurement_type_unit').val();
         var no_of_sheet                     = $('#no_of_sheet').val().trim();
             
-        if (!packaging_title.trim()) {
-            $('#packaging_title').focus();
-            return $('.error_packaging_title').html('Paper Packaging Title field is required');
-        } else {
-            $('.error_packaging_title').html('');
-        }
+        // if (!packaging_title.trim()) {
+        //     $('#packaging_title').focus();
+        //     return $('.error_packaging_title').html('Paper Packaging Title field is required');
+        // } else {
+        //     $('.error_packaging_title').html('');
+        // }
 
         if (!measurement_type_unit.trim()) {
             $('#measurement_type_unit').focus();

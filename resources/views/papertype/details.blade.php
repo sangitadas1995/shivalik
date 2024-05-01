@@ -45,7 +45,7 @@
                                 </div>
                             </div>
                             @if (!empty($papertype->paper_qty))
-                                <div class="col-5 child-table-row">
+                                <!-- <div class="col-5 child-table-row">
                                     <div>
                                         Packaging Details
                                     </div>
@@ -54,7 +54,7 @@
                                     <div>
                                         {{ $papertype->paper_qty?->packaging_title ?? null }}
                                     </div>
-                                </div>
+                                </div> -->
 
                                 @if (!empty($papertype->paper_qty?->unit_type))
                                     <div class="col-5 child-table-row">
