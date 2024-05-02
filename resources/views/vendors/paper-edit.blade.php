@@ -177,37 +177,82 @@
         <div class="page-name">
           <div class="row justify-content-between align-items-center">
             <div class="col-md-4">
-              <h2>Vendor Services</h2>
+              <h2>Tag products</h2>
             </div>
           </div>
         </div>
 
-        <div class="col-md-12">
+
+
+
+        <?php
+        if(count($service_type_ids)>0){
+          $serviceTypesIdCount=0;
+        for($i=0;$i<count($service_type_ids);$i++){
+          if(!empty($service_type_ids[$i]['paper_type_id']) && $service_type_ids[$i]['paper_type_id']!="")
+          {
+            $serviceTypesIdCount++;
+          }
+        ?>
+        <div class="row">
+        <div class="col-md-3">
           <div class="mb-3">
             <label class="form-label">Supplier of paper types<span class="text-danger">*</span>:</label>
-            <div class="form-select p-0 position-relative">
-              <span class="multiselectSvgSpan">
-
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5">
-                  <path fill-rule="evenodd"
-                    d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z"
-                    clip-rule="evenodd" />
-                </svg>
-              </span>
-              <select class="form-select service_types" aria-label="Default select example" id="service_type_id"
-                name="service_type_id[]" multiple="multiple">
-                <option value="">-- Select supplier of paper types ---</option>
+              <select class="form-select" aria-label="Default select example" id="paper_type_id0" name="paper_type_id[]">
+                <option value="">Select</option>
                 @if ($service_types->isNotEmpty())
                 @foreach ($service_types as $type)
-                <option value="{{ $type->id }}" {{ in_array($type->id, $service_type_ids) ? 'selected' : null }}>{{
-                  $type->paper_name }}</option>
+                <option value="{{ $type->id }}" <?php if(!empty($service_type_ids[$i]['paper_type_id']) && $service_type_ids[$i]['paper_type_id'] == $type->id){ echo "selected";}?>>{{$type->paper_name }}</option>
                 @endforeach
                 @endif
               </select>
-            </div>
           </div>
         </div>
+
+        <div class="col-md-3">
+          <div class="mb-3">
+            <label class="form-label">Sales Price<span class="text-danger">*</span>:</label>
+              <input type="text" class="form-control" name="sales_price[]" id="sales_price" value="<?php if(!empty($service_type_ids[$i]['sales_price']) && $service_type_ids[$i]['sales_price']!=""){ echo $service_type_ids[$i]['sales_price'];}?>" />
+          </div>
+        </div>
+
+
+
+      <div class="col-md-3">
+        <div class="mb-3">
+          <label class="form-label">Purchase Price
+          <span class="text-danger">*</span>:</label>
+            <input type="text" class="form-control" name="purchase_price[]" id="purchase_price" value="<?php if(!empty($service_type_ids[$i]['purchase_price']) && $service_type_ids[$i]['purchase_price']!=""){ echo $service_type_ids[$i]['purchase_price'];}?>" />
+        </div>
       </div>
+
+      @if ($i!=0)
+      <div class="col-md-3"><div class="mb-3"><button type="button" name="remove" id="removeRow{{$i}}" class="btn btn-danger btn-sm btn_edit_remove" style="margin-top: 20px;">Remove</button></div></div>
+      @endif
+      </div>
+      <?php } } ?>
+
+
+
+      <?php 
+        $serviceTypesCount = count($service_types);
+      ?>
+
+
+
+      <div class="row" id="dynamic_field">
+        <!-- <div class="row" id="row0">
+      </div> -->
+    
+      </div>
+
+      <div class="col-md-3">
+        <div class="mb-3">
+          <input type="hidden" name="itemcount" id="itemcount" value="1">
+          <button type="button" name="add" id="add_more_product" class="btn btn-primary btn-sm" style="margin-top: 20px;">Add More</button>
+        </div>
+      </div>
+
       <div class="text-end">
         <button type="button" class="btn grey-primary reset_add_vendor">Cancel</button>
         <button type="submit" class="btn black-btn">Save</button>
@@ -220,6 +265,65 @@
 @section('scripts')
 <script src="{{ asset('js/select2.min.js') }}"></script>
 <script>
+var tot = {{ $serviceTypesCount }};
+var counter = parseInt($("#itemcount").val());
+var count = 0;
+
+$('#add_more_product').click(function(){  
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': '{{csrf_token()}}'
+        }
+    });
+
+    $.ajax({
+        type: "POST",
+        url: "{{ route('vendors.fetch-services') }}",
+        success: function (response) 
+        {
+            let htmlView = '';
+            htmlView += '<div class="row" id="row'+counter+'"><div class="col-md-3"><div class="mb-3"><label class="form-label">Supplier of paper types<span class="text-danger">*</span>:</label><select class="form-select" aria-label="Default select example" id="paper_type_id'+counter+'" name="paper_type_id[]"><option value="">Select</option>';
+            for(let k = 0; k < response['data'].length; k++) 
+            {
+                let dobj = response['data'][k];
+                htmlView += '<option value="'+dobj.id+'">'+dobj.paper_name+'</option>';
+            }
+            htmlView += '</select></div></div><div class="col-md-3"><div class="mb-3"><label class="form-label">Sales Price<span class="text-danger">*</span>:</label><input type="text" class="form-control" name="sales_price[]" id="sales_price" value="" /></div></div><div class="col-md-3"><div class="mb-3"><label class="form-label">Purchase Price<span class="text-danger">*</span>:</label><input type="text" class="form-control" name="purchase_price[]" id="purchase_price" value="" /></div></div><div class="col-md-3"><div class="mb-3"><button type="button" name="remove" id="removeRow'+counter+'" class="btn btn-danger btn-sm btn_remove" style="margin-top: 20px;">Remove</button></div></div></div>';
+            $('#dynamic_field').append(htmlView);
+
+            count += 1;
+            counter++;
+            $("#itemcount").val(counter);
+            if(counter==tot){
+               $('#add_more_product').hide();
+            }
+        }
+    });
+});
+
+$(document).on('click', '.btn_remove', function(){  
+    var $this = $(this);
+    var id = $this.attr('id');
+    var lastChar = id[id.length -1];
+    $('#row'+lastChar+'').remove(); 
+    $("#itemcount").val(counter);
+    if(counter-1==tot){
+      $('#add_more_product').hide();
+    }else{
+      $('#add_more_product').show();
+    }
+    counter--; 
+});
+
+
+
+$(document).on('click', '.btn_edit_remove', function (event) {
+    event.preventDefault();
+    $(this).parent().parent().parent().remove();
+});
+
+
+
   $(document).ready(function () {
     $("#mobile_code-1").intlTelInput({
       initialCountry: "in",

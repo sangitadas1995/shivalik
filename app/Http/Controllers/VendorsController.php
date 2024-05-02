@@ -80,7 +80,6 @@ class VendorsController extends Controller
 
     public function store(Request $request)
     {
-
         $request->validate([
             'vendor_type_id' => ['required'],
             'company_name' => ['required', 'string'],
@@ -339,6 +338,23 @@ class VendorsController extends Controller
         return response()->json($html);
     }
 
+    public function fetch_services(Request $request)
+    {
+        $service_types = $this->getAllPaperTypes();
+
+        $serviceData = array();
+        foreach($service_types as $d)
+        {
+            $serviceData[] = array(
+            'id' => $d->id,
+            'paper_name' => $d->paper_name
+            );
+        }
+
+        $response = ['status' => "success", 'message' => "categories found", 'data' => $serviceData];
+        return response()->json($response);
+    }
+
     public function getServiceTypes(Request $request)
     {
         try {
@@ -405,23 +421,23 @@ class VendorsController extends Controller
                 $edit_icon = asset('images/akar-icons_edit.png');
                 $editLink = route('vendors.paper.edit', encrypt($value->id));
 
-                $paper_types_ids = json_decode($value->service_type_ids);
+                // $paper_types_ids = json_decode($value->service_type_ids);
 
-                $papers = PaperTypes::whereIn('id', $paper_types_ids)->where([
-                    'status' => 'A'
-                ])
-                    ->get();
+                // $papers = PaperTypes::whereIn('id', $paper_types_ids)->where([
+                //     'status' => 'A'
+                // ])
+                //     ->get();
 
-                $paper_types = null;
-                if (!empty($papers) && $papers->isNotEmpty()) {
-                    foreach ($papers as $pkey => $paper) {
-                        if ($pkey == 0) {
-                            $paper_types .= $paper->paper_name;
-                        } else {
-                            $paper_types .= ', ' . $paper->paper_name;
-                        }
-                    }
-                }
+                // $paper_types = null;
+                // if (!empty($papers) && $papers->isNotEmpty()) {
+                //     foreach ($papers as $pkey => $paper) {
+                //         if ($pkey == 0) {
+                //             $paper_types .= $paper->paper_name;
+                //         } else {
+                //             $paper_types .= ', ' . $paper->paper_name;
+                //         }
+                //     }
+                // }
 
                 $subarray = [];
                 $subarray[] = $value->id;
@@ -429,7 +445,7 @@ class VendorsController extends Controller
                 $subarray[] = $value->company_name;
                 $subarray[] = $value->contact_person;
                 $subarray[] = $value->mobile_no;
-                $subarray[] = $paper_types;
+                // $subarray[] = $paper_types;
                 $subarray[] = '<a href="#" class="view_details" title="View Details" data-id ="' . $value->id . '"><img src="' . $view_icon . '" /></a> <a href="' . $editLink . '" title="Edit"><img src="' . $edit_icon . '" /></a>
                 ';
                 $data[] = $subarray;
@@ -460,20 +476,37 @@ class VendorsController extends Controller
         $countries = $this->getAllCountries();
         $states = $this->getAllStates(101);
         $cities = $this->getAllCitiesByState($paper->state_id);
-
         $service_types = $this->getAllPaperTypes();
+
         return view('vendors.paper-edit', [
             'paper' => $paper,
             'countries' => $countries,
             'states' => $states,
             'cities' => $cities,
             'service_types' => $service_types,
-            'service_type_ids' => json_decode($paper->service_type_ids)
+            'service_type_ids' => json_decode($paper->service_type_ids,true)
         ]);
     }
 
     public function paper_update(Request $request, $id)
     {
+        if(count($request->paper_type_id)>0)
+        {
+            $serviceTypeArr=array();
+            for($i=0; $i<count($request->paper_type_id); $i++)
+            {
+                $paper_type_id = $request->paper_type_id[$i];
+                $sales_price = $request->sales_price[$i];
+                $purchase_price = $request->purchase_price[$i];
+                $serviceTypeArr[]=array(
+                    'paper_type_id'=>$paper_type_id,
+                    'sales_price' =>$sales_price,
+                    'purchase_price'=>$purchase_price,
+                );
+            }
+        }
+
+   
         $id = decrypt($id);
         $request->validate([
             'vendor_type_id' => ['required'],
@@ -523,7 +556,7 @@ class VendorsController extends Controller
             'state_id' => ['required', 'numeric'],
             'city_id' => ['required', 'numeric'],
             'pincode' => ['required', 'regex:/^[1-9][0-9]{5}$/'],
-            'service_type_id' => ['required'],
+            //'service_type_id' => ['required'],
         ]);
 
         try {
@@ -543,7 +576,7 @@ class VendorsController extends Controller
             $vendor->state_id = $request->state_id;
             $vendor->city_id = $request->city_id;
             $vendor->pincode = $request->pincode;
-            $vendor->service_type_ids = json_encode($request->service_type_id);
+            $vendor->service_type_ids = json_encode($serviceTypeArr);
             $update = $vendor->update();
 
             if ($update) {

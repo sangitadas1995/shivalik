@@ -82,6 +82,10 @@ Route::middleware('auth')->group(function () {
         Route::post('update/{id}', [VendorsController::class, 'update'])->name('update');
         Route::post('service-types', [VendorsController::class, 'getServiceTypes'])->name('service-types');
 
+
+        Route::post('fetch-services',[VendorsController::class,'fetch_services'])->name('fetch-services');
+
+
         Route::prefix('paper')->name('paper.')->group(function () {
             Route::get('edit/{id}', [VendorsController::class, 'paper_edit'])->name('edit');
             Route::post('update/{id}', [VendorsController::class, 'paper_update'])->name('update');
