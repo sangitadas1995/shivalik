@@ -1183,25 +1183,29 @@ input[type=date]::-webkit-calendar-picker-indicator {
   display: inline;
 }
 
-.searchBox {
+.searchBox,
+.dt-search,
+.dt-length {
   display: flex;
   align-items: center;
   gap: 6px;
 }
-.searchBox span {
-  font-size: 16;
-  font-weight: 600;
+.searchBox span,
+.searchBox label,
+.dt-search span,
+.dt-search label,
+.dt-length span,
+.dt-length label {
+  font-size: 16px;
+  font-weight: 600 !important;
   color: #595C5F;
 }
-.searchBox .search {
-  border: 1px solid #BFBFBF;
-  height: 42px;
-  border-radius: 3px;
-  display: flex;
-  align-items: center;
-  width: 280px;
-}
-.searchBox .search input {
+.searchBox input,
+.searchBox select,
+.dt-search input,
+.dt-search select,
+.dt-length input,
+.dt-length select {
   height: 100%;
   width: 100%;
   background-color: transparent;
@@ -1210,9 +1214,33 @@ input[type=date]::-webkit-calendar-picker-indicator {
   font-size: 16;
   color: #595C5F;
   padding: 0 10px;
+  border: 1px solid #BFBFBF;
+  height: 42px;
+  border-radius: 3px;
+  width: 280px;
 }
-.searchBox .search input:focus {
+.searchBox input:focus,
+.searchBox select:focus,
+.dt-search input:focus,
+.dt-search select:focus,
+.dt-length input:focus,
+.dt-length select:focus {
   outline: none;
+}
+.searchBox select,
+.dt-search select,
+.dt-length select {
+  padding: 0 30px 0 10px !important;
+}
+.searchBox .search,
+.dt-search .search,
+.dt-length .search {
+  border: 1px solid #BFBFBF;
+  height: 42px;
+  border-radius: 3px;
+  width: 280px;
+  display: flex;
+  align-items: center;
 }
 
 .table-title {
@@ -1744,6 +1772,9 @@ p.subtableHeading {
 .sidebar-wraper-small .sidebar-header .logo-span-small {
   display: block;
 }
+.sidebar-wraper-small .sub-menu-list {
+  display: none !important;
+}
 
 .sidebar-toggler-small {
   background-color: transparent;
@@ -1780,4 +1811,16 @@ p.subtableHeading {
   height: -moz-fit-content;
   height: fit-content;
   width: 280px;
+}
+
+table.dataTable {
+  width: 100% !important;
+  border-top: 1px solid #ddd;
+  border-left: 1px solid #ddd;
+  border-right: 1px solid #ddd;
+  margin-top: 20px;
+}
+
+table tr td:last-child .d-flex {
+  gap: 0.25rem;
 }/*# sourceMappingURL=style.css.map */
