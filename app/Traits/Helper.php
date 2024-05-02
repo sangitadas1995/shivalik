@@ -85,4 +85,23 @@ trait Helper
         }
         return $service_types;
     }
+
+    public function getAllPaperTypesExceptGivenIds($vendorTypeid = null, $ids = null)
+    {
+        if (!empty($vendorTypeid)) {
+            $service_types = PaperTypes::where([
+                'id' => $vendorTypeid,
+                'status' => 'A',
+            ])
+                ->whereNotIn('id', $ids)
+                ->orderBy('paper_name', 'ASC')->get();
+        } else {
+            $service_types = PaperTypes::where([
+                'status' => 'A',
+            ])
+                ->whereNotIn('id', $ids)
+                ->orderBy('paper_name', 'ASC')->get();
+        }
+        return $service_types;
+    }
 }
