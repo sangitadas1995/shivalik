@@ -190,7 +190,7 @@
                         </div>
                     </div>
 
-                    @if (!empty($products))
+                    @if (!empty($products)) 
                         @foreach ($products as $product)
                             <div class="row product_list">
                                 <div class="col-md-3">
@@ -203,7 +203,7 @@
                                             @if ($service_types->isNotEmpty())
                                                 @foreach ($service_types as $type)
                                                     <option value="{{ $type->id }}"
-                                                        {{ $type->id == $product->paper_type_id ? 'selected' : null }}>
+                                                        {{ $type->id == $product?->paper_type_id ? 'selected' : null }}>
                                                         {{ $type->paper_name }}</option>
                                                 @endforeach
                                             @endif
@@ -644,7 +644,7 @@
                     }).get();
 
                 var lastValue = paper_type_ids[paper_type_ids.length - 1];
-                if (!lastValue) {
+                if (!lastValue && counter >0) {
                     return Swal.fire('Error!', 'Please select paper type', 'error');
                 }
                 $.ajax({
