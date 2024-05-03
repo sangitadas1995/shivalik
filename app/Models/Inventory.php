@@ -13,7 +13,7 @@ class Inventory extends Model
 
     public function unit_type(): BelongsTo
     {
-        return $this->belongsTo(PaperunitMeasument::class, 'measurement_type_unit');
+        return $this->belongsTo(PaperunitMeasument::class, 'measurement_unit_id');
     }
 
     public function paper_type(): BelongsTo

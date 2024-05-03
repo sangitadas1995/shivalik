@@ -98,8 +98,8 @@ class InventoryController extends Controller
                 $subarray[] = ++$key . '.';
                 $subarray[] = $value->paper_type?->paper_name;
                 $subarray[] = Carbon::parse($value->updated_at)->format('d/m/Y h:i A');
-                $subarray[] = $value->opening_stock;
-                $subarray[] = $value->current_stock;
+                $subarray[] = $value->opening_stock." ".$value->unit_type?->measurement_unuit;
+                $subarray[] = $value->current_stock." ".$value->unit_type?->measurement_unuit;
                 $subarray[] = $value->low_atock;
                 $subarray[] = '<div class="align-items-center d-flex dt-center"><a href="#" title="Stock Out"><img src="' . $stock_out_icon . '" /></a> <a href="#" title="Stock In" class="stock_in"><img src="' . $stock_in_icon . '" /></a> <a href="'. $detailsLink .'" title="Stock In"><img src="' . $details_icon . '" /></a></div>';
                 $data[] = $subarray;
@@ -495,23 +495,34 @@ class InventoryController extends Controller
         }
     }
 
+    public function getMesurementUnit(Request $request){
+        $paper_id = $request->paperId;
+        $fetchUnits = $this->fetchUnits($paper_id);
+        return response()->json(['fetchUnits' => $fetchUnits]);
+    }
+
     public function createProductStock($id){
-        
-       $papertypes           = $this->fetchPaperTypes();
-       $warehouses           = $this->fetchWarehouse();
-       $warehousebyId        = $this->fetchWarehouseById(decrypt($id));
-       $paperQuantityUnit    = $this->fetchPackagingTitle();
-       $fetchUnitMeasureList = $this->fetchUnitMeasure();
+
+        $warehouse_id = decrypt($id);
+        $papertypes           = $this->fetchUniquePaperTypes($warehouse_id);
+        //$papertypes           = $this->fetchPaperTypes();
+        $warehouses           = $this->fetchWarehouse();
+        $warehousebyId        = $this->fetchWarehouseById(decrypt($id));
+        $paperQuantityUnit    = $this->fetchPackagingTitle();
+        $fetchUnitMeasureList = $this->fetchUnitMeasure();
+
+        $warehouseDetails = $this->fetchWarehouseById($warehouse_id);
 
         return view('inventory.createproductstock',
         [   'id'=>$id,
+            'warehouse_id'=> $warehouse_id,
             'papertypes'        => $papertypes ,
             'warehouses'        => $warehouses,
             'warehousebyId'     => $warehousebyId,
             'paperQuantityUnit' => $paperQuantityUnit,
-            'fetchUnitMeasureList' => $fetchUnitMeasureList
-        ]); 
-
+            'fetchUnitMeasureList' => $fetchUnitMeasureList,
+            'warehouseDetails' => $warehouseDetails
+        ]);
     }
 
     public function storeInventoryProductStock(Request $request){
