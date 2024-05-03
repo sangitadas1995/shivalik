@@ -56,4 +56,9 @@ class PaperTypes extends Model
     {
         return $this->belongsTo(PaperQuantityCalculation::class, 'quantity_unit_id');
     }
+
+    public function unit_type(): BelongsTo
+    {
+        return $this->belongsTo(PaperunitMeasument::class, 'quantity_unit_id');
+    }
 }
