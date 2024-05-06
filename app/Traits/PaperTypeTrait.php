@@ -34,7 +34,7 @@ trait PaperTypeTrait
             'status' => 'A',
             'id' => $id
         ])
-        ->first();
+            ->first();
 
         return $packaging_details;
     }
@@ -45,9 +45,8 @@ trait PaperTypeTrait
             'status' => 'A',
             'measurement_type_unit' => $unitid
         ])
-        ->first();
+            ->first();
         return $packaging_details;
-        
     }
 
     public function getAllPaperType()
@@ -59,5 +58,15 @@ trait PaperTypeTrait
             ->get();
 
         return $paper;
+    }
+
+    public function getPaperType_name($ids)
+    {
+        $paper_name = PaperTypes::whereIn('id', $ids)
+            ->where(['status' => 'A'])
+            ->orderBy('id', 'desc')
+            ->get();
+
+        return $paper_name;
     }
 }

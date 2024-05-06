@@ -24,7 +24,7 @@ use Illuminate\Support\Facades\Validator;
 
 class VendorsController extends Controller
 {
-    use Validate, Helper , PaperTypeTrait;
+    use Validate, Helper, PaperTypeTrait;
     public function index()
     {
         return view('vendors.index');
@@ -698,10 +698,65 @@ class VendorsController extends Controller
 
     /****** Start Paper tagging with Paper Vendor *********/
 
-    public function paperList(Request $request){
-        $vendor = Vendor::with('vendortype', 'city', 'state', 'country')->findOrFail($request->rowid);
-        $papers = $this->getAllPaperType();
-        $html = view('vendors.allpaper-list', ['vendor' => $vendor,'paper_list'=>$papers])->render();
+    public function paperList(Request $request)
+    {
+        $vendor = Vendor::with('vendortype')->findOrFail($request->rowid);
+
+        if ($vendor->service_type_ids) {
+            $service_types = json_decode($vendor->service_type_ids);
+            $finalArr = [];
+            foreach ($service_types as $key => $val) {
+                $finalArr[] = $val->paper_id;
+            }
+            $paper_list = $this->getAllPaperType();
+            $paper_final_arr = [];
+            foreach ($paper_list as $key => $p_value) {
+                $paper_final_arr[] = $p_value->id;
+            }
+            $papers_array = array_values(array_diff($paper_final_arr, $finalArr));
+            // $papares_implode_ids = implode(',', $papers_array);
+            $papers = $this->getPaperType_name($papers_array);
+        } else {
+            $papers = $this->getAllPaperType();
+        }
+
+        $html = view('vendors.allpaper-list', ['vendor' => $vendor, 'paper_list' => $papers])->render();
         return response()->json($html);
+    }
+
+    public function paperTagWithVendor(Request $request)
+    {
+        $request->validate([
+            'vendor_id' => ['required']
+        ]);
+
+        try {
+            $vendor = Vendor::findOrFail($request->vendor_id);
+            if (count($request->paper_id) > 0) {
+                $serviceTypeArr = [];
+                foreach ($request->paper_id as $key => $value) {
+                    $subarray = [];
+                    if ($value && $request->purchase_price[$key]) {
+                        $subarray['paper_id'] = $value;
+                        $subarray['purchase_price'] = $request->purchase_price[$key];
+                        $serviceTypeArr[] = $subarray;
+                    }
+                }
+            }
+
+            $previous_services = !empty($vendor) && !empty($vendor->service_type_ids) ? json_decode($vendor->service_type_ids) : [];
+
+            $serviceTypeArr = [...$previous_services, ...$serviceTypeArr];
+
+            $vendor->service_type_ids = json_encode($serviceTypeArr);
+            $update = $vendor->update();
+            if ($update) {
+                return redirect()->route('paper-vendor')->with('success', 'The vendor has been updated successfully.');
+            } else {
+                return redirect()->back()->with('fail', 'Failed to create the vendor.');
+            }
+        } catch (Exception $th) {
+            return redirect()->back()->with('fail', trans('messages.server_error'));
+        }
     }
 }
