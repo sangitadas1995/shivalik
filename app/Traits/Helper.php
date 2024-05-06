@@ -8,6 +8,7 @@ use App\Models\State;
 use App\Models\Customer;
 use App\Models\PaperTypes;
 use App\Models\ServiceType;
+use App\Models\User;
 
 trait Helper
 {
@@ -103,5 +104,15 @@ trait Helper
                 ->orderBy('paper_name', 'ASC')->get();
         }
         return $service_types;
+    }
+
+
+    public function getAllUsers()
+    {
+        $users = User::where([
+            'status' => 'A',
+        ])->orderBy('name', 'ASC')->get();
+
+        return $users;
     }
 }

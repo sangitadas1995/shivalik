@@ -97,35 +97,19 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Inventory Manual Stock In</h5>
+                    <h5 class="modal-title">Inventory Manual Stock in</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <form action="" method="POST" id="manual_stock_in" enctype="multipart/form-data">
+                        @csrf
                         <div class="row">
-                            <div class="col-md-6">
+                            <div class="col-md-12">
                                 <div class="mb-3">
-                                    <label class="form-label"><span class="text-danger">*</span>Product :</label>
-                                    <select name="paper_id" id="paper_id" class="form-control">
-                                        <option value="">--Select--</option>
-                                        <option value="1">Paper 1</option>
-                                        <option value="2">Art Paper</option>
-                                        <option value="3">White Art Paper </option>
-                                    </select>
-                                    <small class="text-danger error_warehouse_name"></small>
+                                    <label class="form-label"><b>Warehouse :</b> {{$warehouseDetails->company_name}}, {{$warehouseDetails->address}}</label>
                                 </div>
-                            </div>
-
-                            <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label class="form-label"><span class="text-danger">*</span>Warehouse :</label>
-                                    <select name="warehouse_id" id="warehouse_id" class="form-control">
-                                        <option value="">-- Select--</option>
-                                        <option value="1">ABC Pvt Ltd</option>
-                                        <option value="2">Alex Warehouse</option>
-                                        <option value="3">Jhone Pvt Warehouse</option>
-                                    </select>
-                                    <small class="text-danger error_warehouse_name"></small>
+                                    <label class="form-label"><b>Product :</b> <span id="productval"></span></label>
                                 </div>
                             </div>
                             <div class="col-md-6">
@@ -143,8 +127,8 @@
                                     <small class="text-danger error_opening_stock"></small>
                                 </div>
                             </div>
-                            <div class="col-md-6">
-                                <div class="mb-3">
+                            <!-- <div class="col-md-6">
+                                 <div class="mb-3">
                                     <label class="form-label"><span class="text-danger">*</span>Measurement Unit
                                         :</label>
                                     <select name="measurement_unit_id" id="measurement_unit_id" class="form-control">
@@ -154,36 +138,28 @@
                                         <option value="3">Carton</option>
                                     </select>
                                     <small class="text-danger error_measurement_unit_id"></small>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
+                                </div> 
+                            </div> -->
+                            <div class="col-md-4">
                                 <div class="mb-3">
                                     <label class="form-label">P.O No :</label>
-                                    <select name="purchase_order" id="purchase_order_id" class="form-control">
-                                        <option value="">--- Select --</option>
-                                        <option value="1">PAPER-PO-1234</option>
-                                        <option value="2">PAPER-PO-5678</option>
-                                        <option value="3">PAPER-PO-9745</option>
-                                        <option value="3">PAPER-PO-2589</option>
-                                    </select>
+                                    <input type="text" class="form-control" name="purchase_order_no" id="purchase_order_no" value="" />
                                     <small class="text-danger error_low_stock"></small>
                                 </div>
                             </div>
 
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <div class="mb-3">
                                     <label class="form-label">P.O Date<span class="text-danger">*</span></label>
-                                    <input type="date" class="form-control" name="purchase_order_date"
-                                        id="purchase_order_date" value="" />
+                                    <input type="date" class="form-control" name="purchase_order_date" id="purchase_order_date" value="" />
                                     <small class="text-danger error_purchase_order_date"></small>
                                 </div>
                             </div>
 
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <div class="mb-3">
                                     <label class="form-label">P.O Amount<span class="text-danger">*</span></label>
-                                    <input type="date" class="form-control" name="purchase_order_amount"
-                                        id="purchase_order_amount" value="" />
+                                    <input type="text" class="form-control" name="purchase_order_amount" id="purchase_order_amount" value="" />
                                     <small class="text-danger error_purchase_order_amount"></small>
                                 </div>
                             </div>
@@ -191,7 +167,14 @@
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label class="form-label">Ordered By<span class="text-danger">*</span></label>
-                                    <input type="date" class="form-control" name="order_by" id="order_by" value="" />
+                                    <select name="ordered_by" id="ordered_by" class="form-control">
+                                    <option value="">Select</option>
+                                    @if (!empty($users) && $users->isNotEmpty())
+                                    @foreach ($users as $us)
+                                    <option value="{{ $us->id }}" {{ $us->id == auth()->user()->id ? 'selected' : null }}>{{ $us->name }}</option>
+                                    @endforeach
+                                    @endif
+                                    </select>
                                     <small class="text-danger error_order_by"></small>
                                 </div>
                             </div>
@@ -199,17 +182,15 @@
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label class="form-label">Ordered Date<span class="text-danger">*</span></label>
-                                    <input type="date" class="form-control" name="orders_date" id="orders_date"
-                                        value="" />
+                                    <input type="date" class="form-control" name="orders_date" id="orders_date" value="" />
                                     <small class="text-danger error_orders_date"></small>
                                 </div>
                             </div>
 
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label class="form-label">Delivery Date<span class="text-danger">*</span></label>
-                                    <input type="date" class="form-control" name="delivery_date" id="delivery_date"
-                                        value="" />
+                                    <label class="form-label">Received Date<span class="text-danger">*</span></label>
+                                    <input type="date" class="form-control" name="received_date" id="received_date" value="" />
                                     <small class="text-danger error_delivery_date"></small>
                                 </div>
                             </div>
@@ -217,13 +198,16 @@
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label class="form-label">Attachment<span class="text-danger">*</span></label>
-                                    <input type="file" class="form-control" name="upload_file" id="upload_file"
-                                        value="" />
+                                    <input type="file" class="form-control" name="upload_file" id="upload_file" value="" />
                                     <small class="text-danger error_upload_file"></small>
                                 </div>
                             </div>
 
                             <div class="text-end">
+                                <input type="hidden" name="warehouse_id" value="{{$warehouseDetails->id}}">
+                                <input type="hidden" name="product_id" id="product_id">
+                                <input type="hidden" name="measurement_unit_id" id="measurement_unit_id">
+                                <input type="hidden" name="inventory_id" id="inventory_id">
                                 <button type="button" class="btn grey-primary reset_add_customer">Cancel</button>
                                 <button type="submit" class="btn black-btn">Save</button>
                             </div>
@@ -240,11 +224,44 @@
 <script>
 var warehouseId = "<?php echo $id;?>";
 $(document).ready(function () {
-        $.ajaxSetup({
-          headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-          }
+    $.ajaxSetup({
+      headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+      }
+    });
+
+
+    $("#manual_stock_in").submit(function(e) {
+        e.preventDefault();
+        const fd = new FormData(this);
+        //alert(fd);
+
+        $.ajax({
+          url: "{{ route('inventory.store-product-manual-stock') }}",
+          method: 'post',
+          data: fd,
+          cache: false,
+          contentType: false,
+          processData: false,
+          dataType: 'json',
+          success: function(response) {
+            //alert(response.status);
+            if (response.status == 200) {
+                Swal.fire(
+                'Added!','Manual stock added successfully!','success');
+                $("#manual_stock_in")[0].reset();
+                $("#inventory_manual_stockin").modal('hide');
+                setTimeout(function () { 
+                location.reload();
+                }, 3000);
+            }
+            else{
+                Swal.fire('Error!', 'Something went wrong, please try again.', 'error');
+            }
+        }
         });
+    });
+
 
         let product_stock_list_table = $('#product_stock_list_table').DataTable({
           stateSave: true,
@@ -281,7 +298,17 @@ $(document).ready(function () {
         $('#stock_in_date').val(new Date().toDateInputValue());
         $('#purchase_order_date').val(new Date().toDateInputValue());
         $('#orders_date').val(new Date().toDateInputValue());
-        $('#delivery_date').val(new Date().toDateInputValue());
+        $('#received_date').val(new Date().toDateInputValue());
+        var product_name = $(this).data().pvalue;
+        var product_id = $(this).data().paperid;
+        var measurement_unit_id = $(this).data().measurementunitid;
+        var inventory_id = $(this).data().inventoryid;
+        //alert(inventory_id);
+        $("#productval").html(product_name);
+        $("#product_id").val(product_id);
+        $("#measurement_unit_id").val(measurement_unit_id);
+        $("#inventory_id").val(inventory_id);
+        
         $('#inventory_manual_stockin').modal('show');
     });
 

@@ -101,7 +101,7 @@
                 </div>
 
                 <div class="text-end">
-                     <input type="hidden" class="form-control" name="warehouse_id" id="warehouse_id" value="{{$warehouse_id}}" />
+                    <input type="hidden" class="form-control" name="warehouse_id" id="warehouse_id" value="{{$warehouse_id}}" />
                     <button type="button" class="btn grey-primary reset_add_customer">Cancel</button>
                     <button type="submit" class="btn black-btn">Save</button>
                 </div>
