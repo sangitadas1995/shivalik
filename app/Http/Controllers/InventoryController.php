@@ -10,6 +10,7 @@ use App\Models\Vendor;
 use App\Traits\Helper;
 use App\Models\Country;
 use App\Models\Inventory;
+use App\Models\InventoryDetails;
 use App\Traits\Validate;
 use App\Models\Warehouses;
 use Illuminate\Http\Request;
@@ -24,9 +25,11 @@ class InventoryController extends Controller
     public function index($id)
     {
         $warehouseDetails = $this->fetchWarehouseById(decrypt($id));
+        $users = $this->getAllUsers();
         return view('inventory.index',[
             'id'=>$id,
-            'warehouseDetails' => $warehouseDetails
+            'warehouseDetails' => $warehouseDetails,
+            'users' => $users
         ]);
     }
 
@@ -41,6 +44,7 @@ class InventoryController extends Controller
 
         $query = Inventory::with('unit_type','paper_type');
         $query->where('warehouse_id', '=' , $id);
+        $query->where('inventory_type', '=' , 'opening');
 
 
         if (isset($request->search['value'])) {
@@ -94,19 +98,22 @@ class InventoryController extends Controller
 
                 $detailsLink = route('inventory.details');
 
+                $fetchInvs = $this->fetchInventortDetails($value->id);
+                $current_stock = $fetchInvs->current_stock_balance;
+
                 $subarray = [];
                 $subarray[] = ++$key . '.';
                 $subarray[] = $value->paper_type?->paper_name;
-                $subarray[] = Carbon::parse($value->updated_at)->format('d/m/Y h:i A');
-                $subarray[] = $value->opening_stock." ".$value->unit_type?->measurement_unuit;
-                $subarray[] = $value->current_stock." ".$value->unit_type?->measurement_unuit;
-                $subarray[] = $value->low_atock;
-                $subarray[] = '<div class="align-items-center d-flex dt-center"><a href="#" title="Stock Out"><img src="' . $stock_out_icon . '" /></a> <a href="#" title="Stock In" class="stock_in"><img src="' . $stock_in_icon . '" /></a> <a href="'. $detailsLink .'" title="Stock In"><img src="' . $details_icon . '" /></a></div>';
+                $subarray[] = Carbon::parse($value->updated_at)->format('d/m/Y');
+                $subarray[] = $value->quantity." ".$value->unit_type?->measurement_unuit;
+                $subarray[] = $current_stock." ".$value->unit_type?->measurement_unuit;
+                $subarray[] = $value->low_atock." ".$value->unit_type?->measurement_unuit;
+                $subarray[] = '<div class="align-items-center d-flex dt-center"><a href="#" title="Stock Out"><img src="' . $stock_out_icon . '" /></a> <a href="#" title="Stock In" id="myStockIn" class="stock_in" data-pvalue="' .$value->paper_type?->paper_name. '" data-paperid="' .$value->papertype_id. '" data-measurementunitid="' .$value->measurement_unit_id. '" data-inventoryid="' .$value->id. '"><img src="' . $stock_in_icon . '" /></a> <a href="'. $detailsLink .'" title="Stock In"><img src="' . $details_icon . '" /></a></div>';
                 $data[] = $subarray;
             }
         }
 
-        $count = Inventory::with('unit_type','paper_type')->where('warehouse_id', '=' , $id)->count();
+        $count = Inventory::with('unit_type','paper_type')->where('warehouse_id', '=' , $id)->where('inventory_type', '=' , 'opening')->count();
 
         $output = [
             'draw' => intval($request->draw),
@@ -528,16 +535,34 @@ class InventoryController extends Controller
     public function storeInventoryProductStock(Request $request){
         try
         {
+            DB::beginTransaction();
             $warehouse_get_id = $request->warehouse_get_id;
+
+            $fetchUnits = $this->fetchUnits($request->paper_id);
+            $measurement_name = $fetchUnits->unit_type?->measurement_unuit;
 
             $inventory = new Inventory();
             $inventory->papertype_id        = $request->paper_id;
             $inventory->warehouse_id        = $request->warehouse_id;
-            $inventory->opening_stock       = $request->opening_stock;
+            $inventory->quantity            = $request->opening_stock;
             $inventory->current_stock       = $request->opening_stock;
             $inventory->low_atock           = $request->low_stock;
             $inventory->measurement_unit_id = $request->measure_units_id;
+            $inventory->narration           = "Stock in ".$request->opening_stock." ".$measurement_name." paper as a open stock";
             $save = $inventory->save();
+            $last_inventory_insert_id = $inventory->id;
+
+
+            $inventorydetails = new InventoryDetails();
+            $inventorydetails->inventory_id = $last_inventory_insert_id;
+            $inventorydetails->papertype_id = $request->paper_id;
+            $inventorydetails->warehouse_id = $request->warehouse_id;
+            $inventorydetails->stock_quantity = $request->opening_stock;
+            $inventorydetails->current_stock_balance = $request->opening_stock;
+            $inventorydetails->save();
+
+            DB::commit();
+
 
             if ($save)
             {
@@ -546,9 +571,103 @@ class InventoryController extends Controller
                 return redirect()->back()->with('fail', 'Failed to create the product stock.');
             }
         } catch (Exception $th){
+            DB::rollBack();
             return redirect()->back()->with('fail', trans('messages.server_error'));
         }
 
+    }
+
+
+
+    public function storeInventoryProductManualStock(Request $request){
+
+
+        // $request->validate([
+        //     'stock_qty' => ['required', 'numeric'],
+
+        // ]);
+
+        // Setup the validator
+        // $rules = array('stock_qty' => 'required|numeric');
+        // $validator = Validator::make(Input::all(), $rules);
+
+        // // Validate the input and return correct response
+        // if ($validator->fails())
+        // {
+        //     return response()->json([
+        //         'status' => 404
+        //     ]);
+        // }
+
+
+
+        try
+        {
+            DB::beginTransaction();
+            if(!empty($request->upload_file))
+            {
+                $fileName = time().'.'.$request->upload_file->extension();  
+                $request->upload_file->move(public_path('images/stock'), $fileName);
+            }
+            else
+            {
+                $fileName = "";
+            }
+            
+            $fetchUnits = $this->fetchUnits($request->product_id);
+            $measurement_name = $fetchUnits->unit_type?->measurement_unuit;
+
+            $fetchInvs = $this->fetchInventortDetails($request->inventory_id);
+            $prev_current_stock = $fetchInvs->current_stock_balance;
+            $total_current_stock_balance = $prev_current_stock+$request->stock_qty;
+
+            $inventory = new Inventory();
+            $inventory->papertype_id            = $request->product_id;
+            $inventory->warehouse_id            = $request->warehouse_id;
+            $inventory->measurement_unit_id     = $request->measurement_unit_id;
+            $inventory->stockin_date            = $request->stock_in_date;
+            $inventory->quantity                = $request->stock_qty;
+            //$inventory->current_stock           = $request->stock_qty;
+            $inventory->purchase_order_no       = $request->purchase_order_no;
+            $inventory->purchase_order_date     = $request->purchase_order_date;
+            $inventory->purchase_order_amount   = $request->purchase_order_amount;
+            $inventory->ordered_by              = $request->ordered_by;
+            $inventory->orderd_date             = $request->orders_date;
+            $inventory->received_date           = $request->received_date;
+            $inventory->file                    = $fileName;
+            $inventory->narration               = "Stock in ".$request->stock_qty." ".$measurement_name." paper as a manual stock";
+            $inventory->inventory_type          = "manual";
+            $save = $inventory->save();
+            $last_inventory_insert_id = $inventory->id;
+
+            $inventorydetails = new InventoryDetails();
+            $inventorydetails->inventory_id = $request->inventory_id;
+            $inventorydetails->papertype_id = $request->product_id;
+            $inventorydetails->warehouse_id = $request->warehouse_id;
+            $inventorydetails->stock_quantity = $request->stock_qty;
+            $inventorydetails->current_stock_balance = $total_current_stock_balance;
+            $inventorydetails->save();
+
+            DB::commit();
+
+            if ($save)
+            {
+                return response()->json([
+                    'status' => 200
+                ]);
+            }
+            else
+            {
+                return response()->json([
+                'status' => 404
+                ]);
+            }
+        }   catch (Exception $th){
+            DB::rollBack();
+            return response()->json([
+                'status' => 404
+            ]);
+        }  
     }
 
     public function inventorydetails(){
