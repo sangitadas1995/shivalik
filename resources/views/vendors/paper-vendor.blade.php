@@ -110,7 +110,6 @@
     $(document).on('click', '.view_paper_details', function (e) {
       e.preventDefault();
       var __e = $(this);
-     console.log(__e);
       var rowid = __e.data('id');
       if (rowid) {
         $.ajax({
@@ -125,9 +124,17 @@
         });
       }
     });
-
-   
   });
-
+   
+  $(document).on('change', '.paper_id', function (e) {
+    e.preventDefault();
+    let __di = $(this);
+    let rowId = __di.attr('data-id');
+    if(rowId){
+      let p_html = '';
+      p_html += '<input type="text" name="purchase_price" value="" class="form-control " style="width:50%;">';
+      $('.purchase_val_'+rowId).html(p_html);
+    }
+  });
 </script>
 @endsection

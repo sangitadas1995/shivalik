@@ -47,9 +47,17 @@ trait PaperTypeTrait
         ])
         ->first();
         return $packaging_details;
-        // if(!empty($packaging_details['no_of_sheet']))
-        // {
-        //     return $packaging_details['no_of_sheet'];
-        // }
+        
+    }
+
+    public function getAllPaperType()
+    {
+        $paper = PaperTypes::where([
+            'status' => 'A'
+        ])
+            ->orderBy('id', 'desc')
+            ->get();
+
+        return $paper;
     }
 }

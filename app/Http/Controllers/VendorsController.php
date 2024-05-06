@@ -9,6 +9,7 @@ use App\Models\State;
 use App\Models\Country;
 use App\Models\PaperTypes;
 use App\Traits\Validate;
+use App\Traits\PaperTypeTrait;
 use App\Traits\Helper;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -23,7 +24,7 @@ use Illuminate\Support\Facades\Validator;
 
 class VendorsController extends Controller
 {
-    use Validate, Helper;
+    use Validate, Helper , PaperTypeTrait;
     public function index()
     {
         return view('vendors.index');
@@ -695,11 +696,12 @@ class VendorsController extends Controller
         }
     }
 
- /****** Start Paper tagging with Paper Vendor *********/
+    /****** Start Paper tagging with Paper Vendor *********/
 
     public function paperList(Request $request){
         $vendor = Vendor::with('vendortype', 'city', 'state', 'country')->findOrFail($request->rowid);
-        $html = view('vendors.allpaper-list', ['vendor' => $vendor])->render();
+        $papers = $this->getAllPaperType();
+        $html = view('vendors.allpaper-list', ['vendor' => $vendor,'paper_list'=>$papers])->render();
         return response()->json($html);
     }
 }

@@ -15,40 +15,41 @@
                 <div class="container">
                    <div class="row">
                       <div class="table-responsive table-sec mb-4">
-                         <table class="table table-striped">
-                            <thead>
-                               <tr>
-                                  <th>Check</th>
-                                  <th>ID</th>
-                                  <th style="text-align: center">Paper</th>
-                                  <th style="text-align: center">Purchase Price</th>
-                               </tr>
-                            </thead>
-                            <tbody>
-                               <tr>
-                                  <td><input type="checkbox" id="paper_id" name="paper_id" value=""></td>
-                                  <td>1</td>
-                                  <td style="text-align: center">Art Paper</td>
-                                  <td style="text-align: center"><input type="text" id="purchase_price" name="purchase_price" value=""></td>
-                               </tr>
-                               <tr>
-                                  <td><input type="checkbox" id="paper_id" name="paper_id" value=""></td>
-                                  <td>2</td>
-                                  <td style="text-align: center">Bond Paper</td>
-                                  <td style="text-align: center"><input type="text" id="purchase_price" name="purchase_price" value=""></td>
-                               </tr>
-                               <tr>
-                                  <td><input type="checkbox" id="paper_id" name="paper_id" value=""></td>
-                                  <td>3</td>
-                                  <td style="text-align: center">A4 Size Paper</td>
-                                  <td style="text-align: center"><input type="text" id="purchase_price" name="purchase_price" value=""></td>
-                               </tr>
-                            </tbody>
-                         </table>
-                      </div>
+                        <table class="table table-striped">
+                           <thead>
+                              <tr>
+                                 <th>Check</th>
+                                 <th>ID</th>
+                                 <th style="text-align: center">Paper</th>
+                                 <th style="text-align: center">Purchase Price</th>
+                              </tr>
+                           </thead>
+                           <tbody>
+                              @if (isset($paper_list) && count($paper_list) > 0)
+                                 @foreach ($paper_list as $paper)
+                                    <tr>
+                                       <td><input type="checkbox" name="paper_id" class="paper_id" data-id="{{ $paper->id }}"></td>
+                                       <td>{{ $paper->id }}</td>
+                                       <td style="text-align: center">{{ $paper->paper_name }}</td>
+                                       <td style="text-align: center"><div class="d-flex justify-content-center purchase_val_{{ $paper->id }}"></div></td>
+                                    </tr>
+                                 @endforeach
+                              @else
+                                 <tr>
+                                    <td colspan="4">No record found</td>
+                                 </tr>
+                              @endif
+                           </tbody>
+                        </table>
+                     </div>
+                     <div class="text-end">
+                        <button type="button" class="btn grey-primary reset_add_vendor">Cancel</button>
+                        <button type="submit" class="btn black-btn paper_assign_to_vendor">Save</button>
+                    </div>
                    </div>
                 </div>
              </div>
           </div>
        </div>
     </div>
+  
