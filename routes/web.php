@@ -78,6 +78,7 @@ Route::middleware('auth')->group(function () {
         Route::post('store', [VendorsController::class, 'store'])->name('store');
         Route::post('list-data', [VendorsController::class, 'list_data'])->name('data');
         Route::post('view', [VendorsController::class, 'view'])->name('view');
+        Route::post('paper-list', [VendorsController::class, 'paperList'])->name('paper-list');
         Route::get('edit/{id}', [VendorsController::class, 'edit'])->name('edit');
         Route::post('update/{id}', [VendorsController::class, 'update'])->name('update');
         Route::post('service-types', [VendorsController::class, 'getServiceTypes'])->name('service-types');

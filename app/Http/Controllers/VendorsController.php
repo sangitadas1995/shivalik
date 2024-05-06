@@ -417,25 +417,8 @@ class VendorsController extends Controller
 
                 $view_icon = asset('images/lucide_view.png');
                 $edit_icon = asset('images/akar-icons_edit.png');
+                $productlist_icon = asset('images/paper.png');
                 $editLink = route('vendors.paper.edit', encrypt($value->id));
-
-                // $paper_types_ids = json_decode($value->service_type_ids);
-
-                // $papers = PaperTypes::whereIn('id', $paper_types_ids)->where([
-                //     'status' => 'A'
-                // ])
-                //     ->get();
-
-                // $paper_types = null;
-                // if (!empty($papers) && $papers->isNotEmpty()) {
-                //     foreach ($papers as $pkey => $paper) {
-                //         if ($pkey == 0) {
-                //             $paper_types .= $paper->paper_name;
-                //         } else {
-                //             $paper_types .= ', ' . $paper->paper_name;
-                //         }
-                //     }
-                // }
 
                 $subarray = [];
                 $subarray[] = $value->id;
@@ -444,7 +427,7 @@ class VendorsController extends Controller
                 $subarray[] = $value->contact_person;
                 $subarray[] = $value->mobile_no;
                 // $subarray[] = $paper_types;
-                $subarray[] = '<a href="#" class="view_details" title="View Details" data-id ="' . $value->id . '"><img src="' . $view_icon . '" /></a> <a href="' . $editLink . '" title="Edit"><img src="' . $edit_icon . '" /></a>
+                $subarray[] = '<a href="#" class="view_details" title="View Details" data-id ="' . $value->id . '"><img src="' . $view_icon . '" /></a> <a href="' . $editLink . '" title="Edit"><img src="' . $edit_icon . '" /></a><a href="#" class="view_paper_details" title="Paper List" data-id ="' . $value->id . '"><img src="' . $productlist_icon . '" /></a> 
                 ';
                 $data[] = $subarray;
             }
@@ -710,5 +693,13 @@ class VendorsController extends Controller
             DB::rollBack();
             return redirect()->back()->with('fail', trans('messages.server_error'));
         }
+    }
+
+ /****** Start Paper tagging with Paper Vendor *********/
+
+    public function paperList(Request $request){
+        $vendor = Vendor::with('vendortype', 'city', 'state', 'country')->findOrFail($request->rowid);
+        $html = view('vendors.allpaper-list', ['vendor' => $vendor])->render();
+        return response()->json($html);
     }
 }
