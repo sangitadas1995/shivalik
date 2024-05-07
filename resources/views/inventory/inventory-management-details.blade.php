@@ -11,10 +11,9 @@
             <div class="col-auto ">
                 <div class="d-flex align-items-center gap-2">
 
-                    <h2><i class="ri-arrow-left-line"></i> ABC Printing Company
-                    </h2>
-                    <p class="subtableHeading">
-                        (Warehouse Id: 123456)</p>
+                <h2><a href="{{route('inventory.index', ['id' => encrypt($warehouseDetails->id)])}}"><i class="ri-arrow-left-line"></i></a> {{$warehouseDetails->company_name}}</h2>
+                <p class="subtableHeading">
+                (Warehouse Id: {{$warehouseDetails->id}})</p>
                 </div>
             </div>
             <div class="col-auto ">
@@ -27,18 +26,14 @@
                         </div>
                     </div>
                     <div class="col-auto">
-                        <select
-                            class="form-select inventory-management-details-filter-select bg-transparent fw-semibold inventory-management"
-                            aria-label="Default select example  ">
-                            <option value="1">Today</option>
-                            <option selected>7 days</option>
-                            <option value="2">14 days</option>
-                            <option value="3">1 month</option>
-                            <option value="3">All</option>
-                        </select>
+                    <select class="form-select inventory-management-details-filter-select bg-transparent fw-semibold inventory-management" aria-label="Default select example" onchange="invDetailsList(this.value)">
+                        <option value="1">Today</option>
+                        <option value="7" selected>7 days</option>
+                        <option value="14">14 days</option>
+                        <option value="30">1 month</option>
+                        <option value="365">All</option>
+                    </select>
                     </div>
-
-
                 </div>
             </div>
         </div>
@@ -46,7 +41,7 @@
     <div class="row">
         <div class="d-flex w-100 justify-content-between ">
             <p class="subtableHeading">
-                Transaction Ledger for (Product Name)
+                Transaction Ledger for ({{$inventoryDetails->paper_type?->paper_name}})
             </p>
             <p class="subtableHeading">
                 Current Stock: 250
@@ -70,7 +65,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
+                    <!-- <tr>
                         <td>23.04.2024</td>
                         <td>-</td>
                         <td>XYZ123</td>
@@ -80,10 +75,8 @@
                         <td class="border-left-table-td">300</td>
                         <td>-</td>
                         <td class="txt-green">250</td>
-
-
-                    </tr>
-                    <tr>
+                    </tr> -->
+<!--                     <tr>
                         <td>22.04.2024</td>
                         <td>PQR1234</td>
                         <td>123489</td>
@@ -93,8 +86,6 @@
                         <td class="border-left-table-td">-</td>
                         <td>350</td>
                         <td class="txt-red">-50</td>
-
-
                     </tr>
                     <tr>
                         <td>21.04.2024</td>
@@ -117,7 +108,7 @@
                     <td class="border-left-table-td">500</td>
                     <td>-</td>
                     <td class="txt-green">500</td>
-                </tr>
+                </tr> -->
             </tbody>
         </table>
     </div>
@@ -125,3 +116,29 @@
 @endsection
 
 @section('scripts')
+
+<script>
+var warehouseId = "<?php echo $warehouseDetails->id;?>";
+var paperId = "<?php echo $inventoryDetails->papertype_id;?>";
+
+invDetailsList(7);
+function invDetailsList(noofdays)
+{
+    //alert(noofdays);
+    $.ajaxSetup({
+    headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    }
+    });
+    $.ajax({
+        type:'POST',
+        url: "{{ route('inventory.productmanualstocklist-data') }}",
+        data:{warehouseId:warehouseId, paperId:paperId, noofdays:noofdays},
+        dataType: 'json',
+        success: function(response) {
+            $('tbody').html(response.table_data);
+        }
+    });
+}
+</script>
+@endsection

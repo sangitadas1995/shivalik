@@ -96,7 +96,7 @@ class InventoryController extends Controller
                 $stock_in_icon = asset('images/inventoryIcon-2.png');
                 $details_icon = asset('images/inventoryIcon-3.png');
 
-                $detailsLink = route('inventory.details');
+                $detailsLink = route('inventory.details', ['id' => encrypt($value->id)]);
 
                 $fetchInvs = $this->fetchInventortDetails($value->id);
                 $current_stock = $fetchInvs->current_stock_balance;
@@ -548,6 +548,10 @@ class InventoryController extends Controller
             $inventory->current_stock       = $request->opening_stock;
             $inventory->low_atock           = $request->low_stock;
             $inventory->measurement_unit_id = $request->measure_units_id;
+            if(!empty($request->vendor_id))
+            {
+                $inventory->vendor_id = $request->vendor_id;
+            }
             $inventory->narration           = "Stock in ".$request->opening_stock." ".$measurement_name." paper as a open stock";
             $save = $inventory->save();
             $last_inventory_insert_id = $inventory->id;
@@ -634,6 +638,10 @@ class InventoryController extends Controller
             $inventory->ordered_by              = $request->ordered_by;
             $inventory->orderd_date             = $request->orders_date;
             $inventory->received_date           = $request->received_date;
+            if(!empty($request->vendor_id))
+            {
+                $inventory->vendor_id           = $request->vendor_id;
+            }
             $inventory->file                    = $fileName;
             $inventory->narration               = "Stock in ".$request->stock_qty." ".$measurement_name." paper as a manual stock";
             $inventory->inventory_type          = "manual";
@@ -670,8 +678,77 @@ class InventoryController extends Controller
         }  
     }
 
-    public function inventorydetails(){
-        return view('inventory.inventory-management-details');
+    public function inventorydetails($id){
+        $inventory_id = decrypt($id);
+        $fetch_inventory = $this->fetchInventoriesById($inventory_id);
+        $warehouseId = $fetch_inventory->warehouse_id;
+        $paperId = $fetch_inventory->papertype_id;
+
+        $warehouseDetails = $this->fetchWarehouseById($warehouseId);
+        if(!empty($fetch_inventory)){
+           // $inventoryDetails_calculation = $this->fetchInventoryCalculation($warehouseId,$paperId);
+           //dd($inventoryDetails_calculation);
+        }
+        return view('inventory.inventory-management-details',[
+            'id'=>$id,
+            'inventoryDetails' => $fetch_inventory,
+            'warehouseDetails' => $warehouseDetails
+        ]);
+    }
+
+
+    public function product_manual_stocklist_data(Request $request){
+       
+        $data = $request->all();
+        //dd($data["warehouseId"]);
+
+        $warehouseId = $data["warehouseId"];
+        $paperId = $data["paperId"];
+        $noofdays = $data["noofdays"];
+
+
+        $inventoryDetails_calculation = $this->fetchInventoryCalculation($warehouseId,$paperId,$noofdays);
+
+        $output = '';
+        if ($inventoryDetails_calculation->isNotEmpty()) {
+            foreach ($inventoryDetails_calculation as $key => $value) {
+
+            $output .= '
+            <tr>
+            <td>'.Carbon::parse($value->created_at)->format('d.m.Y').'</td>
+            <td>NIL</td>
+            <td>'.$value->purchase_order_no.'</td>
+            <td>'.$value->vendor?->company_name.'</td>
+            <td>'.$value->user?->name.'</td>
+            <td class="naration-colum">'.$value->narration.'</td>';
+            if($value->inventory_details?->stock_type=="credit")
+            {
+                $output .= '<td class="border-left-table-td">'.$value->inventory_details?->stock_quantity.'</td>
+                <td>-</td>
+                <td class="txt-green">'.$value->inventory_details?->current_stock_balance.'</td>';
+            }
+            if($value->inventory_details?->stock_type=="debit")
+            {
+                $output .= '<td class="border-left-table-td">-</td>
+                <td>'.$value->inventory_details?->stock_quantity.'</td>
+                <td class="txt-red">'.$value->inventory_details?->current_stock_balance.'</td>';
+            } 
+           
+            $output .= '</tr>';
+
+            }
+        }
+
+        //dd($inventoryDetails_calculation);
+
+
+
+        $data = array(
+           'table_data'  => $output
+        );
+
+        echo json_encode($data);
+
     }
 
 }

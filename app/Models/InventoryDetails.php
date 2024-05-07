@@ -11,9 +11,4 @@ class InventoryDetails extends Model
     use HasFactory;
 
     protected $guarded = ['id'];
-
-    public function inventory(): BelongsTo
-    {
-        return $this->belongsTo(Inventory::class, 'inventory_id');
-    }
 }
