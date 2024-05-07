@@ -339,7 +339,12 @@ class VendorsController extends Controller
             if ($vendor->vendor_type_id == 2) {
                 $service_types = ServiceType::whereIn('id', $service_types_id)->get();
             } else {
-                $service_types = PaperTypes::whereIn('id', $service_types_id)->get();
+                $result = [];
+                foreach ($service_types_id as $item) {
+                    $result[] = $item->paper_id;
+                }
+                $service_types = PaperTypes::whereIn('id', $result)->get();
+                //dd($service_types);
             }
         }
 
