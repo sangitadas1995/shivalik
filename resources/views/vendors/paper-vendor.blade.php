@@ -25,7 +25,7 @@
                     <th style="text-align: center">Company Name</th>
                     <th style="text-align: center">Contact Person</th>
                     <th style="text-align: center">Mobile No</th>
-                    <!-- <th style="text-align: center">Supplier of paper types</th> -->
+                    <th style="text-align: center">Supplier of papers</th> 
                     <th style="text-align: center">Action</th>
                 </tr>
             </thead>
