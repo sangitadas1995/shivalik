@@ -84,6 +84,7 @@ Route::middleware('auth')->group(function () {
         Route::post('service-types', [VendorsController::class, 'getServiceTypes'])->name('service-types');
         Route::post('fetch-services', [VendorsController::class, 'fetch_services'])->name('fetch-services');
         Route::post('paper-tag-vendor', [VendorsController::class, 'paperTagWithVendor'])->name('paper-tag-vendor');
+        Route::post('tagservicedetails', [VendorsController::class, 'tagPaperServiceDetails'])->name('tagservicedetails');
 
         Route::prefix('paper')->name('paper.')->group(function () {
             Route::get('edit/{id}', [VendorsController::class, 'paper_edit'])->name('edit');

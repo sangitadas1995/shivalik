@@ -403,6 +403,7 @@ class VendorsController extends Controller
         ];
 
         $query = Vendor::where('vendor_type_id', '1');
+       
 
         if (isset($request->search['value'])) {
             $query->where(function ($q) use ($request) {
@@ -429,6 +430,15 @@ class VendorsController extends Controller
         $data = [];
         if ($result->isNotEmpty()) {
             foreach ($result as $key => $value) {
+                $service_types_id = !empty($value->service_type_ids) ? json_decode($value->service_type_ids) : null;
+                $res_service = [];
+
+                if ($service_types_id !== null) {
+                    foreach ($service_types_id as $item) {
+                        $res_service[] = $item->paper_id;
+                    }
+                } 
+                $service_types_count = count($res_service);
 
                 $view_icon = asset('images/lucide_view.png');
                 $edit_icon = asset('images/akar-icons_edit.png');
@@ -441,12 +451,13 @@ class VendorsController extends Controller
                 $subarray[] = $value->company_name;
                 $subarray[] = $value->contact_person;
                 $subarray[] = $value->mobile_no;
-                $subarray[] = '<a href="#" class="view_paper_details" title="Paper List" data-id ="' . $value->id . '"><img src="' . $productlist_icon . '" /></a> 
+                $subarray[] = '<a href="#" class="view_service_tagging_details" title="paper tag details" data-id ="' . $value->id . '">'.$service_types_count.'</a><br><a href="#" class="view_paper_details" title="Paper List" data-id ="' . $value->id . '"><img src="' . $productlist_icon . '" /></a> 
                 ';
                 $subarray[] = '<a href="#" class="view_details" title="View Details" data-id ="' . $value->id . '"><img src="' . $view_icon . '" /></a> <a href="' . $editLink . '" title="Edit"><img src="' . $edit_icon . '" /></a> 
                 ';
                 $data[] = $subarray;
             }
+            
         }
 
         $count = Vendor::where('vendor_type_id', '2')->count();
@@ -714,7 +725,6 @@ class VendorsController extends Controller
                 $paper_final_arr[] = $p_value->id;
             }
             $papers_array = array_values(array_diff($paper_final_arr, $finalArr));
-            // $papares_implode_ids = implode(',', $papers_array);
             $papers = $this->getPaperType_name($papers_array);
         } else {
             $papers = $this->getAllPaperType();
@@ -758,5 +768,24 @@ class VendorsController extends Controller
         } catch (Exception $th) {
             return redirect()->back()->with('fail', trans('messages.server_error'));
         }
+    }
+
+    public function tagPaperServiceDetails(Request $request){
+        $vendor = Vendor::with('vendortype')->findOrFail($request->rowId);
+        $finalArr = [];
+        if (!empty($vendor->service_type_ids)) {
+            $service_types = json_decode($vendor->service_type_ids);
+            foreach ($service_types as $item) {
+                $paperName = $this->getPaperNameById($item->paper_id);
+                $finalArr[] = [
+                    'paper_id' => $item->paper_id,
+                    'paper_name' => $paperName->paper_name,
+                    'purchase_price' => $item->purchase_price
+                ];
+            }
+          
+        } 
+        $html = view('vendors.tagged-paper-list', ['vendor' => $vendor,'paper_list'=>$finalArr])->render();
+        return response()->json($html);
     }
 }

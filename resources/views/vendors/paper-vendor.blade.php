@@ -50,6 +50,13 @@
     </div>
 </div>
 
+<div class="modal fade" id="tagPaperListModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="render_tag_PaperListModal"></div>
+    <div class="modal-dialog modal-dialog-scrollable  modal-dialog-centered">
+    </div>
+</div>
+
 
 @endsection
 
@@ -145,7 +152,6 @@
         let __di = $(this);
         let rowId = __di.attr('data-id');
         if (rowId) {
-            console.log(checked_paper_id);
             if ($(this).prop('checked') == true) {
                 let p_html = '';
                 p_html +=
@@ -160,6 +166,26 @@
                 }
                 $('.purchase_val_' + rowId).html('');
             }
+        }
+    });
+
+    $(document).on('click', '.view_service_tagging_details', function (e) {
+        e.preventDefault();
+        let __di = $(this);
+        let rowId = __di.attr('data-id');
+        if(rowId){
+            $.ajax({
+                    type: "post",
+                    url: "{{ route('vendors.tagservicedetails') }}",
+                    data: {
+                        rowId
+                    },
+                    dataType: "json",
+                    success: function (response) {
+                        $('.render_tag_PaperListModal').html(response);
+                        $('#tagPaperListModal').modal('show');
+                    }
+                });
         }
     });
 </script>

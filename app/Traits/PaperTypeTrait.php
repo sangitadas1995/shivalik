@@ -69,4 +69,14 @@ trait PaperTypeTrait
 
         return $paper_name;
     }
+
+    public function getPaperNameById($id)
+    {
+        $paper_name = PaperTypes::where([
+            'id' => $id
+        ])
+        ->first();
+
+        return $paper_name;
+    }
 }
