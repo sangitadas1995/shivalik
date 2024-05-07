@@ -73,4 +73,25 @@ trait InventoryTrait
         ->first();
         return $invDetails;
     }
+
+    public function fetchInventoriesById($id)
+    {
+        $inventories = Inventory::with('paper_type')->where([
+            'id' => $id
+        ])
+        ->first();
+        return $inventories;
+    }
+
+    public function fetchInventoryCalculation($warehouseId,$paperId,$noofdays)
+    {
+        $inventories = Inventory::with('inventory_details','vendor','user')->where([
+            'warehouse_id' => $warehouseId,
+            'papertype_id' => $paperId,
+            'inventory_type' => 'manual'
+        ])->where('created_at', '>=', now()->subDays($noofdays))
+        ->orderBy('id', 'desc')
+        ->get();
+        return $inventories;
+    }
 }

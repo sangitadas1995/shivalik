@@ -33,10 +33,9 @@
             </li>
             <li>
               <a href="{{ route('inventory.warehouse.list') }}"
-                class="{{ Route::is('inventory.index','inventory.warehouse.add','inventory.warehouse.list','inventory.warehouse.edit') ? 'activeBox' : null }}">
+                class="{{ Route::is('inventory.index','inventory.add-product-stock','inventory.details','inventory.warehouse.add','inventory.warehouse.list','inventory.warehouse.edit') ? 'activeBox' : null }}">
                 <span class="imgSpan"><img src="{{ asset('images/ic_round-inventory.png') }}" />
                 </span><span>Inventory <br> Management</span>
-
               </a>
             </li>
           </ul>

@@ -205,6 +205,7 @@
 
                             <div class="text-end">
                                 <input type="hidden" name="warehouse_id" value="{{$warehouseDetails->id}}">
+                                <input type="hidden" name="vendor_id" value="{{$warehouseDetails->vendor_id}}">
                                 <input type="hidden" name="product_id" id="product_id">
                                 <input type="hidden" name="measurement_unit_id" id="measurement_unit_id">
                                 <input type="hidden" name="inventory_id" id="inventory_id">

@@ -113,13 +113,17 @@ Route::middleware('auth')->group(function () {
 
         Route::post('productstocklist-data', [InventoryController::class, 'productstocklist_data'])->name('productstocklist-data');
 
-        Route::get('details', [InventoryController::class, 'inventorydetails'])->name('details');
+        Route::get('/details/{id}', [InventoryController::class, 'inventorydetails'])->name('details');
         Route::get('add-product-stock/{id}', [InventoryController::class, 'createProductStock'])->name('add-product-stock');
         Route::post('store-product-stock', [InventoryController::class, 'storeInventoryProductStock'])->name('store-product-stock');
 
         Route::post('getmesurementunit', [InventoryController::class, 'getMesurementUnit'])->name('getmesurementunit');
 
         Route::post('store-product-manual-stock', [InventoryController::class, 'storeInventoryProductManualStock'])->name('store-product-manual-stock');
+
+
+        Route::post('productmanualstocklist-data', [InventoryController::class, 'product_manual_stocklist_data'])->name('productmanualstocklist-data');
+
 
         Route::prefix('warehouse')->name('warehouse.')->group(function () {
             Route::get('add', [InventoryController::class, 'create'])->name('add');

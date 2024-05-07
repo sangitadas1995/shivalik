@@ -20,6 +20,21 @@ class Inventory extends Model
     {
         return $this->belongsTo(PaperTypes::class, 'papertype_id');
     }
+
+    public function inventory_details()
+    {
+        return $this->belongsTo(InventoryDetails::class, 'id');
+    }
+
+    public function vendor()
+    {
+        return $this->belongsTo(Vendor::class, 'vendor_id');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'ordered_by');
+    }
 }
 
 
