@@ -159,17 +159,18 @@
           </div>
        
           <br>
-          <div class="page-name">
-            <div class="row justify-content-between align-items-center">
-                <div class="col-md-4">
-                    <h2> Vendor Services</h2>
-                </div>
+          <div class="service_type_tagging">
+            <div class="page-name">
+              <div class="row justify-content-between align-items-center">
+                  <div class="col-md-4">
+                      <h2> Vendor Services</h2>
+                  </div>
+              </div>
             </div>
-        </div>
-        
-          <div class="col-md-12">
-            <div class="mb-3" id="service_types">
-              
+            <div class="col-md-12">
+              <div class="mb-3" id="service_types">
+                
+              </div>
             </div>
           </div>
         </div>
@@ -486,11 +487,12 @@
 
       __e[0].submit();
     });
-    
+    $('.service_type_tagging').hide();
     $(document).on('change', '.vendor_type', function () {
       let vendor_type = this.value;
    
-      if (vendor_type) {
+      if (vendor_type == 2) {
+        $('.service_type_tagging').show();
         $.ajax({
           url: "{{ route('vendors.service-types') }}",
           type: 'post',
@@ -509,7 +511,9 @@
             return Swal.fire('Error!', 'Something went wrong, Plese try again.', 'error');
           }
         });
-      } 
+      } else{
+        $('.service_type_tagging').hide();
+      }
     });
 
     $(document).on('click','.reset_add_vendor',function(e){

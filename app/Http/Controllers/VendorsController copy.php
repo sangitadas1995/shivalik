@@ -528,10 +528,26 @@ class VendorsController extends Controller
             'country_id' => ['required', 'numeric'],
             'state_id' => ['required', 'numeric'],
             'city_id' => ['required', 'numeric'],
-            'pincode' => ['required', 'regex:/^[1-9][0-9]{5}$/']
+            'pincode' => ['required', 'regex:/^[1-9][0-9]{5}$/'],
+            'paper_type_id.*' => ['required'],
+            'sales_price.*' => ['required'],
+            'purchase_price.*' => ['required'],
         ]);
 
         try {
+            if (count($request->paper_type_id) > 0) {
+                $serviceTypeArr = [];
+                foreach ($request->paper_type_id as $key => $value) {
+                    $subarray = [];
+                    if ($value) {
+                        $subarray['paper_type_id'] = $value;
+                        $subarray['sales_price'] = $request->sales_price[$key];
+                        $subarray['purchase_price'] = $request->purchase_price[$key];
+
+                        $serviceTypeArr[] = $subarray;
+                    }
+                }
+            }
 
             $vendor = Vendor::findOrFail($id);
             $vendor->vendor_type_id = $request->vendor_type_id;
@@ -549,6 +565,7 @@ class VendorsController extends Controller
             $vendor->state_id = $request->state_id;
             $vendor->city_id = $request->city_id;
             $vendor->pincode = $request->pincode;
+            $vendor->service_type_ids = json_encode($serviceTypeArr);
             $update = $vendor->update();
 
             if ($update) {
