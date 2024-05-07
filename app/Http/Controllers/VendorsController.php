@@ -158,7 +158,9 @@ class VendorsController extends Controller
             $vendor->state_id = $request->state_id;
             $vendor->city_id = $request->city_id;
             $vendor->pincode = $request->pincode;
-            $vendor->service_type_ids = $request->service_type_id ? json_encode($request->service_type_id): '' ;
+            if($request->vendor_type_id == 2){
+                $vendor->service_type_ids = json_encode($request->service_type_id);
+            }
             $vendor->is_warehouse = $request->vendor_type_id == 2 ? 'yes' : 'no';
             $save = $vendor->save();
             $last_vendor_insert_id = $vendor->id;
@@ -195,7 +197,7 @@ class VendorsController extends Controller
             }
         } catch (Exception $th) {
             DB::rollBack();
-            // dd($th);
+            /* dd($th); */
             return redirect()->back()->with('fail', trans('messages.server_error'));
         }
     }
@@ -692,9 +694,11 @@ class VendorsController extends Controller
     {
         $vendor = Vendor::with('vendortype')->findOrFail($request->rowid);
 
-        if ($vendor->service_type_ids) {
+        if (!empty($vendor->service_type_ids)) {
+           
             $service_types = json_decode($vendor->service_type_ids);
             $finalArr = [];
+            
             foreach ($service_types as $key => $val) {
                 $finalArr[] = $val->paper_id;
             }
