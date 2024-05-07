@@ -2143,3 +2143,25 @@ table {
         }
     }
 }
+
+.paper-vendor-modal-table {
+    thead {
+        th {
+            text-align: center;
+        }
+    }
+
+    tbody {
+        tr {
+            td {
+
+                // min-width: 100px;
+                &:last-child {
+                    width: 200px;
+                }
+
+                text-align: center;
+            }
+        }
+    }
+}

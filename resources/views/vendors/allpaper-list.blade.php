@@ -17,7 +17,7 @@
                             <form action="{{ route('vendors.paper-tag-vendor') }}" method="post">
                                 @csrf
                                 <input type="hidden" name="vendor_id" id="vendor_id" value="">
-                                <div class="table-responsive table-sec mb-4">
+                                <div class="table-responsive table-sec mb-4 paper-vendor-modal-table">
                                     <table class="table table-striped">
                                         <thead>
                                             <tr>
@@ -29,24 +29,23 @@
                                         </thead>
                                         <tbody>
                                             @if (isset($paper_list) && count($paper_list) > 0)
-                                                @foreach ($paper_list as $paper)
-                                                    <tr>
-                                                        <td><input type="checkbox" name="paper_id[]" class="paper_id"
-                                                                data-id="{{ $paper->id }}"
-                                                                value="{{ $paper->id }}"></td>
-                                                        <td>{{ $paper->id }}</td>
-                                                        <td style="text-align: center">{{ $paper->paper_name }}</td>
-                                                        <td style="text-align: center">
-                                                            <div
-                                                                class="d-flex justify-content-center purchase_val_{{ $paper->id }}">
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-                                                @endforeach
+                                            @foreach ($paper_list as $paper)
+                                            <tr>
+                                                <td><input type="checkbox" name="paper_id[]" class="paper_id"
+                                                        data-id="{{ $paper->id }}" value="{{ $paper->id }}"></td>
+                                                <td>{{ $paper->id }}</td>
+                                                <td style="text-align: center">{{ $paper->paper_name }}</td>
+                                                <td style="text-align: center">
+                                                    <div
+                                                        class="d-flex justify-content-center purchase_val_{{ $paper->id }}">
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            @endforeach
                                             @else
-                                                <tr>
-                                                    <td colspan="4">No record found</td>
-                                                </tr>
+                                            <tr>
+                                                <td colspan="4">No record found</td>
+                                            </tr>
                                             @endif
                                         </tbody>
                                     </table>
