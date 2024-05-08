@@ -683,12 +683,8 @@ class InventoryController extends Controller
         $fetch_inventory = $this->fetchInventoriesById($inventory_id);
         $warehouseId = $fetch_inventory->warehouse_id;
         $paperId = $fetch_inventory->papertype_id;
-
         $warehouseDetails = $this->fetchWarehouseById($warehouseId);
-        if(!empty($fetch_inventory)){
-           // $inventoryDetails_calculation = $this->fetchInventoryCalculation($warehouseId,$paperId);
-           //dd($inventoryDetails_calculation);
-        }
+
         return view('inventory.inventory-management-details',[
             'id'=>$id,
             'inventoryDetails' => $fetch_inventory,

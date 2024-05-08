@@ -1823,4 +1823,14 @@ table.dataTable {
 
 table tr td:last-child .d-flex {
   gap: 0.25rem;
+}
+
+.paper-vendor-modal-table thead th {
+  text-align: center;
+}
+.paper-vendor-modal-table tbody tr td {
+  text-align: center;
+}
+.paper-vendor-modal-table tbody tr td:last-child {
+  width: 200px;
 }/*# sourceMappingURL=style.css.map */

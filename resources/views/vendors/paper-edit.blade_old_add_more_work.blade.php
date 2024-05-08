@@ -180,6 +180,79 @@
                             <small class="text-danger error_pincode"></small>
                         </div>
                     </div>
+
+                <br>
+                    <div class="page-name">
+                        <div class="row justify-content-between align-items-center">
+                            <div class="col-md-4">
+                                <h2>Tag products</h2>
+                            </div>
+                        </div>
+                    </div> 
+
+                    @if (!empty($products)) 
+                        @foreach ($products as $product)
+                            <div class="row product_list">
+                                <div class="col-md-3">
+                                    <div class="mb-3">
+                                        <label class="form-label">Supplier of paper types<span
+                                                class="text-danger">*</span>:</label>
+                                        <select class="form-select" aria-label="Default select example"
+                                            id="paper_type_id0" name="paper_type_id[]">
+                                            <option value="">Select</option>
+                                            @if ($service_types->isNotEmpty())
+                                                @foreach ($service_types as $type)
+                                                    <option value="{{ $type->id }}"
+                                                        {{ $type->id == $product?->paper_type_id ? 'selected' : null }}>
+                                                        {{ $type->paper_name }}</option>
+                                                @endforeach
+                                            @endif
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <div class="mb-3">
+                                        <label class="form-label">Sales Price<span class="text-danger">*</span>:</label>
+                                        <input type="text" class="form-control" name="sales_price[]" id="sales_price"
+                                            value="{{ $product->sales_price }}" />
+                                    </div>
+                                </div>
+
+
+
+                                <div class="col-md-3">
+                                    <div class="mb-3">
+                                        <label class="form-label">Purchase Price
+                                            <span class="text-danger">*</span>:</label>
+                                        <input type="text" class="form-control" name="purchase_price[]"
+                                            id="purchase_price" value="{{ $product->purchase_price }}" />
+                                    </div>
+                                </div>
+
+                                @if ($loop->iteration != 1)
+                                    <div class="col-md-3">
+                                        <div class="mb-3">
+                                            <button type="button" name="remove" id="removeRow{{ $loop->iteration }}"
+                                                class="btn btn-danger btn-sm btn_edit_remove"
+                                                style="margin-top: 20px;">Remove</button>
+                                        </div>
+                                    </div>
+                                @endif
+                            </div>
+                        @endforeach
+                    @endif
+
+                    <div id="dynamic_field"></div> 
+
+                <div class="col-md-3">
+                        <div class="mb-3">
+                            <input type="hidden" name="itemcount" id="itemcount" value="1">
+                            <button type="button" name="add" id="add_more_product" class="btn btn-primary btn-sm"
+                                style="margin-top: 20px;">Add More</button>
+                        </div>
+                    </div>
+
                     <div class="text-end">
                         <button type="button" class="btn grey-primary reset_add_vendor">Cancel</button>
                         <button type="submit" class="btn black-btn">Save</button>
@@ -563,6 +636,70 @@
                     return true;
                 }
             }
+
+            $('#add_more_product').click(function() {
+                var paper_type_ids = $("select[name='paper_type_id[]'] option:selected")
+                    .map(function() {
+                        return $(this).val();
+                    }).get();
+
+                var lastValue = paper_type_ids[paper_type_ids.length - 1];
+                if (!lastValue && counter >0) {
+                    return Swal.fire('Error!', 'Please select paper type', 'error');
+                }
+                $.ajax({
+                    type: "POST",
+                    url: "{{ route('vendors.fetch-services') }}",
+                    data: {
+                        paper_type_ids
+                    },
+                    success: function(response) {
+                        let htmlView = '';
+                        htmlView += '<div class="row product_list" id="row' + counter +
+                            '"><div class="col-md-3"><div class="mb-3"><label class="form-label">Supplier of paper types<span class="text-danger">*</span>:</label><select class="form-select" aria-label="Default select example" id="paper_type_id' +
+                            counter +
+                            '" name="paper_type_id[]"><option value="">Select</option>';
+                        for (let k = 0; k < response['data'].length; k++) {
+                            let dobj = response['data'][k];
+                            htmlView += '<option value="' + dobj.id + '">' + dobj.paper_name +
+                                '</option>';
+                        }
+                        htmlView +=
+                            '</select></div></div><div class="col-md-3"><div class="mb-3"><label class="form-label">Sales Price<span class="text-danger">*</span>:</label><input type="text" class="form-control" name="sales_price[]" id="sales_price" value="" /></div></div><div class="col-md-3"><div class="mb-3"><label class="form-label">Purchase Price<span class="text-danger">*</span>:</label><input type="text" class="form-control" name="purchase_price[]" id="purchase_price" value="" /></div></div><div class="col-md-3"><div class="mb-3"><button type="button" name="remove" id="removeRow' +
+                            counter +
+                            '" class="btn btn-danger btn-sm btn_remove" style="margin-top: 20px;">Remove</button></div></div></div>';
+                        $('#dynamic_field').append(htmlView);
+
+                        count += 1;
+                        counter++;
+                        $("#itemcount").val(counter);
+                        if (counter == tot) {
+                            $('#add_more_product').hide();
+                        }
+                    }
+                });
+            });
+
+            $(document).on('click', '.btn_remove', function() {
+                var $this = $(this);
+                var id = $this.attr('id');
+                var lastChar = id[id.length - 1];
+                $('#row' + lastChar + '').remove();
+                $("#itemcount").val(counter);
+                if (counter - 1 == tot) {
+                    $('#add_more_product').hide();
+                } else {
+                    $('#add_more_product').show();
+                }
+                counter--;
+            });
+
+
+
+            $(document).on('click', '.btn_edit_remove', function(event) {
+                event.preventDefault();
+                $(this).closest('.product_list').remove();
+            });
         });
     </script>
 @endsection

@@ -158,9 +158,7 @@ class VendorsController extends Controller
             $vendor->state_id = $request->state_id;
             $vendor->city_id = $request->city_id;
             $vendor->pincode = $request->pincode;
-            if($request->vendor_type_id == 2){
-                $vendor->service_type_ids = json_encode($request->service_type_id);
-            }
+            $vendor->service_type_ids = $request->service_type_id ? json_encode($request->service_type_id): '' ;
             $vendor->is_warehouse = $request->vendor_type_id == 2 ? 'yes' : 'no';
             $save = $vendor->save();
             $last_vendor_insert_id = $vendor->id;
@@ -197,7 +195,7 @@ class VendorsController extends Controller
             }
         } catch (Exception $th) {
             DB::rollBack();
-            /* dd($th); */
+            // dd($th);
             return redirect()->back()->with('fail', trans('messages.server_error'));
         }
     }
@@ -339,12 +337,7 @@ class VendorsController extends Controller
             if ($vendor->vendor_type_id == 2) {
                 $service_types = ServiceType::whereIn('id', $service_types_id)->get();
             } else {
-                $result = [];
-                foreach ($service_types_id as $item) {
-                    $result[] = $item->paper_id;
-                }
-                $service_types = PaperTypes::whereIn('id', $result)->get();
-                //dd($service_types);
+                $service_types = PaperTypes::whereIn('id', $service_types_id)->get();
             }
         }
 
@@ -403,7 +396,6 @@ class VendorsController extends Controller
         ];
 
         $query = Vendor::where('vendor_type_id', '1');
-       
 
         if (isset($request->search['value'])) {
             $query->where(function ($q) use ($request) {
@@ -430,19 +422,10 @@ class VendorsController extends Controller
         $data = [];
         if ($result->isNotEmpty()) {
             foreach ($result as $key => $value) {
-                $service_types_id = !empty($value->service_type_ids) ? json_decode($value->service_type_ids) : null;
-                $res_service = [];
-
-                if ($service_types_id !== null) {
-                    foreach ($service_types_id as $item) {
-                        $res_service[] = $item->paper_id;
-                    }
-                } 
-                $service_types_count = count($res_service);
 
                 $view_icon = asset('images/lucide_view.png');
                 $edit_icon = asset('images/akar-icons_edit.png');
-                $productlist_icon = asset('images/plus_blue_squre.png');
+                $productlist_icon = asset('images/paper.png');
                 $editLink = route('vendors.paper.edit', encrypt($value->id));
 
                 $subarray = [];
@@ -451,13 +434,11 @@ class VendorsController extends Controller
                 $subarray[] = $value->company_name;
                 $subarray[] = $value->contact_person;
                 $subarray[] = $value->mobile_no;
-                $subarray[] = '<a href="#" class="view_service_tagging_details" title="paper tag details" data-id ="' . $value->id . '">'.$service_types_count.'</a><br><a href="#" class="view_paper_details" title="Paper List" data-id ="' . $value->id . '"><img src="' . $productlist_icon . '" /></a> 
-                ';
-                $subarray[] = '<a href="#" class="view_details" title="View Details" data-id ="' . $value->id . '"><img src="' . $view_icon . '" /></a> <a href="' . $editLink . '" title="Edit"><img src="' . $edit_icon . '" /></a> 
+                // $subarray[] = $paper_types;
+                $subarray[] = '<a href="#" class="view_details" title="View Details" data-id ="' . $value->id . '"><img src="' . $view_icon . '" /></a> <a href="' . $editLink . '" title="Edit"><img src="' . $edit_icon . '" /></a><a href="#" class="view_paper_details" title="Paper List" data-id ="' . $value->id . '"><img src="' . $productlist_icon . '" /></a> 
                 ';
                 $data[] = $subarray;
             }
-            
         }
 
         $count = Vendor::where('vendor_type_id', '2')->count();
@@ -547,10 +528,26 @@ class VendorsController extends Controller
             'country_id' => ['required', 'numeric'],
             'state_id' => ['required', 'numeric'],
             'city_id' => ['required', 'numeric'],
-            'pincode' => ['required', 'regex:/^[1-9][0-9]{5}$/']
+            'pincode' => ['required', 'regex:/^[1-9][0-9]{5}$/'],
+            'paper_type_id.*' => ['required'],
+            'sales_price.*' => ['required'],
+            'purchase_price.*' => ['required'],
         ]);
 
         try {
+            if (count($request->paper_type_id) > 0) {
+                $serviceTypeArr = [];
+                foreach ($request->paper_type_id as $key => $value) {
+                    $subarray = [];
+                    if ($value) {
+                        $subarray['paper_type_id'] = $value;
+                        $subarray['sales_price'] = $request->sales_price[$key];
+                        $subarray['purchase_price'] = $request->purchase_price[$key];
+
+                        $serviceTypeArr[] = $subarray;
+                    }
+                }
+            }
 
             $vendor = Vendor::findOrFail($id);
             $vendor->vendor_type_id = $request->vendor_type_id;
@@ -568,6 +565,7 @@ class VendorsController extends Controller
             $vendor->state_id = $request->state_id;
             $vendor->city_id = $request->city_id;
             $vendor->pincode = $request->pincode;
+            $vendor->service_type_ids = json_encode($serviceTypeArr);
             $update = $vendor->update();
 
             if ($update) {
@@ -711,11 +709,9 @@ class VendorsController extends Controller
     {
         $vendor = Vendor::with('vendortype')->findOrFail($request->rowid);
 
-        if (!empty($vendor->service_type_ids)) {
-           
+        if ($vendor->service_type_ids) {
             $service_types = json_decode($vendor->service_type_ids);
             $finalArr = [];
-            
             foreach ($service_types as $key => $val) {
                 $finalArr[] = $val->paper_id;
             }
@@ -725,6 +721,7 @@ class VendorsController extends Controller
                 $paper_final_arr[] = $p_value->id;
             }
             $papers_array = array_values(array_diff($paper_final_arr, $finalArr));
+            // $papares_implode_ids = implode(',', $papers_array);
             $papers = $this->getPaperType_name($papers_array);
         } else {
             $papers = $this->getAllPaperType();
@@ -768,24 +765,5 @@ class VendorsController extends Controller
         } catch (Exception $th) {
             return redirect()->back()->with('fail', trans('messages.server_error'));
         }
-    }
-
-    public function tagPaperServiceDetails(Request $request){
-        $vendor = Vendor::with('vendortype')->findOrFail($request->rowId);
-        $finalArr = [];
-        if (!empty($vendor->service_type_ids)) {
-            $service_types = json_decode($vendor->service_type_ids);
-            foreach ($service_types as $item) {
-                $paperName = $this->getPaperNameById($item->paper_id);
-                $finalArr[] = [
-                    'paper_id' => $item->paper_id,
-                    'paper_name' => $paperName->paper_name,
-                    'purchase_price' => $item->purchase_price
-                ];
-            }
-          
-        } 
-        $html = view('vendors.tagged-paper-list', ['vendor' => $vendor,'paper_list'=>$finalArr])->render();
-        return response()->json($html);
     }
 }
