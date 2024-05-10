@@ -453,6 +453,7 @@ class VendorsController extends Controller
                 $subarray[] = $value->mobile_no;
                 $subarray[] = '<a href="#" class="view_service_tagging_details" title="paper tag details" data-id ="' . $value->id . '">'.$service_types_count.'</a><br><a href="#" class="view_paper_details" title="Paper List" data-id ="' . $value->id . '"><img src="' . $productlist_icon . '" /></a> 
                 ';
+                $subarray[] = '<a href="#" class="view_service_tagging_details1" title="paper tag details" data-id ="' . $value->id . '">0</a><br><a href="#" class="add_po_creation" title="Create purchased order" data-id ="' . $value->id . '"><img src="' . $productlist_icon . '" /></a>';
                 $subarray[] = '<a href="#" class="view_details" title="View Details" data-id ="' . $value->id . '"><img src="' . $view_icon . '" /></a> <a href="' . $editLink . '" title="Edit"><img src="' . $edit_icon . '" /></a> 
                 ';
                 $data[] = $subarray;
@@ -783,9 +784,156 @@ class VendorsController extends Controller
                     'purchase_price' => $item->purchase_price
                 ];
             }
-          
         } 
         $html = view('vendors.tagged-paper-list', ['vendor' => $vendor,'paper_list'=>$finalArr])->render();
         return response()->json($html);
+    }
+
+
+    public function addPoCreation(Request $request)
+    {
+        $vendor = Vendor::with('vendortype')->findOrFail($request->rowid);
+        $warehousesList = Warehouses::where('warehouse_type', 'printing')->get();
+        //dd($warehousesList);
+
+        if (!empty($vendor->service_type_ids)) {
+           
+            $service_types = json_decode($vendor->service_type_ids);
+            $finalArr = [];
+            
+            foreach ($service_types as $key => $val) {
+                $finalArr[] = $val->paper_id;
+            }
+            $paper_list = $this->getAllPaperType();
+            $paper_final_arr = [];
+            foreach ($paper_list as $key => $p_value) {
+                $paper_final_arr[] = $p_value->id;
+            }
+            $papers_array = array_values(array_diff($paper_final_arr, $finalArr));
+            $papers = $this->getPaperType_name($papers_array);
+        } else {
+            $papers = $this->getAllPaperType();
+        }
+
+        $html = view('vendors.add-po-creation', ['vendor' => $vendor, 'paper_list' => $papers, 'warehousesList' => $warehousesList])->render();
+        return response()->json($html);
+    }
+
+
+    public function poPaperList(Request $request)
+    {
+        $product_hidden_ids = explode(",", $request->product_hidden_ids);
+        $vendor = Vendor::with('vendortype')->findOrFail($request->rowid);
+        $finalArr = [];
+        if (!empty($vendor->service_type_ids)) {
+            $service_types = json_decode($vendor->service_type_ids);
+            foreach ($service_types as $item) {
+                $paperName = $this->getPaperNameById($item->paper_id);
+                if (!in_array($item->paper_id, $product_hidden_ids))
+                {
+                    $finalArr[] = [
+                        'paper_id' => $item->paper_id,
+                        'paper_name' => $paperName->paper_name,
+                        'purchase_price' => $item->purchase_price
+                    ];
+                }
+            }
+        } 
+
+        $html = view('vendors.po-product-list', ['vendor' => $vendor, 'paper_list' => $finalArr])->render();
+        return response()->json($html);
+    }
+
+
+    public function poPaperAddList(Request $request)
+    {
+        //dd($request->all());
+
+        $vendor = Vendor::with('vendortype')->findOrFail($request->rowid);
+        $finalArr = [];
+        if (!empty($vendor->service_type_ids)) {
+            $service_types = json_decode($vendor->service_type_ids);
+            foreach ($service_types as $item) {
+                $paperName = $this->getPaperNameById($item->paper_id);
+                if (in_array($item->paper_id, $request->paper_ids))
+                {
+                    $finalArr[$item->paper_id] = [
+                        'purchase_price' => $item->purchase_price
+                    ];
+                }
+                
+            }
+        }
+
+        $paper_ids = $request->paper_ids;
+        $product_total_amt = $request->product_total_amt; 
+        $paperTypes = PaperTypes::with('unit_type')->whereIn('id', $paper_ids)->get();
+
+        $output = '';
+        $outputArr = array();
+        if ($paperTypes->isNotEmpty()) {
+            $total_calculation=0;
+            $total_gross_price_calculation=0;
+            $total_gross_price_gst=0;
+            foreach ($paperTypes as $key => $value) {
+                $calculation = $finalArr[$value->id]["purchase_price"]+($finalArr[$value->id]["purchase_price"]*18)/100;
+                $total_gross_price_calculation=$total_gross_price_calculation+$finalArr[$value->id]["purchase_price"];
+                $gross_price_gst=($finalArr[$value->id]["purchase_price"]*18)/100;
+                $total_gross_price_gst=$total_gross_price_gst+$gross_price_gst;
+
+                $total_calculation=($total_calculation+$calculation);
+                
+                $remove_link = '<a href="javascript:void;" class="vd_product_remove" style="font-size: 14px; color: #d31b08;" data-calculation="'. $calculation .'" id="'. $value->id .'"><i class="fa fa-trash" aria-hidden="true"></i></a>';
+
+                $output .= '
+                <tr id="row'.$value->id.'">
+                <td>'.$value->paper_name.'<input type="hidden" name="po_product_id[]" id="po_product_id_'.$value->id.'" value="'.$value->id.'"><input type="hidden" name="current_row_price[]" id="current_row_price_'.$value->id.'" value="'.$calculation.'"><input type="hidden" name="current_row_gross_price[]" id="current_row_gross_price_'.$value->id.'" value="'.$finalArr[$value->id]["purchase_price"].'"><input type="hidden" name="current_row_discount[]" id="current_row_discount_'.$value->id.'" value=""><input type="hidden" name="current_row_gst[]" id="current_row_gst_'.$value->id.'" value="'.$gross_price_gst.'"></td>
+                <td><input type="text" name="purchase_price[]" id="purchase_price_'.$value->id.'" value="'.$finalArr[$value->id]["purchase_price"].'" style="width:60%;" onkeyup="changePrice('.$value->id.')" onkeypress="return isNumberFloatKey(event)"> /'. strtolower($value->unit_type?->measurement_unuit).'</td>
+                <td><input type="text" name="order_qty[]" id="order_qty_'.$value->id.'" value="1" style="width:60%;" onkeyup="changePqty('.$value->id.')" onkeypress="return isNumberKey(event)"></td>
+                <td><input type="text" name="receive_qty[]" id="receive_qty_'.$value->id.'" value="1" style="width:60%;" onkeypress="return isNumberKey(event)"></td>
+                <td><input type="text" name="reason[]" id="reason_'.$value->id.'"></td>
+                <td><input type="text" name="discount[]" id="discount_'.$value->id.'" value="0" style="width:60%;" onkeyup="changeDisc('.$value->id.')" onkeypress="return isNumberKey(event)"></td>
+                <td><input type="text" name="gst[]" id="gst_'.$value->id.'" value="18" style="width:60%;" onkeyup="changeGst('.$value->id.')" onkeypress="return isNumberKey(event)"></td>
+                <td style="text-align: right;"><span id="rowTotCalPrice_'.$value->id.'">'.number_format((float)$calculation, 2, '.', '').'</span> '.$remove_link.'</td>
+                </tr>';
+
+                $outputArr[]=array($value->id);
+            }
+        }
+
+        $data = array(
+            'total_calculation'  => $total_calculation,
+            'table_arr'  => $outputArr,
+            'table_data'  => $output,
+            'total_gross_calculation'  => $total_gross_price_calculation,
+            'total_disc'  => "0",
+            'total_gross_price_gst'  => $total_gross_price_gst
+        );
+        echo json_encode($data);
+    }
+
+
+    public function getVendorAddress(Request $request){
+        $vendor = Warehouses::with('country','state','city')->where(['id' => $request->vendor_id])->first();
+        $data = array('vendors'  => "Company Address: ".$vendor->address." ,".$vendor->city?->city_name." ,".$vendor->state?->state_name." ,".$vendor->country?->country_name."\n"."GST: ".$vendor->gst);
+        echo json_encode($data);
+    }
+
+
+    public function storePoOfVendor(Request $request){
+        $r = $request->all();
+        dd($r);
+        //echo "555";
+        //$formData = Request::createFromGlobals()->getContent();
+        //echo $formData;
+        //$formData1 = json_decode($formData);
+        //dd($formData1);
+        
+      
+      exit;
+
+        return response()->json([
+            'status' => $request->purchased_order_date
+        ]);
     }
 }
