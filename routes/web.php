@@ -86,6 +86,16 @@ Route::middleware('auth')->group(function () {
         Route::post('paper-tag-vendor', [VendorsController::class, 'paperTagWithVendor'])->name('paper-tag-vendor');
         Route::post('tagservicedetails', [VendorsController::class, 'tagPaperServiceDetails'])->name('tagservicedetails');
 
+
+        Route::post('add-po-creation', [VendorsController::class, 'addPoCreation'])->name('add-po-creation');
+        Route::post('po-paper-list', [VendorsController::class, 'poPaperList'])->name('po-paper-list');
+        Route::post('po-paper-add-list', [VendorsController::class, 'poPaperAddList'])->name('po-paper-add-list');
+        Route::post('get-vendor-address', [VendorsController::class, 'getVendorAddress'])->name('get-vendor-address');
+
+        Route::post('store-po-of-vendor', [VendorsController::class, 'storePoOfVendor'])->name('store-po-of-vendor');
+
+
+
         Route::prefix('paper')->name('paper.')->group(function () {
             Route::get('edit/{id}', [VendorsController::class, 'paper_edit'])->name('edit');
             Route::post('update/{id}', [VendorsController::class, 'paper_update'])->name('update');
