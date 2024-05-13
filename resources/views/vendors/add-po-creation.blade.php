@@ -19,21 +19,21 @@
                             <div class="col-md-2">
                                 <div class="mb-3">
                                 <label class="form-label">PO No<span class="text-danger">*</span> :</label>
-                                <input type="text" class="form-control" name="purchased_order_no" id="purchased_order_no" value="" />
+                                <input type="text" class="form-control" name="purchase_order_no" id="purchase_order_no" value="{{ $po_unique_no }}" style="width:100%" />
                                 <small class="text-danger error_purchased_order_no"></small>
                                 </div>
                             </div>
                             <div class="col-md-2">
                                 <div class="mb-3">
                                   <label class="form-label">PO Date<span class="text-danger">*</span> :</label>
-                                  <input type="date" class="form-control" name="purchased_order_date" id="purchased_order_date" value="<?php echo date('Y-m-d'); ?>" />
+                                  <input type="date" class="form-control" name="purchase_order_date" id="purchase_order_date" value="<?php echo date('Y-m-d'); ?>" />
                                   <small class="text-danger error_purchased_order_date"></small>
                                 </div>
                             </div>
                             <div class="col-md-2">
                                 <div class="mb-3">
                                   <label class="form-label">Exp. Delivery Date<span class="text-danger">*</span> :</label>
-                                  <input type="date" class="form-control" name="delivery_date" id="delivery_date" />
+                                  <input type="date" class="form-control" name="exp_delivery_date" id="exp_delivery_date" />
                                   <small class="text-danger error_delivery_date"></small>
                                 </div>
                             </div>
@@ -63,14 +63,15 @@
                             <div class="col-md-4">
                                 <div class="mb-3">
                                 <label class="form-label">Order To :</label></br>
-                                <textarea name="order_to" id="order_to" rows="5" cols="30" style="white-space: pre-line;width: 100%;"><?php echo $vendor->company_name."\n".$vendor->address."\n"."Email: ".$vendor->email."\n"."Mobile: ".$vendor->mobile_no."\n"."GST: ".$vendor->gst_no;?></textarea>
+                                <input type="hidden" class="form-control" name="vendor_id" id="vendor_id" value="{{$vendor->id}}" />
+                                <textarea name="vendor_order_details" id="vendor_order_details" rows="5" cols="30" style="white-space: pre-line;width: 100%;"><?php echo $vendor->company_name."\n".$vendor->address."\n"."Email: ".$vendor->email."\n"."Mobile: ".$vendor->mobile_no."\n"."GST: ".$vendor->gst_no;?></textarea>
                                 </div>
                             </div>
 
                             <div class="col-md-4">
                                 <div class="mb-3">
                                 <label class="form-label">Ship To :
-                                <select name="ship_to" id="ship_to" class="form-select">
+                                <select name="warehouse_ship_id" id="warehouse_ship_id" class="form-select">
                                     <option value="">Select</option>
                                     @if (!empty($warehousesList))
                                     @foreach ($warehousesList as $wh)
@@ -80,7 +81,7 @@
                                 </select>
                                 </label>
 
-                                <textarea name="vendor_details" id="vendor_details" rows="3" cols="30" style="white-space: pre-line;" readOnly="true"></textarea>
+                                <textarea name="warehouse_ship_details" id="warehouse_ship_details" rows="3" cols="30" style="white-space: pre-line;"></textarea>
                                 
                                 </div>
                             </div>    
@@ -92,14 +93,12 @@
                         <table class="table table-striped" id="vendors_list_table">
                         <thead>
                         <tr>
-                        <th style="text-align: center;width: 15%;">Product Name</th>
-                        <th style="text-align: center; width: 15%;">Unit Price(INR)</th>
+                        <th style="text-align: center;width: 25%;">Product Name</th>
+                        <th style="text-align: center; width: 20%;">Unit Price(INR)</th>
                         <th style="text-align: center; width: 12%;">Ordered Qty</th>
-                        <th style="text-align: center; width: 12%;">Received Qty</th>
-                        <th style="text-align: center; width: 10%;">Reason(more or less recv. qty)</th>
-                        <th style="text-align: center; width: 10%;">Disc(%)</th>
-                        <th style="text-align: center; width: 10%;">GST(%)</th>
-                        <th style="text-align: right; width: 16%;">Net Amount(INR)</th>
+                        <th style="text-align: center; width: 13%;">Disc(%)</th>
+                        <th style="text-align: center; width: 13%;">GST(%)</th>
+                        <th style="text-align: right; width: 17%;">Net Amount(INR)</th>
                         </tr>
                         </thead>
                         <tbody id="dynamic_field">
@@ -107,7 +106,7 @@
                         </table>
                         <table class="table table-striped">
                         <tr>
-                            <td colspan="7" style="text-align:right;font-weight:bold;font-size: 20px;">Total Net Amount</td>
+                            <td colspan="5" style="text-align:right;font-weight:bold;font-size: 20px;">Total Net Amount</td>
                             <td colspan="1" style="text-align:right;font-weight:bold;font-size: 20px;"><span id="total_calculation">0.00</span> INR</td>
                         </tr>
                         </table>
@@ -169,37 +168,30 @@
                             <div class="col-md-6">
                                 <div class="mb-3">
                                 <label class="form-label">Vendor's Bank Details :</label></br>
-                                <textarea name="vendor_bank_details" id="vendor_bank_details" rows="5" cols="30" style="white-space: pre-line;width:100%;"></textarea>
+                                <textarea name="vendor_bank_details" id="vendor_bank_details" rows="5" cols="30" style="white-space: pre-line;width:100%;">{{$vendor->bank_details}}</textarea>
                                 </div>
                             </div>
                         </div>
 
                         <div class="row">
-                            <div class="col-md-3">
+                            <div class="col-md-6">
                                 <div class="mb-3">
-                                <label class="form-label">Country of Origin :</label>
-                                <input type="text" class="form-control" name="country_of_origin" id="country_of_origin" />
+                                <label class="form-label">Update Payment Terms :</label>
+                                <select name="po_payment_terms" id="po_payment_terms" class="form-select">
+                                    <option value="">Select</option>
+                                    <option value="1">Advance Payment</option>
+                                    <option value="2">Credit Payment</option>
+                                    <option value="3">Payment on delivery</option>
+                                    <option value="4">Payment after delivery</option>
+                                </select>
                                 </div>
                             </div>
 
-                            <div class="col-md-3">
-                                <div class="mb-3">
-                                <label class="form-label">Port of Loading :</label>
-                                <input type="text" class="form-control" name="port_of_loading" id="port_of_loading" />
-                                </div>
-                            </div>
 
-                            <div class="col-md-3">
+                            <div class="col-md-6" id="toggle_credit_days" style="display: none;">
                                 <div class="mb-3">
-                                <label class="form-label">Port of Discharge :</label>
-                                <input type="text" class="form-control" name="port_of_discharge" id="port_of_discharge" />
-                                </div>
-                            </div>
-
-                            <div class="col-md-3">
-                                <div class="mb-3">
-                                <label class="form-label">Country of Final Destination :</label>
-                                <input type="text" class="form-control" name="country_of_final_destination" id="country_of_final_destination" />
+                                <label class="form-label">Credit Days </label>
+                                <input type="text" class="form-control" name="po_payment_credit_days" id="po_payment_credit_days" />
                                 </div>
                             </div>
                         </div>
@@ -237,7 +229,7 @@
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label class="form-label">Thanks & Regards: </label></br>
-                                    <textarea name="" id="" rows="5" cols="30" style="white-space: pre-line;width:100%;"></textarea>
+                                    <textarea name="thanksyou_notes" id="thanksyou_notes" rows="5" cols="30" style="white-space: pre-line;width:100%;"></textarea>
                                 </div>
                             </div>
 
@@ -252,26 +244,19 @@
 
 
                 <div class="row">
-                    <div class="col-md-3">
+                    <div class="col-md-4">
                         <div class="mb-3">
                         <a href="JavaScript:void(0);" class="btn btn-primary txt-upper pro-form-preview-bt po_submit"><i class="fa fa fa-eye" aria-hidden="true"></i> Preview</a>
                         </div>
                     </div>
 
-                    <div class="col-md-3">
+                    <div class="col-md-4">
                         <div class="mb-3">
-                        <button type="button" class="btn btn-primary txt-upper pro-form-preview-bt po_submit"><i class="fa fa-paper-plane" aria-hidden="true"></i> Send</button>
+                        <button type="button" class="btn btn-primary txt-upper pro-form-preview-bt po_submit"><i class="fa fa-paper-plane" aria-hidden="true"></i> Save &amp; Send</button>
                         </div>
                     </div>
 
-                    <div class="col-md-3">
-                        <div class="mb-3">
-                        <a href="JavaScript:void(0)" class="btn btn-primary txt-upper pro-form-preview-bt po_submit" id="po_pro_forma_invoice_download"><i class="fa fa-file-pdf-o" aria-hidden="true"></i> Download</a>
-                        </div>
-                    </div>
-
-
-                    <div class="col-md-3">
+                    <div class="col-md-4">
                         <div class="mb-3">
                         <button type="button" class="btn btn-primary txt-upper pro-form-preview-bt savePoGenerate"><i class="fa fa-floppy-o" aria-hidden="true"></i> Save &amp; Close</button>
                         </div>

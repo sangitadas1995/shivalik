@@ -180,6 +180,14 @@
                             <small class="text-danger error_pincode"></small>
                         </div>
                     </div>
+
+                    <div class="col-md-6">
+                    <div class="mb-3">
+                      <label class="form-label">Vendor's Bank Details :</label>
+                      <textarea name="bank_details" id="bank_details" rows="5" cols="30" style="white-space: pre-line;width: 100%;">{{ $paper->bank_details }}</textarea>
+                    </div>
+                    </div>
+
                     <div class="text-end">
                         <button type="button" class="btn grey-primary reset_add_vendor">Cancel</button>
                         <button type="submit" class="btn black-btn">Save</button>

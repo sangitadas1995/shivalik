@@ -98,18 +98,24 @@
             data: formdata,
             dataType: 'json',
             success: function(response) {
-                alert(response.status);
-                // Handle success response
+                if(response.status=="success")
+                {
+                    return Swal.fire('Success!', response.message, 'success');
+                    $('#addPoCreationModal').modal('hide');
+                }
+                else{
+                    return Swal.fire('Error!', response.message, 'error');
+                }
             },
             error: function(xhr, status, error) {
-                // Handle error
+                return Swal.fire('Error!', 'Something went wrong, Plese try again.', 'error');
             }
             });
         });
 
 
 
-        $(document).on('change', '#ship_to', function () {
+        $(document).on('change', '#warehouse_ship_id', function () {
           let vendor_id = this.value;
           if (vendor_id) {
             $.ajax({
@@ -120,12 +126,24 @@
               success: function (response) {
                 //console.log(response);
                 //alert(response.vendors);
-                $("#vendor_details").val(response.vendors);
+                $("#warehouse_ship_details").val(response.vendors);
               },
               error: function (xhr, ajaxOptions, thrownError) {
                 return Swal.fire('Error!', 'Something went wrong, Plese try again.', 'error');
               }
             });
+          }
+        });
+
+        $(document).on('change', '#po_payment_terms', function () {
+          let po_payment_id = this.value;
+          //alert(po_payment_id);
+          if (po_payment_id=="2") {
+            $("#toggle_credit_days").show();
+          }
+          else
+          {
+            $("#toggle_credit_days").hide();
           }
         });
 
@@ -232,9 +250,6 @@
     });
 
 
-
-
-
     $(document).on('change', '.paper_id', function (e) {
         e.preventDefault();
         var checked_paper_id = false;
@@ -289,7 +304,7 @@
         e.preventDefault();
         var __e = $(this);
         var rowid = __e.data('id');
-        $('#purchased_order_date').val(new Date().toDateInputValue());
+        $('#purchase_order_date').val(new Date().toDateInputValue());
         if (rowid) {
             $.ajax({
                 type: "post",
@@ -312,9 +327,6 @@
         local.setMinutes(this.getMinutes() - this.getTimezoneOffset());
         return local.toJSON().slice(0, 10);
     });
-
-
-
 
 
     $(document).on('click', '.product_assign_to_po', function (e) {
@@ -400,7 +412,6 @@
         $("#product_gross_total_amt").val(pd_gross_tot_amt);
         $('#total_pd_gross_price').html(pd_gross_tot_amt.toFixed(2));
 
-
         var row_discount = $("#current_row_discount_"+product_id).val();
         var product_total_discount = parseFloat($("#product_total_discount").val());
         var pd_tot_discount = product_total_discount-row_discount;
@@ -412,7 +423,6 @@
         var pd_tot_gst = product_total_gst-row_gst;
         $("#product_total_gst").val(pd_tot_gst.toFixed(2));
         $('#total_pd_gst').html(pd_tot_gst.toFixed(2));
-
 
         var calculation = $("#current_row_price_"+product_id).val();
         //alert(calculation);
@@ -444,7 +454,6 @@
         var order_qty = $("#order_qty_"+id).val();
         var discount = $("#discount_"+id).val();
         var gst = $("#gst_"+id).val();
-        $("#receive_qty_"+id).val(order_qty);
 
         var rowPurchasePrice = (purchase_price*order_qty)+((purchase_price*order_qty)*gst/100);
         if(discount!="0")
@@ -474,7 +483,6 @@
         var order_qty = $("#order_qty_"+id).val();
         var discount = $("#discount_"+id).val();
         var gst = $("#gst_"+id).val();
-        $("#receive_qty_"+id).val(order_qty);
 
         var rowPurchasePrice = (purchase_price*order_qty)+((purchase_price*order_qty)*gst/100);
         if(discount!="0")
@@ -504,7 +512,6 @@
         var order_qty = $("#order_qty_"+id).val();
         var discount = $("#discount_"+id).val();
         var gst = $("#gst_"+id).val();
-        $("#receive_qty_"+id).val(order_qty);
 
         var rowPurchasePrice = (purchase_price*order_qty)+((purchase_price*order_qty)*gst/100);
         if(discount!="0")
@@ -534,7 +541,6 @@
         var order_qty = $("#order_qty_"+id).val();
         var discount = $("#discount_"+id).val();
         var gst = $("#gst_"+id).val();
-        $("#receive_qty_"+id).val(order_qty);
 
         var rowPurchasePrice = (purchase_price*order_qty)+((purchase_price*order_qty)*gst/100);
         if(discount!="0")

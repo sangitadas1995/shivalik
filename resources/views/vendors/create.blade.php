@@ -173,6 +173,16 @@
               </div>
             </div>
           </div>
+
+        <div class="vendor_bank_details">
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label class="form-label">Vendor's Bank Details :</label>
+              <textarea name="bank_details" id="bank_details" rows="5" cols="30" style="white-space: pre-line;width: 100%;"></textarea>
+            </div>
+          </div>
+        </div>
+
         </div>
         <div class="text-end">
           <button type="button" class="btn grey-primary reset_add_vendor">Cancel</button>
@@ -488,11 +498,13 @@
       __e[0].submit();
     });
     $('.service_type_tagging').hide();
+    $('.vendor_bank_details').hide();
     $(document).on('change', '.vendor_type', function () {
       let vendor_type = this.value;
    
       if (vendor_type == 2) {
         $('.service_type_tagging').show();
+        $('.vendor_bank_details').hide();
         $.ajax({
           url: "{{ route('vendors.service-types') }}",
           type: 'post',
@@ -513,6 +525,7 @@
         });
       } else{
         $('.service_type_tagging').hide();
+        $('.vendor_bank_details').show();
       }
     });
 

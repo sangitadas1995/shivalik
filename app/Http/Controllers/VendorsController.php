@@ -19,6 +19,8 @@ use App\Models\Vendor;
 use App\Models\ServiceType;
 use App\Models\Vendor_type;
 use App\Models\Warehouses;
+use App\Models\VendorPurchaseOrders;
+use App\Models\VendorPurchaseOrderDetails;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
@@ -162,6 +164,9 @@ class VendorsController extends Controller
                 $vendor->service_type_ids = json_encode($request->service_type_id);
             }
             $vendor->is_warehouse = $request->vendor_type_id == 2 ? 'yes' : 'no';
+            if($request->vendor_type_id == 1){
+                $vendor->bank_details = $request->bank_details;
+            }
             $save = $vendor->save();
             $last_vendor_insert_id = $vendor->id;
 
@@ -569,6 +574,9 @@ class VendorsController extends Controller
             $vendor->state_id = $request->state_id;
             $vendor->city_id = $request->city_id;
             $vendor->pincode = $request->pincode;
+            if($request->bank_details != ""){
+                $vendor->bank_details = $request->bank_details;
+            }
             $update = $vendor->update();
 
             if ($update) {
@@ -815,7 +823,11 @@ class VendorsController extends Controller
             $papers = $this->getAllPaperType();
         }
 
-        $html = view('vendors.add-po-creation', ['vendor' => $vendor, 'paper_list' => $papers, 'warehousesList' => $warehousesList])->render();
+        $today = date("Ymd");
+        $rand = strtoupper(substr(uniqid(sha1(time())),0,4));
+        $po_unique_no = $today . $rand;
+
+        $html = view('vendors.add-po-creation', ['vendor' => $vendor, 'paper_list' => $papers, 'warehousesList' => $warehousesList, 'po_unique_no' => $po_unique_no])->render();
         return response()->json($html);
     }
 
@@ -887,13 +899,11 @@ class VendorsController extends Controller
 
                 $output .= '
                 <tr id="row'.$value->id.'">
-                <td>'.$value->paper_name.'<input type="hidden" name="po_product_id[]" id="po_product_id_'.$value->id.'" value="'.$value->id.'"><input type="hidden" name="current_row_price[]" id="current_row_price_'.$value->id.'" value="'.$calculation.'"><input type="hidden" name="current_row_gross_price[]" id="current_row_gross_price_'.$value->id.'" value="'.$finalArr[$value->id]["purchase_price"].'"><input type="hidden" name="current_row_discount[]" id="current_row_discount_'.$value->id.'" value=""><input type="hidden" name="current_row_gst[]" id="current_row_gst_'.$value->id.'" value="'.$gross_price_gst.'"></td>
-                <td><input type="text" name="purchase_price[]" id="purchase_price_'.$value->id.'" value="'.$finalArr[$value->id]["purchase_price"].'" style="width:60%;" onkeyup="changePrice('.$value->id.')" onkeypress="return isNumberFloatKey(event)"> /'. strtolower($value->unit_type?->measurement_unuit).'</td>
-                <td><input type="text" name="order_qty[]" id="order_qty_'.$value->id.'" value="1" style="width:60%;" onkeyup="changePqty('.$value->id.')" onkeypress="return isNumberKey(event)"></td>
-                <td><input type="text" name="receive_qty[]" id="receive_qty_'.$value->id.'" value="1" style="width:60%;" onkeypress="return isNumberKey(event)"></td>
-                <td><input type="text" name="reason[]" id="reason_'.$value->id.'"></td>
-                <td><input type="text" name="discount[]" id="discount_'.$value->id.'" value="0" style="width:60%;" onkeyup="changeDisc('.$value->id.')" onkeypress="return isNumberKey(event)"></td>
-                <td><input type="text" name="gst[]" id="gst_'.$value->id.'" value="18" style="width:60%;" onkeyup="changeGst('.$value->id.')" onkeypress="return isNumberKey(event)"></td>
+                <td style="text-align: center;">'.$value->paper_name.'<input type="hidden" name="po_product_id[]" id="po_product_id_'.$value->id.'" value="'.$value->id.'"><input type="hidden" name="current_row_price[]" id="current_row_price_'.$value->id.'" value="'.$calculation.'"><input type="hidden" name="current_row_gross_price[]" id="current_row_gross_price_'.$value->id.'" value="'.$finalArr[$value->id]["purchase_price"].'"><input type="hidden" name="current_row_discount[]" id="current_row_discount_'.$value->id.'" value=""><input type="hidden" name="current_row_gst[]" id="current_row_gst_'.$value->id.'" value="'.$gross_price_gst.'"></td>
+                <td style="text-align: center;"><input type="text" name="purchase_price[]" id="purchase_price_'.$value->id.'" value="'.$finalArr[$value->id]["purchase_price"].'" style="width:60%;" onkeyup="changePrice('.$value->id.')" onkeypress="return isNumberFloatKey(event)"> /'. strtolower($value->unit_type?->measurement_unuit).'</td>
+                <td style="text-align: center;"><input type="text" name="order_qty[]" id="order_qty_'.$value->id.'" value="1" style="width:60%;" onkeyup="changePqty('.$value->id.')" onkeypress="return isNumberKey(event)"></td>
+                <td style="text-align: center;"><input type="text" name="discount[]" id="discount_'.$value->id.'" value="0" style="width:60%;" onkeyup="changeDisc('.$value->id.')" onkeypress="return isNumberKey(event)"></td>
+                <td style="text-align: center;"><input type="text" name="gst[]" id="gst_'.$value->id.'" value="18" style="width:60%;" onkeyup="changeGst('.$value->id.')" onkeypress="return isNumberKey(event)"></td>
                 <td style="text-align: right;"><span id="rowTotCalPrice_'.$value->id.'">'.number_format((float)$calculation, 2, '.', '').'</span> '.$remove_link.'</td>
                 </tr>';
 
@@ -915,25 +925,94 @@ class VendorsController extends Controller
 
     public function getVendorAddress(Request $request){
         $vendor = Warehouses::with('country','state','city')->where(['id' => $request->vendor_id])->first();
-        $data = array('vendors'  => "Company Address: ".$vendor->address." ,".$vendor->city?->city_name." ,".$vendor->state?->state_name." ,".$vendor->country?->country_name."\n"."GST: ".$vendor->gst);
+        $data = array('vendors'  => "Company Address: ".$vendor->address.", ".$vendor->city?->city_name.", ".$vendor->state?->state_name.", ".$vendor->country?->country_name."\n"."GST: ".$vendor->gst);
         echo json_encode($data);
     }
 
 
     public function storePoOfVendor(Request $request){
-        $r = $request->all();
-        dd($r);
-        //echo "555";
-        //$formData = Request::createFromGlobals()->getContent();
-        //echo $formData;
-        //$formData1 = json_decode($formData);
-        //dd($formData1);
-        
-      
-      exit;
+        //$r = $request->all();
+        //dd($request->all());
+        //exit;
+       
+        try {
+            DB::beginTransaction();
+            $PoCreate = new VendorPurchaseOrders();
+            $PoCreate->purchase_order_no = $request->purchase_order_no;
+            $PoCreate->purchase_order_date = $request->purchase_order_date;
+            $PoCreate->exp_delivery_date = $request->exp_delivery_date;
+            $PoCreate->vendor_quotation_no = $request->vendor_quotation_no;
+            $PoCreate->vendor_quotation_date = $request->vendor_quotation_date;
+            $PoCreate->order_by = $request->order_by;
+            $PoCreate->vendor_id = $request->vendor_id;
+            $PoCreate->vendor_order_details = $request->vendor_order_details;
+            $PoCreate->warehouse_ship_id = $request->warehouse_ship_id;
+            $PoCreate->warehouse_ship_details = $request->warehouse_ship_details;
+            $PoCreate->total_amount = $request->product_total_amt;
+            $PoCreate->vendor_bank_details = $request->vendor_bank_details;
 
-        return response()->json([
-            'status' => $request->purchased_order_date
-        ]);
+            $PoCreate->po_payment_terms = $request->po_payment_terms;
+            if($request->po_payment_terms=="2")
+            {
+                $PoCreate->po_payment_credit_days = $request->po_payment_credit_days;
+            }
+
+            $PoCreate->terms_conditions = $request->terms_conditions;
+            $PoCreate->additional_note = $request->additional_note;
+            $PoCreate->po_facilitation = $request->po_facilitation;
+            $PoCreate->thanksyou_notes = $request->thanksyou_notes;
+            
+            $save = $PoCreate->save();
+            $last_po_insert_id = $PoCreate->id;
+
+            if ($last_po_insert_id != "") {
+                if(is_countable($request->po_product_id) && count($request->po_product_id)>0)
+                {
+                    for ($i=0; $i < count($request->po_product_id); $i++) { 
+                        $po_product_id = $request->po_product_id[$i];
+                        $po_product_purchase_price = $request->purchase_price[$i];
+                        $po_product_order_qty = $request->order_qty[$i];
+                        $po_product_discount = $request->discount[$i];
+                        $po_product_gst = $request->gst[$i];
+                        $po_product_row_price = $request->current_row_price[$i];
+                        //echo $po_product_id."</br>";
+
+                        $PoDetailsCreate = new VendorPurchaseOrderDetails();
+                        $PoDetailsCreate->purchase_order_id = $last_po_insert_id;
+                        $PoDetailsCreate->product_id = $po_product_id;
+                        $PoDetailsCreate->purchase_price = $po_product_purchase_price;
+                        $PoDetailsCreate->order_qty = $po_product_order_qty;
+                        $PoDetailsCreate->discount = $po_product_discount;
+                        $PoDetailsCreate->gst = $po_product_gst;
+                        $PoDetailsCreate->net_amount = $po_product_row_price;
+                        $PoDetailsCreate->save();
+                    }
+                }
+            }
+            DB::commit();
+
+            //echo $last_po_insert_id;
+            //exit;
+
+            if ($save) {
+                return response()->json([
+                    'status' => "success",
+                    'message' => "PO has been created successfully"
+                ]);
+            } else {
+                return response()->json([
+                    'status' => "fail",
+                    'message' => "Failed to create the vendor"
+                ]);
+            }
+        } catch (Exception $th) {
+            DB::rollBack();
+            /* dd($th); */
+             return response()->json([
+                'status' => "fail",
+                'message' => "Failed to create the vendor"
+            ]);
+        }
+
     }
 }
