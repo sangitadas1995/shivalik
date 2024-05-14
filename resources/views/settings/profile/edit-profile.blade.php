@@ -8,14 +8,14 @@
     <div class="row justify-content-between align-items-center">
         <div class="col-md-4">
             <h2>
-                <a href="{{ route('settings.vendor.service-type.index') }}"><i class="ri-arrow-left-line"></i></a>Add Service Type
+                <a href=""><i class="ri-arrow-left-line"></i></a>Update Profile
             </h2>
         </div>
     </div>
 </div>
 <div class="card add-new-location mt-2">
     <div class="card-body">
-      <form action="{{ route('customers.store') }}" method="POST" id="customer-add-form">
+      <form action="" method="POST" id="customer-add-form">
         @csrf
         <div class="row">
             <div class="col-md-12">
@@ -24,7 +24,7 @@
           <div class="col-md-6">
             <div class="mb-3">
               <label class="form-label"><span class="text-danger">*</span>Company Name :</label>
-              <input type="text" class="form-control" name="company_name" id="company_name" value="{{ old('company_name') }}" />
+              <input type="text" class="form-control" name="company_name" id="company_name" value="" />
               <small class="text-danger error_company_name"></small>
             </div>
           </div>
@@ -42,13 +42,7 @@
               <small class="text-danger error_contact_person"></small>
             </div>
           </div>
-          <div class="col-md-6">
-            <div class="mb-3">
-              <label class="form-label">Contact Person Designation :</label>
-              <input type="text" class="form-control" name="contact_person_designation" id="contact_person_designation" value="{{ old('contact_person_designation') }}" />
-              <small class="text-danger error_contact_person_designation"></small>
-            </div>
-          </div>
+          
           <div class="col-md-6">
             <div class=" row">
               <div class="col-md-6">
@@ -56,14 +50,6 @@
                   <label class="form-label"><span class="text-danger">*</span>Mobile No :</label>
                   <input type="tel" id="mobile_code-1" class="form-control mobileNumber" name="mobile_no" value="{{ old('mobile_no') }}" />
                   <small class="text-danger error_mobile_no"></small>
-                </div>
-              </div>
-              <div class="col-md-6">
-                <div class="mb-3 d-flex flex-column">
-                  <label class="form-label">Alternative Mobile No.
-                    :</label>
-                  <input type="tel" id="mobile_code-2" class="form-control mobileNumber" name="alter_mobile_no" value="{{ old('alter_mobile_no') }}" />
-                  <small class="text-danger error_alter_mobile_no"></small>
                 </div>
               </div>
             </div>
@@ -77,13 +63,6 @@
                   <small class="text-danger error_email"></small>
                 </div>
               </div>
-              <div class="col-md-6">
-                <div class="mb-3 d-flex flex-column">
-                  <label class="form-label">Alternative Email Id :</label>
-                  <input type="text" id="alternative_email_id" class="form-control" name="alternative_email_id" value="{{ old('alternative_email_id') }}" />
-                  <small class="text-danger error_alternative_email_id"></small>
-                </div>
-              </div>
             </div>
           </div>
           <div class="col-md-6">
@@ -95,23 +74,9 @@
                   <small class="text-danger error_phone_no"></small>
                 </div>
               </div>
-              <div class="col-md-6">
-                <div class="mb-3 d-flex flex-column">
-                  <label class="form-label">Alternative Phone No. :</label>
-                  <input type="tel" id="mobile_code-4" class="form-control onlyNumber phoneNumber" name="alternative_phone_no" value="{{ old('alternative_phone_no') }}" />
-                  <small class="text-danger error_alternative_phone_no"></small>
-                </div>
-              </div>
             </div>
           </div>
-          <div class="col-md-6">
-            <div class="mb-3">
-              <label class="form-label">Customer Website :</label>
-              <input type="text" class="form-control" name="customer_website" id="customer_website" value="{{ old('customer_website') }}" />
-              <small class="text-danger error_customer_website"></small>
-              <small class="text-danger">e.g : (http://) OR https://www.code.com</small>
-            </div>
-          </div>
+         
         </div>
         <div class="mb-3">
           <label class="form-label"><span class="text-danger">*</span>Address :</label>

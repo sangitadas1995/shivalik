@@ -229,7 +229,7 @@ class SettingController extends Controller
         }
     }
 
-    public function updateProfile(){
+    public function edit_profile(){
         return view('settings.profile.edit-profile');
     }
 
