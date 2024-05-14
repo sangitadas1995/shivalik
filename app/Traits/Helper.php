@@ -115,4 +115,11 @@ trait Helper
 
         return $users;
     }
+
+    public function convertData($body_content) {
+       $body_content = trim($body_content);
+       $body_content = stripslashes($body_content);
+       $body_content = htmlspecialchars($body_content);
+       return $body_content;
+    } 
 }

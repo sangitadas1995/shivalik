@@ -74,10 +74,17 @@
 </div>
 
 
+<div class="modal fade" id="poListModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="render_PoListModal"></div>
+    <div class="modal-dialog modal-dialog-scrollable  modal-dialog-centered">
+    </div>
+</div>
 @endsection
 
 @section('scripts')
 <script>
+
     $(document).ready(function () {
         $.ajaxSetup({
             headers: {
@@ -100,8 +107,11 @@
             success: function(response) {
                 if(response.status=="success")
                 {
-                    return Swal.fire('Success!', response.message, 'success');
-                    $('#addPoCreationModal').modal('hide');
+                    return Swal.fire('Success!', response.message, 'success').then((result) => {
+                      if (result.isConfirmed) {
+                       $('#addPoCreationModal').modal('hide');
+                      }
+                    });
                 }
                 else{
                     return Swal.fire('Error!', response.message, 'error');
@@ -218,7 +228,6 @@
             }
         });
 
-
         $(document).on('click', '.add_product_to_po', function (e) {
         e.preventDefault();
         var __e = $(this);
@@ -299,6 +308,27 @@
         }
     });
 
+
+    $(document).on('click', '.view_po_list', function (e) {
+        e.preventDefault();
+        let __di = $(this);
+        let rowId = __di.attr('data-id');
+        //alert(rowId);
+        if(rowId){
+            $.ajax({
+                    type: "post",
+                    url: "{{ route('vendors.vendor-wise-po-list') }}",
+                    data: {
+                        rowId
+                    },
+                    dataType: "json",
+                    success: function (response) {
+                        $('.render_PoListModal').html(response);
+                        $('#poListModal').modal('show');
+                    }
+                });
+        }
+    });
 
     $(document).on('click', '.add_po_creation', function (e) {
         e.preventDefault();
@@ -383,7 +413,8 @@
 
 
                     $('#total_calculation').html(sm.toFixed(2));
-                    $('#grand_total_round_off').html(sm.toFixed(2));
+                    var smRound = Math.round(sm).toFixed(2);
+                    $('#grand_total_round_off').html(smRound);
                     $('#addPoProductListModal').modal('hide');
                 }
 
@@ -431,7 +462,8 @@
         var sm = product_total_amt-calculation;
         $("#product_total_amt").val(sm);
         $('#total_calculation').html(sm.toFixed(2));
-        $('#grand_total_round_off').html(sm.toFixed(2));
+        var smRound = Math.round(sm).toFixed(2);
+        $('#grand_total_round_off').html(smRound);
         //alert(sm);
 
         var paper_ids = new Array();
@@ -580,9 +612,11 @@
             totGst += parseFloat($("#current_row_gst_"+val).val()) || 0;
         });
 
+        var smRound = Math.round(sum).toFixed(2);
+
         $("#product_total_amt").val(parseFloat(sum).toFixed(2));
         $('#total_calculation').html(parseFloat(sum).toFixed(2));
-        $('#grand_total_round_off').html(sum.toFixed(2));
+        $('#grand_total_round_off').html(smRound);
         $("#product_gross_total_amt").val(parseFloat(grossSum).toFixed(2));
         $('#total_pd_gross_price').html(parseFloat(grossSum).toFixed(2));
         $("#product_total_discount").val(parseFloat(totDisc).toFixed(2));

@@ -202,6 +202,9 @@
                                 <div class="mb-3">
                                 <label class="form-label">Terms & Conditions/Comments :</label></br>
                                 <textarea name="terms_conditions" id="terms_conditions" rows="5" cols="30" style="white-space: pre-line;width:100%;"></textarea>
+                                <!-- <script>
+                                    CKEDITOR.replace( 'terms_conditions' );
+                                </script> -->
                                 </div>
                             </div>
                         </div>
@@ -211,6 +214,9 @@
                                 <div class="mb-3">
                                 <label class="form-label">Additional Note :</label></br>
                                 <textarea name="additional_note" id="additional_note" rows="5" cols="30" style="white-space: pre-line;width:100%;"></textarea>
+                                <!-- <script>
+                                    CKEDITOR.replace( 'additional_note' );
+                                </script> -->
                                 </div>
                             </div>
                         </div>
@@ -220,6 +226,9 @@
                                 <div class="mb-3">
                                     <label class="form-label">Write PO facilitation Text (Letter Footer): </label></br>
                                     <textarea name="po_facilitation" id="po_facilitation" rows="5" cols="30" style="white-space: pre-line;width:100%;"></textarea>
+                                    <!-- <script>
+                                    CKEDITOR.replace( 'po_facilitation' );
+                                    </script> -->
                                 </div>
                             </div>
                         </div>
