@@ -445,6 +445,9 @@ class VendorsController extends Controller
                 } 
                 $service_types_count = count($res_service);
 
+
+                $vendorPoListCount = VendorPurchaseOrders::where('vendor_id', $value->id)->get()->count();
+
                 $view_icon = asset('images/lucide_view.png');
                 $edit_icon = asset('images/akar-icons_edit.png');
                 $productlist_icon = asset('images/plus_blue_squre.png');
@@ -458,7 +461,7 @@ class VendorsController extends Controller
                 $subarray[] = $value->mobile_no;
                 $subarray[] = '<a href="#" class="view_service_tagging_details" title="paper tag details" data-id ="' . $value->id . '">'.$service_types_count.'</a><br><a href="#" class="view_paper_details" title="Paper List" data-id ="' . $value->id . '"><img src="' . $productlist_icon . '" /></a> 
                 ';
-                $subarray[] = '<a href="#" class="view_service_tagging_details1" title="paper tag details" data-id ="' . $value->id . '">0</a><br><a href="#" class="add_po_creation" title="Create purchased order" data-id ="' . $value->id . '"><img src="' . $productlist_icon . '" /></a>';
+                $subarray[] = '<a href="#" class="view_po_list" title="View PO List" data-id ="' . $value->id . '">'.$vendorPoListCount.'</a><br><a href="#" class="add_po_creation" title="Create purchased order" data-id ="' . $value->id . '"><img src="' . $productlist_icon . '" /></a>';
                 $subarray[] = '<a href="#" class="view_details" title="View Details" data-id ="' . $value->id . '"><img src="' . $view_icon . '" /></a> <a href="' . $editLink . '" title="Edit"><img src="' . $edit_icon . '" /></a> 
                 ';
                 $data[] = $subarray;
@@ -934,6 +937,9 @@ class VendorsController extends Controller
         //$r = $request->all();
         //dd($request->all());
         //exit;
+
+        //$terms_conditions = $this->convertData($request->terms_conditions);
+        //echo $terms_conditions;exit;
        
         try {
             DB::beginTransaction();
@@ -948,7 +954,7 @@ class VendorsController extends Controller
             $PoCreate->vendor_order_details = $request->vendor_order_details;
             $PoCreate->warehouse_ship_id = $request->warehouse_ship_id;
             $PoCreate->warehouse_ship_details = $request->warehouse_ship_details;
-            $PoCreate->total_amount = $request->product_total_amt;
+            $PoCreate->total_amount = round($request->product_total_amt);
             $PoCreate->vendor_bank_details = $request->vendor_bank_details;
 
             $PoCreate->po_payment_terms = $request->po_payment_terms;
@@ -1013,6 +1019,49 @@ class VendorsController extends Controller
                 'message' => "Failed to create the vendor"
             ]);
         }
+    }
 
+
+
+    public function vendorWisePoList(Request $request){
+        $vendor = Vendor::with('vendortype')->findOrFail($request->rowId);
+        $vendorPoList = VendorPurchaseOrders::where('vendor_id', $request->rowId)->get();
+        //dd($vendorPoList);
+        $finalArr = [];
+        if (!empty($vendorPoList)) {
+            foreach ($vendorPoList as $vpo) {
+                $finalArr[] = [
+                    'id' => $vpo->id,
+                    'purchase_order_no' => $vpo->purchase_order_no,
+                    'purchase_order_date' => $vpo->purchase_order_date,
+                    'exp_delivery_date' => $vpo->exp_delivery_date,
+                    'po_status' => $vpo->po_status
+                ];
+            }
+        } 
+        $html = view('vendors.vendor-po-list', ['vendor' => $vendor,'po_list'=>$finalArr])->render();
+        return response()->json($html);
+    }
+
+
+    public function vendor_po_preview($id)
+    {
+        $id = decrypt($id);
+        $vendorPoPreviewDetails = VendorPurchaseOrders::with('po_product_details')->where('id', $id)->first();
+
+        //dd($vendorPoPreviewDetails->po_product_details);
+
+        //echo $id;exit;
+
+        // $paper = Vendor::findOrFail($id);
+        // $countries = $this->getAllCountries();
+        // $states = $this->getAllStates(101);
+        // $cities = $this->getAllCitiesByState($paper->state_id);
+        // $service_types = $this->getAllPaperTypes();
+        // $products = json_decode($paper->service_type_ids);
+
+        return view('vendors.vendor-po-preview', [
+            'vendorPoPreviewDetails' => $vendorPoPreviewDetails
+        ]);
     }
 }

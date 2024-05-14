@@ -45,6 +45,8 @@
     <script src="{{ asset('js/dataTables.min.js') }}"></script>
     <script src="{{ asset('js/validation.js') }}?v={{ time() }}"></script>
 
+
+    <script src="//cdn.ckeditor.com/4.10.1/standard/ckeditor.js"></script>
     @yield('scripts')
   </body>
 </html>
