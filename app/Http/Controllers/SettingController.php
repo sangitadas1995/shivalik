@@ -189,7 +189,6 @@ class SettingController extends Controller
 
     public function edit_service_type($id)
     {
-
         $id = decrypt($id);
         $vendortypes = Vendor_type::select('id', 'name')->where([
             'status' => 'A'
@@ -229,4 +228,10 @@ class SettingController extends Controller
             return redirect()->back()->with('fail', trans('messages.server_error'));
         }
     }
+
+    public function updateProfile(){
+        return view('settings.profile.edit-profile');
+    }
+
+    
 }
