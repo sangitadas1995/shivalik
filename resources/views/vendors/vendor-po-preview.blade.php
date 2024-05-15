@@ -183,7 +183,7 @@
                     </td>
                 </tr>
 
-<!--                 <tr>
+            <!-- <tr>
                     <td colspan="6" style="box-sizing: border-box; padding: 10px;  vertical-align: middle; background: #FFF; border-bottom:#888888 1px solid;text-align:right;padding-right:34px">
                         <strong style="font-size:12px; color:#000;margin: 0; font-weight:700; width: 100%; display:inline-block;font-family: century-gothic;"><b>Two Hundred  And Ninety Five Only</b></strong>
                     </td>
