@@ -78,85 +78,12 @@
                 <span class="menu-title">Paper Type</span>
               </a>
             </li>
-            <!-- manna -->
-            <!-- <li class="menu-item sub-menu">
-                   <a>
-                     <span class="menu-icon">
-                       <svg width="28" height="29" viewBox="0 0 28 29" fill="none" xmlns="http://www.w3.org/2000/svg">
-                         <path
-                           d="M8.16663 18.0904V15.7358H12.8333V18.0904H8.16663ZM25.6666 22.2109V17.5017L24.3016 18.8792C23.8683 18.4415 23.3536 18.0945 22.787 17.8581C22.2204 17.6217 21.6131 17.5006 21 17.5017C18.4216 17.5017 16.3333 19.6091 16.3333 22.2109C16.3333 24.8127 18.4216 26.92 21 26.92C22.96 26.92 24.64 25.7074 25.3283 23.9768H23.3333C22.9761 24.4562 22.4822 24.814 21.9179 25.0023C21.3536 25.1906 20.7458 25.2004 20.1758 25.0305C19.6058 24.8605 19.1008 24.5189 18.7285 24.0514C18.3563 23.5838 18.1344 23.0127 18.0927 22.4144C18.051 21.8161 18.1914 21.2192 18.4952 20.7037C18.799 20.1882 19.2516 19.7786 19.7924 19.5298C20.3332 19.281 20.9364 19.2049 21.5213 19.3117C22.1062 19.4184 22.6448 19.7029 23.065 20.1271L21 22.2109H25.6666ZM14.21 20.445C14.0816 21.0336 14 21.6222 14 22.2109C14 22.411 14 22.5994 14.035 22.7995H4.66663V14.5585C4.66663 13.9341 4.91246 13.3352 5.35004 12.8936C5.78763 12.452 6.38112 12.204 6.99996 12.204H8.16663V5.14026H19.8333V12.204H21C21.6188 12.204 22.2123 12.452 22.6499 12.8936C23.0875 13.3352 23.3333 13.9341 23.3333 14.5585H6.99996V20.445H14.21ZM10.5 12.204H17.5V7.49483H10.5V12.204Z"
-                           fill="#BEC9D9" />
-                       </svg>
-                   
-                     </span>
-                     <span class="menu-title">Printing Plate Vendor</span>
-                   </a>
-                   <div class="sub-menu-list">
-                     <ul>
-                       <li class="menu-item">
-                         <a href="#">
-                           <span class="menu-title">Grid</span>
-                         </a>
-                       </li>
-                     </ul>
-                   </div>
-                   </li>
-                   <li class="menu-item sub-menu">
-                   <a>
-                     <span class="menu-icon">
-                       <svg width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg">
-                         <g clip-path="url(#clip0_268_82)">
-                           <path
-                             d="M13.6 1.7H17V14.45C17 15.1263 16.7313 15.7749 16.2531 16.2531C15.7749 16.7313 15.1263 17 14.45 17H2.55C1.8737 17 1.2251 16.7313 0.746878 16.2531C0.26866 15.7749 0 15.1263 0 14.45L0 0H13.6V1.7ZM13.6 3.4V14.45C13.6 14.6754 13.6896 14.8916 13.849 15.051C14.0084 15.2104 14.2246 15.3 14.45 15.3C14.6754 15.3 14.8916 15.2104 15.051 15.051C15.2104 14.8916 15.3 14.6754 15.3 14.45V3.4H13.6ZM1.7 1.7V14.45C1.7 14.6754 1.78955 14.8916 1.94896 15.051C2.10837 15.2104 2.32457 15.3 2.55 15.3H12.0445C11.9481 15.027 11.8992 14.7395 11.9 14.45V1.7H1.7ZM3.4 8.5H10.2V10.2H3.4V8.5ZM3.4 11.9H10.2V13.6H3.4V11.9ZM3.4 3.4H10.2V6.8H3.4V3.4Z"
-                             fill="#BEC9D9" />
-                         </g>
-                         <defs>
-                           <clipPath id="clip0_268_82">
-                             <rect width="17" height="17" fill="white" />
-                           </clipPath>
-                         </defs>
-                       </svg>
-                   
-                     </span>
-                     <span class="menu-title">Paper Vendor</span>
-                   </a>
-                   <div class="sub-menu-list">
-                     <ul>
-                       <li class="menu-item">
-                         <a href="#">
-                           <span class="menu-title">Grid</span>
-                         </a>
-                       </li>
-                     </ul>
-                   </div>
-                   </li>
-                   <li class="menu-item sub-menu">
-                   <a>
-                     <span class="menu-icon">
-                       <svg width="21" height="21" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg">
-                         <path
-                           d="M10.5 1.3125C6.47062 1.3125 2.1875 2.38612 2.1875 4.375V16.625C2.1875 18.6139 6.47062 19.6875 10.5 19.6875C14.5294 19.6875 18.8125 18.6139 18.8125 16.625V4.375C18.8125 2.38612 14.5294 1.3125 10.5 1.3125ZM10.5 15.3125C5.89137 15.3125 3.0625 14.0385 3.0625 13.125V11.9289C4.52025 12.9973 7.5775 13.5625 10.5 13.5625C13.4225 13.5625 16.4797 12.9973 17.9375 11.9289V13.125C17.9375 14.0385 15.1086 15.3125 10.5 15.3125ZM10.5 11.8125C5.89137 11.8125 3.0625 10.5385 3.0625 9.625V8.428C4.52025 9.49725 7.5775 10.0625 10.5 10.0625C13.4225 10.0625 16.4797 9.49725 17.9375 8.428V9.625C17.9375 10.5385 15.1086 11.8125 10.5 11.8125ZM17.9375 16.625C17.9375 17.5385 15.1086 18.8125 10.5 18.8125C5.89137 18.8125 3.0625 17.5385 3.0625 16.625V15.4289C4.52025 16.4972 7.5775 17.0625 10.5 17.0625C13.4225 17.0625 16.4797 16.4972 17.9375 15.4289V16.625ZM10.5 8.3125C5.89137 8.3125 3.0625 7.0385 3.0625 6.125V4.375C3.0625 3.4615 5.89137 2.1875 10.5 2.1875C15.1086 2.1875 17.9375 3.4615 17.9375 4.375V6.125C17.9375 7.0385 15.1086 8.3125 10.5 8.3125Z"
-                           fill="#BEC9D9" />
-                       </svg>
-                   
-                     </span>
-                     <span class="menu-title">Books Database</span>
-                   </a>
-                   <div class="sub-menu-list">
-                     <ul>
-                       <li class="menu-item ">
-                         <a href="#">
-                           <span class="menu-title">Grid</span>
-                         </a>
-                       </li>
-                   
-                     </ul>
-                   </div>
-                   </li> -->
+          
+            
             <!-- sub-menu -->
 
             <li data-bs-toggle="collapse"
-              class="menu-item sub-menu {{ Route::is('settings.vendor.service-type.index','settings.vendor.service-type.add','settings.vendor.service-type.edit','settings.papersettings.paper_category_list', 'settings.papersettings.add_paper_category','settings.papersettings.edit_paper_category','settings.papersettings.add_paper_color','settings.papersettings.paper_color_list','settings.papersettings.edit_paper_color','settings.papersettings.paper_quality_list','settings.papersettings.add_paper_quality', 'settings.papersettings.edit_paper_quality','settings.papersettings.paper_thickness_list','settings.papersettings.add_paper_thickness', 'settings.papersettings.edit_paper_thickness','settings.papersettings.edit-paper-size','settings.papersettings.add-paper-size','settings.papersettings.paper-size','settings.papersettings.quantity-calculation','settings.papersettings.add-quantity','settings.papersettings.edit-paper-quantity','settings.papersettings.quantity-units','settings.papersettings.add-quantityunits','settings.papersettings.edit-quantityunits','settings.papersettings.size-units','settings.papersettings.add-sizeunits','settings.papersettings.edit-sizeunits') ? 'open active' : null }}">
+              class="menu-item sub-menu {{ Route::is('settings.vendor.service-type.index','settings.vendor.service-type.add','settings.vendor.service-type.edit','settings.papersettings.paper_category_list', 'settings.papersettings.add_paper_category','settings.papersettings.edit_paper_category','settings.papersettings.add_paper_color','settings.papersettings.paper_color_list','settings.papersettings.edit_paper_color','settings.papersettings.paper_quality_list','settings.papersettings.add_paper_quality', 'settings.papersettings.edit_paper_quality','settings.papersettings.paper_thickness_list','settings.papersettings.add_paper_thickness', 'settings.papersettings.edit_paper_thickness','settings.papersettings.edit-paper-size','settings.papersettings.add-paper-size','settings.papersettings.paper-size','settings.papersettings.quantity-calculation','settings.papersettings.add-quantity','settings.papersettings.edit-paper-quantity','settings.papersettings.quantity-units','settings.papersettings.add-quantityunits','settings.papersettings.edit-quantityunits','settings.papersettings.size-units','settings.papersettings.add-sizeunits','settings.papersettings.edit-sizeunits','settings.edit-profile') ? 'open active' : null }}">
               <a data-bs-toggle="collapse">
                 <span class="menu-icon">
                   <svg width="21" height="21" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -240,6 +167,12 @@
                       </ul>
                     </div>
                   </li>
+                  <li
+                  class="menu-item {{ Route::is('settings.edit-profile') ? 'active' : null }}">
+                  <a href="{{ route('settings.edit-profile') }}">
+                    <span class="menu-title">Admin Profile Settings</span>
+                  </a>
+                </li>
                 </ul>
               </div>
             </li>
