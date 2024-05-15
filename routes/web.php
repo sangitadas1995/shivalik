@@ -243,7 +243,8 @@ Route::middleware('auth')->group(function () {
             Route::post('update-sizeunits/{id}', [PaperSettingController::class, 'updatePaperSizeUnit'])->name('update-sizeunits');
         });
 
-        Route::get('edit-profile', [SettingController::class, 'edit_profile'])->name('edit');
+        Route::get('edit-profile', [SettingController::class, 'edit_profile'])->name('edit-profile');
+        Route::post('update-profile', [SettingController::class, 'updateProfile'])->name('update-profile');
 
     });
 

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Profile;
 use Exception;
 use Carbon\Carbon;
 use App\Models\ServiceType;
@@ -230,8 +231,52 @@ class SettingController extends Controller
     }
 
     public function edit_profile(){
-        return view('settings.profile.edit-profile');
+        $id = 1;
+        $profile = Profile::findOrFail($id);
+        return view('settings.profile.edit-profile',['profile'=>$profile]);
     }
+
+    public function updateProfile(Request $request){
+        $request->validate([
+            'company_name' => ['required', 'string'],
+            'gst_no' => ['required', 'regex:/^([0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}[Z]{1}[0-9A-Z]{1})$/'],
+            'contact_person' => ['required', 'string'],
+            'mobile_no' => [
+                'required',
+                'regex:/^(\+?\d{1,4}[\s-]?)?((\(\d{1,4}\))|\d{1,4})[\s-]?\d{3,4}[\s-]?\d{3,4}$/',
+            ],
+            'email' => [
+                'required',
+                'email',
+                'unique:users,email',
+            ],
+            'address' => ['required', 'string'],
+        ], [
+            'email.unique' => 'This email address is already in use.',
+            'mobile_no.regex' => 'The mobile number format is invalid.',
+            // Add custom messages for other fields as necessary
+        ]);
+        
+        try {
+
+            $profile = Profile::find($request->id);
+            $profile->company_name        = $request->company_name;
+            $profile->gst_no              = $request->gst_no;
+            $profile->contact_person      = $request->contact_person;
+            $profile->mobile_no           = $request->mobile_no;
+            $profile->email               = $request->email;
+            $profile->address             = $request->address;
+
+            $update = $profile->update();
+            if ($update) {
+                return redirect()->route('settings.edit-profile')->with('success', 'The profile has been updated successfully.');
+            } else {
+                return redirect()->back()->with('fail', 'Failed to updated the profile.');
+            }
+        } catch (Exception $th) {
+            return redirect()->back()->with('fail', trans('messages.server_error'));
+        }
+    }        
 
     
 }
