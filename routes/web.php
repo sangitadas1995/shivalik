@@ -92,9 +92,14 @@ Route::middleware('auth')->group(function () {
         Route::post('po-paper-add-list', [VendorsController::class, 'poPaperAddList'])->name('po-paper-add-list');
         Route::post('get-vendor-address', [VendorsController::class, 'getVendorAddress'])->name('get-vendor-address');
         Route::post('store-po-of-vendor', [VendorsController::class, 'storePoOfVendor'])->name('store-po-of-vendor');
+        Route::post('update-po-of-vendor', [VendorsController::class, 'updatePoOfVendor'])->name('update-po-of-vendor');
 
         Route::post('vendor-wise-po-list', [VendorsController::class, 'vendorWisePoList'])->name('vendor-wise-po-list');
         Route::get('vendor-po-preview/{id}', [VendorsController::class, 'vendor_po_preview'])->name('vendor-po-preview');
+
+        Route::post('edit-po-creation', [VendorsController::class, 'editPoCreation'])->name('edit-po-creation');
+        Route::post('delete-po-details', [VendorsController::class, 'deletePoDetails'])->name('delete-po-details');
+        Route::post('preview-po-of-vendor', [VendorsController::class, 'previewPoOfVendor'])->name('preview-po-of-vendor');
 
 
 

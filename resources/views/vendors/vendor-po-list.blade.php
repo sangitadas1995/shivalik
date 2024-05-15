@@ -1,7 +1,7 @@
 <div class="customer-details-popup">
     <div class="popup-content ">
         <h4>
-            Manage Vendor ({{ $vendor->company_name }}) PO
+            Manage Vendor PO
         </h4>
         <button class="close-popup-btn" data-bs-dismiss="modal" aria-label="Close">
             <svg width="9" height="9" viewBox="0 0 9 9" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -38,7 +38,7 @@
                                                 @endif
                                                 </td>
                                                 <td style="text-align: center;width:10%;">{{ $po['po_status'] }}</td>
-                                                <td style="text-align: center;width:30%;"><a href="#" title="Edit Vendor PO"><img src="{{asset('images/akar-icons_edit.png')}}" /></a><a href="{{route('vendors.vendor-po-preview', encrypt($po['id']))}}" class="" target="__blank" title="View Vendor PO"> <i class="fa fa-eye" aria-hidden="true"></i> </a><a href="#" title="Vendor PO details"><i class="fa fa-search-plus"></i></a></td>
+                                                <td style="text-align: center;width:30%;"><a href="#" class="edit_po_creation" title="Edit purchase order" data-id ="{{ $po['id'] }}"><img src="{{asset('images/akar-icons_edit.png')}}" /></a><a href="{{route('vendors.vendor-po-preview', encrypt($po['id']))}}" class="" target="__blank" title="View Vendor PO"> <i class="fa fa-eye" aria-hidden="true"></i> </a><a href="#" title="Vendor PO details"><i class="fa fa-search-plus"></i></a></td>
                                             </tr>
                                             @endforeach
                                             @else

@@ -934,13 +934,6 @@ class VendorsController extends Controller
 
 
     public function storePoOfVendor(Request $request){
-        //$r = $request->all();
-        //dd($request->all());
-        //exit;
-
-        //$terms_conditions = $this->convertData($request->terms_conditions);
-        //echo $terms_conditions;exit;
-       
         try {
             DB::beginTransaction();
             $PoCreate = new VendorPurchaseOrders();
@@ -997,9 +990,6 @@ class VendorsController extends Controller
             }
             DB::commit();
 
-            //echo $last_po_insert_id;
-            //exit;
-
             if ($save) {
                 return response()->json([
                     'status' => "success",
@@ -1026,7 +1016,6 @@ class VendorsController extends Controller
     public function vendorWisePoList(Request $request){
         $vendor = Vendor::with('vendortype')->findOrFail($request->rowId);
         $vendorPoList = VendorPurchaseOrders::where('vendor_id', $request->rowId)->get();
-        //dd($vendorPoList);
         $finalArr = [];
         if (!empty($vendorPoList)) {
             foreach ($vendorPoList as $vpo) {
@@ -1044,24 +1033,201 @@ class VendorsController extends Controller
     }
 
 
-    public function vendor_po_preview($id)
-    {
+    public function vendor_po_preview($id){
         $id = decrypt($id);
         $vendorPoPreviewDetails = VendorPurchaseOrders::with('po_product_details')->where('id', $id)->first();
-
-        //dd($vendorPoPreviewDetails->po_product_details);
-
-        //echo $id;exit;
-
-        // $paper = Vendor::findOrFail($id);
-        // $countries = $this->getAllCountries();
-        // $states = $this->getAllStates(101);
-        // $cities = $this->getAllCitiesByState($paper->state_id);
-        // $service_types = $this->getAllPaperTypes();
-        // $products = json_decode($paper->service_type_ids);
-
         return view('vendors.vendor-po-preview', [
             'vendorPoPreviewDetails' => $vendorPoPreviewDetails
         ]);
+    }
+
+
+
+    public function editPoCreation(Request $request)
+    {
+        //dd($request->rowid);
+
+        $vendorPoDetails = VendorPurchaseOrders::with('po_product_details')->where('id', $request->rowid)->first();
+        //dd($vendorPoDetails);
+
+        $vendor_id = $vendorPoDetails->vendor_id;
+        $vendor = Vendor::with('vendortype')->findOrFail($vendor_id);
+        $warehousesList = Warehouses::where('warehouse_type', 'printing')->get();
+
+        if (!empty($vendor->service_type_ids)) {
+           
+            $service_types = json_decode($vendor->service_type_ids);
+            $finalArr = [];
+            
+            foreach ($service_types as $key => $val) {
+                $finalArr[] = $val->paper_id;
+            }
+            $paper_list = $this->getAllPaperType();
+            $paper_final_arr = [];
+            foreach ($paper_list as $key => $p_value) {
+                $paper_final_arr[] = $p_value->id;
+            }
+            $papers_array = array_values(array_diff($paper_final_arr, $finalArr));
+            $papers = $this->getPaperType_name($papers_array);
+        } else {
+            $papers = $this->getAllPaperType();
+        }
+
+        $today = date("Ymd");
+        $rand = strtoupper(substr(uniqid(sha1(time())),0,4));
+        $po_unique_no = $today . $rand;
+
+        $html = view('vendors.edit-po-creation', ['vendor' => $vendor, 'paper_list' => $papers, 'warehousesList' => $warehousesList, 'vendorPoDetails' => $vendorPoDetails])->render();
+        return response()->json($html);
+    }
+
+
+
+
+
+    public function deletePoDetails(Request $request){
+        //dd($request->po_id);
+        try {
+            $purchase_order_id = $request->po_id;
+            $purchase_order_details_id = $request->po_details_id;
+            $product_id = $request->product_id;
+
+            $vendorPo = VendorPurchaseOrders::where('id', $purchase_order_id)->first();
+            $po_total_amt = $vendorPo->total_amount;
+
+            $vendorPoDetails = VendorPurchaseOrderDetails::where('id', $purchase_order_details_id)->first();
+            $po_details_total_amt = $vendorPoDetails->net_amount;
+
+            $po_remaining_amt = round($po_total_amt-$po_details_total_amt);
+
+            $po_update = VendorPurchaseOrders::findOrFail($purchase_order_id);
+            $po_update->total_amount = $po_remaining_amt;
+            $update = $po_update->update();
+
+
+            $po_details_delete=VendorPurchaseOrderDetails::find($purchase_order_details_id);
+            $po_details_delete->delete();
+
+           return response()->json([
+                'status' => "success",
+                'message' => "PO details has been deleted successfully"
+            ]);
+        } catch (Exception $th) {
+             return response()->json([
+                'status' => "fail",
+                'message' => "Failed to create the vendor"
+            ]);
+        }
+    }
+
+
+
+    public function updatePoOfVendor(Request $request){
+        //dd($request->all());
+        try {
+            DB::beginTransaction();
+
+            $vendor_purchased_id = $request->vendor_purchased_id;
+            $vendorPoDetailsCount = VendorPurchaseOrderDetails::where('purchase_order_id', $vendor_purchased_id)->get()->count();
+            if($vendorPoDetailsCount>0)
+            {
+                VendorPurchaseOrderDetails::where('purchase_order_id', $vendor_purchased_id)->delete();
+            }
+
+            $PoUpdate = VendorPurchaseOrders::findOrFail($vendor_purchased_id);
+            $PoUpdate->purchase_order_no = $request->purchase_order_no;
+            $PoUpdate->purchase_order_date = $request->purchase_order_date;
+            $PoUpdate->exp_delivery_date = $request->exp_delivery_date;
+            $PoUpdate->vendor_quotation_no = $request->vendor_quotation_no;
+            $PoUpdate->vendor_quotation_date = $request->vendor_quotation_date;
+            $PoUpdate->order_by = $request->order_by;
+            $PoUpdate->vendor_id = $request->vendor_id;
+            $PoUpdate->vendor_order_details = $request->vendor_order_details;
+            $PoUpdate->warehouse_ship_id = $request->warehouse_ship_id;
+            $PoUpdate->warehouse_ship_details = $request->warehouse_ship_details;
+            $PoUpdate->total_amount = round($request->product_total_amt);
+            $PoUpdate->vendor_bank_details = $request->vendor_bank_details;
+            $PoUpdate->po_payment_terms = $request->po_payment_terms;
+            if($request->po_payment_terms=="2")
+            {
+                $PoUpdate->po_payment_credit_days = $request->po_payment_credit_days;
+            }
+
+            $PoUpdate->terms_conditions = $request->terms_conditions;
+            $PoUpdate->additional_note = $request->additional_note;
+            $PoUpdate->po_facilitation = $request->po_facilitation;
+            $PoUpdate->thanksyou_notes = $request->thanksyou_notes;
+            $update = $PoUpdate->update();
+
+            if(is_countable($request->po_product_id) && count($request->po_product_id)>0)
+            {
+                for ($i=0; $i < count($request->po_product_id); $i++) { 
+                    $po_product_id = $request->po_product_id[$i];
+                    $po_product_purchase_price = $request->purchase_price[$i];
+                    $po_product_order_qty = $request->order_qty[$i];
+                    $po_product_discount = $request->discount[$i];
+                    $po_product_gst = $request->gst[$i];
+                    $po_product_row_price = $request->current_row_price[$i];
+                    //echo $po_product_id."</br>";
+
+                    $PoDetailsCreate = new VendorPurchaseOrderDetails();
+                    $PoDetailsCreate->purchase_order_id = $vendor_purchased_id;
+                    $PoDetailsCreate->product_id = $po_product_id;
+                    $PoDetailsCreate->purchase_price = $po_product_purchase_price;
+                    $PoDetailsCreate->order_qty = $po_product_order_qty;
+                    $PoDetailsCreate->discount = $po_product_discount;
+                    $PoDetailsCreate->gst = $po_product_gst;
+                    $PoDetailsCreate->net_amount = $po_product_row_price;
+                    $PoDetailsCreate->save();
+                }
+            }
+            DB::commit();
+
+            if ($update) {
+                return response()->json([
+                    'status' => "success",
+                    'message' => "PO has been updated successfully"
+                ]);
+            } else {
+                return response()->json([
+                    'status' => "fail",
+                    'message' => "Failed to update the po"
+                ]);
+            }
+        } catch (Exception $th) {
+            DB::rollBack();
+            /* dd($th); */
+             return response()->json([
+                'status' => "fail",
+                'message' => "Failed to update the po"
+            ]);
+        }
+    }
+
+
+    public function previewPoOfVendor(Request $request){
+        //dd($request->all());
+
+        $allRqest = $request->all();
+
+        $product_id = $request->po_product_id;
+        //echo count($product_id);exit;
+
+        $po_product_arr = array();
+        if(is_countable($product_id) && count($product_id)>0)
+        {
+            for ($i=0; $i < count($product_id); $i++) { 
+                $product_name = $this->getPaperNameById($product_id[$i])->paper_name;
+                $purchase_price = $request->purchase_price[$i];
+
+                echo $product_name."</br>";
+                $po_product_arr[] = array('product_id' => $product_id[$i], 
+                    'product_name' => $product_name);
+            }
+        }
+        exit;
+
+        $html = view('vendors.preview-po-of-vendor', ['allRqest' => $allRqest])->render();
+        return response()->json($html);
     }
 }

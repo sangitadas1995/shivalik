@@ -58,13 +58,17 @@
     </div>
 </div>
 
-
 <div class="modal fade" id="addPoCreationModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
   <div class="render_po_creation"></div>
   <div class="modal-dialog modal-dialog-scrollable  modal-dialog-centered">
   </div>
 </div>
 
+<div class="modal fade" id="editPoCreationModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="render_po_edit"></div>
+  <div class="modal-dialog modal-dialog-scrollable  modal-dialog-centered">
+  </div>
+</div>
 
 <div class="modal fade" id="addPoProductListModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
 <div class="render_po_product_list">  
@@ -73,10 +77,16 @@
   </div>
 </div>
 
-
 <div class="modal fade" id="poListModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
     aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="render_PoListModal"></div>
+    <div class="modal-dialog modal-dialog-scrollable  modal-dialog-centered">
+    </div>
+</div>
+
+<div class="modal fade" id="previewPoOfVendor" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="render_preview_po_of_vendor"></div>
     <div class="modal-dialog modal-dialog-scrollable  modal-dialog-centered">
     </div>
 </div>
@@ -84,7 +94,6 @@
 
 @section('scripts')
 <script>
-
     $(document).ready(function () {
         $.ajaxSetup({
             headers: {
@@ -92,10 +101,8 @@
             }
         });
 
-
         $(document).on('click', '.savePoGenerate', function (e) {
             //alert("666");
-
             e.preventDefault();
             var formdata = $("#create_po_forvendor").serialize();
 
@@ -123,10 +130,61 @@
             });
         });
 
+        $(document).on('click', '.updatePoGenerate', function (e) {
+            //alert("666");
+            e.preventDefault();
+            var formdata = $("#update_po_forvendor").serialize();
+
+            $.ajax({
+            url: "{{ route('vendors.update-po-of-vendor') }}",
+            method: 'POST',
+            data: formdata,
+            dataType: 'json',
+            success: function(response) {
+                if(response.status=="success")
+                {
+                    return Swal.fire('Success!', response.message, 'success').then((result) => {
+                      if (result.isConfirmed) {
+                       $('#editPoCreationModal').modal('hide');
+                       //$('.view_po_list').click();
+                      }
+                    });
+                }
+                else{
+                    return Swal.fire('Error!', response.message, 'error');
+                }
+            },
+            error: function(xhr, status, error) {
+                return Swal.fire('Error!', 'Something went wrong, Plese try again.', 'error');
+            }
+            });
+        });
+
+
+        $(document).on('click', '.poPreviewBeforeSubmit', function (e) {
+            //alert("666");
+            e.preventDefault();
+            var formdata = $("#create_po_forvendor").serialize();
+            //alert(formdata);
+
+            $.ajax({
+            url: "{{ route('vendors.preview-po-of-vendor') }}",
+            method: 'POST',
+            data: formdata,
+            dataType: 'json',
+            success: function(response) {
+                $('.render_preview_po_of_vendor').html(response);
+                $('#previewPoOfVendor').modal('show');
+            }
+            });
+        });
+
+
 
 
         $(document).on('change', '#warehouse_ship_id', function () {
           let vendor_id = this.value;
+          //alert(vendor_id);
           if (vendor_id) {
             $.ajax({
               url: "{{ route('vendors.get-vendor-address') }}",
@@ -156,7 +214,6 @@
             $("#toggle_credit_days").hide();
           }
         });
-
 
         let vendors_list_table = $('#vendors_list_table').DataTable({
             processing: true,
@@ -352,6 +409,33 @@
         }
     });
 
+
+    $(document).on('click', '.edit_po_creation', function (e) {
+        e.preventDefault();
+        $('#poListModal').modal('hide');
+        var __e = $(this);
+        var rowid = __e.data('id');
+        //alert(rowid);
+        //$('#purchase_order_date').val(new Date().toDateInputValue());
+        if (rowid) {
+            $.ajax({
+                type: "post",
+                url: "{{ route('vendors.edit-po-creation') }}",
+                data: {
+                    rowid
+                },
+                dataType: "json",
+                success: function (response) {
+                    $('.render_po_edit').html(response);
+                    $('#editPoCreationModal').modal('show');
+                    //$('#vendor_id').val(rowid);
+                }
+            });
+        }
+    });
+
+
+
     Date.prototype.toDateInputValue = (function () {
         var local = new Date(this);
         local.setMinutes(this.getMinutes() - this.getTimezoneOffset());
@@ -423,6 +507,7 @@
     });
 
     $(document).on('click', '.vd_product_remove', function(){  
+
         Swal.fire({
             icon: "warning",
             text: `Are you sure?`,
@@ -433,7 +518,13 @@
             cancelButtonColor: "crimson",
           }).then((result) => {
             if (result.isConfirmed) {
+
+
         var product_id = $(this).attr("id");
+        var po_id = $(this).data("poid");
+        var po_details_id = $(this).data("podetailsid");
+        //alert(po_id +" "+ po_details_id);
+
         var product_hidden_ids = $("#product_hidden_ids").val();
         var product_arrs = product_hidden_ids.split(",");
 
@@ -473,7 +564,25 @@
         //console.log(paper_ids);
         var string = paper_ids.toString();
 
-        $("#product_hidden_ids").val(string);  
+        $("#product_hidden_ids").val(string);
+
+        $.ajax({
+        url: "{{ route('vendors.delete-po-details') }}",
+        method: 'POST',
+        data: {product_id:product_id,po_id:po_id,po_details_id:po_details_id},
+        dataType: 'json',
+        success: function(response) {
+            if(response.status=="success")
+            {
+                totalCalculation();
+            }
+        },
+        error: function(xhr, status, error) {
+            return Swal.fire('Error!', 'Something went wrong, Plese try again.', 'error');
+        }
+        });
+
+
         $('#row'+product_id+'').remove();
 
         }
