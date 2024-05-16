@@ -1209,25 +1209,48 @@ class VendorsController extends Controller
         //dd($request->all());
 
         $allRqest = $request->all();
-
         $product_id = $request->po_product_id;
-        //echo count($product_id);exit;
 
         $po_product_arr = array();
+        $po_calculation_arr = array();
         if(is_countable($product_id) && count($product_id)>0)
         {
+            $tot_net_amt = 0;
+            $tot_gross_amt = 0;
+            $tot_disc = 0;
+            $tot_gst = 0;
             for ($i=0; $i < count($product_id); $i++) { 
                 $product_name = $this->getPaperNameById($product_id[$i])->paper_name;
                 $purchase_price = $request->purchase_price[$i];
+                $order_qty = $request->order_qty[$i];
+                $discount = $request->discount[$i];
+                $gst = $request->gst[$i];
+                $current_row_price = $request->current_row_price[$i];
+                $current_row_gross_price = $request->current_row_gross_price[$i];
 
-                echo $product_name."</br>";
                 $po_product_arr[] = array('product_id' => $product_id[$i], 
-                    'product_name' => $product_name);
-            }
-        }
-        exit;
+                    'product_name' => $product_name,
+                    'purchase_price' => $purchase_price,
+                    'order_qty' => $order_qty,
+                    'discount' => $discount,
+                    'gst' => $gst,
+                    'current_row_price' => $current_row_price,
+                    'current_row_gross_price' => $current_row_gross_price
+                );
 
-        $html = view('vendors.preview-po-of-vendor', ['allRqest' => $allRqest])->render();
+                $tot_net_amt += $current_row_price;
+                $tot_gross_amt += ($purchase_price*$order_qty);
+                $tot_disc += (($purchase_price*$order_qty)*$discount/100);
+                $tot_gst += (($purchase_price*$order_qty)-(($purchase_price*$order_qty*$discount)/100))*$gst/100;
+            }
+
+            $po_calculation_arr[] = array('tot_net_amt' => $tot_net_amt, 
+                'tot_gross_amt' => $tot_gross_amt,
+                'tot_disc' => $tot_disc,
+                'tot_gst' => $tot_gst);
+        }
+
+        $html = view('vendors.preview-po-of-vendor', ['allRqest' => $allRqest, 'po_product_arr' => $po_product_arr, 'po_calculation_arr' => $po_calculation_arr])->render();
         return response()->json($html);
     }
 }
