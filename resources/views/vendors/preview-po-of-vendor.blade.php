@@ -18,13 +18,6 @@
             <b>PREVIEW PURCHASE ORDER</b>
             </div>
         
-
-    <div class="head-invoice" style="width:100%; height:auto; display: inline-block; margin:0;">
-
-            <b>PURCHASE ORDER</b>
-            </div>
-        
-
         <div class="head-invoice" style="width:100%; height:auto; display: inline-block; margin:0;">
         <table colspan="0" rowspan="0" style="width:100%;border-bottom: #878787 3px solid;">
             <tbody>

@@ -90,6 +90,13 @@
     <div class="modal-dialog modal-dialog-scrollable  modal-dialog-centered">
     </div>
 </div>
+
+<div class="modal fade" id="poDetailsOfVendor" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="render_po_details"></div>
+    <div class="modal-dialog modal-dialog-scrollable  modal-dialog-centered">
+    </div>
+</div>
 @endsection
 
 @section('scripts')
@@ -117,6 +124,7 @@
                     return Swal.fire('Success!', response.message, 'success').then((result) => {
                       if (result.isConfirmed) {
                        $('#addPoCreationModal').modal('hide');
+                       window.location.reload();
                       }
                     });
                 }
@@ -177,6 +185,30 @@
                 $('#previewPoOfVendor').modal('show');
             }
             });
+        });
+
+
+        $(document).on('click', '.view_po_details', function (e) {
+            //alert("666");
+            e.preventDefault();
+            $('#poListModal').modal('hide');
+            var __e = $(this);
+            var rowid = __e.data('id');
+            //alert(rowid);
+            if (rowid) {
+            $.ajax({
+                type: "post",
+                url: "{{ route('vendors.view-po-details') }}",
+                data: {
+                    rowid
+                },
+                dataType: "json",
+                success: function (response) {
+                    $('.render_po_details').html(response);
+                    $('#poDetailsOfVendor').modal('show');
+                }
+            });
+            }
         });
 
 
