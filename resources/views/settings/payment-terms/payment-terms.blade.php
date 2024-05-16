@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title','Paper Size Units')
+@section('title','Payment Term & Condition')
 @push('extra_css')
 
 @endpush
@@ -11,7 +11,7 @@
         </div>
         <div class="col-md-6">
             <div class="text-end mb-4">
-                <a href="#" class="btn primary-btn"><img src="{{ asset('images/add-accoun-1t.png') }}" /> Add New Payment Terms</a>
+                <a href="{{ route('settings.add-payment-terms') }}" class="btn primary-btn"><img src="{{ asset('images/add-accoun-1t.png') }}" /> Add New Payment Terms</a>
             </div>
         </div>
     </div>
@@ -50,7 +50,7 @@
             }
         });
 
-        let papersize_units_tbl = $('#payment_table').DataTable({
+        let payment_tbl = $('#payment_table').DataTable({
             stateSave: true,
             processing: true,
             serverSide: true,
@@ -86,11 +86,11 @@
             var __e = $(this);
             var rowid = __e.data('id');
             var rowstatus = __e.data('status');
-            var currentPage = papersize_units_tbl.page();
+            var currentPage = payment_tbl.page();
             if (rowid) {
                 Swal.fire({
                     icon: "warning",
-                    text: `Are you sure, you want to ${rowstatus} this paper size units ?`,
+                    text: `Are you sure, you want to ${rowstatus} this payment terms & condition ?`,
                     showDenyButton: false,
                     showCancelButton: true,
                     confirmButtonText: "Yes",
@@ -100,14 +100,14 @@
                     if (result.isConfirmed) {
                         $.ajax({
                             type: "post",
-                            url: "{{ route('settings.papersettings.sizeunits-status') }}",
+                            url: "{{ route('settings.update-payement-terms-status') }}",
                             data: {
                                 rowid,
                                 rowstatus
                             },
                             dataType: "json",
                             success: function(response) {
-                                papersize_units_tbl.page(currentPage).draw(false);
+                                payment_tbl.page(currentPage).draw(false);
                                 return Swal.fire('Success!', response.message, 'success');
                             },
                             error: function(xhr, status, error) {

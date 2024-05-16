@@ -333,7 +333,7 @@ class SettingController extends Controller
                     $presentStatus = '<span style="color:red">Inactive</span>';
                 }
 
-                $editLink = route('settings.papersettings.edit_paper_category', encrypt($value->id));
+                $editLink = route('settings.edit-payment-terms', encrypt($value->id));
                 $subarray = [];
                 $subarray[] = ++$key . '.';
                 $subarray[] = $value->id;
@@ -357,5 +357,59 @@ class SettingController extends Controller
         return response()->json($output);
     }
 
-    
+    public function addPaymentTerms(){
+        return view('settings.payment-terms.add-payment-terms');
+    }
+
+    public function storePaymentTerms(Request $request){
+        $request->validate([
+            'payement_terms_condition' => ['required']
+        ]);
+        
+        try {
+            $p_terms = new PaymentTermsModel();
+            $p_terms->payement_terms_condition = $request->payement_terms_condition;
+            $p_terms->save();
+            if($p_terms){
+                return redirect()->route('settings.payment-terms-condition')->with('success', 'New Patment and terms added successfully.');
+            }else{
+                return redirect()->back()->with('fail', 'Failed to add data.');
+            }
+        } catch (Exception $th) {
+            return redirect()->back()->with('fail', trans('messages.server_error'));
+        }
+    }
+
+    public function paymentStatusUpdate(Request $request){
+        $request->validate([
+            'rowid' => ['required'],
+            'rowstatus' => ['required']
+        ]);
+
+        try {
+            $id = $request->rowid;
+            $status = $request->rowstatus == 'lock' ? 'I' : 'A';
+
+            $payment_status = PaymentTermsModel::findOrFail($id);
+            $payment_status->status = $status;
+            $payment_status->update();
+
+            return response()->json([
+                'message' => 'payement terms & condition' . $request->rowstatus . ' successfully.'
+            ]);
+        } catch (Exception $th) {
+            return response()->json([
+                'message' => trans('messages.server_error')
+            ], 500);
+        }
+    }
+
+    public function editPaymentTermsCondition($id){
+        $id = decrypt($id);
+        $paymentTerms = PaymentTermsModel::findOrFail($id);
+        return view('settings.payment-terms.edit-payment-terms', [
+            'id' => $id,
+            'paymentTerms' => $paymentTerms
+        ]);
+    }
 }

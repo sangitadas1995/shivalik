@@ -252,6 +252,10 @@ Route::middleware('auth')->group(function () {
         Route::post('update-profile', [SettingController::class, 'updateProfile'])->name('update-profile');
         Route::get('payment-terms-condition', [SettingController::class, 'PaymentTerms'])->name('payment-terms-condition');
         Route::post('payment-terms-list-ajax', [SettingController::class, 'listPaymentTermsAjax'])->name('payment-terms-list-ajax');
+        Route::get('add-payment-terms', [SettingController::class, 'addPaymentTerms'])->name('add-payment-terms');
+        Route::post('store-terms', [SettingController::class, 'storePaymentTerms'])->name('store-terms');
+        Route::post('update-payement-terms-status', [SettingController::class, 'paymentStatusUpdate'])->name('update-payement-terms-status');
+        Route::get('edit-payment-terms/{id}', [SettingController::class, 'editPaymentTermsCondition'])->name('edit-payment-terms');
     });
 
     Route::prefix('papertype')->name('papertype.')->group(function () {
