@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Profile;
 use Exception;
 use Carbon\Carbon;
+use App\Models\Profile;
 use App\Models\ServiceType;
 use App\Models\Vendor_type;
-use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Http\Request;
+use App\Models\PaymentTermsModel;
+use Illuminate\Contracts\Encryption\DecryptException;
 
 class SettingController extends Controller
 {
@@ -276,7 +277,85 @@ class SettingController extends Controller
         } catch (Exception $th) {
             return redirect()->back()->with('fail', trans('messages.server_error'));
         }
-    }        
+    }  
+    
+    public function PaymentTerms(){
+        return view('settings.payment-terms.payment-terms');
+    }
+
+    public function listPaymentTermsAjax(Request $request){
+        $column = [
+            'id',
+            'payement_terms_condition'
+        ];
+
+        $query = PaymentTermsModel::where('id', '!=', '0');
+
+        if (isset($request->search['value'])) {
+            $query->where(function ($q) use ($request) {
+                $q->where('payement_terms_condition', 'LIKE', "%" . $request->search['value'] . "%");
+            });
+        }
+
+        if (isset($request->order['0']['dir']) && ($request->order['0']['column'] != 0) && ($request->order['0']['column'] == 2)) {
+            $query->orderBy('name', $request->order['0']['dir']);
+        } else if (isset($request->order['0']['dir']) && ($request->order['0']['column'] != 0) && ($request->order['0']['column'] == 3)) {
+            $query->orderBy('status', $request->order['0']['dir']);
+        } else {
+            $query->orderBy('created_at', 'desc');
+        }
+
+        $number_filtered_row = $query->count();
+
+        if ($request->length != -1) {
+            $query->limit($request->length)->offset($request->start);
+        }
+
+        $result = $query->get();
+
+        $data = [];
+        if ($result->isNotEmpty()) {
+            //dd($result);
+            foreach ($result as $key => $value) {
+
+                $delete_icon = asset('images/lucide_view.png');
+                $edit_icon = asset('images/akar-icons_edit.png');
+
+                $inactive_icon =  asset('images/eva_lock-outline.png');
+                $active_icon =  asset('images/lock-open-right-outline.png');
+
+                if ($value->status == "A") {
+                    $status = '<a href="#" class="updateStatus" data-id ="' . $value->id . '" data-status="lock" title="Unlock"><img src="' . $active_icon . '" /></a>';
+                    $presentStatus = '<span style="color:green">Active</span>';
+                }
+                if ($value->status == "I") {
+                    $status = '<a href="#" class="updateStatus" data-id ="' . $value->id . '" data-status="unlock" title="Lock"><img src="' . $inactive_icon . '" /></a>';
+                    $presentStatus = '<span style="color:red">Inactive</span>';
+                }
+
+                $editLink = route('settings.papersettings.edit_paper_category', encrypt($value->id));
+                $subarray = [];
+                $subarray[] = ++$key . '.';
+                $subarray[] = $value->id;
+                $subarray[] = $value->payement_terms_condition;
+                $subarray[] = $presentStatus;
+                $subarray[] = '<div class="align-items-center d-flex dt-center justify-content-center">
+                <a href="' . $editLink . '" title="Edit"><img src="' . $edit_icon . '" /></a>' . $status . '</div>';
+                $data[] = $subarray;
+            }
+        }
+
+        $count = PaymentTermsModel::where('id', '!=', '0')->count();
+
+        $output = [
+            'draw' => intval($request->draw),
+            'recordsTotal' => $count,
+            'recordsFiltered' => $number_filtered_row,
+            'data' => $data
+        ];
+
+        return response()->json($output);
+    }
 
     
 }

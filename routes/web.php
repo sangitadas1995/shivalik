@@ -250,7 +250,8 @@ Route::middleware('auth')->group(function () {
 
         Route::get('edit-profile', [SettingController::class, 'edit_profile'])->name('edit-profile');
         Route::post('update-profile', [SettingController::class, 'updateProfile'])->name('update-profile');
-
+        Route::get('payment-terms-condition', [SettingController::class, 'PaymentTerms'])->name('payment-terms-condition');
+        Route::post('payment-terms-list-ajax', [SettingController::class, 'listPaymentTermsAjax'])->name('payment-terms-list-ajax');
     });
 
     Route::prefix('papertype')->name('papertype.')->group(function () {
@@ -266,8 +267,6 @@ Route::middleware('auth')->group(function () {
         Route::post('update/{id}', [PaperTypeController::class, 'update'])->name('update');
         Route::post('get-size-details', [PaperTypeController::class, 'get_size_details'])->name('get-size-details');
         Route::post('get-packaging-details', [PaperTypeController::class, 'get_packaging_details'])->name('get-packaging-details');
-
-
 
         Route::post('get-no-of-sheet-by-unitid', [PaperTypeController::class, 'get_no_of_sheet_by_unitid'])->name('get-no-of-sheet-by-unitid');
     });
