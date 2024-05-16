@@ -1249,7 +1249,6 @@ class VendorsController extends Controller
                 'tot_disc' => $tot_disc,
                 'tot_gst' => $tot_gst);
         }
-
         $html = view('vendors.preview-po-of-vendor', ['allRqest' => $allRqest, 'po_product_arr' => $po_product_arr, 'po_calculation_arr' => $po_calculation_arr])->render();
         return response()->json($html);
     }
