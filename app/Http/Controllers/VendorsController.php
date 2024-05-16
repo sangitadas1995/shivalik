@@ -1206,8 +1206,6 @@ class VendorsController extends Controller
 
 
     public function previewPoOfVendor(Request $request){
-        //dd($request->all());
-
         $allRqest = $request->all();
         $product_id = $request->po_product_id;
 
