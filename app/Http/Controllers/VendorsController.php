@@ -1206,8 +1206,6 @@ class VendorsController extends Controller
 
 
     public function previewPoOfVendor(Request $request){
-        //dd($request->all());
-
         $allRqest = $request->all();
         $product_id = $request->po_product_id;
 
@@ -1251,6 +1249,25 @@ class VendorsController extends Controller
         }
 
         $html = view('vendors.preview-po-of-vendor', ['allRqest' => $allRqest, 'po_product_arr' => $po_product_arr, 'po_calculation_arr' => $po_calculation_arr])->render();
+        
+        $product_id = $request->po_product_id;
+        //echo count($product_id);exit;
+
+        $po_product_arr = array();
+        if(is_countable($product_id) && count($product_id)>0)
+        {
+            for ($i=0; $i < count($product_id); $i++) { 
+                $product_name = $this->getPaperNameById($product_id[$i])->paper_name;
+                $purchase_price = $request->purchase_price[$i];
+
+                echo $product_name."</br>";
+                $po_product_arr[] = array('product_id' => $product_id[$i], 
+                    'product_name' => $product_name);
+            }
+        }
+        exit;
+
+        $html = view('vendors.preview-po-of-vendor', ['allRqest' => $allRqest])->render();
         return response()->json($html);
     }
 }

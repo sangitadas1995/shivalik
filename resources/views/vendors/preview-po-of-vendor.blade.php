@@ -14,11 +14,18 @@
 
         <div class="main-invoice" style="width:800px; height:auto; display: block; margin: 20px auto 0; background:#FFF:">
             <div class="head-invoice" style="width:100%; height:auto; display: inline-block; padding: 10px; box-sizing: border-box; text-align:center; font-size:16px; font-weight:500;background: #000; color: #FFF;font-family: century-gothic;">
+
             <b>PREVIEW PURCHASE ORDER</b>
             </div>
         
 
     <div class="head-invoice" style="width:100%; height:auto; display: inline-block; margin:0;">
+
+            <b>PURCHASE ORDER</b>
+            </div>
+        
+
+        <div class="head-invoice" style="width:100%; height:auto; display: inline-block; margin:0;">
         <table colspan="0" rowspan="0" style="width:100%;border-bottom: #878787 3px solid;">
             <tbody>
                 <tr>
@@ -93,6 +100,7 @@
     </div>
 
 
+
     <div class="head-invoice" style="width:100%; height:auto; display: inline-block; margin: 20px 0; font-weight: 400;">
         <table style="width:100%; border-collapse: collapse; border:#888888 1px solid;">
             <thead>
@@ -151,10 +159,7 @@
                     <strong style="font-size:15px; color:#000;margin: 0; font-weight:700; width: 100%; display:inline-block;font-family: century-gothic;"><b>{{number_format($poDetails['current_row_price'],2)}}</b></strong>
                     </td>
                 </tr>
-                <?php //$tot_net_amt += $poDetails?->net_amount ?>
-                <?php //$tot_gross_amt += ($poDetails?->purchase_price*$poDetails?->order_qty) ?>
-                <?php //$tot_disc += (($poDetails?->purchase_price*$poDetails?->order_qty)*$poDetails?->discount/100) ?>
-                <?php //$tot_gst += (($poDetails?->purchase_price*$poDetails?->order_qty)-(($poDetails?->purchase_price*$poDetails?->order_qty*$poDetails?->discount)/100))*$poDetails?->gst/100 ?>
+               
                 @endforeach
                 @else
                 <tr>
@@ -194,13 +199,6 @@
                         <strong style="font-size:15px; color:#000;margin: 0; font-weight:700; width: 100%; display:inline-block;font-family: century-gothic;"><b>{{number_format(round($po_calculation_arr[0]['tot_net_amt']),2)}}</b></strong>
                     </td>
                 </tr>
-
-            <!-- <tr>
-                    <td colspan="6" style="box-sizing: border-box; padding: 10px;  vertical-align: middle; background: #FFF; border-bottom:#888888 1px solid;text-align:right;padding-right:34px">
-                        <strong style="font-size:12px; color:#000;margin: 0; font-weight:700; width: 100%; display:inline-block;font-family: century-gothic;"><b>Two Hundred  And Ninety Five Only</b></strong>
-                    </td>
-                </tr> -->
-                
             </tbody>
         </table>
     </div>
@@ -248,8 +246,5 @@
         </table>
     </div>
     @endif
-
-
-
-        </div>
+  </div>
 </div>
