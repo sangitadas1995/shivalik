@@ -1250,4 +1250,16 @@ class VendorsController extends Controller
         $html = view('vendors.preview-po-of-vendor', ['allRqest' => $allRqest, 'po_product_arr' => $po_product_arr, 'po_calculation_arr' => $po_calculation_arr])->render();
         return response()->json($html);
     }
+
+
+    public function viewPoDetails(Request $request){
+        $vendorPoDetails = VendorPurchaseOrders::with('po_product_details')->where('id', $request->rowid)->first();
+
+        $vendor_id = $vendorPoDetails->vendor_id;
+        $vendor = Vendor::with('vendortype', 'city', 'state', 'country')->findOrFail($vendor_id);
+        //dd($vendorPoDetails);
+
+        $html = view('vendors.view-po-details', ['vendor' => $vendor, 'vendorPoDetails' => $vendorPoDetails])->render();
+        return response()->json($html);
+    }
 }

@@ -101,6 +101,8 @@ Route::middleware('auth')->group(function () {
         Route::post('delete-po-details', [VendorsController::class, 'deletePoDetails'])->name('delete-po-details');
         Route::post('preview-po-of-vendor', [VendorsController::class, 'previewPoOfVendor'])->name('preview-po-of-vendor');
 
+        Route::post('view-po-details', [VendorsController::class, 'viewPoDetails'])->name('view-po-details');
+
 
 
         Route::prefix('paper')->name('paper.')->group(function () {
