@@ -21,6 +21,8 @@ use App\Models\Vendor_type;
 use App\Models\Warehouses;
 use App\Models\VendorPurchaseOrders;
 use App\Models\VendorPurchaseOrderDetails;
+use App\Models\Profile;
+use App\Models\PaymentTermsModel;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
@@ -792,7 +794,8 @@ class VendorsController extends Controller
                 $finalArr[] = [
                     'paper_id' => $item->paper_id,
                     'paper_name' => $paperName->paper_name,
-                    'purchase_price' => $item->purchase_price
+                    'purchase_price' => $item->purchase_price,
+                    'paper_unit' => $paperName?->unit_type->measurement_unuit
                 ];
             }
         } 
@@ -805,10 +808,11 @@ class VendorsController extends Controller
     {
         $vendor = Vendor::with('vendortype')->findOrFail($request->rowid);
         $warehousesList = Warehouses::where('warehouse_type', 'printing')->get();
+        $profile = Profile::where('status', 'A')->first();
+        $paymentTerms = PaymentTermsModel::where('status', 'A')->get();
         //dd($warehousesList);
 
         if (!empty($vendor->service_type_ids)) {
-           
             $service_types = json_decode($vendor->service_type_ids);
             $finalArr = [];
             
@@ -830,7 +834,7 @@ class VendorsController extends Controller
         $rand = strtoupper(substr(uniqid(sha1(time())),0,4));
         $po_unique_no = $today . $rand;
 
-        $html = view('vendors.add-po-creation', ['vendor' => $vendor, 'paper_list' => $papers, 'warehousesList' => $warehousesList, 'po_unique_no' => $po_unique_no])->render();
+        $html = view('vendors.add-po-creation', ['vendor' => $vendor, 'paper_list' => $papers, 'warehousesList' => $warehousesList, 'po_unique_no' => $po_unique_no, 'profile' => $profile, 'paymentTerms' => $paymentTerms])->render();
         return response()->json($html);
     }
 
@@ -928,7 +932,7 @@ class VendorsController extends Controller
 
     public function getVendorAddress(Request $request){
         $vendor = Warehouses::with('country','state','city')->where(['id' => $request->vendor_id])->first();
-        $data = array('vendors'  => "Company Address: ".$vendor->address.", ".$vendor->city?->city_name.", ".$vendor->state?->state_name.", ".$vendor->country?->country_name."\n"."GST: ".$vendor->gst);
+        $data = array('vendors'  => "Company Name: ".$vendor->company_name."\n"."Contact Person: ".$vendor->contact_person."\n"."Mobile No: ".$vendor->mobile_no."\n"."Email: ".$vendor->email."\n"."Company Address: ".$vendor->address.", ".$vendor->city?->city_name.", ".$vendor->state?->state_name.", ".$vendor->country?->country_name."\n"."GST: ".$vendor->gst);
         echo json_encode($data);
     }
 
@@ -1012,7 +1016,6 @@ class VendorsController extends Controller
     }
 
 
-
     public function vendorWisePoList(Request $request){
         $vendor = Vendor::with('vendortype')->findOrFail($request->rowId);
         $vendorPoList = VendorPurchaseOrders::where('vendor_id', $request->rowId)->get();
@@ -1035,7 +1038,8 @@ class VendorsController extends Controller
 
     public function vendor_po_preview($id){
         $id = decrypt($id);
-        $vendorPoPreviewDetails = VendorPurchaseOrders::with('po_product_details')->where('id', $id)->first();
+        $vendorPoPreviewDetails = VendorPurchaseOrders::with('po_product_details','payment_terms')->where('id', $id)->first();
+        //dd($vendorPoPreviewDetails);
         return view('vendors.vendor-po-preview', [
             'vendorPoPreviewDetails' => $vendorPoPreviewDetails
         ]);
@@ -1045,9 +1049,8 @@ class VendorsController extends Controller
 
     public function editPoCreation(Request $request)
     {
-        //dd($request->rowid);
-
         $vendorPoDetails = VendorPurchaseOrders::with('po_product_details')->where('id', $request->rowid)->first();
+        $paymentTerms = PaymentTermsModel::where('status', 'A')->get();
         //dd($vendorPoDetails);
 
         $vendor_id = $vendorPoDetails->vendor_id;
@@ -1077,12 +1080,9 @@ class VendorsController extends Controller
         $rand = strtoupper(substr(uniqid(sha1(time())),0,4));
         $po_unique_no = $today . $rand;
 
-        $html = view('vendors.edit-po-creation', ['vendor' => $vendor, 'paper_list' => $papers, 'warehousesList' => $warehousesList, 'vendorPoDetails' => $vendorPoDetails])->render();
+        $html = view('vendors.edit-po-creation', ['vendor' => $vendor, 'paper_list' => $papers, 'warehousesList' => $warehousesList, 'vendorPoDetails' => $vendorPoDetails, 'paymentTerms' => $paymentTerms])->render();
         return response()->json($html);
     }
-
-
-
 
 
     public function deletePoDetails(Request $request){
@@ -1119,7 +1119,6 @@ class VendorsController extends Controller
             ]);
         }
     }
-
 
 
     public function updatePoOfVendor(Request $request){
@@ -1209,6 +1208,9 @@ class VendorsController extends Controller
         $allRqest = $request->all();
         $product_id = $request->po_product_id;
 
+        $po_payment_terms = $request->po_payment_terms;
+        $poPaymentTermsDetails = PaymentTermsModel::where('id', $po_payment_terms)->first();
+
         $po_product_arr = array();
         $po_calculation_arr = array();
         if(is_countable($product_id) && count($product_id)>0)
@@ -1247,7 +1249,7 @@ class VendorsController extends Controller
                 'tot_disc' => $tot_disc,
                 'tot_gst' => $tot_gst);
         }
-        $html = view('vendors.preview-po-of-vendor', ['allRqest' => $allRqest, 'po_product_arr' => $po_product_arr, 'po_calculation_arr' => $po_calculation_arr])->render();
+        $html = view('vendors.preview-po-of-vendor', ['allRqest' => $allRqest, 'po_product_arr' => $po_product_arr, 'po_calculation_arr' => $po_calculation_arr, 'poPaymentTermsDetails' =>$poPaymentTermsDetails])->render();
         return response()->json($html);
     }
 

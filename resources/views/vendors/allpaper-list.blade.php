@@ -34,7 +34,7 @@
                                                 <td><input type="checkbox" name="paper_id[]" class="paper_id"
                                                         data-id="{{ $paper->id }}" value="{{ $paper->id }}"></td>
                                                 <td>{{ $paper->id }}</td>
-                                                <td style="text-align: center">{{ $paper->paper_name }}</td>
+                                                <td style="text-align: center">{{ $paper->paper_name }} ({{ $paper?->unit_type->measurement_unuit }})</td>
                                                 <td style="text-align: center">
                                                     <div
                                                         class="d-flex justify-content-center purchase_val_{{ $paper->id }}">

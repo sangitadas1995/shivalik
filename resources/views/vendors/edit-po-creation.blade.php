@@ -204,21 +204,20 @@
                             </div>
                         </div>
 
-
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="mb-3">
                                 <label class="form-label">Update Payment Terms :</label>
                                 <select name="po_payment_terms" id="po_payment_terms" class="form-select">
                                     <option value="">Select</option>
-                                    <option value="1" {{ $vendorPoDetails->po_payment_terms == 1 ? 'selected' : null }}>Advance Payment</option>
-                                    <option value="2" {{ $vendorPoDetails->po_payment_terms == 2 ? 'selected' : null }}>Credit Payment</option>
-                                    <option value="3" {{ $vendorPoDetails->po_payment_terms == 3 ? 'selected' : null }}>Payment on delivery</option>
-                                    <option value="4" {{ $vendorPoDetails->po_payment_terms == 4 ? 'selected' : null }}>Payment after delivery</option>
+                                    @if (!empty($paymentTerms))
+                                    @foreach ($paymentTerms as $pt)
+                                    <option value="{{ $pt->id }}" {{ $vendorPoDetails->po_payment_terms == $pt->id ? 'selected' : null }}>{{ $pt->payement_terms_condition }}</option>
+                                    @endforeach
+                                    @endif
                                 </select>
                                 </div>
                             </div>
-
 
                             <div class="col-md-6" id="toggle_credit_days"  @if ($vendorPoDetails->po_payment_terms == 2) style="display: block;" @else style="display: none;" @endif>
                                 <div class="mb-3">
@@ -227,7 +226,6 @@
                                 </div>
                             </div>
                         </div>
-
 
                         <div class="row">
                             <div class="col-md-12">
