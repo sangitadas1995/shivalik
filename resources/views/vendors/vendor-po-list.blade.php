@@ -38,7 +38,7 @@
                                                 @endif
                                                 </td>
                                                 <td style="text-align: center;width:10%;">{{ $po['po_status'] }}</td>
-                                                <td style="text-align: center;width:30%;"><a href="#" class="edit_po_creation" title="Edit purchase order" data-id ="{{ $po['id'] }}"><img src="{{asset('images/akar-icons_edit.png')}}" /></a><a href="{{route('vendors.vendor-po-preview', encrypt($po['id']))}}" class="" target="__blank" title="View Vendor PO"> <i class="fa fa-eye" aria-hidden="true"></i> </a><a href="#" title="Vendor PO details"><i class="fa fa-search-plus"></i></a></td>
+                                                <td style="text-align: center;width:30%;"><a href="#" class="edit_po_creation" title="Edit purchase order" data-id ="{{ $po['id'] }}"><img src="{{asset('images/akar-icons_edit.png')}}" /></a><a href="{{route('vendors.vendor-po-preview', encrypt($po['id']))}}" class="" target="__blank" title="View Vendor PO"><i class="fa fa-eye" aria-hidden="true"></i></a><a href="#" class="view_po_details" title="Vendor PO details" data-id ="{{ $po['id'] }}"><i class="fa fa-search-plus"></i></a></td>
                                             </tr>
                                             @endforeach
                                             @else
