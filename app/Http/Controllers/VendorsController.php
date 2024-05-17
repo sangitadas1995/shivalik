@@ -23,6 +23,9 @@ use App\Models\VendorPurchaseOrders;
 use App\Models\VendorPurchaseOrderDetails;
 use App\Models\Profile;
 use App\Models\PaymentTermsModel;
+use App\Models\PoStatusHistories;
+use App\Models\PoDeliveryStatusHistories;
+use App\Models\PoProductsDeliveryQtyTrackers;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
@@ -1255,13 +1258,129 @@ class VendorsController extends Controller
 
 
     public function viewPoDetails(Request $request){
-        $vendorPoDetails = VendorPurchaseOrders::with('po_product_details')->where('id', $request->rowid)->first();
+        $vendorPoDetails = VendorPurchaseOrders::with('po_product_details','payment_terms')->where('id', $request->rowid)->first();
 
         $vendor_id = $vendorPoDetails->vendor_id;
         $vendor = Vendor::with('vendortype', 'city', 'state', 'country')->findOrFail($vendor_id);
         //dd($vendorPoDetails);
 
         $html = view('vendors.view-po-details', ['vendor' => $vendor, 'vendorPoDetails' => $vendorPoDetails])->render();
+        return response()->json($html);
+    }
+
+    public function poStatusChange(Request $request){
+        $po_id = $request->rowid;
+        $html = view('vendors.po-status-change', ['po_id' => $po_id])->render();
+        return response()->json($html);
+    }
+
+    public function doPoStatusChange(Request $request){
+        //dd($request->all());
+
+        $id = $request->po_id;
+        $po_status = $request->po_status;
+        $comment = $request->comment;
+
+        $vendorPo = VendorPurchaseOrders::findOrFail($id);
+        $vendorPo->po_status = $po_status;
+        $update = $vendorPo->update();
+
+        $postatushistories = new PoStatusHistories();
+        $postatushistories->purchase_order_id = $id;
+        $postatushistories->purchase_order_status = $po_status;
+        $postatushistories->status_change_comment = $comment;
+        $save = $postatushistories->save();
+
+
+        if ($update) {
+            return response()->json([
+                'status' => "success",
+                'message' => "PO status has been changed successfully"
+            ]);
+        } else {
+            return response()->json([
+                'status' => "fail",
+                'message' => "Failed to change the po status"
+            ]);
+        }
+    }
+
+    public function poDeliveryStatusChange(Request $request){
+        $po_id = $request->rowid;
+        $html = view('vendors.po-delivery-status-change', ['po_id' => $po_id])->render();
+        return response()->json($html);
+    }
+
+    public function doPoDeliveryStatusChange(Request $request){
+        //dd($request->all());
+
+        $id = $request->po_id;
+        $po_delivery_status = $request->po_delivery_status;
+
+        $vendorPo = VendorPurchaseOrders::findOrFail($id);
+        $vendorPo->delivery_status = $po_delivery_status;
+        $update = $vendorPo->update();
+
+        $podeliverystatushistories = new PoDeliveryStatusHistories();
+        $podeliverystatushistories->purchase_order_id = $id;
+        $podeliverystatushistories->purchase_order_delivery_status = $po_delivery_status;
+        $save = $podeliverystatushistories->save();
+
+
+        if ($update) {
+            return response()->json([
+                'status' => "success",
+                'message' => "PO delivery status has been changed successfully"
+            ]);
+        } else {
+            return response()->json([
+                'status' => "fail",
+                'message' => "Failed to change the po delivery status"
+            ]);
+        }
+    }
+
+
+    public function itemDeliveryUpdateShow(Request $request){
+        $po_id = $request->rowid;
+
+        $vendorPoDetails = VendorPurchaseOrderDetails::with('paper_type')->where('purchase_order_id', $po_id)->get();
+        //dd($vendorPoDetails);
+
+        $po_details_arr = array();
+        foreach($vendorPoDetails as $vd){
+            $PoPdDvQtyTrackDetails = PoProductsDeliveryQtyTrackers::where('purchase_order_id', $vd->purchase_order_id)->where('product_id', $vd->product_id)->get();
+            $total_qty_received = 0;
+            $total_qty_due = 0;
+            $poPdDvQtyDetArr = array();
+            $i=0;
+            foreach($PoPdDvQtyTrackDetails as $povd){
+                $total_qty_received += $povd->qty_received;
+                if($i==0)
+                {
+                    $remain_qty = ($vd->order_qty-$povd->qty_received);
+                }
+                else
+                {
+                    $remain_qty = ($remain_qty-$povd->qty_received);
+                }
+                $poPdDvQtyDetArr[] = array('po_pd_track_id' =>$povd->id, 'qty_received' =>$povd->qty_received, 'delivery_date' =>$povd->delivery_date, 'remain_qty' => $remain_qty);
+
+                $i++;
+            }
+            $total_qty_due = ($vd->order_qty-$total_qty_received);
+
+            $po_details_arr[] = array('po_details_id' => $vd->id, 'po_id' => $vd->purchase_order_id, 'product_id' => $vd->product_id, 'product_name' => $vd?->paper_type->paper_name, 'product_unit' => $vd?->paper_type?->unit_type->measurement_unuit, 'order_qty' => $vd->order_qty, 'total_qty_received' => $total_qty_received, 'total_qty_due' => $total_qty_due, 'childTrackarr' => $poPdDvQtyDetArr);
+
+        }
+
+
+        //dd($po_details_arr);
+
+
+
+
+        $html = view('vendors.item-delivery-update-show', ['po_id' => $po_id, 'po_details_arr' => $po_details_arr])->render();
         return response()->json($html);
     }
 }

@@ -103,6 +103,14 @@ Route::middleware('auth')->group(function () {
 
         Route::post('view-po-details', [VendorsController::class, 'viewPoDetails'])->name('view-po-details');
 
+        Route::post('po-status-change', [VendorsController::class, 'poStatusChange'])->name('po-status-change');
+        Route::post('do-po-status-change', [VendorsController::class, 'doPoStatusChange'])->name('do-po-status-change');
+
+        Route::post('po-delivery-status-change', [VendorsController::class, 'poDeliveryStatusChange'])->name('po-delivery-status-change');
+        Route::post('do-po-delivery-status-change', [VendorsController::class, 'doPoDeliveryStatusChange'])->name('do-po-delivery-status-change');
+
+        Route::post('item-delivery-update-show', [VendorsController::class, 'itemDeliveryUpdateShow'])->name('item-delivery-update-show');
+
 
 
         Route::prefix('paper')->name('paper.')->group(function () {
