@@ -31,7 +31,7 @@
                                             @foreach ($paper_list as $paper)
                                             <tr>
                                                 <td>{{ $paper['paper_id'] }}</td>
-                                                <td style="text-align: center">{{ $paper['paper_name'] }}</td>
+                                                <td style="text-align: center">{{ $paper['paper_name'] }} ({{ $paper['paper_unit'] }})</td>
                                                 <td style="text-align: center">{{ $paper['purchase_price'] }}</td>
                                             </tr>
                                             @endforeach

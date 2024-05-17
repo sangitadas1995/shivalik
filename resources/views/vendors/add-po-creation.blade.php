@@ -56,7 +56,11 @@
                             <div class="col-md-4">
                                 <div class="mb-3">
                                 <label class="form-label">Order By :</label></br>
-                                <textarea name="order_by" id="order_by" rows="5" cols="30" style="white-space: pre-line;width: 100%;"><?php echo "shivalik"."\n";?></textarea>
+                                <textarea name="order_by" id="order_by" rows="5" cols="30" style="white-space: pre-line;width: 100%;">@php echo $profile->company_name."\n"."Mobile No: ".$profile->mobile_no."\n"."Email: ".$profile->email."\n".$profile->address."\n"."GST: ".$profile->gst_no; @endphp</textarea>
+
+                                <!-- <script>
+                                    CKEDITOR.replace( 'order_by' );
+                                </script> -->
                                 </div>
                             </div>
 
@@ -64,7 +68,7 @@
                                 <div class="mb-3">
                                 <label class="form-label">Order To :</label></br>
                                 <input type="hidden" class="form-control" name="vendor_id" id="vendor_id" value="{{$vendor->id}}" />
-                                <textarea name="vendor_order_details" id="vendor_order_details" rows="5" cols="30" style="white-space: pre-line;width: 100%;"><?php echo $vendor->company_name."\n".$vendor->address."\n"."Email: ".$vendor->email."\n"."Mobile: ".$vendor->mobile_no."\n"."GST: ".$vendor->gst_no;?></textarea>
+                                <textarea name="vendor_order_details" id="vendor_order_details" rows="5" cols="30" style="white-space: pre-line;width: 100%;">@php echo $vendor->company_name."\n".$vendor->address."\n"."Email: ".$vendor->email."\n"."Mobile: ".$vendor->mobile_no."\n"."GST: ".$vendor->gst_no;@endphp</textarea>
                                 </div>
                             </div>
 
@@ -80,9 +84,7 @@
                                     @endif
                                 </select>
                                 </label>
-
                                 <textarea name="warehouse_ship_details" id="warehouse_ship_details" rows="3" cols="30" style="white-space: pre-line;"></textarea>
-                                
                                 </div>
                             </div>    
                         </div>
@@ -179,10 +181,11 @@
                                 <label class="form-label">Update Payment Terms :</label>
                                 <select name="po_payment_terms" id="po_payment_terms" class="form-select">
                                     <option value="">Select</option>
-                                    <option value="1">Advance Payment</option>
-                                    <option value="2">Credit Payment</option>
-                                    <option value="3">Payment on delivery</option>
-                                    <option value="4">Payment after delivery</option>
+                                    @if (!empty($paymentTerms))
+                                    @foreach ($paymentTerms as $pt)
+                                    <option value="{{ $pt->id }}">{{ $pt->payement_terms_condition }}</option>
+                                    @endforeach
+                                    @endif
                                 </select>
                                 </div>
                             </div>

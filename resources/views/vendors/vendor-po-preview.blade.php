@@ -193,6 +193,39 @@
         </table>
     </div>
 
+
+    @if (!empty($vendorPoPreviewDetails->po_payment_terms))
+    <div class="head-invoice" style="width:100%; height:auto; display: inline-block; margin: 0 0 15px 0;">
+        <table style="width:100%; border-collapse: collapse; border:#888888 1px solid;">
+            <thead>
+                <tr>
+                    <th style="box-sizing: border-box; padding: 10px 15px; border-bottom: #969696 1px solid; vertical-align: top; background: #d6d6d6; text-align:left">
+                        <strong style="font-size:15px; color:#000;margin: 0; font-weight:700; width: 100%;font-family: century-gothic;">PAYMENT &amp; TERMS</strong>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td style="box-sizing: border-box; padding: 15px; vertical-align: middle; background: #FFF;">
+                        <span style="font-size:15px; color:#000;margin: 0; font-weight:400; width: 100%; display:inline-block; text-align: left; line-height: 20px;font-family: century-gothic;">
+                        @php    
+                        if($vendorPoPreviewDetails->po_payment_terms==2){
+                            echo $vendorPoPreviewDetails?->payment_terms->payement_terms_condition." After ".$vendorPoPreviewDetails->po_payment_credit_days." days";
+                        }
+                        else
+                        {
+                            echo $vendorPoPreviewDetails?->payment_terms->payement_terms_condition;
+                        }
+                        @endphp
+                        </span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    @endif
+
+
     @if (!empty($vendorPoPreviewDetails->terms_conditions))
     <div class="head-invoice" style="width:100%; height:auto; display: inline-block; margin: 0 0 15px 0;">
         <table style="width:100%; border-collapse: collapse; border:#888888 1px solid;">
@@ -228,6 +261,28 @@
                 <tr>
                     <td style="box-sizing: border-box; padding: 15px; vertical-align: middle; background: #FFF;">
                         <span style="font-size:15px; color:#000;margin: 0; font-weight:400; width: 100%; display:inline-block; text-align: left; line-height: 20px;font-family: century-gothic;">{{$vendorPoPreviewDetails->additional_note}}</span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    @endif
+
+
+    @if (!empty($vendorPoPreviewDetails->vendor_bank_details))
+    <div class="head-invoice" style="width:100%; height:auto; display: inline-block; margin: 0 0 15px 0;">
+        <table style="width:100%; border-collapse: collapse; border:#888888 1px solid;">
+            <thead>
+                <tr>
+                    <th style="box-sizing: border-box; padding: 10px 15px; border-bottom: #969696 1px solid; vertical-align: top; background: #d6d6d6; text-align:left">
+                        <strong style="font-size:15px; color:#000;margin: 0; font-weight:700; width: 100%;font-family: century-gothic;">BANK &amp; DETAILS</strong>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td style="box-sizing: border-box; padding: 15px; vertical-align: middle; background: #FFF;">
+                        <span style="font-size:15px; color:#000;margin: 0; font-weight:400; width: 100%; display:inline-block; text-align: left; line-height: 20px;font-family: century-gothic;">{{$vendorPoPreviewDetails->vendor_bank_details}}</span>
                     </td>
                 </tr>
             </tbody>

@@ -62,7 +62,7 @@ trait PaperTypeTrait
 
     public function getPaperType_name($ids)
     {
-        $paper_name = PaperTypes::whereIn('id', $ids)
+        $paper_name = PaperTypes::with('unit_type')->whereIn('id', $ids)
             ->where(['status' => 'A'])
             ->orderBy('id', 'desc')
             ->get();
@@ -72,7 +72,7 @@ trait PaperTypeTrait
 
     public function getPaperNameById($id)
     {
-        $paper_name = PaperTypes::where([
+        $paper_name = PaperTypes::with('unit_type')->where([
             'id' => $id
         ])
         ->first();
