@@ -258,6 +258,7 @@ Route::middleware('auth')->group(function () {
         Route::post('store-terms', [SettingController::class, 'storePaymentTerms'])->name('store-terms');
         Route::post('update-payement-terms-status', [SettingController::class, 'paymentStatusUpdate'])->name('update-payement-terms-status');
         Route::get('edit-payment-terms/{id}', [SettingController::class, 'editPaymentTermsCondition'])->name('edit-payment-terms');
+        Route::post('update-payement-terms/{id}', [SettingController::class, 'updatePayementTerms'])->name('update-payement-terms');
     });
 
     Route::prefix('papertype')->name('papertype.')->group(function () {

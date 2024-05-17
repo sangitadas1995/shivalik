@@ -412,4 +412,24 @@ class SettingController extends Controller
             'paymentTerms' => $paymentTerms
         ]);
     }
+
+    public function updatePayementTerms(Request $request , $id){
+        $id = decrypt($id);
+        $request->validate([
+            'payement_terms_condition' => ['required'],
+        ]);
+        
+        try {
+            $paymentTerms = PaymentTermsModel::find($id);
+            $paymentTerms->payement_terms_condition   = $request->payement_terms_condition;
+            $update = $paymentTerms->update();
+            if ($update) {
+                return redirect()->route('settings.payment-terms-condition')->with('success', 'Payment terms and condition has been updated successfully.');
+            } else {
+                return redirect()->back()->with('fail', 'Failed to updated the Payment terms and condition.');
+            }
+        } catch (Exception $th) {
+            return redirect()->back()->with('fail', trans('messages.server_error'));
+        }
+    }
 }

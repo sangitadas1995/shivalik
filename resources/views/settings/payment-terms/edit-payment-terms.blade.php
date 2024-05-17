@@ -14,7 +14,7 @@
 </div>
 <div class="card add-new-location mt-2">
     <div class="card-body">
-        <form action="{{ route('settings.store-terms') }}" method="POST" id="payment_termsAdd-form">
+        <form action="{{ route('settings.update-payement-terms', encrypt($paymentTerms->id)) }}" method="POST" id="payment_termsAdd-form">
             @csrf
             <div class="row">
                 <div class="col-md-12">
@@ -23,7 +23,7 @@
                 <div class="col-md-12">
                     <div class="mb-3">
                         <label class="form-label"><span class="text-danger">*</span>Payment Terms & Condition:</label>
-                        <input type="text" class="form-control alphaNumericChar" name="payement_terms_condition" id="name" value="{{ $paymentTerms->payement_terms_condition }}"/>
+                        <input type="text" class="form-control" name="payement_terms_condition" id="name" value="{{ $paymentTerms->payement_terms_condition }}"/>
                         <small class="text-danger error_payement_terms_condition"></small>
                     </div>
                 </div>
