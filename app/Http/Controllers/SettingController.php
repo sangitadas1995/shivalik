@@ -432,4 +432,5 @@ class SettingController extends Controller
             return redirect()->back()->with('fail', trans('messages.server_error'));
         }
     }
+    
 }
