@@ -7,7 +7,7 @@
    <div class="row justify-content-between align-items-center">
       <div class="col-md-4">
          <h2>
-            <a href="#"><i class="ri-arrow-left-line"></i></a> Edit Payment Terms & Condition
+            <a href="#"><i class="ri-arrow-left-line"></i></a> Edit Payment Terms
          </h2>
       </div>
    </div>

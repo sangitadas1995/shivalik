@@ -8,6 +8,7 @@ use App\Models\Profile;
 use App\Models\ServiceType;
 use App\Models\Vendor_type;
 use Illuminate\Http\Request;
+use App\Models\AdminSettingTerms;
 use App\Models\PaymentTermsModel;
 use Illuminate\Contracts\Encryption\DecryptException;
 
@@ -433,4 +434,10 @@ class SettingController extends Controller
         }
     }
     
+    /***** TERM AND CONDITION *****/
+    public function adminSettingTerms(){
+        $adminTerms = AdminSettingTerms::findOrFail($request->id);
+        return view('settings.adminTermSettings.admin-settings',['adminTerms' => $adminTerms]); 
+
+    }
 }
