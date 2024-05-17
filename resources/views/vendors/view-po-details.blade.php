@@ -32,7 +32,7 @@
                                     <strong>PO Date</strong><br>{{date("d-M-Y",strtotime($vendorPoDetails->purchase_order_date))}}
                                 </td>                                
                                 <td style="width:13%;">
-                                    <strong>PO Status</strong><br><a href="JavaScript:void(0)" class="po_status_change" data-po_id="48" id="po_status_div_48">{{ucfirst($vendorPoDetails->po_status)}}</a>
+                                    <strong>PO Status</strong><br><a href="javascript:void(0);" class="text-primary po_status_change" data-id="{{$vendorPoDetails->id}}">{{ucfirst($vendorPoDetails->po_status)}}</a>
                                 </td>
                                 <td style="width:19%;">
                                     <strong>Delivery Date</strong><br>{{date("d-M-Y",strtotime($vendorPoDetails->exp_delivery_date))}}                             
@@ -62,19 +62,42 @@
                 </div>
             </div>
             <div class="border-block">
-                <div class="value-title"><span>Product/ Item Delivery Received:</span> <a href="JavaScript:void(0)" id="item_delivery_update_view" class="text-primary"> <u>Update</u></a></div>
-                <div class="value-title"><span>Product/ Item Delivery Status:</span> <a href="JavaScript:void(0)" id="po_delivery_status_change" class="text-primary" data-po_id="48"> <u>Not Received</u></a></div>
+                <div class="value-title"><span>Product/ Item Delivery Received:</span> <a href="JavaScript:void(0)" data-id="{{$vendorPoDetails->id}}" class="text-primary item_delivery_update_view">Update</a></div>
+                <div class="value-title"><span>Product/ Item Delivery Status:</span> <a href="javascript:void(0);" class="text-primary po_delivery_status_change" data-id="{{$vendorPoDetails->id}}">
+                @php    
+                if($vendorPoDetails->delivery_status=="not_received"){
+                    echo "Not Received";
+                }
+                if($vendorPoDetails->delivery_status=="partial_received"){
+                    echo "Partial Received";
+                }
+                if($vendorPoDetails->delivery_status=="received"){
+                    echo "Received";
+                }
+                @endphp
+                </a>
+                </div>
                 <div class="value-title"><span>Deal Value:</span> INR {{$vendorPoDetails->total_amount !="" ? number_format(round($vendorPoDetails->total_amount),2) : 'N/A'}}</div>
 
-<!--                 <div class="tholder max-w-540">
+                <div class="tholder max-w-540">
                     <table class="table order-details-border-table">
                         <tbody>
                             <tr>
+                                @if (!empty($vendorPoDetails->po_payment_terms))
                                 <td>
                                     <strong>Payment Terms</strong><br>
-                                    Credit Payment After 10 Days                       
+                                    @php    
+                                    if($vendorPoDetails->po_payment_terms==2){
+                                        echo $vendorPoDetails?->payment_terms->payement_terms_condition." After ".$vendorPoDetails->po_payment_credit_days." days";
+                                    }
+                                    else
+                                    {
+                                        echo $vendorPoDetails?->payment_terms->payement_terms_condition;
+                                    }
+                                    @endphp                       
                                 </td>
-                                <td>
+                                @endif
+<!--                                 <td>
                                     <strong>Payment Made</strong><br>INR 
                                     <span id="po_payment_recived_div">200.00</span>
                                 </td>
@@ -82,11 +105,11 @@
                                     <strong>Outstanding Balance</strong><br><span class="red">INR  
                                     <font id="po_balance_payment_div">513.90</font></span><br>
                                     (<a href="JavaScript:void(0)" class="view_payment_ledger">Update Vendor Payment Released</a>)
-                                </td>
+                                </td> -->
                             </tr>
                         </tbody>
                    </table>
-                </div> -->
+                </div>
             </div>
             
 <!--             <div class="border-block no-border">

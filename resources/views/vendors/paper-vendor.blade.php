@@ -97,6 +97,27 @@
     <div class="modal-dialog modal-dialog-scrollable  modal-dialog-centered">
     </div>
 </div>
+
+<div class="modal fade" id="poStatusChangeModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="render_po_status_change"></div>
+    <div class="modal-dialog modal-dialog-scrollable  modal-dialog-centered">
+    </div>
+</div>
+
+<div class="modal fade" id="poDeliveryStatusChangeModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="render_po_delivery_status_change"></div>
+    <div class="modal-dialog modal-dialog-scrollable  modal-dialog-centered">
+    </div>
+</div>
+
+<div class="modal fade" id="itemDeliveryViewModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="render_item_delivery_view"></div>
+    <div class="modal-dialog modal-dialog-scrollable  modal-dialog-centered">
+    </div>
+</div>
 @endsection
 
 @section('scripts')
@@ -210,9 +231,6 @@
             });
             }
         });
-
-
-
 
         $(document).on('change', '#warehouse_ship_id', function () {
           let vendor_id = this.value;
@@ -465,6 +483,199 @@
             });
         }
     });
+
+
+    $(document).on('click', '.po_status_change', function (e) {
+        e.preventDefault();
+        var __e = $(this);
+        var rowid = __e.data('id');
+        //alert(rowid);
+        if (rowid) {
+            $.ajax({
+                type: "post",
+                url: "{{ route('vendors.po-status-change') }}",
+                data: {
+                    rowid
+                },
+                dataType: "json",
+                success: function (response) {
+                    $('.render_po_status_change').html(response);
+                    $('#poStatusChangeModal').modal('show');
+                }
+            });
+        }
+    });
+
+    $(document).on('click', '.changePoStatus', function (e) {
+        e.preventDefault();
+        var po_id = $("#po_id").val();
+        var po_status = $("#po_status").val();
+        var comment = $("#comment").val();
+        //alert(comment);
+        if(po_status=="")
+        {
+            $('.error_po_status').html('Please select status.');
+        }
+        else
+        {
+            $('.error_po_status').html('');
+            if (po_id) {
+                $.ajax({
+                    type: "post",
+                    url: "{{ route('vendors.do-po-status-change') }}",
+                    data: {
+                        po_id:po_id,po_status:po_status,comment:comment
+                    },
+                    dataType: "json",
+                    success: function (response) {
+                    if(response.status=="success")
+                    {
+                        return Swal.fire('Success!', response.message, 'success').then((result) => {
+                          if (result.isConfirmed) {
+                           $('#poStatusChangeModal').modal('hide');
+                           $('.po_status_change').html(po_status);
+                          }
+                        });
+                    }
+                    else{
+                        return Swal.fire('Error!', response.message, 'error');
+                    }
+                    }
+                });
+            }
+        }
+    });
+
+    $(document).on('click', '.po_delivery_status_change', function (e) {
+        e.preventDefault();
+        var __e = $(this);
+        var rowid = __e.data('id');
+        //alert(rowid);
+        if (rowid) {
+            $.ajax({
+                type: "post",
+                url: "{{ route('vendors.po-delivery-status-change') }}",
+                data: {
+                    rowid
+                },
+                dataType: "json",
+                success: function (response) {
+                    $('.render_po_delivery_status_change').html(response);
+                    $('#poDeliveryStatusChangeModal').modal('show');
+                }
+            });
+        }
+    });
+
+    $(document).on('click', '.changePoDeliveryStatus', function (e) {
+        e.preventDefault();
+        var podvstat = '';
+        var po_id = $("#po_id").val();
+        var po_delivery_status = $("#po_delivery_status").val();
+        if(po_delivery_status=="")
+        {
+            $('.error_po_delivery_status').html('Please select status.');
+        }
+        else
+        {
+            if(po_delivery_status=="not_received")
+            {
+                podvstat = 'Not Received';
+            }
+            if(po_delivery_status=="partial_received")
+            {
+                podvstat = 'Partial Received';
+            }
+            if(po_delivery_status=="received")
+            {
+                podvstat = 'Received';
+            }
+            $('.error_po_delivery_status').html('');
+            if (po_id) {
+                $.ajax({
+                    type: "post",
+                    url: "{{ route('vendors.do-po-delivery-status-change') }}",
+                    data: {
+                        po_id:po_id,po_delivery_status:po_delivery_status
+                    },
+                    dataType: "json",
+                    success: function (response) {
+                    if(response.status=="success")
+                    {
+                        return Swal.fire('Success!', response.message, 'success').then((result) => {
+                          if (result.isConfirmed) {
+                           $('#poDeliveryStatusChangeModal').modal('hide');
+                           $('.po_delivery_status_change').html(podvstat);
+                          }
+                        });
+                    }
+                    else{
+                        return Swal.fire('Error!', response.message, 'error');
+                    }
+                    }
+                });
+            }
+        }
+    });
+
+
+    $(document).on('click', '.item_delivery_update_view', function (e) {
+        e.preventDefault();
+        var __e = $(this);
+        var rowid = __e.data('id');
+        //alert(rowid);
+        if (rowid) {
+            $.ajax({
+                type: "post",
+                url: "{{ route('vendors.item-delivery-update-show') }}",
+                data: {
+                    rowid
+                },
+                dataType: "json",
+                success: function (response) {
+                    $('.render_item_delivery_view').html(response);
+                    $('#itemDeliveryViewModal').modal('show');
+                }
+            });
+        }
+    });
+
+
+
+    $(document).on('change', '#po_product_delevery', function () {
+        var product_id = this.value;
+        var unit_type = $(this).find(':selected').attr('data-product-unit');
+        var order_qty = $(this).find(':selected').attr('data-p-quantity');
+        var receive_qty = $(this).find(':selected').attr('data-p-total-quantity-received');
+        var due_qty = $(this).find(':selected').attr('data-p-total-quantity-due');
+        //alert(unit_type);
+
+        $("#unit_type").val(unit_type);
+        $("#qty_ordered").val(order_qty);
+        $("#qty_received").val(due_qty);
+        $("#balance").val(due_qty);
+     });
+
+
+    $(document).on("click",".show_log",function(e){
+        let id = $(this).attr("data-id");
+        //alert(id);
+        $(".inner_div_"+id).show("slow","linear",function(){
+            $("#view_log_"+id).html('<i class="fa fa-level-up" aria-hidden="true"></i>');
+            $("#view_log_"+id).removeClass("show_log");
+            $("#view_log_"+id).addClass("hide_log");
+        });
+    });
+
+    $(document).on("click",".hide_log",function(e){
+        let id = $(this).attr("data-id");
+        $(".inner_div_"+id).hide("slow","linear",function(){
+            $("#view_log_"+id).html('<i class="fa fa-level-down" aria-hidden="true"></i>');
+            $("#view_log_"+id).removeClass("hide_log");
+            $("#view_log_"+id).addClass("show_log");
+        });
+    });
+
 
 
 
