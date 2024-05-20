@@ -118,10 +118,34 @@
     <div class="modal-dialog modal-dialog-scrollable  modal-dialog-centered">
     </div>
 </div>
+
+<div class="modal fade" id="viewPaymentLedgerModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="render_view_payment_ledger"></div>
+    <div class="modal-dialog modal-dialog-scrollable  modal-dialog-centered">
+    </div>
+</div>
 @endsection
 
 @section('scripts')
 <script>
+var dateControler = {
+    currentDate : null
+}
+
+$(document).on( "change", "#payment_date",function( event, ui ) {
+    var now = new Date();
+    var selectedDate = new Date($(this).val());
+    
+    if(selectedDate > now) {
+        $(this).val(dateControler.currentDate)
+    } else {
+        dateControler.currentDate = $(this).val();
+    }
+});
+
+
+
     $(document).ready(function () {
         $.ajaxSetup({
             headers: {
@@ -364,6 +388,26 @@
 
 
     });
+
+
+function showPaymentLedger(po_id)
+{
+    $.ajax({
+        type: "post",
+        url: "{{ route('vendors.show-pmt-rcv-by-vendor') }}",
+        data: {
+            po_id
+        },
+        dataType: "json",
+        success: function (response) {
+            //alert(response.table_data);
+            console.log(response.table_data);
+            alert($('#x123').html());
+            //$('#viewPaymentLedgerModal').modal('show');
+        }
+    });
+}
+//showPaymentLedger();
 
 
     $(document).on('change', '.paper_id', function (e) {
@@ -640,8 +684,6 @@
         }
     });
 
-
-
     $(document).on('change', '#po_product_delevery', function () {
         var product_id = this.value;
         var unit_type = $(this).find(':selected').attr('data-product-unit');
@@ -674,6 +716,85 @@
             $("#view_log_"+id).removeClass("hide_log");
             $("#view_log_"+id).addClass("show_log");
         });
+    });
+
+
+    $(document).on('click', '.view_payment_ledger', function (e) {
+        e.preventDefault();
+        var __e = $(this);
+        var rowid = __e.data('id');
+        //showPaymentLedger(rowid);
+        //alert(rowid);
+        if (rowid) {
+            $.ajax({
+                type: "post",
+                url: "{{ route('vendors.view-payment-ledger') }}",
+                data: {
+                    rowid
+                },
+                dataType: "json",
+                success: function (response) {
+                    $('.render_view_payment_ledger').html(response);
+                    $('#viewPaymentLedgerModal').modal('show');
+                }
+            });
+        }
+    });
+
+
+    $(document).on('click', '.addPaymentLedger', function (e) {
+        //alert("666");
+        e.preventDefault();
+        var formdata = $("#create_pmt_rcv_by_vendor").serialize();
+
+        var payment_date = $("#payment_date").val();
+        var payment_amount = $("#payment_amount").val();
+        var payment_mode_id = $("#payment_mode_id").val();
+
+        if(payment_date=="")
+        {
+            $('.error_payment_date').html('Please choose date');
+            $('.error_payment_amount').html('');
+            $('.error_payment_mode_id').html('');
+        }
+        else if(payment_amount=="")
+        {
+            $('.error_payment_amount').html('Please provide amount');
+            $('.error_payment_date').html('');
+            $('.error_payment_mode_id').html('');
+        }
+        else if(payment_mode_id=="")
+        {
+            $('.error_payment_mode_id').html('Please choose payment mode');
+            $('.error_payment_date').html('');
+            $('.error_payment_amount').html('');
+        }
+        else
+        {
+            $.ajax({
+            url: "{{ route('vendors.store-pmt-rcv-by-vendor') }}",
+            method: 'POST',
+            data: formdata,
+            dataType: 'json',
+            success: function(response) {
+                if(response.status=="success")
+                {
+                    return Swal.fire('Success!', response.message, 'success').then((result) => {
+                      if (result.isConfirmed) {
+                       $('#viewPaymentLedgerModal').modal('hide');
+                       //window.location.reload();
+                      }
+                    });
+                }
+                else{
+                    return Swal.fire('Error!', response.message, 'error');
+                }
+            },
+            error: function(xhr, status, error) {
+                return Swal.fire('Error!', 'Something went wrong, Plese try again.', 'error');
+            }
+            });
+        }
     });
 
 

@@ -26,6 +26,8 @@ use App\Models\PaymentTermsModel;
 use App\Models\PoStatusHistories;
 use App\Models\PoDeliveryStatusHistories;
 use App\Models\PoProductsDeliveryQtyTrackers;
+use App\Models\PoPaymentModes;
+use App\Models\PoPaymentReceivedByVendors;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
@@ -1262,9 +1264,23 @@ class VendorsController extends Controller
 
         $vendor_id = $vendorPoDetails->vendor_id;
         $vendor = Vendor::with('vendortype', 'city', 'state', 'country')->findOrFail($vendor_id);
-        //dd($vendorPoDetails);
 
-        $html = view('vendors.view-po-details', ['vendor' => $vendor, 'vendorPoDetails' => $vendorPoDetails])->render();
+        $totalPaymentRcvByVendor = PoPaymentReceivedByVendors::where('purchase_order_id', $request->rowid)->sum('payment_amount');
+        $poPmtRcvDts = PoPaymentReceivedByVendors::select('balance')->where('purchase_order_id', $request->rowid)->orderBy('id', 'desc')->first();
+        if(!empty($totalPaymentRcvByVendor))
+        {
+            $total_payment_rcv_by_vendor = $totalPaymentRcvByVendor;
+            $outstanding_amount = $poPmtRcvDts->balance;
+        }
+        else
+        {
+            $total_payment_rcv_by_vendor = 0;
+            $outstanding_amount = $vendorPoDetails->total_amount;
+        }
+
+        //dd($totalPaymentRcvByVendor);
+
+        $html = view('vendors.view-po-details', ['vendor' => $vendor, 'vendorPoDetails' => $vendorPoDetails, 'total_payment_rcv_by_vendor' => $total_payment_rcv_by_vendor, 'outstanding_amount' => $outstanding_amount])->render();
         return response()->json($html);
     }
 
@@ -1455,5 +1471,93 @@ class VendorsController extends Controller
                 'message' => "Failed to added item delivery"
             ]);
         }
+    }
+
+
+
+    public function viewPaymentLedger(Request $request){
+        //dd($request->rowid);
+
+        $poPaymentModes = PoPaymentModes::where('status', 'A')->get();
+
+        $po_id = $request->rowid;
+
+        $vendorPoDetails = VendorPurchaseOrders::with('po_product_details','po_payment_received_by_vendors','payment_terms')->where('id', $po_id)->first();
+
+        //dd($vendorPoDetails);
+
+        $vendor_id = $vendorPoDetails->vendor_id;
+        $vendor = Vendor::with('vendortype', 'city', 'state', 'country')->findOrFail($vendor_id);
+
+        $html = view('vendors.view-payment-ledger', ['po_id' => $po_id, 'vendor' => $vendor, 'vendorPoDetails' => $vendorPoDetails, 'poPaymentModes' => $poPaymentModes])->render();
+        return response()->json($html);
+    }
+
+
+
+
+    public function storePmtRcvByVendor(Request $request){
+        //dd($request->all());
+        try {
+            $poPmtRcvDts = PoPaymentReceivedByVendors::select('balance')->where('purchase_order_id', $request->purchase_order_id)->orderBy('id', 'desc')->first();
+            if(!empty($poPmtRcvDts))
+            {
+                $balance = ($poPmtRcvDts->balance - $request->payment_amount);
+            }
+            else
+            {
+                $balance = ($request->total_po_amount - $request->payment_amount);
+            }
+
+            $poPaymentReceivedByVendors = new PoPaymentReceivedByVendors();
+            $poPaymentReceivedByVendors->purchase_order_id = $request->purchase_order_id;
+            $poPaymentReceivedByVendors->payment_mode_id = $request->payment_mode_id;
+            $poPaymentReceivedByVendors->payment_amount = $request->payment_amount;
+            $poPaymentReceivedByVendors->balance = $balance;
+            $poPaymentReceivedByVendors->payment_date = $request->payment_date;
+            $poPaymentReceivedByVendors->narration = $request->narration;
+            $save = $poPaymentReceivedByVendors->save();
+
+            if ($save) {
+                return response()->json([
+                    'status' => "success",
+                    'message' => "Payment successfully received by vendor"
+                ]);
+            } else {
+                return response()->json([
+                    'status' => "fail",
+                    'message' => "Failed to create the payment"
+                ]);
+            }
+        } catch (Exception $th) {
+             return response()->json([
+                'status' => "fail",
+                'message' => "Failed to create the payment"
+            ]);
+        }
+    }
+
+
+
+    public function showPmtRcvByVendor(Request $request){
+        //dd($request->all());
+
+        $vendorPoDetails = VendorPurchaseOrders::where('id', $request->po_id)->get();
+        //dd($vendorPoDetails);
+
+        //$html = view('vendors.show-payment-ledge-list', ['vendorPoDetails' => $vendorPoDetails])->render();
+        //return response()->json($html);
+        $output="";
+
+                $output .= '<tr><td style="text-align: center;">hhhhh123</td></tr>';
+
+        $data = array(
+            'table_data'  => $output
+        );
+        echo json_encode($data);
+
+
+
+
     }
 }
