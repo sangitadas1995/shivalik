@@ -110,6 +110,8 @@ Route::middleware('auth')->group(function () {
         Route::post('do-po-delivery-status-change', [VendorsController::class, 'doPoDeliveryStatusChange'])->name('do-po-delivery-status-change');
 
         Route::post('item-delivery-update-show', [VendorsController::class, 'itemDeliveryUpdateShow'])->name('item-delivery-update-show');
+        Route::post('delete-po-items', [VendorsController::class, 'deletePoItems'])->name('delete-po-items');
+        Route::post('add-po-item-delivery', [VendorsController::class, 'addPoItemDelivery'])->name('add-po-item-delivery');
 
 
 

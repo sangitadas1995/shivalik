@@ -50,22 +50,24 @@
                             <div class="col-md-2">
                                 <label>Quantity Received:</label>
                                 <input type="text" class="form-control" name="qty_received" id="qty_received"/>
+                                <span class="text-danger error_qty_received"></span>
                             </div>
                             <div class="col-md-2">
                                 <label>Delivery Date:</label>
                                 <input type="date" class="form-control" name="delivery_date" id="delivery_date" />
+                                <span class="text-danger error_delivery_date"></span>
                             </div>
                             <div class="col-md-2">
                                 <label>Balance:</label>
                                 <input type="text" class="form-control" name="balance" id="balance" readonly="true"/>
                             </div>
-                            <div class="col-md-2">
-                                <button type="button" class="btn black-btn changePoStatus">Add</button>
+                            <div class="col-md-2 mt-4">
+                                <button type="button" class="btn black-btn addPoItemDelivery" id={{$po_id}}>Add</button>
                             </div>
                         </div>
 
                         <div class="row">
-                        <div class="table-responsive table-sec mb-4">
+                        <div class="table-responsive table-sec mb-4 mt-4">
                         <table class="table table-striped" id="vendors_list_table">
                         <thead>
                         <tr>
@@ -90,7 +92,7 @@
                             <td style="text-align: center;width: 15%;">{{$po_details_arr[$i]['product_unit']}}</td>
                             <td style="text-align: center;width: 15%;">{{$po_details_arr[$i]['order_qty']}}</td>
                             <td style="text-align: center;width: 12%;">{{$po_details_arr[$i]['total_qty_received']}}</td>
-                            <td style="text-align: center;width: 13%;">&nbsp;</td>
+                            <td style="text-align: center;width: 13%;">{{$po_details_arr[$i]['delivery_date']}}</td>
                             <td style="text-align: center;width: 15%;">{{$po_details_arr[$i]['total_qty_due']}}</td>
                             <td style="text-align: center;width: 10%;">
                                 <a href="JavaScript:void(0)" id="view_log_{{$po_details_arr[$i]['po_details_id']}}" class="show_log" data-id="{{$po_details_arr[$i]['po_details_id']}}"><i class="fa fa-level-down" aria-hidden="true"></i></a>
@@ -110,7 +112,7 @@
                                 <td style="text-align: center;width: 13%;">{{$po_details_arr[$i]['childTrackarr'][$j]['delivery_date']}}</td>
                                 <td style="text-align: center;width: 15%;">{{$po_details_arr[$i]['childTrackarr'][$j]['remain_qty']}}</td>
                                 <td style="text-align: center;width: 10%;">
-                                <a href="JavaScript:void(0);" class="po_product_delete" data-id="4" data-vendor_po_product_id="3" data-po_id="2" title="Edit Vendor PO" style="color:red"> 
+                                <a href="JavaScript:void(0);" class="po_item_delete" id="{{$po_details_arr[$i]['childTrackarr'][$j]['po_pd_track_id']}}"  title="Delete" style="color:red"> 
                                     <i class="fa fa-trash"></i> 
                                 </a>
                                 </td>

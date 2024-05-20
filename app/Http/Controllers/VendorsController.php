@@ -1370,17 +1370,90 @@ class VendorsController extends Controller
             }
             $total_qty_due = ($vd->order_qty-$total_qty_received);
 
-            $po_details_arr[] = array('po_details_id' => $vd->id, 'po_id' => $vd->purchase_order_id, 'product_id' => $vd->product_id, 'product_name' => $vd?->paper_type->paper_name, 'product_unit' => $vd?->paper_type?->unit_type->measurement_unuit, 'order_qty' => $vd->order_qty, 'total_qty_received' => $total_qty_received, 'total_qty_due' => $total_qty_due, 'childTrackarr' => $poPdDvQtyDetArr);
+
+
+            if(count($PoPdDvQtyTrackDetails)>0)
+            {
+                $PoPdDvQtyTrackCurrentDetails = PoProductsDeliveryQtyTrackers::select('delivery_date')->where('purchase_order_id', $vd->purchase_order_id)->where('product_id', $vd->product_id)->orderBy('id', 'desc')->first();
+                $delivery_date = $PoPdDvQtyTrackCurrentDetails->delivery_date;
+            }
+            else
+            {
+                $delivery_date = 'N/A';
+            }
+            
+            
+
+            $po_details_arr[] = array('po_details_id' => $vd->id, 'po_id' => $vd->purchase_order_id, 'product_id' => $vd->product_id, 'product_name' => $vd?->paper_type->paper_name, 'product_unit' => $vd?->paper_type?->unit_type->measurement_unuit, 'order_qty' => $vd->order_qty, 'total_qty_received' => $total_qty_received, 'total_qty_due' => $total_qty_due, 'delivery_date' => $delivery_date, 'childTrackarr' => $poPdDvQtyDetArr);
 
         }
 
-
         //dd($po_details_arr);
-
-
-
 
         $html = view('vendors.item-delivery-update-show', ['po_id' => $po_id, 'po_details_arr' => $po_details_arr])->render();
         return response()->json($html);
+    }
+
+
+
+    public function deletePoItems(Request $request){
+        //dd($request->po_id);
+        try {
+            $track_id = $request->track_id;
+            $pd_delivery_track_delete=PoProductsDeliveryQtyTrackers::find($track_id)->delete();
+
+            if($pd_delivery_track_delete)
+            {
+                return response()->json([
+                    'status' => "success",
+                    'message' => "Item has been deleted successfully"
+                ]);
+            }
+            else
+            {
+                return response()->json([
+                    'status' => "fail",
+                    'message' => "Failed to delete item"
+                ]);
+            }
+        } catch (Exception $th) {
+             return response()->json([
+                'status' => "fail",
+                'message' => "Failed to delete item"
+            ]);
+        }
+    }
+
+
+    public function addPoItemDelivery(Request $request){
+        //dd($request->all());
+
+        try {
+            $pd_delivery_track_insert = new PoProductsDeliveryQtyTrackers();
+            $pd_delivery_track_insert->purchase_order_id = $request->po_id;
+            $pd_delivery_track_insert->product_id = $request->product_id;
+            $pd_delivery_track_insert->qty_received = $request->qty_received;
+            $pd_delivery_track_insert->delivery_date = $request->delivery_date;
+            $save = $pd_delivery_track_insert->save();
+            if($save)
+            {
+                return response()->json([
+                    'status' => "success",
+                    'message' => "Item delivery has been added successfully"
+                ]);
+            }
+            else
+            {
+                return response()->json([
+                    'status' => "fail",
+                    'message' => "Failed to added item delivery"
+                ]);
+            }
+        } catch (Exception $th) {
+             return response()->json([
+                'status' => "fail",
+                'message' => "Failed to added item delivery"
+            ]);
+        }
     }
 }
