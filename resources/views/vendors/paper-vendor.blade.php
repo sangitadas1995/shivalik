@@ -677,8 +677,6 @@
     });
 
 
-
-
     Date.prototype.toDateInputValue = (function () {
         var local = new Date(this);
         local.setMinutes(this.getMinutes() - this.getTimezoneOffset());
@@ -831,6 +829,94 @@
         }
         });  
     });
+
+
+    $(document).on('click', '.po_item_delete', function(){  
+
+        Swal.fire({
+            icon: "warning",
+            text: `Are you sure?`,
+            showDenyButton: false,
+            showCancelButton: true,
+            confirmButtonText: "Yes delete, it?",
+            cancelButtonText: "No",
+            cancelButtonColor: "crimson",
+          }).then((result) => {
+            if (result.isConfirmed) {
+
+
+        var track_id = $(this).attr("id");
+        //alert(track_id);
+
+
+        $.ajax({
+            url: "{{ route('vendors.delete-po-items') }}",
+            method: 'POST',
+            data: {track_id:track_id},
+            dataType: 'json',
+            success: function(response) {
+            if(response.status=="success")
+            {
+                return Swal.fire('Success!', response.message, 'success').then((result) => {
+                if (result.isConfirmed) {
+                    $('#itemDeliveryViewModal').modal('hide');
+                }
+                });
+            }
+            },
+            error: function(xhr, status, error) {
+                return Swal.fire('Error!', 'Something went wrong, Plese try again.', 'error');
+            }
+        });
+
+        }
+        });  
+    });
+
+
+    $(document).on('click', '.addPoItemDelivery', function(){  
+        var po_id = $(this).attr("id");
+        var po_product_delevery = $("#po_product_delevery").val();
+        var qty_received = $("#qty_received").val();
+        var delivery_date = $("#delivery_date").val();
+        //alert(po_product_delevery);
+
+        if(qty_received=="")
+        {
+            $('.error_qty_received').html('Quantity Received should not be blank');
+            $('.error_delivery_date').html('');
+        }
+        else if(delivery_date=="")
+        {
+            $('.error_delivery_date').html('Receiving Date should not be blank');
+            $('.error_qty_received').html('');
+        }
+        else
+        {
+            $.ajax({
+            url: "{{ route('vendors.add-po-item-delivery') }}",
+            method: 'POST',
+            data: {po_id:po_id,product_id:po_product_delevery,qty_received:qty_received,delivery_date:delivery_date},
+            dataType: 'json',
+            success: function(response) {
+            if(response.status=="success")
+            {
+                return Swal.fire('Success!', response.message, 'success').then((result) => {
+                if (result.isConfirmed) {
+                    $('#itemDeliveryViewModal').modal('hide');
+                }
+                });
+            }
+            },
+            error: function(xhr, status, error) {
+                return Swal.fire('Error!', 'Something went wrong, Plese try again.', 'error');
+            }
+            }); 
+        }
+    });
+
+
+
 
     function changePqty(id)
     {
