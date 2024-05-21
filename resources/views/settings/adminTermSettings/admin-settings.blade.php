@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title','Add Payment Terms & Condition')
+@section('title','Admin Terms & Condition')
 @push('extra_css')
 @endpush
 @section('content')
