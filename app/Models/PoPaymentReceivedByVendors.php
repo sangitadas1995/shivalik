@@ -15,4 +15,9 @@ class PoPaymentReceivedByVendors extends Model
     {
         return $this->belongsTo(PoPaymentModes::class, 'payment_mode_id');
     }
+
+    public function vendorpurchaseorder(): BelongsTo
+    {
+        return $this->belongsTo(VendorPurchaseOrders::class, 'purchase_order_id');
+    }
 }

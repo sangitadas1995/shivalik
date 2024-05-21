@@ -28,6 +28,8 @@ use App\Models\PoDeliveryStatusHistories;
 use App\Models\PoProductsDeliveryQtyTrackers;
 use App\Models\PoPaymentModes;
 use App\Models\PoPaymentReceivedByVendors;
+use App\Models\PoUploadFileTypes;
+use App\Models\PoUploadDocuments;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
@@ -1279,7 +1281,7 @@ class VendorsController extends Controller
         $vendor_id = $vendorPoDetails->vendor_id;
         $vendor = Vendor::with('vendortype', 'city', 'state', 'country')->findOrFail($vendor_id);
 
-        $totalPaymentRcvByVendor = PoPaymentReceivedByVendors::where('purchase_order_id', $request->rowid)->sum('payment_amount');
+        $totalPaymentRcvByVendor = PoPaymentReceivedByVendors::where('purchase_order_id', $request->rowid)->where('status', 'A')->sum('payment_amount');
         if(!empty($totalPaymentRcvByVendor))
         {
             $total_payment_rcv_by_vendor = $totalPaymentRcvByVendor;
@@ -1378,7 +1380,7 @@ class VendorsController extends Controller
 
         $po_details_arr = array();
         foreach($vendorPoDetails as $vd){
-            $PoPdDvQtyTrackDetails = PoProductsDeliveryQtyTrackers::where('purchase_order_id', $vd->purchase_order_id)->where('product_id', $vd->product_id)->get();
+            $PoPdDvQtyTrackDetails = PoProductsDeliveryQtyTrackers::where('purchase_order_id', $vd->purchase_order_id)->where('product_id', $vd->product_id)->where('status', 'A')->get();
             $total_qty_received = 0;
             $total_qty_due = 0;
             $poPdDvQtyDetArr = array();
@@ -1399,11 +1401,9 @@ class VendorsController extends Controller
             }
             $total_qty_due = ($vd->order_qty-$total_qty_received);
 
-
-
             if(count($PoPdDvQtyTrackDetails)>0)
             {
-                $PoPdDvQtyTrackCurrentDetails = PoProductsDeliveryQtyTrackers::select('delivery_date')->where('purchase_order_id', $vd->purchase_order_id)->where('product_id', $vd->product_id)->orderBy('id', 'desc')->first();
+                $PoPdDvQtyTrackCurrentDetails = PoProductsDeliveryQtyTrackers::select('delivery_date')->where('purchase_order_id', $vd->purchase_order_id)->where('product_id', $vd->product_id)->where('status', 'A')->orderBy('id', 'desc')->first();
                 $delivery_date = $PoPdDvQtyTrackCurrentDetails->delivery_date;
             }
             else
@@ -1411,10 +1411,7 @@ class VendorsController extends Controller
                 $delivery_date = 'N/A';
             }
             
-            
-
             $po_details_arr[] = array('po_details_id' => $vd->id, 'po_id' => $vd->purchase_order_id, 'product_id' => $vd->product_id, 'product_name' => $vd?->paper_type->paper_name, 'product_unit' => $vd?->paper_type?->unit_type->measurement_unuit, 'order_qty' => $vd->order_qty, 'total_qty_received' => $total_qty_received, 'total_qty_due' => $total_qty_due, 'delivery_date' => $delivery_date, 'childTrackarr' => $poPdDvQtyDetArr);
-
         }
 
         //dd($po_details_arr);
@@ -1427,9 +1424,11 @@ class VendorsController extends Controller
         //dd($request->po_id);
         try {
             $track_id = $request->track_id;
-            $pd_delivery_track_delete=PoProductsDeliveryQtyTrackers::find($track_id)->delete();
+            $po_delivery_track_update = PoProductsDeliveryQtyTrackers::findOrFail($track_id);
+            $po_delivery_track_update->status = 'D';
+            $update = $po_delivery_track_update->update();
 
-            if($pd_delivery_track_delete)
+            if($update)
             {
                 return response()->json([
                     'status' => "success",
@@ -1561,14 +1560,15 @@ class VendorsController extends Controller
         echo json_encode($data);
     }
 
-
     public function deletePoPaymentRcvByVendors(Request $request){
         //dd($request->po_id);
         try {
             $id = $request->id;
-            $po_payment_rcv_delete=PoPaymentReceivedByVendors::find($id)->delete();
+            $po_payment_rcv_update = PoPaymentReceivedByVendors::findOrFail($id);
+            $po_payment_rcv_update->status = 'D';
+            $update = $po_payment_rcv_update->update();
 
-            if($po_payment_rcv_delete)
+            if($update)
             {
                 return response()->json([
                     'status' => "success",
@@ -1588,5 +1588,19 @@ class VendorsController extends Controller
                 'message' => "Failed to delete"
             ]);
         }
+    }
+
+
+
+    public function poFileList(Request $request){
+        $po_id = $request->rowid;
+
+        $poUploadFileTypes = PoUploadFileTypes::where('status', 'A')->get();
+
+        $vendorPoDetails = VendorPurchaseOrderDetails::with('paper_type')->where('purchase_order_id', $po_id)->get();
+        //dd($vendorPoDetails);
+
+        $html = view('vendors.po-file-list', ['po_id' => $po_id, 'poUploadFileTypes' => $poUploadFileTypes])->render();
+        return response()->json($html);
     }
 }

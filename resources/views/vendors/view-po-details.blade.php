@@ -17,7 +17,6 @@
         <div class="col-md-9">
             <div class="order_status_title">
                <!-- <h2>Order Details</h2> -->
-               
             </div>
             
             <div class="border-block">
@@ -116,20 +115,18 @@
                 </div>
             </div>
             
-<!--             <div class="border-block no-border">
+            <div class="border-block no-border">
                 <div class="big-title">Download 
-                    <i class="fa fa-download" aria-hidden="true"></i> &nbsp;&nbsp;
-                    <a href="JavaScript:void(0);" class="po_file_list_view_rander" data-id="48" title="Upload Related Documents">
-                        <i class="fa fa-upload" style="font-size:20px;"></i>
+                    <i class="fa fa-download" aria-hidden="true"></i> &nbsp;&nbsp;<a href="JavaScript:void(0);" class="text-primary po_file_list_view" data-id="{{$vendorPoDetails->id}}" title="Upload Related Documents"><i class="fa fa-upload" style="font-size:20px;"></i>
                     </a> 
                 </div>
-                <ul class="auto-ul">
+<!--                 <ul class="auto-ul">
                     <li>                                     
                         <a href="https://pocdev.lmsbaba.com/clientportal/vendor/download_system_generated_po/48" target="_blank">Vendor Purchase Order</a>               
                     </li>
                     <li><a href="JavaScript:void(0)" class="view_payment_ledger">Payment Ledger</a></li>
-                </ul>
-            </div> -->
+                </ul> -->
+            </div>
         </div>
         <div class="col-md-3">
             <div class="grey-order-bg">
