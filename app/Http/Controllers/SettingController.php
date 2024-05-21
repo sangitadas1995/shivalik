@@ -566,7 +566,5 @@ class SettingController extends Controller
         }
     }
 
-    public function editPaymentMethod(){
-        
-    }
+    
 }
