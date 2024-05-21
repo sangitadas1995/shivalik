@@ -277,6 +277,7 @@ Route::middleware('auth')->group(function () {
 
     
         Route::get('admin-terms-settings', [SettingController::class, 'adminSettingTerms'])->name('admin-terms-settings');
+        Route::post('update-admin-terms-condition', [SettingController::class, 'updateAdminSettingsTerms'])->name('update-admin-terms-condition');
     });
 
     Route::prefix('papertype')->name('papertype.')->group(function () {

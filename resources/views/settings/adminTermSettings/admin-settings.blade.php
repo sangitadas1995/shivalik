@@ -14,34 +14,40 @@
 </div>
 <div class="card add-new-location mt-2">
     <div class="card-body">
-        <form action="#" method="POST" id="admin-settings-form">
+        <form action="{{ route('settings.update-admin-terms-condition') }}" method="POST" id="admin-settings-form">
             @csrf
+            <input type="hidden" name="id" value="{{ $admin_terms->id }}">
             <div class="row">
                 <div class="col-md-12">
                 @include('utils.alert')
                 </div>
-                <input type="hidden" id="id" name="id" value="">
-                <div class="col-md-12">
-                    <div class="mb-3">
-                        <label class="form-label"><span class="text-danger">*</span>Terms & Condition Content: </label>
-                        <input type="text" class="form-control" name="payement_terms_condition" id="name" value="{{ $paymentTerms->payement_terms_condition }}"/>
-                        <small class="text-danger error_payement_terms_condition"></small>
+                @if (!empty($admin_terms->admin_terms_condition))
+                    <div class="col-md-12">
+                        <div class="mb-3">
+                            <label class="form-label"><span class="text-danger">*</span>Admin Terms & Condition Content: </label>
+                            <textarea name="admin_terms_condition" id="admin_terms_condition" cols="30" rows="10" class="form-control" >{{ $admin_terms->admin_terms_condition  }}</textarea>
+                            <small class="text-danger error_payement_terms_condition"></small>
+                        </div>
                     </div>
-                </div>
-                <div class="col-md-12">
-                    <div class="mb-3">
-                        <label class="form-label"><span class="text-danger">*</span>Additional Content:</label>
-                        <input type="text" class="form-control" name="payement_terms_condition" id="name" value="{{ $paymentTerms->payement_terms_condition }}"/>
-                        <small class="text-danger error_payement_terms_condition"></small>
+                @endif
+                @if (!empty($admin_terms->additional_note_settings))
+                    <div class="col-md-12">
+                        <div class="mb-3">
+                            <label class="form-label"><span class="text-danger">*</span>Additional Content:</label>
+                            <input type="text" class="form-control" name="payement_terms_condition" id="name" value="{{ $admin_terms->additional_note_settings }}"/>
+                            <small class="text-danger error_payement_terms_condition"></small>
+                        </div>
                     </div>
-                </div>
-                <div class="col-md-12">
-                    <div class="mb-3">
-                        <label class="form-label"><span class="text-danger">*</span> Thanks & Regards Content :</label>
-                        <input type="text" class="form-control" name="payement_terms_condition" id="name" value="{{ $paymentTerms->payement_terms_condition }}"/>
-                        <small class="text-danger error_payement_terms_condition"></small>
+                @endif
+                @if (!empty($admin_terms->thanks_regards_content))
+                    <div class="col-md-12">
+                        <div class="mb-3">
+                            <label class="form-label"><span class="text-danger">*</span> Thanks & Regards Content :</label>
+                            <input type="text" class="form-control" name="payement_terms_condition" id="name" value="{{$admin_terms->thanks_regards_content}}"/>
+                            <small class="text-danger error_payement_terms_condition"></small>
+                        </div>
                     </div>
-                </div>
+                @endif
             </div>
 
             <div class="text-end"><button type="submit" class="btn black-btn">Save</button></div>

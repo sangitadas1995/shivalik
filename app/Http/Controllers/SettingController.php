@@ -435,9 +435,28 @@ class SettingController extends Controller
     }
     
     /***** TERM AND CONDITION *****/
-    public function adminSettingTerms(){
-        $adminTerms = AdminSettingTerms::findOrFail($request->id);
-        return view('settings.adminTermSettings.admin-settings',['adminTerms' => $adminTerms]); 
+    public function adminSettingTerms(Request $request){
+        $id = 1;
+        $adminTerms = AdminSettingTerms::findOrFail($id);
+        return view('settings.adminTermSettings.admin-settings',['admin_terms'=>$adminTerms]); 
+    }
 
+    public function updateAdminSettingsTerms(Request $request){
+        $request->validate([
+            'admin_terms_condition' => ['required'],
+        ]);
+        
+        try {
+            $adminTerms = AdminSettingTerms::find($request->id);
+            $adminTerms->admin_terms_condition   = $request->admin_terms_condition;
+            $update   = $adminTerms->update();
+            if ($update) {
+                return redirect()->route('settings.admin-terms-settings')->with('success', 'Admin settings terms and condition has been updated successfully.');
+            } else {
+                return redirect()->back()->with('fail', 'Failed to updated the Admin settings terms and condition.');
+            }
+        } catch (Exception $th) {
+            return redirect()->back()->with('fail', trans('messages.server_error'));
+        }
     }
 }
