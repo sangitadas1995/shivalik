@@ -100,7 +100,7 @@
                     if (result.isConfirmed) {
                         $.ajax({
                             type: "post",
-                            url: "{{ route('settings.update-payment-method-satus') }}",
+                            url: "{{ route('settings.update-payement-terms-status') }}",
                             data: {
                                 rowid,
                                 rowstatus
