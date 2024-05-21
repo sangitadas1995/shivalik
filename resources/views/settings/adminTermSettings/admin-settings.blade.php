@@ -14,7 +14,7 @@
 </div>
 <div class="card add-new-location mt-2">
     <div class="card-body">
-        <form action="{{ route('settings.update-admin-terms-condition') }}" method="POST" id="admin-settings-form">
+        <form action="{{ route('settings.update-admin-terms-condition') }}" method="POST" id ="admin-settings-form">
             @csrf
             <input type="hidden" name="id" value="{{ $admin_terms->id }}">
             <div class="row">

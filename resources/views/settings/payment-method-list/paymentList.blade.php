@@ -11,7 +11,7 @@
         </div>
         <div class="col-md-6">
             <div class="text-end mb-4">
-                <a href="{{ route('settings.add-payment-terms') }}" class="btn primary-btn"><img src="{{ asset('images/add-accoun-1t.png') }}" /> Add New Payment Terms</a>
+                <a href="{{ route('settings.add-payment-terms') }}" class="btn primary-btn"><img src="{{ asset('images/add-accoun-1t.png') }}" /> Add New Payment Method</a>
             </div>
         </div>
     </div>
@@ -23,12 +23,12 @@
 </div>
 <div class="row">
     <div class="table-responsive table-sec mb-4">
-        <table class="table table-striped" id="payment_table">
+        <table class="table table-striped" id="payment_method_tbl">
             <thead>
                 <tr>
                     <th>Row ID</th>
                     <th style="text-align: center">ID</th>
-                    <th style="text-align: center">Payment & Terms</th>
+                    <th style="text-align: center">Payment Method</th>
                     <th style="text-align: center">Status</th>
                     <th style="text-align: center">Action</th>
                 </tr>
@@ -50,13 +50,13 @@
             }
         });
 
-        let payment_tbl = $('#payment_table').DataTable({
+        let payment_method_tbl = $('#payment_method_tbl').DataTable({
             stateSave: true,
             processing: true,
             serverSide: true,
             pageLength: 10,
             ajax: {
-                url: "{{ route('settings.payment-terms-list-ajax') }}",
+                url: "{{ route('settings.payment-method-list-ajax') }}",
                 type: 'POST',
                 'data': function(data) {
                     return data;
@@ -80,17 +80,16 @@
             ]
         });
 
-
         $(document).on('click', '.updateStatus', function(e) {
             e.preventDefault();
             var __e = $(this);
             var rowid = __e.data('id');
             var rowstatus = __e.data('status');
-            var currentPage = payment_tbl.page();
+            var currentPage = payment_method_tbl.page();
             if (rowid) {
                 Swal.fire({
                     icon: "warning",
-                    text: `Are you sure, you want to ${rowstatus} this payment terms & condition ?`,
+                    text: `Are you sure, you want to ${rowstatus} this payment methiods ?`,
                     showDenyButton: false,
                     showCancelButton: true,
                     confirmButtonText: "Yes",
@@ -100,14 +99,14 @@
                     if (result.isConfirmed) {
                         $.ajax({
                             type: "post",
-                            url: "{{ route('settings.update-payment-method-satus') }}",
+                            url: "{{ route('settings.update-payment-method-status') }}",
                             data: {
                                 rowid,
                                 rowstatus
                             },
                             dataType: "json",
                             success: function(response) {
-                                payment_tbl.page(currentPage).draw(false);
+                                payment_method_tbl.page(currentPage).draw(false);
                                 return Swal.fire('Success!', response.message, 'success');
                             },
                             error: function(xhr, status, error) {
@@ -119,6 +118,6 @@
             }
         });
 
-    }); 
+    });
 </script>
 @endsection
