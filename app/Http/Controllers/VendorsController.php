@@ -28,8 +28,10 @@ use App\Models\PoDeliveryStatusHistories;
 use App\Models\PoProductsDeliveryQtyTrackers;
 use App\Models\PoPaymentModes;
 use App\Models\PoPaymentReceivedByVendors;
+use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+//use Illuminate\Support\Facades\Auth;
 
 class VendorsController extends Controller
 {
@@ -811,6 +813,12 @@ class VendorsController extends Controller
 
     public function addPoCreation(Request $request)
     {
+        $thanksAndRegards = array(
+            "name" => auth()->user()->name,
+            "mobile" => "Mobile:".auth()->user()->mobile,
+            "email" => "Email:".auth()->user()->email
+        );
+
         $vendor = Vendor::with('vendortype')->findOrFail($request->rowid);
         $warehousesList = Warehouses::where('warehouse_type', 'printing')->get();
         $profile = Profile::where('status', 'A')->first();
@@ -839,7 +847,7 @@ class VendorsController extends Controller
         $rand = strtoupper(substr(uniqid(sha1(time())),0,4));
         $po_unique_no = $today . $rand;
 
-        $html = view('vendors.add-po-creation', ['vendor' => $vendor, 'paper_list' => $papers, 'warehousesList' => $warehousesList, 'po_unique_no' => $po_unique_no, 'profile' => $profile, 'paymentTerms' => $paymentTerms])->render();
+        $html = view('vendors.add-po-creation', ['vendor' => $vendor, 'paper_list' => $papers, 'warehousesList' => $warehousesList, 'po_unique_no' => $po_unique_no, 'profile' => $profile, 'paymentTerms' => $paymentTerms, 'thanksAndRegards' => $thanksAndRegards])->render();
         return response()->json($html);
     }
 
@@ -1054,6 +1062,12 @@ class VendorsController extends Controller
 
     public function editPoCreation(Request $request)
     {
+        $thanksAndRegards = array(
+            "name" => auth()->user()->name,
+            "mobile" => "Mobile:".auth()->user()->mobile,
+            "email" => "Email:".auth()->user()->email
+        );
+
         $vendorPoDetails = VendorPurchaseOrders::with('po_product_details')->where('id', $request->rowid)->first();
         $paymentTerms = PaymentTermsModel::where('status', 'A')->get();
         //dd($vendorPoDetails);
@@ -1085,7 +1099,7 @@ class VendorsController extends Controller
         $rand = strtoupper(substr(uniqid(sha1(time())),0,4));
         $po_unique_no = $today . $rand;
 
-        $html = view('vendors.edit-po-creation', ['vendor' => $vendor, 'paper_list' => $papers, 'warehousesList' => $warehousesList, 'vendorPoDetails' => $vendorPoDetails, 'paymentTerms' => $paymentTerms])->render();
+        $html = view('vendors.edit-po-creation', ['vendor' => $vendor, 'paper_list' => $papers, 'warehousesList' => $warehousesList, 'vendorPoDetails' => $vendorPoDetails, 'paymentTerms' => $paymentTerms, 'thanksAndRegards' => $thanksAndRegards])->render();
         return response()->json($html);
     }
 
@@ -1266,11 +1280,10 @@ class VendorsController extends Controller
         $vendor = Vendor::with('vendortype', 'city', 'state', 'country')->findOrFail($vendor_id);
 
         $totalPaymentRcvByVendor = PoPaymentReceivedByVendors::where('purchase_order_id', $request->rowid)->sum('payment_amount');
-        $poPmtRcvDts = PoPaymentReceivedByVendors::select('balance')->where('purchase_order_id', $request->rowid)->orderBy('id', 'desc')->first();
         if(!empty($totalPaymentRcvByVendor))
         {
             $total_payment_rcv_by_vendor = $totalPaymentRcvByVendor;
-            $outstanding_amount = $poPmtRcvDts->balance;
+            $outstanding_amount = ($vendorPoDetails->total_amount-$total_payment_rcv_by_vendor);
         }
         else
         {
@@ -1410,8 +1423,6 @@ class VendorsController extends Controller
         return response()->json($html);
     }
 
-
-
     public function deletePoItems(Request $request){
         //dd($request->po_id);
         try {
@@ -1473,8 +1484,6 @@ class VendorsController extends Controller
         }
     }
 
-
-
     public function viewPaymentLedger(Request $request){
         //dd($request->rowid);
 
@@ -1493,27 +1502,24 @@ class VendorsController extends Controller
         return response()->json($html);
     }
 
-
-
-
     public function storePmtRcvByVendor(Request $request){
         //dd($request->all());
         try {
-            $poPmtRcvDts = PoPaymentReceivedByVendors::select('balance')->where('purchase_order_id', $request->purchase_order_id)->orderBy('id', 'desc')->first();
-            if(!empty($poPmtRcvDts))
-            {
-                $balance = ($poPmtRcvDts->balance - $request->payment_amount);
-            }
-            else
-            {
-                $balance = ($request->total_po_amount - $request->payment_amount);
-            }
+            // $poPmtRcvDts = PoPaymentReceivedByVendors::select('balance')->where('purchase_order_id', $request->purchase_order_id)->orderBy('id', 'desc')->first();
+            // if(!empty($poPmtRcvDts))
+            // {
+            //     $balance = ($poPmtRcvDts->balance - $request->payment_amount);
+            // }
+            // else
+            // {
+            //     $balance = ($request->total_po_amount - $request->payment_amount);
+            // }
 
             $poPaymentReceivedByVendors = new PoPaymentReceivedByVendors();
             $poPaymentReceivedByVendors->purchase_order_id = $request->purchase_order_id;
             $poPaymentReceivedByVendors->payment_mode_id = $request->payment_mode_id;
             $poPaymentReceivedByVendors->payment_amount = $request->payment_amount;
-            $poPaymentReceivedByVendors->balance = $balance;
+            //$poPaymentReceivedByVendors->balance = $balance;
             $poPaymentReceivedByVendors->payment_date = $request->payment_date;
             $poPaymentReceivedByVendors->narration = $request->narration;
             $save = $poPaymentReceivedByVendors->save();
@@ -1537,8 +1543,6 @@ class VendorsController extends Controller
         }
     }
 
-
-
     public function showPmtRcvByVendor(Request $request){
         //dd($request->all());
 
@@ -1555,9 +1559,34 @@ class VendorsController extends Controller
             'table_data'  => $output
         );
         echo json_encode($data);
+    }
 
 
+    public function deletePoPaymentRcvByVendors(Request $request){
+        //dd($request->po_id);
+        try {
+            $id = $request->id;
+            $po_payment_rcv_delete=PoPaymentReceivedByVendors::find($id)->delete();
 
-
+            if($po_payment_rcv_delete)
+            {
+                return response()->json([
+                    'status' => "success",
+                    'message' => "This is deleted successfully"
+                ]);
+            }
+            else
+            {
+                return response()->json([
+                    'status' => "fail",
+                    'message' => "Failed to delete"
+                ]);
+            }
+        } catch (Exception $th) {
+             return response()->json([
+                'status' => "fail",
+                'message' => "Failed to delete"
+            ]);
+        }
     }
 }

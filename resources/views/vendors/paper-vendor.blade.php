@@ -234,11 +234,12 @@ $(document).on( "change", "#payment_date",function( event, ui ) {
 
 
         $(document).on('click', '.view_po_details', function (e) {
-            //alert("666");
+            //alert($(this).attr("data-poid"));
             e.preventDefault();
             $('#poListModal').modal('hide');
             var __e = $(this);
             var rowid = __e.data('id');
+            //alert(__e);
             //alert(rowid);
             if (rowid) {
             $.ajax({
@@ -662,7 +663,6 @@ function showPaymentLedger(po_id)
         }
     });
 
-
     $(document).on('click', '.item_delivery_update_view', function (e) {
         e.preventDefault();
         var __e = $(this);
@@ -718,7 +718,6 @@ function showPaymentLedger(po_id)
         });
     });
 
-
     $(document).on('click', '.view_payment_ledger', function (e) {
         e.preventDefault();
         var __e = $(this);
@@ -740,7 +739,6 @@ function showPaymentLedger(po_id)
             });
         }
     });
-
 
     $(document).on('click', '.addPaymentLedger', function (e) {
         //alert("666");
@@ -1034,6 +1032,52 @@ function showPaymentLedger(po_id)
             }
             }); 
         }
+    });
+
+
+
+    $(document).on('click', '.del_payment_ledger', function(){  
+        Swal.fire({
+            icon: "warning",
+            text: `Are you sure?`,
+            showDenyButton: false,
+            showCancelButton: true,
+            confirmButtonText: "Yes delete, it?",
+            cancelButtonText: "No",
+            cancelButtonColor: "crimson",
+          }).then((result) => {
+            if (result.isConfirmed) {
+
+        var id = $(this).attr("id");
+        //alert(track_id);
+
+        $.ajax({
+            url: "{{ route('vendors.delete-po-payment-rcv-by-vendors') }}",
+            method: 'POST',
+            data: {id:id},
+            dataType: 'json',
+            success: function(response) {
+            if(response.status=="success")
+            {
+                return Swal.fire('Success!', response.message, 'success').then((result) => {
+                if (result.isConfirmed) {
+                    $('#viewPaymentLedgerModal').modal('hide');
+                    //$('.view_po_details').trigger('click');
+
+                    //$('.view_po_details').data('data-poid','17').trigger("click");
+                    // var data2 = {id:id};
+                    // $(".view_po_details").trigger(data2);
+                }
+                });
+            }
+            },
+            error: function(xhr, status, error) {
+                return Swal.fire('Error!', 'Something went wrong, Plese try again.', 'error');
+            }
+        });
+
+        }
+        });  
     });
 
 

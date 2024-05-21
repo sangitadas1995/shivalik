@@ -41,11 +41,11 @@
 
                             <div class="col-md-2">
                                 <label>Unit Type:</label>
-                                <input type="text" class="form-control" id="unit_type" readonly="true"/>
+                                <input type="text" class="form-control" id="unit_type" readonly="true" style="background-color:#e8e8e8;" />
                             </div>
                             <div class="col-md-2">
                                 <label>Quantity Ordered:</label>
-                                <input type="text" class="form-control" id="qty_ordered" readonly="true"/>
+                                <input type="text" class="form-control" id="qty_ordered" readonly="true" style="background-color:#e8e8e8;"/>
                             </div>
                             <div class="col-md-2">
                                 <label>Quantity Received:</label>
@@ -59,7 +59,7 @@
                             </div>
                             <div class="col-md-2">
                                 <label>Balance:</label>
-                                <input type="text" class="form-control" name="balance" id="balance" readonly="true"/>
+                                <input type="text" class="form-control" name="balance" id="balance" readonly="true" style="background-color:#e8e8e8;"/>
                             </div>
                             <div class="col-md-2 mt-4">
                                 <button type="button" class="btn black-btn addPoItemDelivery" id={{$po_id}}>Add</button>
