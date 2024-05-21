@@ -114,6 +114,11 @@ Route::middleware('auth')->group(function () {
         Route::post('add-po-item-delivery', [VendorsController::class, 'addPoItemDelivery'])->name('add-po-item-delivery');
 
 
+        Route::post('view-payment-ledger', [VendorsController::class, 'viewPaymentLedger'])->name('view-payment-ledger');
+        Route::post('store-pmt-rcv-by-vendor', [VendorsController::class, 'storePmtRcvByVendor'])->name('store-pmt-rcv-by-vendor');
+        Route::post('show-pmt-rcv-by-vendor', [VendorsController::class, 'showPmtRcvByVendor'])->name('show-pmt-rcv-by-vendor');
+
+
 
         Route::prefix('paper')->name('paper.')->group(function () {
             Route::get('edit/{id}', [VendorsController::class, 'paper_edit'])->name('edit');

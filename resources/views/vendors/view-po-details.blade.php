@@ -77,7 +77,7 @@
                 @endphp
                 </a>
                 </div>
-                <div class="value-title"><span>Deal Value:</span> INR {{$vendorPoDetails->total_amount !="" ? number_format(round($vendorPoDetails->total_amount),2) : 'N/A'}}</div>
+                <div class="value-title"><span>PO Amount:</span> INR {{$vendorPoDetails->total_amount !="" ? number_format(round($vendorPoDetails->total_amount),2) : 'N/A'}}</div>
 
                 <div class="tholder max-w-540">
                     <table class="table order-details-border-table">
@@ -97,15 +97,15 @@
                                     @endphp                       
                                 </td>
                                 @endif
-<!--                                 <td>
+                                <td>
                                     <strong>Payment Made</strong><br>INR 
-                                    <span id="po_payment_recived_div">200.00</span>
+                                    <span id="po_payment_recived_div">{{$total_payment_rcv_by_vendor}}</span>
                                 </td>
                                 <td>
                                     <strong>Outstanding Balance</strong><br><span class="red">INR  
-                                    <font id="po_balance_payment_div">513.90</font></span><br>
-                                    (<a href="JavaScript:void(0)" class="view_payment_ledger">Update Vendor Payment Released</a>)
-                                </td> -->
+                                    <font id="po_balance_payment_div">{{$outstanding_amount}}</font></span><br>
+                                    (<a href="JavaScript:void(0)" class="text-primary view_payment_ledger" data-id="{{$vendorPoDetails->id}}">Update Vendor Payment Released</a>)
+                                </td>
                             </tr>
                         </tbody>
                    </table>
