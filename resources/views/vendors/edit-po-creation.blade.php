@@ -268,9 +268,10 @@
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label class="form-label">Thanks & Regards: </label></br>
-                                    <textarea name="thanksyou_notes" id="thanksyou_notes" rows="5" cols="30" style="white-space: pre-line;width:100%;">{{$vendorPoDetails->thanksyou_notes}}</textarea>
+                                    <textarea name="thanksyou_notes" id="thanksyou_notes" rows="5" cols="30" style="white-space: pre-line;width:100%;">@php if(!empty($vendorPoDetails->thanksyou_notes)){ echo $vendorPoDetails->thanksyou_notes;} else { echo $thanksAndRegards['name']."\n".$thanksAndRegards['mobile']."\n".$thanksAndRegards['email']; }@endphp</textarea>
                                 </div>
                             </div>
+                            
 
                             <div class="col-md-6">
                                 <div class="mb-3">

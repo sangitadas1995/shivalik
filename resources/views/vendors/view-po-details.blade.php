@@ -99,11 +99,15 @@
                                 @endif
                                 <td>
                                     <strong>Payment Made</strong><br>INR 
-                                    <span id="po_payment_recived_div">{{$total_payment_rcv_by_vendor}}</span>
+                                    <span id="po_payment_recived_div">
+                                    {{$total_payment_rcv_by_vendor !="" ? number_format($total_payment_rcv_by_vendor,2) : 'N/A'}}
+                                    </span>
                                 </td>
                                 <td>
                                     <strong>Outstanding Balance</strong><br><span class="red">INR  
-                                    <font id="po_balance_payment_div">{{$outstanding_amount}}</font></span><br>
+                                    <font id="po_balance_payment_div">
+                                    {{$outstanding_amount !="" ? number_format($outstanding_amount,2) : 'N/A'}}
+                                </font></span><br>
                                     (<a href="JavaScript:void(0)" class="text-primary view_payment_ledger" data-id="{{$vendorPoDetails->id}}">Update Vendor Payment Released</a>)
                                 </td>
                             </tr>
