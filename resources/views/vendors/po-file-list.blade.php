@@ -21,7 +21,8 @@
                         </div>
                         </div>
                         </div>
-
+                        <form action="" method="POST" id="add_po_files" enctype="multipart/form-data">
+                        @csrf
                         <div class="row">
                             <input type="hidden" name="po_id" id="po_id" value="{{$po_id}}">
                             <div class="col-md-3">
@@ -44,42 +45,27 @@
                                 <label>Title:</label>
                                 <input type="text" class="form-control" id="po_file_type_title" name="po_file_type_title" readonly="true" style="background-color:#e8e8e8;" />
                                 </div>
-                                <span class="text-danger error_po_status"></span>
+                                <span class="text-danger error_po_file_type_title"></span>
                             </div>
 
                             <div class="col-md-3">
                                 <div class="mb-3  d-flex flex-column">
                                 <label>File:</label>
-                                <input type="file" class="form-control" id="unit_type" readonly="true" style="background-color:#e8e8e8;" />
+                                <input type="file" class="form-control" id="po_file" name="po_file" readonly="true" style="background-color:#e8e8e8;" />
                                 </div>
-                                <span class="text-danger error_po_status"></span>
+                                <span class="text-danger error_po_file"></span>
                             </div>
 
                             <div class="col-md-3 mt-4">
-                                <button type="button" class="btn black-btn addPoItemDelivery" id={{$po_id}}>Add</button>
+                                <button type="button" class="btn black-btn addPoUploadDocuments">Add</button>
                             </div>
                         </div>
+                        </form>
 
                         <div class="row">
-                        <div class="table-responsive table-sec mb-4 mt-4">
-                        <table class="table table-striped" id="vendors_list_table">
-                        <thead>
-                        <tr>
-                        <th style="text-align: center;width: 60%;">Title</th>
-                        <th style="text-align: center; width: 15%;">File Type</th>
-                        <th style="text-align: right; width: 25%;">Action</th>
-                        </tr>
-                        </thead>
-                        <tbody id="dynamic_field">
-
-
-                        </tbody>
-                        </table>
-
+                        <div class="table-responsive table-sec mb-4 mt-4" id="showPoDocList">
                         </div>
                         </div>
-
-
                     </div>
                 </div>
             </div>

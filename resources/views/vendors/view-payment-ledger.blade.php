@@ -136,7 +136,7 @@
 
             <div class="form-group">
             <label class="form-label">Amount<span class="text-danger">*</span> INR:</label>
-            <input type="text" class="form-control" name="payment_amount" id="payment_amount" style="width: 70%;" />
+            <input type="text" class="form-control" name="payment_amount" id="payment_amount" style="width: 70%;" onkeypress="return isNumberFloatKey(event)"/>
             <small class="text-danger error_payment_amount"></small>
             </div>
 

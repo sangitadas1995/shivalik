@@ -204,7 +204,7 @@
                             <div class="col-md-12">
                                 <div class="mb-3">
                                 <label class="form-label">Terms & Conditions/Comments :</label></br>
-                                <textarea name="terms_conditions" id="terms_conditions" rows="5" cols="30" style="white-space: pre-line;width:100%;"></textarea>
+                                <textarea name="terms_conditions" id="terms_conditions" rows="5" cols="30" style="white-space: pre-line;width:100%;">{{$termsAndCondition->admin_terms_condition}}</textarea>
                                 <!-- <script>
                                     CKEDITOR.replace( 'terms_conditions' );
                                 </script> -->
