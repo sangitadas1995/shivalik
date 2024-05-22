@@ -31,6 +31,7 @@ use App\Models\PoPaymentReceivedByVendors;
 use App\Models\PoUploadFileTypes;
 use App\Models\PoUploadDocuments;
 use App\Models\User;
+use App\Models\AdminSettingTerms;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 //use Illuminate\Support\Facades\Auth;
@@ -815,6 +816,7 @@ class VendorsController extends Controller
 
     public function addPoCreation(Request $request)
     {
+        $termsAndCondition = AdminSettingTerms::findOrFail(1);
         $thanksAndRegards = array(
             "name" => auth()->user()->name,
             "mobile" => "Mobile:".auth()->user()->mobile,
@@ -849,7 +851,7 @@ class VendorsController extends Controller
         $rand = strtoupper(substr(uniqid(sha1(time())),0,4));
         $po_unique_no = $today . $rand;
 
-        $html = view('vendors.add-po-creation', ['vendor' => $vendor, 'paper_list' => $papers, 'warehousesList' => $warehousesList, 'po_unique_no' => $po_unique_no, 'profile' => $profile, 'paymentTerms' => $paymentTerms, 'thanksAndRegards' => $thanksAndRegards])->render();
+        $html = view('vendors.add-po-creation', ['vendor' => $vendor, 'paper_list' => $papers, 'warehousesList' => $warehousesList, 'po_unique_no' => $po_unique_no, 'profile' => $profile, 'paymentTerms' => $paymentTerms, 'thanksAndRegards' => $thanksAndRegards, 'termsAndCondition' => $termsAndCondition])->render();
         return response()->json($html);
     }
 
@@ -877,7 +879,6 @@ class VendorsController extends Controller
         $html = view('vendors.po-product-list', ['vendor' => $vendor, 'paper_list' => $finalArr])->render();
         return response()->json($html);
     }
-
 
     public function poPaperAddList(Request $request)
     {
@@ -922,10 +923,10 @@ class VendorsController extends Controller
                 $output .= '
                 <tr id="row'.$value->id.'">
                 <td style="text-align: center;">'.$value->paper_name.'<input type="hidden" name="po_product_id[]" id="po_product_id_'.$value->id.'" value="'.$value->id.'"><input type="hidden" name="current_row_price[]" id="current_row_price_'.$value->id.'" value="'.$calculation.'"><input type="hidden" name="current_row_gross_price[]" id="current_row_gross_price_'.$value->id.'" value="'.$finalArr[$value->id]["purchase_price"].'"><input type="hidden" name="current_row_discount[]" id="current_row_discount_'.$value->id.'" value=""><input type="hidden" name="current_row_gst[]" id="current_row_gst_'.$value->id.'" value="'.$gross_price_gst.'"></td>
-                <td style="text-align: center;"><input type="text" name="purchase_price[]" id="purchase_price_'.$value->id.'" value="'.$finalArr[$value->id]["purchase_price"].'" style="width:60%;" onkeyup="changePrice('.$value->id.')" onkeypress="return isNumberFloatKey(event)"> /'. strtolower($value->unit_type?->measurement_unuit).'</td>
-                <td style="text-align: center;"><input type="text" name="order_qty[]" id="order_qty_'.$value->id.'" value="1" style="width:60%;" onkeyup="changePqty('.$value->id.')" onkeypress="return isNumberKey(event)"></td>
-                <td style="text-align: center;"><input type="text" name="discount[]" id="discount_'.$value->id.'" value="0" style="width:60%;" onkeyup="changeDisc('.$value->id.')" onkeypress="return isNumberKey(event)"></td>
-                <td style="text-align: center;"><input type="text" name="gst[]" id="gst_'.$value->id.'" value="18" style="width:60%;" onkeyup="changeGst('.$value->id.')" onkeypress="return isNumberKey(event)"></td>
+                <td style="text-align: center;"><input type="text" name="purchase_price[]" id="purchase_price_'.$value->id.'" value="'.$finalArr[$value->id]["purchase_price"].'" style="width:60%;" onkeyup="changePrice('.$value->id.')" onblur="changePrice('.$value->id.')" onmouseleave="changePrice('.$value->id.')" onkeypress="return isNumberFloatKey(event)"> /'. strtolower($value->unit_type?->measurement_unuit).'</td>
+                <td style="text-align: center;"><input type="text" name="order_qty[]" id="order_qty_'.$value->id.'" value="1" style="width:60%;" onkeyup="changePqty('.$value->id.')" onmouseleave="changePqty('.$value->id.')" onblur="changePqty('.$value->id.')" onkeypress="return isNumberKey(event)"></td>
+                <td style="text-align: center;"><input type="text" name="discount[]" id="discount_'.$value->id.'" value="0" style="width:60%;" onkeyup="changeDisc('.$value->id.')" onblur="changeDisc('.$value->id.')" onmouseleave="changeDisc('.$value->id.')" onkeypress="return isNumberKey(event)"></td>
+                <td style="text-align: center;"><input type="text" name="gst[]" id="gst_'.$value->id.'" value="18" style="width:60%;" onkeyup="changeGst('.$value->id.')" onblur="changeGst('.$value->id.')" onmouseleave="changeGst('.$value->id.')" onkeypress="return isNumberKey(event)"></td>
                 <td style="text-align: right;"><span id="rowTotCalPrice_'.$value->id.'">'.number_format((float)$calculation, 2, '.', '').'</span> '.$remove_link.'</td>
                 </tr>';
 
@@ -944,13 +945,11 @@ class VendorsController extends Controller
         echo json_encode($data);
     }
 
-
     public function getVendorAddress(Request $request){
         $vendor = Warehouses::with('country','state','city')->where(['id' => $request->vendor_id])->first();
         $data = array('vendors'  => "Company Name: ".$vendor->company_name."\n"."Contact Person: ".$vendor->contact_person."\n"."Mobile No: ".$vendor->mobile_no."\n"."Email: ".$vendor->email."\n"."Company Address: ".$vendor->address.", ".$vendor->city?->city_name.", ".$vendor->state?->state_name.", ".$vendor->country?->country_name."\n"."GST: ".$vendor->gst);
         echo json_encode($data);
     }
-
 
     public function storePoOfVendor(Request $request){
         try {
@@ -1030,7 +1029,6 @@ class VendorsController extends Controller
         }
     }
 
-
     public function vendorWisePoList(Request $request){
         $vendor = Vendor::with('vendortype')->findOrFail($request->rowId);
         $vendorPoList = VendorPurchaseOrders::where('vendor_id', $request->rowId)->get();
@@ -1050,7 +1048,6 @@ class VendorsController extends Controller
         return response()->json($html);
     }
 
-
     public function vendor_po_preview($id){
         $id = decrypt($id);
         $vendorPoPreviewDetails = VendorPurchaseOrders::with('po_product_details','payment_terms')->where('id', $id)->first();
@@ -1060,10 +1057,9 @@ class VendorsController extends Controller
         ]);
     }
 
-
-
     public function editPoCreation(Request $request)
     {
+        $termsAndCondition = AdminSettingTerms::findOrFail(1);
         $thanksAndRegards = array(
             "name" => auth()->user()->name,
             "mobile" => "Mobile:".auth()->user()->mobile,
@@ -1101,7 +1097,7 @@ class VendorsController extends Controller
         $rand = strtoupper(substr(uniqid(sha1(time())),0,4));
         $po_unique_no = $today . $rand;
 
-        $html = view('vendors.edit-po-creation', ['vendor' => $vendor, 'paper_list' => $papers, 'warehousesList' => $warehousesList, 'vendorPoDetails' => $vendorPoDetails, 'paymentTerms' => $paymentTerms, 'thanksAndRegards' => $thanksAndRegards])->render();
+        $html = view('vendors.edit-po-creation', ['vendor' => $vendor, 'paper_list' => $papers, 'warehousesList' => $warehousesList, 'vendorPoDetails' => $vendorPoDetails, 'paymentTerms' => $paymentTerms, 'thanksAndRegards' => $thanksAndRegards, 'termsAndCondition' => $termsAndCondition])->render();
         return response()->json($html);
     }
 
@@ -1590,17 +1586,135 @@ class VendorsController extends Controller
         }
     }
 
-
-
     public function poFileList(Request $request){
         $po_id = $request->rowid;
-
         $poUploadFileTypes = PoUploadFileTypes::where('status', 'A')->get();
-
         $vendorPoDetails = VendorPurchaseOrderDetails::with('paper_type')->where('purchase_order_id', $po_id)->get();
-        //dd($vendorPoDetails);
-
         $html = view('vendors.po-file-list', ['po_id' => $po_id, 'poUploadFileTypes' => $poUploadFileTypes])->render();
         return response()->json($html);
+    }
+
+    public function addPoUploadDocuments(Request $request){
+        // echo $request->file_data->getClientOriginalName();
+        try {
+            $po_id = $request->po_id;
+            $po_file_type_id = $request->po_file_type_id;
+            $po_file_type_title = $request->po_file_type_title;
+
+            $poUploadDocumentsTotCnt = PoUploadDocuments::where('purchase_order_id', $po_id)->where('po_file_type_id', $po_file_type_id)->where('po_file_type_title', $po_file_type_title)->where('status', 'A')->get()->count();
+
+            if($poUploadDocumentsTotCnt>0)
+            {
+                return response()->json([
+                    'status' => "fail",
+                    'message' => "File already exist"
+                ]);
+            }
+            else
+            {
+                if(!empty($request->file_data))
+                {
+                    $fileName = time().'.'.$request->file_data->getClientOriginalExtension();  
+                    $request->file_data->move(public_path('images/po_uploads'), $fileName);
+                }
+                else
+                {
+                    $fileName = "";
+                }
+
+                $poUploadDocuments = new PoUploadDocuments();
+                $poUploadDocuments->purchase_order_id = $po_id;
+                $poUploadDocuments->po_file_type_id = $po_file_type_id;
+                $poUploadDocuments->po_file_type_title = $po_file_type_title;
+                $poUploadDocuments->po_file = $fileName;
+                $poUploadDocuments->po_file_extension = $request->file_data->getClientOriginalExtension();
+                $save = $poUploadDocuments->save();
+
+                if ($save) {
+                    return response()->json([
+                        'status' => "success",
+                        'message' => "PO document uploaded successfully"
+                    ]);
+                } else {
+                    return response()->json([
+                        'status' => "fail",
+                        'message' => "Failed to upload PO document"
+                    ]);
+                }
+            }
+        } catch (Exception $th) {
+             return response()->json([
+                'status' => "fail",
+                'message' => "Failed to upload PO document"
+            ]);
+        }
+    }
+
+    public function poDocumentsList(Request $request){
+        $output = "";
+        $output .='<table class="table table-striped" id="vendors_list_table"><thead><tr><th style="text-align: center;width: 60%;">Title</th><th style="text-align: center; width: 15%;">File Type</th><th style="text-align: right; width: 25%;">Action</th></tr></thead><tbody id="dynamic_field">';
+
+        $poUploadDocumentsList = PoUploadDocuments::where('purchase_order_id', $request->rowid)->where('status', 'A')->get();
+        foreach($poUploadDocumentsList as $podoclist)
+        {
+            $output .='<tr><td style="text-align: center;width: 60%;">'.$podoclist->po_file_type_title.'</td><td style="text-align: center;width: 60%;">'.$podoclist->po_file_extension.'</td><td style="text-align: center;width: 60%;"><a href="'.asset('images/po_uploads/'.$podoclist->po_file).'" target="_blank" class="lead_stage_edit icon-btn btn-secondary text-gray"><i class="fa fa-download" aria-hidden="true"></i></a> &nbsp;<a href="JavaScript:void(0);" class="po_upload_file_delete icon-btn btn-alert text-danger" id="'.$podoclist->id.'" data-po-id="'.$podoclist->purchase_order_id.'" style="color:red"><i class="fa fa-trash" aria-hidden="true"></i></a></td></tr>';
+        }
+
+        $output .='</tbody></table>';
+
+        $data = array(
+            'table_data'  => $output
+        );
+        echo json_encode($data);
+    }
+
+    public function deletePoDocuments(Request $request){
+        try {
+            $id = $request->id;
+            $po_doc_delete = PoUploadDocuments::findOrFail($id);
+            $po_doc_delete->status = 'D';
+            $update = $po_doc_delete->update();
+
+            if($update)
+            {
+                return response()->json([
+                    'status' => "success",
+                    'message' => "This is deleted successfully"
+                ]);
+            }
+            else
+            {
+                return response()->json([
+                    'status' => "fail",
+                    'message' => "Failed to delete"
+                ]);
+            }
+        } catch (Exception $th) {
+             return response()->json([
+                'status' => "fail",
+                'message' => "Failed to delete"
+            ]);
+        }
+    }
+
+
+    public function showPoAmountDetails(Request $request){
+        $vendorPoDetails = VendorPurchaseOrders::with('po_product_details','payment_terms')->where('id', $request->rowid)->first();
+
+        $vendor_id = $vendorPoDetails->vendor_id;
+        $vendor = Vendor::with('vendortype', 'city', 'state', 'country')->findOrFail($vendor_id);
+
+        $totalPaymentRcvByVendor = PoPaymentReceivedByVendors::where('purchase_order_id', $request->rowid)->where('status', 'A')->sum('payment_amount');
+        if(!empty($totalPaymentRcvByVendor))
+        {
+            $total_payment_rcv_by_vendor = $totalPaymentRcvByVendor;
+            $outstanding_amount = ($vendorPoDetails->total_amount-$total_payment_rcv_by_vendor);
+        }
+        else
+        {
+            $total_payment_rcv_by_vendor = 0;
+            $outstanding_amount = $vendorPoDetails->total_amount;
+        }
+
     }
 }

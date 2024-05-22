@@ -697,12 +697,29 @@ function showPaymentLedger(po_id)
         var order_qty = $(this).find(':selected').attr('data-p-quantity');
         var receive_qty = $(this).find(':selected').attr('data-p-total-quantity-received');
         var due_qty = $(this).find(':selected').attr('data-p-total-quantity-due');
-        //alert(unit_type);
+        //alert(due_qty);
 
         $("#unit_type").val(unit_type);
         $("#qty_ordered").val(order_qty);
         $("#qty_received").val(due_qty);
         $("#balance").val(due_qty);
+
+        if(due_qty == "0")
+        {
+            $(".addPoItemDelivery").attr("disabled", true);
+            $("#qty_received").attr("readonly", true);
+            $("#qty_received").css('background-color','#e8e8e8');
+            $("#delivery_date").attr("readonly", true);
+            $("#delivery_date").css('background-color','#e8e8e8');
+        }
+        else
+        {
+            $(".addPoItemDelivery").attr("disabled", false);
+            $("#qty_received").attr("readonly", false);
+            $("#qty_received").css('background-color','');
+            $("#delivery_date").attr("readonly", false);
+            $("#delivery_date").css('background-color','');
+        }
      });
 
 
@@ -818,11 +835,11 @@ function showPaymentLedger(po_id)
                 success: function (response) {
                     $('.render_po_file_list').html(response);
                     $('#poFileListModal').modal('show');
+                    fn_get_po_file_upload_list_view(rowid);
                 }
             });
         }
     });
-
 
     $(document).on('change', '#po_file_type_id', function () {
         var file_type_id = this.value;
@@ -842,6 +859,138 @@ function showPaymentLedger(po_id)
             $("#po_file_type_title").val(file_type_title);
         }
      });
+
+    $(document).on('click', '.addPoUploadDocuments', function (e) {
+        e.preventDefault();
+        var file_data = $('#po_file').prop('files')[0];
+        //console.log(file_data);
+        //alert($('#po_file')[0].files.length);
+        var form_data = new FormData();
+
+        var po_id = $("#po_id").val();
+        var po_file_type_id = $("#po_file_type_id").val();
+        var po_file_type_title = $("#po_file_type_title").val();
+
+        if(po_file_type_title == "")
+        {
+            $('.error_po_file_type_title').html('Title should not be blank');
+            $('.error_po_file').html('');
+        }
+        else if($('#po_file')[0].files.length === 0)
+        {
+            $('.error_po_file').html('Please select file');
+            $('.error_po_file_type_title').html('');
+        }
+        else
+        {
+            form_data.append('file_data', file_data);
+            form_data.append('po_id', po_id);
+            form_data.append('po_file_type_id', po_file_type_id);
+            form_data.append('po_file_type_title', po_file_type_title);
+            //console.log(form_data);
+
+            $.ajax({
+                url: "{{ route('vendors.add-po-upload-documents') }}",
+                method: 'POST',
+                crossDomain: true,
+                data: form_data, // Send the FormData object
+                cache: false,
+                contentType: false,
+                processData: false,
+                dataType: 'json',
+                success: function(response) {
+                    if(response.status=="success")
+                    {
+                        return Swal.fire('Success!', response.message, 'success').then((result) => {
+                          if (result.isConfirmed) {
+                            $('.error_po_file_type_title').html('');
+                            $('.error_po_file').html('');
+                            fn_get_po_file_upload_list_view(po_id);
+                          }
+                        });
+                    }
+                    else{
+                        $('.error_po_file_type_title').html('');
+                        $('.error_po_file').html('');
+                        return Swal.fire('Error!', response.message, 'error');
+                    }
+                },
+                error: function(xhr, status, error) {
+                    Swal.fire('Error!', 'Something went wrong, please try again.', 'error');
+                }
+            });
+        }
+    });
+
+    $(document).on('click', '.po_upload_file_delete', function(){  
+        Swal.fire({
+            icon: "warning",
+            text: `Are you sure?`,
+            showDenyButton: false,
+            showCancelButton: true,
+            confirmButtonText: "Yes delete, it?",
+            cancelButtonText: "No",
+            cancelButtonColor: "crimson",
+          }).then((result) => {
+            if (result.isConfirmed) {
+        var id = $(this).attr("id");
+        var po_id = $(this).attr('data-po-id');
+        //alert(id);
+
+        $.ajax({
+            url: "{{ route('vendors.delete-po-documents') }}",
+            method: 'POST',
+            data: {id:id},
+            dataType: 'json',
+            success: function(response) {
+            if(response.status=="success")
+            {
+                return Swal.fire('Success!', response.message, 'success').then((result) => {
+                if (result.isConfirmed) {
+                    fn_get_po_file_upload_list_view(po_id);
+                }
+                });
+            }
+            },
+            error: function(xhr, status, error) {
+                return Swal.fire('Error!', 'Something went wrong, Plese try again.', 'error');
+            }
+        });
+
+        }
+        });  
+    });
+
+    function fn_get_po_file_upload_list_view(rowid)
+    {
+        $.ajax({
+            type: "post",
+            url: "{{ route('vendors.po-documents-list') }}",
+            data: {
+            rowid
+            },
+            dataType: "json",
+            success: function (response) {
+                $('#showPoDocList').html(response.table_data);
+            }
+        });
+    }
+
+
+    function fn_show_po_amount_details(rowid)
+    {
+        $.ajax({
+            type: "post",
+            url: "{{ route('vendors.show-po-amount-details') }}",
+            data: {
+            rowid
+            },
+            dataType: "json",
+            success: function (response) {
+                $('#showPoAmtDetails5').html(response.table_data);
+            }
+        });
+    }
 
 
     Date.prototype.toDateInputValue = (function () {
@@ -1045,11 +1194,17 @@ function showPaymentLedger(po_id)
         var po_product_delevery = $("#po_product_delevery").val();
         var qty_received = $("#qty_received").val();
         var delivery_date = $("#delivery_date").val();
-        //alert(po_product_delevery);
+        var balance_qty = $("#balance").val();
+        //alert(balance_qty);
 
         if(qty_received=="")
         {
             $('.error_qty_received').html('Quantity Received should not be blank');
+            $('.error_delivery_date').html('');
+        }
+        else if(Number(qty_received) > Number(balance_qty))
+        {
+            $('.error_qty_received').html('Received quantity should not be greater than ordered quantity.');
             $('.error_delivery_date').html('');
         }
         else if(delivery_date=="")
@@ -1080,8 +1235,6 @@ function showPaymentLedger(po_id)
             }); 
         }
     });
-
-
 
     $(document).on('click', '.del_payment_ledger', function(){  
         Swal.fire({
@@ -1126,9 +1279,6 @@ function showPaymentLedger(po_id)
         }
         });  
     });
-
-
-
 
     function changePqty(id)
     {
