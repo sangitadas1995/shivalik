@@ -125,6 +125,13 @@
     <div class="modal-dialog modal-dialog-scrollable  modal-dialog-centered">
     </div>
 </div>
+
+<div class="modal fade" id="poFileListModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="render_po_file_list"></div>
+    <div class="modal-dialog modal-dialog-scrollable  modal-dialog-centered">
+    </div>
+</div>
 @endsection
 
 @section('scripts')
@@ -795,6 +802,47 @@ function showPaymentLedger(po_id)
         }
     });
 
+    $(document).on('click', '.po_file_list_view', function (e) {
+        e.preventDefault();
+        var __e = $(this);
+        var rowid = __e.data('id');
+        //alert(rowid);
+        if (rowid) {
+            $.ajax({
+                type: "post",
+                url: "{{ route('vendors.po-file-list') }}",
+                data: {
+                    rowid
+                },
+                dataType: "json",
+                success: function (response) {
+                    $('.render_po_file_list').html(response);
+                    $('#poFileListModal').modal('show');
+                }
+            });
+        }
+    });
+
+
+    $(document).on('change', '#po_file_type_id', function () {
+        var file_type_id = this.value;
+        var file_type_title = $(this).find(':selected').attr('data-po-file-type-title');
+        //alert(file_type_title);
+
+        if(file_type_title=="Other")
+        {
+            $("#po_file_type_title").attr("readonly", false);
+            $("#po_file_type_title").css('background-color','');
+            $("#po_file_type_title").val('');
+        }
+        else
+        {
+            $("#po_file_type_title").attr("readonly", true);
+            $("#po_file_type_title").css('background-color','#e8e8e8');
+            $("#po_file_type_title").val(file_type_title);
+        }
+     });
+
 
     Date.prototype.toDateInputValue = (function () {
         var local = new Date(this);
@@ -951,7 +999,6 @@ function showPaymentLedger(po_id)
 
 
     $(document).on('click', '.po_item_delete', function(){  
-
         Swal.fire({
             icon: "warning",
             text: `Are you sure?`,

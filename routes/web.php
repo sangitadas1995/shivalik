@@ -119,6 +119,7 @@ Route::middleware('auth')->group(function () {
         Route::post('show-pmt-rcv-by-vendor', [VendorsController::class, 'showPmtRcvByVendor'])->name('show-pmt-rcv-by-vendor');
 
         Route::post('delete-po-payment-rcv-by-vendors', [VendorsController::class, 'deletePoPaymentRcvByVendors'])->name('delete-po-payment-rcv-by-vendors');
+        Route::post('po-file-list', [VendorsController::class, 'poFileList'])->name('po-file-list');
 
 
 

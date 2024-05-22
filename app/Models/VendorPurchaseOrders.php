@@ -19,7 +19,7 @@ class VendorPurchaseOrders extends Model
 
     public function po_payment_received_by_vendors()
     {
-        return $this->hasMany(PoPaymentReceivedByVendors::class, 'purchase_order_id');
+        return $this->hasMany(PoPaymentReceivedByVendors::class, 'purchase_order_id')->where('status','=', 'A');
     }
 
     public function payment_terms(): BelongsTo
