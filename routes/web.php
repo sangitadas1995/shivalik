@@ -283,7 +283,8 @@ Route::middleware('auth')->group(function () {
         Route::get('payment-method-list', [SettingController::class, 'paymentMethodList'])->name('payment-method-list');
         Route::post('payment-method-list-ajax', [SettingController::class, 'listPaymentMethodAjax'])->name('payment-method-list-ajax');
         Route::post('update-payment-method-status', [SettingController::class, 'paymentMethodStatusUpdate'])->name('update-payment-method-status');
-        
+        Route::get('edit-payment-method/{id}', [SettingController::class, 'editPaymentMethod'])->name('edit-payment-method');
+        Route::post('update-payment-method/{id}', [SettingController::class, 'updatePaymentMethod'])->name('update-payment-method');
     });
 
     Route::prefix('papertype')->name('papertype.')->group(function () {

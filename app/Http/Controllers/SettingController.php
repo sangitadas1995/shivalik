@@ -517,7 +517,7 @@ class SettingController extends Controller
                     $presentStatus = '<span style="color:red">Inactive</span>';
                 }
 
-                $editLink = route('settings.edit-payment-terms', encrypt($value->id));
+                $editLink = route('settings.edit-payment-method', encrypt($value->id));
                 $subarray = [];
                 $subarray[] = ++$key . '.';
                 $subarray[] = $value->id;
@@ -566,5 +566,30 @@ class SettingController extends Controller
         }
     }
 
+    public function editPaymentMethod($id){
+        $id     = decrypt($id);
+        $paymentMode= PoPaymentModes::findOrFail($id);
+        return view('settings.payment-method-list.edit-payment-mode',['payment_mode'=>$paymentMode]);
+    }
+
+    public function updatePaymentMethod(Request $request,$id){
+        $id = decrypt($id);
+        $request->validate([
+            'payment_mode' => ['required'],
+        ]);
+        
+        try {
+            $adminTerms = PoPaymentModes::find($id);
+            $adminTerms->payment_mode    = $request->payment_mode;
+            $update   = $adminTerms->update();
+            if ($update) {
+                return redirect()->route('settings.payment-method-list')->with('success', 'Payment mode has been updated successfully.');
+            } else {
+                return redirect()->back()->with('fail', 'Failed to updated the Admin settings terms and condition.');
+            }
+        } catch (Exception $th) {
+            return redirect()->back()->with('fail', trans('messages.server_error'));
+        }
+    }
     
 }
