@@ -70,6 +70,14 @@
                 </ul>
               </div>
             </li>
+            <li class="menu-item {{ Route::is('purchaseorder.index') ? 'active' : null }}">
+              <a href="{{ route('purchaseorder.index') }}">
+                <span class="menu-icon">
+                  <i class="ri-pie-chart-2-fill"></i>
+                </span>
+                <span class="menu-title">All Po List</span>
+              </a>
+            </li>
             <li class="menu-item {{ Route::is('papertype.index','papertype.add','papertype.edit') ? 'active' : null }}">
               <a href="{{ route('papertype.index') }}">
                 <span class="menu-icon">
@@ -203,8 +211,6 @@
                   <span class="menu-title">Admin Terms&Condition Settings</span>
                 </a>
                </li>
-
-               
                 </ul>
               </div>
             </li>
