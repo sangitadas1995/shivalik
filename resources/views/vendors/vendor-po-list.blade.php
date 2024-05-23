@@ -38,7 +38,11 @@
                                                 @endif
                                                 </td>
                                                 <td style="text-align: center;width:10%;">{{ $po['po_status'] }}</td>
-                                                <td style="text-align: center;width:30%;"><a href="JavaScript:void(0)" class="edit_po_creation" title="Edit purchase order" data-id ="{{ $po['id'] }}"><img src="{{asset('images/akar-icons_edit.png')}}" /></a><a href="{{route('vendors.vendor-po-preview', encrypt($po['id']))}}" class="" target="__blank" title="View Vendor PO"><i class="fa fa-eye" aria-hidden="true"></i></a><a href="JavaScript:void(0)" class="view_po_details" title="Vendor PO details" data-id ="{{ $po['id'] }}"><i class="fa fa-search-plus"></i></a></td>
+                                                <td style="text-align: center;width:30%;">
+                                                    <a href="JavaScript:void(0)" class="text-primary edit_po_creation" title="Edit Vendor PO" data-id ="{{ $po['id'] }}"><img src="{{asset('images/akar-icons_edit.png')}}" /></a>&nbsp;&nbsp;<a href="{{route('vendors.vendor-po-preview', encrypt($po['id']))}}" class="text-primary" target="__blank" title="View Vendor PO"><i class="fa fa-eye" aria-hidden="true"></i></a>&nbsp;&nbsp;
+                                                    <a href="JavaScript:void(0);" class="text-primary po_file_list_view" title="Upload Related Documents" data-id="{{$po['id']}}"><i class="fa fa-upload" aria-hidden="true"></i></a>&nbsp;&nbsp;
+                                                    <a href="JavaScript:void(0)" class="text-primary view_po_details" title="Vendor PO details" data-id ="{{ $po['id'] }}"><i class="fa fa-search-plus"></i></a>
+                                                </td>
                                             </tr>
                                             @endforeach
                                             @else

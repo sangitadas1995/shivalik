@@ -78,7 +78,7 @@
                 </div>
                 <div class="value-title"><span>PO Amount:</span> INR {{$vendorPoDetails->total_amount !="" ? number_format(round($vendorPoDetails->total_amount),2) : 'N/A'}}</div>
 
-                <div class="tholder max-w-540">
+                <div class="tholder max-w-540" id="showPoAmtDetails">
                     <table class="table order-details-border-table">
                         <tbody>
                             <tr>

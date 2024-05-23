@@ -120,7 +120,16 @@ Route::middleware('auth')->group(function () {
 
         Route::post('delete-po-payment-rcv-by-vendors', [VendorsController::class, 'deletePoPaymentRcvByVendors'])->name('delete-po-payment-rcv-by-vendors');
         Route::post('po-file-list', [VendorsController::class, 'poFileList'])->name('po-file-list');
-        
+
+        Route::post('add-po-upload-documents', [VendorsController::class, 'addPoUploadDocuments'])->name('add-po-upload-documents');
+
+        Route::post('po-documents-list', [VendorsController::class, 'poDocumentsList'])->name('po-documents-list');
+        Route::post('delete-po-documents', [VendorsController::class, 'deletePoDocuments'])->name('delete-po-documents');
+
+
+        Route::post('show-po-amount-details', [VendorsController::class, 'showPoAmountDetails'])->name('show-po-amount-details');
+
+
 
 
         Route::prefix('paper')->name('paper.')->group(function () {

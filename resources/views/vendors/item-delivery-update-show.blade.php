@@ -49,7 +49,7 @@
                             </div>
                             <div class="col-md-2">
                                 <label>Quantity Received:</label>
-                                <input type="text" class="form-control" name="qty_received" id="qty_received"/>
+                                <input type="text" class="form-control" name="qty_received" id="qty_received" onkeypress="return isNumberKey(event)"/>
                                 <span class="text-danger error_qty_received"></span>
                             </div>
                             <div class="col-md-2">
@@ -112,9 +112,9 @@
                                 <td style="text-align: center;width: 13%;">{{$po_details_arr[$i]['childTrackarr'][$j]['delivery_date']}}</td>
                                 <td style="text-align: center;width: 15%;">{{$po_details_arr[$i]['childTrackarr'][$j]['remain_qty']}}</td>
                                 <td style="text-align: center;width: 10%;">
-                                <a href="JavaScript:void(0);" class="po_item_delete" id="{{$po_details_arr[$i]['childTrackarr'][$j]['po_pd_track_id']}}"  title="Delete" style="color:red"> 
+                                <!-- <a href="JavaScript:void(0);" class="po_item_delete" id="{{$po_details_arr[$i]['childTrackarr'][$j]['po_pd_track_id']}}"  title="Delete" style="color:red"> 
                                     <i class="fa fa-trash"></i> 
-                                </a>
+                                </a> -->
                                 </td>
                                 </tr>
                             @php
