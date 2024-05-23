@@ -85,7 +85,7 @@ trait InventoryTrait
 
     public function fetchInventoryCalculation($warehouseId,$paperId,$noofdays)
     {
-        $inventories = Inventory::with('inventory_details','vendor','user')->where([
+        $inventories = Inventory::with('inventory_details','vendor')->where([
             'warehouse_id' => $warehouseId,
             'papertype_id' => $paperId,
             'inventory_type' => 'manual'

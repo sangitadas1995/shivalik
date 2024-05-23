@@ -30,11 +30,6 @@ class Inventory extends Model
     {
         return $this->belongsTo(Vendor::class, 'vendor_id');
     }
-
-    public function user()
-    {
-        return $this->belongsTo(User::class, 'ordered_by');
-    }
 }
 
 

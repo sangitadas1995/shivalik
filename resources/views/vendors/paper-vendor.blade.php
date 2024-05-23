@@ -259,6 +259,7 @@ $(document).on( "change", "#payment_date",function( event, ui ) {
                 success: function (response) {
                     $('.render_po_details').html(response);
                     $('#poDetailsOfVendor').modal('show');
+                    fn_show_po_amount_details(rowid);
                 }
             });
             }
@@ -697,12 +698,14 @@ function showPaymentLedger(po_id)
         var order_qty = $(this).find(':selected').attr('data-p-quantity');
         var receive_qty = $(this).find(':selected').attr('data-p-total-quantity-received');
         var due_qty = $(this).find(':selected').attr('data-p-total-quantity-due');
+        var product_unit_id = $(this).find(':selected').attr('data-product-unit-id');
         //alert(due_qty);
 
         $("#unit_type").val(unit_type);
         $("#qty_ordered").val(order_qty);
         $("#qty_received").val(due_qty);
         $("#balance").val(due_qty);
+        $("#product_unit_id").val(product_unit_id);
 
         if(due_qty == "0")
         {
@@ -765,13 +768,13 @@ function showPaymentLedger(po_id)
     });
 
     $(document).on('click', '.addPaymentLedger', function (e) {
-        //alert("666");
         e.preventDefault();
         var formdata = $("#create_pmt_rcv_by_vendor").serialize();
-
         var payment_date = $("#payment_date").val();
         var payment_amount = $("#payment_amount").val();
         var payment_mode_id = $("#payment_mode_id").val();
+        var purchase_order_id = $("#purchase_order_id").val();
+        //alert(purchase_order_id);
 
         if(payment_date=="")
         {
@@ -804,6 +807,7 @@ function showPaymentLedger(po_id)
                     return Swal.fire('Success!', response.message, 'success').then((result) => {
                       if (result.isConfirmed) {
                        $('#viewPaymentLedgerModal').modal('hide');
+                       fn_show_po_amount_details(purchase_order_id);
                        //window.location.reload();
                       }
                     });
@@ -987,7 +991,7 @@ function showPaymentLedger(po_id)
             },
             dataType: "json",
             success: function (response) {
-                $('#showPoAmtDetails5').html(response.table_data);
+                $('#showPoAmtDetails').html(response.table_data);
             }
         });
     }
@@ -1063,8 +1067,7 @@ function showPaymentLedger(po_id)
         }
     });
 
-    $(document).on('click', '.vd_product_remove', function(){  
-
+    $(document).on('click', '.vd_product_remove', function(){
         Swal.fire({
             icon: "warning",
             text: `Are you sure?`,
@@ -1195,7 +1198,9 @@ function showPaymentLedger(po_id)
         var qty_received = $("#qty_received").val();
         var delivery_date = $("#delivery_date").val();
         var balance_qty = $("#balance").val();
-        //alert(balance_qty);
+        var warehouse_ship_id = $("#warehouse_ship_id").val();
+        var product_unit_id = $("#product_unit_id").val();
+        //alert(warehouse_ship_id);
 
         if(qty_received=="")
         {
@@ -1217,7 +1222,7 @@ function showPaymentLedger(po_id)
             $.ajax({
             url: "{{ route('vendors.add-po-item-delivery') }}",
             method: 'POST',
-            data: {po_id:po_id,product_id:po_product_delevery,qty_received:qty_received,delivery_date:delivery_date},
+            data: {po_id:po_id,product_id:po_product_delevery,qty_received:qty_received,delivery_date:delivery_date,warehouse_ship_id:warehouse_ship_id,product_unit_id:product_unit_id},
             dataType: 'json',
             success: function(response) {
             if(response.status=="success")
@@ -1249,6 +1254,7 @@ function showPaymentLedger(po_id)
             if (result.isConfirmed) {
 
         var id = $(this).attr("id");
+        var purchase_order_id = $("#purchase_order_id").val();
         //alert(track_id);
 
         $.ajax({
@@ -1262,11 +1268,7 @@ function showPaymentLedger(po_id)
                 return Swal.fire('Success!', response.message, 'success').then((result) => {
                 if (result.isConfirmed) {
                     $('#viewPaymentLedgerModal').modal('hide');
-                    //$('.view_po_details').trigger('click');
-
-                    //$('.view_po_details').data('data-poid','17').trigger("click");
-                    // var data2 = {id:id};
-                    // $(".view_po_details").trigger(data2);
+                    fn_show_po_amount_details(purchase_order_id);
                 }
                 });
             }

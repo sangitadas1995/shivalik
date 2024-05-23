@@ -51,15 +51,13 @@ class InventoryController extends Controller
             $query->where(function ($q) use ($request) {
             $q->where('opening_stock', 'LIKE', "%" . $request->search['value'] . "%")
             ->orWhere('current_stock', 'LIKE', "%" . $request->search['value'] . "%")
-            ->orWhere('low_atock', 'LIKE', "%" . $request->search['value'] . "%")
+            ->orWhere('low_stock', 'LIKE', "%" . $request->search['value'] . "%")
             ->orWhereHas('paper_type', function ($q) use ($request) {
                 $q->where('paper_name', 'LIKE', "%" . $request->search['value'] . "%");
                 });
             });
         }
 
-
-       
         if (isset($request->order['0']['dir']) && ($request->order['0']['column'] == 0)) {
             $query->whereHas('paper_type', function ($q) use ($request) {
                 return $q->orderBy('paper_name', $request->order['0']['dir']);
@@ -75,7 +73,7 @@ class InventoryController extends Controller
             $query->orderBy('current_stock', $request->order['0']['dir']);
         }
         else if (isset($request->order['0']['dir']) && ($request->order['0']['column'] == 4)) {
-            $query->orderBy('low_atock', $request->order['0']['dir']);
+            $query->orderBy('low_stock', $request->order['0']['dir']);
         }
         else {
             $query->orderBy('created_at', 'desc');
@@ -105,9 +103,9 @@ class InventoryController extends Controller
                 $subarray[] = ++$key . '.';
                 $subarray[] = $value->paper_type?->paper_name;
                 $subarray[] = Carbon::parse($value->updated_at)->format('d/m/Y');
-                $subarray[] = $value->quantity." ".$value->unit_type?->measurement_unuit;
+                $subarray[] = $value->opening_stock." ".$value->unit_type?->measurement_unuit;
                 $subarray[] = $current_stock." ".$value->unit_type?->measurement_unuit;
-                $subarray[] = $value->low_atock." ".$value->unit_type?->measurement_unuit;
+                $subarray[] = $value->low_stock." ".$value->unit_type?->measurement_unuit;
                 $subarray[] = '<div class="align-items-center d-flex dt-center"><a href="#" title="Stock Out"><img src="' . $stock_out_icon . '" /></a> <a href="#" title="Stock In" id="myStockIn" class="stock_in" data-pvalue="' .$value->paper_type?->paper_name. '" data-paperid="' .$value->papertype_id. '" data-measurementunitid="' .$value->measurement_unit_id. '" data-inventoryid="' .$value->id. '"><img src="' . $stock_in_icon . '" /></a> <a href="'. $detailsLink .'" title="Stock In"><img src="' . $details_icon . '" /></a></div>';
                 $data[] = $subarray;
             }
@@ -124,7 +122,6 @@ class InventoryController extends Controller
 
         return response()->json($output);
     }
-
 
     public function create()
     {
@@ -541,18 +538,19 @@ class InventoryController extends Controller
             $fetchUnits = $this->fetchUnits($request->paper_id);
             $measurement_name = $fetchUnits->unit_type?->measurement_unuit;
 
+            //dd($request->all());
+
             $inventory = new Inventory();
             $inventory->papertype_id        = $request->paper_id;
             $inventory->warehouse_id        = $request->warehouse_id;
-            $inventory->quantity            = $request->opening_stock;
+            $inventory->opening_stock       = $request->opening_stock;
             $inventory->current_stock       = $request->opening_stock;
-            $inventory->low_atock           = $request->low_stock;
+            $inventory->low_stock           = $request->low_stock;
             $inventory->measurement_unit_id = $request->measure_units_id;
-            if(!empty($request->vendor_id))
-            {
-                $inventory->vendor_id = $request->vendor_id;
-            }
-            $inventory->narration           = "Stock in ".$request->opening_stock." ".$measurement_name." paper as a open stock";
+            // if(!empty($request->vendor_id))
+            // {
+            //     $inventory->vendor_id = $request->vendor_id;
+            // }
             $save = $inventory->save();
             $last_inventory_insert_id = $inventory->id;
 
@@ -563,6 +561,7 @@ class InventoryController extends Controller
             $inventorydetails->warehouse_id = $request->warehouse_id;
             $inventorydetails->stock_quantity = $request->opening_stock;
             $inventorydetails->current_stock_balance = $request->opening_stock;
+            $inventorydetails->narration           = "Stock in ".$request->opening_stock." ".$measurement_name." paper as a open stock";
             $inventorydetails->save();
 
             DB::commit();
@@ -629,21 +628,21 @@ class InventoryController extends Controller
             $inventory->papertype_id            = $request->product_id;
             $inventory->warehouse_id            = $request->warehouse_id;
             $inventory->measurement_unit_id     = $request->measurement_unit_id;
-            $inventory->stockin_date            = $request->stock_in_date;
-            $inventory->quantity                = $request->stock_qty;
+            //$inventory->stockin_date            = $request->stock_in_date;
+            $inventory->opening_stock           = $request->stock_qty;
             //$inventory->current_stock           = $request->stock_qty;
-            $inventory->purchase_order_no       = $request->purchase_order_no;
-            $inventory->purchase_order_date     = $request->purchase_order_date;
-            $inventory->purchase_order_amount   = $request->purchase_order_amount;
-            $inventory->ordered_by              = $request->ordered_by;
-            $inventory->orderd_date             = $request->orders_date;
-            $inventory->received_date           = $request->received_date;
-            if(!empty($request->vendor_id))
-            {
-                $inventory->vendor_id           = $request->vendor_id;
-            }
-            $inventory->file                    = $fileName;
-            $inventory->narration               = "Stock in ".$request->stock_qty." ".$measurement_name." paper as a manual stock";
+            // $inventory->purchase_order_no       = $request->purchase_order_no;
+            // $inventory->purchase_order_date     = $request->purchase_order_date;
+            // $inventory->purchase_order_amount   = $request->purchase_order_amount;
+            // $inventory->ordered_by              = $request->ordered_by;
+            // $inventory->orderd_date             = $request->orders_date;
+            // $inventory->received_date           = $request->received_date;
+            // if(!empty($request->vendor_id))
+            // {
+            //     $inventory->vendor_id           = $request->vendor_id;
+            // }
+            // $inventory->file                    = $fileName;
+            // $inventory->narration               = "Stock in ".$request->stock_qty." ".$measurement_name." paper as a manual stock";
             $inventory->inventory_type          = "manual";
             $save = $inventory->save();
             $last_inventory_insert_id = $inventory->id;
@@ -654,6 +653,17 @@ class InventoryController extends Controller
             $inventorydetails->warehouse_id = $request->warehouse_id;
             $inventorydetails->stock_quantity = $request->stock_qty;
             $inventorydetails->current_stock_balance = $total_current_stock_balance;
+
+            $inventorydetails->stockin_date            = $request->stock_in_date;
+            $inventorydetails->purchase_order_no       = $request->purchase_order_no;
+            $inventorydetails->purchase_order_date     = $request->purchase_order_date;
+            $inventorydetails->purchase_order_amount   = $request->purchase_order_amount;
+            $inventorydetails->ordered_by              = $request->ordered_by;
+            $inventorydetails->orderd_date             = $request->orders_date;
+            $inventorydetails->received_date           = $request->received_date;
+            $inventorydetails->file                    = $fileName;
+            $inventorydetails->narration               = "Stock in ".$request->stock_qty." ".$measurement_name." paper as a manual stock";
+
             $inventorydetails->save();
 
             DB::commit();
@@ -702,7 +712,6 @@ class InventoryController extends Controller
         $paperId = $data["paperId"];
         $noofdays = $data["noofdays"];
 
-
         $inventoryDetails_calculation = $this->fetchInventoryCalculation($warehouseId,$paperId,$noofdays);
 
         $output = '';
@@ -713,10 +722,10 @@ class InventoryController extends Controller
             <tr>
             <td>'.Carbon::parse($value->created_at)->format('d.m.Y').'</td>
             <td>NIL</td>
-            <td>'.$value->purchase_order_no.'</td>
+            <td>'.$value?->inventory_details->purchase_order_no.'</td>
             <td>'.$value->vendor?->company_name.'</td>
-            <td>'.$value->user?->name.'</td>
-            <td class="naration-colum">'.$value->narration.'</td>';
+            <td>'.$value?->inventory_details->user?->name.'</td>
+            <td class="naration-colum">'.$value?->inventory_details->narration.'</td>';
             if($value->inventory_details?->stock_type=="credit")
             {
                 $output .= '<td class="border-left-table-td">'.$value->inventory_details?->stock_quantity.'</td>

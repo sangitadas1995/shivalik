@@ -32,6 +32,8 @@ use App\Models\PoUploadFileTypes;
 use App\Models\PoUploadDocuments;
 use App\Models\User;
 use App\Models\AdminSettingTerms;
+use App\Models\Inventory;
+use App\Models\InventoryDetails;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 //use Illuminate\Support\Facades\Auth;
@@ -1371,6 +1373,10 @@ class VendorsController extends Controller
     public function itemDeliveryUpdateShow(Request $request){
         $po_id = $request->rowid;
 
+        $vendorPos = VendorPurchaseOrders::where('id', $po_id)->first();
+        $warehouse_ship_id = $vendorPos->warehouse_ship_id;
+        //echo $warehouse_ship_id;exit;
+
         $vendorPoDetails = VendorPurchaseOrderDetails::with('paper_type')->where('purchase_order_id', $po_id)->get();
         //dd($vendorPoDetails);
 
@@ -1407,12 +1413,12 @@ class VendorsController extends Controller
                 $delivery_date = 'N/A';
             }
             
-            $po_details_arr[] = array('po_details_id' => $vd->id, 'po_id' => $vd->purchase_order_id, 'product_id' => $vd->product_id, 'product_name' => $vd?->paper_type->paper_name, 'product_unit' => $vd?->paper_type?->unit_type->measurement_unuit, 'order_qty' => $vd->order_qty, 'total_qty_received' => $total_qty_received, 'total_qty_due' => $total_qty_due, 'delivery_date' => $delivery_date, 'childTrackarr' => $poPdDvQtyDetArr);
+            $po_details_arr[] = array('po_details_id' => $vd->id, 'po_id' => $vd->purchase_order_id, 'product_id' => $vd->product_id, 'product_name' => $vd?->paper_type->paper_name, 'product_unit' => $vd?->paper_type?->unit_type->measurement_unuit, 'product_unit_id' => $vd?->paper_type?->unit_type->id, 'order_qty' => $vd->order_qty, 'total_qty_received' => $total_qty_received, 'total_qty_due' => $total_qty_due, 'delivery_date' => $delivery_date, 'childTrackarr' => $poPdDvQtyDetArr);
         }
 
         //dd($po_details_arr);
 
-        $html = view('vendors.item-delivery-update-show', ['po_id' => $po_id, 'po_details_arr' => $po_details_arr])->render();
+        $html = view('vendors.item-delivery-update-show', ['po_id' => $po_id, 'po_details_arr' => $po_details_arr, 'warehouse_ship_id' => $warehouse_ship_id])->render();
         return response()->json($html);
     }
 
@@ -1451,12 +1457,87 @@ class VendorsController extends Controller
         //dd($request->all());
 
         try {
+            DB::beginTransaction();
             $pd_delivery_track_insert = new PoProductsDeliveryQtyTrackers();
             $pd_delivery_track_insert->purchase_order_id = $request->po_id;
             $pd_delivery_track_insert->product_id = $request->product_id;
             $pd_delivery_track_insert->qty_received = $request->qty_received;
             $pd_delivery_track_insert->delivery_date = $request->delivery_date;
             $save = $pd_delivery_track_insert->save();
+
+            $po_detail = VendorPurchaseOrders::where('id', $request->po_id)->first();
+            $purchase_order_no = $po_detail->purchase_order_no;
+            $purchase_order_date = $po_detail->purchase_order_date;
+            $stockin_date = $request->delivery_date;
+            $purchase_order_amount = $po_detail->total_amount;
+            $ordered_by = $po_detail->order_by;
+            $orderd_date = $po_detail->exp_delivery_date;
+            $received_date = $request->delivery_date;
+
+            $inventoriesCount = Inventory::where('papertype_id', $request->product_id)->where('warehouse_id', $request->warehouse_ship_id)->get()->count();
+
+            if($inventoriesCount>0)
+            {
+                $inventoriesDetails = Inventory::where('papertype_id', $request->product_id)->where('warehouse_id', $request->warehouse_ship_id)->first();
+
+                $invAutoId = $inventoriesDetails->id;
+                $current_stock = ($inventoriesDetails->current_stock+$request->qty_received);
+                $automaticInventoriesUpdate = Inventory::findOrFail($invAutoId);
+                $automaticInventoriesUpdate->current_stock = $current_stock;
+                $automaticInventoriesUpdate->update();
+
+
+                $current_stock_balance = ($inventoriesDetails->current_stock+$request->qty_received);
+                $invDetailsInsert = new InventoryDetails();
+                $invDetailsInsert->inventory_id = $invAutoId;
+                $invDetailsInsert->papertype_id = $request->product_id;
+                $invDetailsInsert->warehouse_id = $request->warehouse_ship_id;
+                $invDetailsInsert->stock_quantity = $request->qty_received;
+                $invDetailsInsert->current_stock_balance = $current_stock_balance;
+                $invDetailsInsert->narration = "Stock in ".$request->qty_received." paper as a automatic stock";
+                $invDetailsInsert->stockin_date = $stockin_date;
+                $invDetailsInsert->purchase_order_no = $purchase_order_no;
+                $invDetailsInsert->purchase_order_date = $purchase_order_date;
+                $invDetailsInsert->purchase_order_amount = $purchase_order_amount;
+                $invDetailsInsert->ordered_by = $ordered_by;
+                $invDetailsInsert->orderd_date = $orderd_date;
+                $invDetailsInsert->received_date = $received_date;
+                $invDetailsInsert->save();
+            }
+            else
+            {
+                $low_stock = round(($request->qty_received*50)/100);
+                $automaticInventoriesInsert = new Inventory();
+                $automaticInventoriesInsert->papertype_id = $request->product_id;
+                $automaticInventoriesInsert->warehouse_id = $request->warehouse_ship_id;
+                $automaticInventoriesInsert->opening_stock = $request->qty_received;
+                $automaticInventoriesInsert->current_stock = $request->qty_received;
+                $automaticInventoriesInsert->measurement_unit_id = $request->product_unit_id;
+                $automaticInventoriesInsert->low_stock = $low_stock;
+                $automaticInventoriesInsert->inventory_type = 'automatic';
+                $invSave = $automaticInventoriesInsert->save();
+
+                $invAutoId = $automaticInventoriesInsert->id;
+
+                $invDetailsInsert = new InventoryDetails();
+                $invDetailsInsert->inventory_id = $invAutoId;
+                $invDetailsInsert->papertype_id = $request->product_id;
+                $invDetailsInsert->warehouse_id = $request->warehouse_ship_id;
+                $invDetailsInsert->stock_quantity = $request->qty_received;
+                $invDetailsInsert->current_stock_balance = $request->qty_received;
+                $invDetailsInsert->narration = "Stock in ".$request->qty_received." paper as a automatic stock";
+                $invDetailsInsert->stockin_date = $stockin_date;
+                $invDetailsInsert->purchase_order_no = $purchase_order_no;
+                $invDetailsInsert->purchase_order_date = $purchase_order_date;
+                $invDetailsInsert->purchase_order_amount = $purchase_order_amount;
+                $invDetailsInsert->ordered_by = $ordered_by;
+                $invDetailsInsert->orderd_date = $orderd_date;
+                $invDetailsInsert->received_date = $received_date;
+                $invDetailsInsert->save();
+            }
+
+
+            DB::commit();
             if($save)
             {
                 return response()->json([
@@ -1472,7 +1553,8 @@ class VendorsController extends Controller
                 ]);
             }
         } catch (Exception $th) {
-             return response()->json([
+            DB::rollBack();
+            return response()->json([
                 'status' => "fail",
                 'message' => "Failed to added item delivery"
             ]);
@@ -1601,17 +1683,17 @@ class VendorsController extends Controller
             $po_file_type_id = $request->po_file_type_id;
             $po_file_type_title = $request->po_file_type_title;
 
-            $poUploadDocumentsTotCnt = PoUploadDocuments::where('purchase_order_id', $po_id)->where('po_file_type_id', $po_file_type_id)->where('po_file_type_title', $po_file_type_title)->where('status', 'A')->get()->count();
+            // $poUploadDocumentsTotCnt = PoUploadDocuments::where('purchase_order_id', $po_id)->where('po_file_type_id', $po_file_type_id)->where('po_file_type_title', $po_file_type_title)->where('status', 'A')->get()->count();
 
-            if($poUploadDocumentsTotCnt>0)
-            {
-                return response()->json([
-                    'status' => "fail",
-                    'message' => "File already exist"
-                ]);
-            }
-            else
-            {
+            // if($poUploadDocumentsTotCnt>0)
+            // {
+            //     return response()->json([
+            //         'status' => "fail",
+            //         'message' => "File already exist"
+            //     ]);
+            // }
+            //else
+            //{
                 if(!empty($request->file_data))
                 {
                     $fileName = time().'.'.$request->file_data->getClientOriginalExtension();  
@@ -1641,7 +1723,7 @@ class VendorsController extends Controller
                         'message' => "Failed to upload PO document"
                     ]);
                 }
-            }
+            //}
         } catch (Exception $th) {
              return response()->json([
                 'status' => "fail",
@@ -1716,5 +1798,38 @@ class VendorsController extends Controller
             $outstanding_amount = $vendorPoDetails->total_amount;
         }
 
+        $output = "";
+        $output .='<table class="table order-details-border-table"><tbody><tr>';
+        if(!empty($vendorPoDetails->po_payment_terms)){
+            $output .='<td><strong>Payment Terms</strong><br>';
+            if($vendorPoDetails->po_payment_terms==2){
+            $output .= $vendorPoDetails?->payment_terms->payement_terms_condition.' After '.$vendorPoDetails->po_payment_credit_days.' days';
+            }
+            else
+            {
+                $output .= $vendorPoDetails?->payment_terms->payement_terms_condition;
+            }
+                $output .='</td>';
+            }
+
+            $output .='<td><strong>Payment Made</strong><br>INR <span id="po_payment_recived_div">';
+            if($total_payment_rcv_by_vendor!=""){
+                $output .= number_format($total_payment_rcv_by_vendor,2);
+            } else {
+                $output .= 'N/A';
+            }
+            $output .= '</span></td><td><strong>Outstanding Balance</strong><br><span class="red">INR  <font id="po_balance_payment_div">';
+            if($outstanding_amount!=""){
+                $output .= number_format(round($outstanding_amount),2);
+            } else {
+                $output .= 'N/A';
+            }
+
+            $output .= '</font></span><br>(<a href="JavaScript:void(0)" class="text-primary view_payment_ledger" data-id="'.$vendorPoDetails->id.'">Update Vendor Payment Released</a>)</td></tr></tbody></table>';
+
+            $data = array(
+            'table_data'  => $output
+            );
+            echo json_encode($data);
     }
 }
