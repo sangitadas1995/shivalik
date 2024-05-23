@@ -34,7 +34,7 @@
                                     <strong>PO Status</strong><br><a href="javascript:void(0);" class="text-primary po_status_change" data-id="{{$vendorPoDetails->id}}">{{ucfirst($vendorPoDetails->po_status)}}</a>
                                 </td>
                                 <td style="width:19%;">
-                                    <strong>Delivery Date</strong><br>{{date("d-M-Y",strtotime($vendorPoDetails->exp_delivery_date))}}                             
+                                    <strong>Delivery Date</strong><br>{{$vendorPoDetails->exp_delivery_date!="" ? date("d-M-Y",strtotime($vendorPoDetails->exp_delivery_date)) : 'N/A'}}                             
                                 </td>
                                 <td style="width:13%;">
                                     <strong>Vendor Quotation No.</strong><br>
@@ -43,15 +43,7 @@
                                 <td style="width:17%;">
                                     <strong>Quotation Date</strong><br>
                                     {{$vendorPoDetails->vendor_quotation_date !="" ? date("d-M-Y",strtotime($vendorPoDetails->vendor_quotation_date)) : 'N/A'}}
-                                </td> 
-                                <!-- <td>
-                                    <strong>Vendor Invoice No.</strong><br><a href="JavaScript:void(0)" class="po_vendor_invoice_no_change" data-po_id="48" id="po_vendor_invoice_no_div_48">N/A</a>
-                                </td> 
-                                <td>
-                                    <strong>Vendor Invoice Date</strong><br><a href="JavaScript:void(0)" class="po_vendor_invoice_date_change" data-po_id="48" id="po_vendor_invoice_date_div_48">N/A</a>
-                                </td>  -->
-                                
-                                
+                                </td>
                                 <td style="width:10%;">
                                     <strong>Added By </strong><br>Admin 1
                                 </td>
@@ -79,39 +71,6 @@
                 <div class="value-title"><span>PO Amount:</span> INR {{$vendorPoDetails->total_amount !="" ? number_format(round($vendorPoDetails->total_amount),2) : 'N/A'}}</div>
 
                 <div class="tholder max-w-540" id="showPoAmtDetails">
-                    <table class="table order-details-border-table">
-                        <tbody>
-                            <tr>
-                                @if (!empty($vendorPoDetails->po_payment_terms))
-                                <td>
-                                    <strong>Payment Terms</strong><br>
-                                    @php    
-                                    if($vendorPoDetails->po_payment_terms==2){
-                                        echo $vendorPoDetails?->payment_terms->payement_terms_condition." After ".$vendorPoDetails->po_payment_credit_days." days";
-                                    }
-                                    else
-                                    {
-                                        echo $vendorPoDetails?->payment_terms->payement_terms_condition;
-                                    }
-                                    @endphp                       
-                                </td>
-                                @endif
-                                <td>
-                                    <strong>Payment Made</strong><br>INR 
-                                    <span id="po_payment_recived_div">
-                                    {{$total_payment_rcv_by_vendor !="" ? number_format($total_payment_rcv_by_vendor,2) : 'N/A'}}
-                                    </span>
-                                </td>
-                                <td>
-                                    <strong>Outstanding Balance</strong><br><span class="red">INR  
-                                    <font id="po_balance_payment_div">
-                                    {{$outstanding_amount !="" ? number_format($outstanding_amount,2) : 'N/A'}}
-                                </font></span><br>
-                                    (<a href="JavaScript:void(0)" class="text-primary view_payment_ledger" data-id="{{$vendorPoDetails->id}}">Update Vendor Payment Released</a>)
-                                </td>
-                            </tr>
-                        </tbody>
-                   </table>
                 </div>
             </div>
             

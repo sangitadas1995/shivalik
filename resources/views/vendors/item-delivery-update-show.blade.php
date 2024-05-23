@@ -31,7 +31,7 @@
                                 <option value="">Select</option>
                                 @if (!empty($po_details_arr))
                                 @foreach ($po_details_arr as $vd)
-                                <option value="{{ $vd['product_id'] }}" data-product-unit="{{$vd['product_unit']}}" data-p-quantity="{{$vd['order_qty']}}" data-p-total-quantity-received="{{$vd['total_qty_received']}}" data-p-total-quantity-due="{{$vd['total_qty_due']}}">{{$vd['product_name']}}</option>
+                                <option value="{{ $vd['product_id'] }}" data-product-unit="{{$vd['product_unit']}}" data-p-quantity="{{$vd['order_qty']}}" data-p-total-quantity-received="{{$vd['total_qty_received']}}" data-p-total-quantity-due="{{$vd['total_qty_due']}}" data-product-unit-id="{{$vd['product_unit_id']}}">{{$vd['product_name']}}</option>
                                 @endforeach
                                 @endif
                                 </select>
@@ -62,6 +62,8 @@
                                 <input type="text" class="form-control" name="balance" id="balance" readonly="true" style="background-color:#e8e8e8;"/>
                             </div>
                             <div class="col-md-2 mt-4">
+                                <input type="hidden" class="form-control" name="warehouse_ship_id" id="warehouse_ship_id" value="{{$warehouse_ship_id}}" />
+                                <input type="hidden" class="form-control" name="product_unit_id" id="product_unit_id"/>
                                 <button type="button" class="btn black-btn addPoItemDelivery" id={{$po_id}}>Add</button>
                             </div>
                         </div>
