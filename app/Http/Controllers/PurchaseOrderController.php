@@ -52,7 +52,7 @@ class PurchaseOrderController extends Controller
                 return $q->orderBy('company_name', $request->order['0']['dir']);
             });
         } else {
-            $query->orderBy('created_at', 'desc');
+            $query->orderBy('id', 'desc');
         }
 
         $number_filtered_row = $query->count();
@@ -86,8 +86,8 @@ class PurchaseOrderController extends Controller
                 $subarray[] = $value->id;
                 $subarray[] = $value->purchase_order_no;
                 $subarray[] = Carbon::parse($value->purchase_order_date)->format('d/m/Y');
-                $subarray[] = $value->vendor?->company_name ?? null;
                 $subarray[] = Carbon::parse($value->exp_delivery_date)->format('d/m/Y');
+                $subarray[] = $value->vendor?->company_name ?? null;
                 $subarray[] = 'INR '.$value->total_amount;
                 $subarray[] = $presentStatus;
                 $subarray[] = ucfirst($value->po_status);
