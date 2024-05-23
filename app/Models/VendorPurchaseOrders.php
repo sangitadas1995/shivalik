@@ -26,4 +26,9 @@ class VendorPurchaseOrders extends Model
     {
         return $this->belongsTo(PaymentTermsModel::class, 'po_payment_terms');
     }
+
+    public function vendor(): BelongsTo
+    {
+        return $this->belongsTo(Vendor::class, 'vendor_id');
+    }
 }

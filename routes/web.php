@@ -1,16 +1,17 @@
 <?php
 
-use App\Http\Controllers\CustomersController;
-use App\Http\Controllers\InventoryController;
-use App\Http\Controllers\OrdersController;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UsersController;
+use App\Http\Controllers\OrdersController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\VendorsController;
-use App\Http\Controllers\PaperSettingController;
+use App\Http\Controllers\CustomersController;
+use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\PaperTypeController;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\PaperSettingController;
+use App\Http\Controllers\PurchaseOrderController;
 
 /*
 |--------------------------------------------------------------------------
@@ -73,7 +74,6 @@ Route::middleware('auth')->group(function () {
 
 
     Route::prefix('vendors')->name('vendors.')->group(function () {
-        /*  Route::get('/', [VendorsController::class, 'index'])->name('index'); */
         Route::get('add', [VendorsController::class, 'create'])->name('add');
         Route::post('store', [VendorsController::class, 'store'])->name('store');
         Route::post('list-data', [VendorsController::class, 'list_data'])->name('data');
@@ -120,7 +120,7 @@ Route::middleware('auth')->group(function () {
 
         Route::post('delete-po-payment-rcv-by-vendors', [VendorsController::class, 'deletePoPaymentRcvByVendors'])->name('delete-po-payment-rcv-by-vendors');
         Route::post('po-file-list', [VendorsController::class, 'poFileList'])->name('po-file-list');
-
+        
 
 
         Route::prefix('paper')->name('paper.')->group(function () {
@@ -304,6 +304,12 @@ Route::middleware('auth')->group(function () {
 
         Route::post('get-no-of-sheet-by-unitid', [PaperTypeController::class, 'get_no_of_sheet_by_unitid'])->name('get-no-of-sheet-by-unitid');
     });
+
+    Route::prefix('purchaseorder')->name('purchaseorder.')->group(function () {
+        Route::get('/', [PurchaseOrderController::class, 'puchaseOrderList'])->name('index');
+        Route::post('list-data', [PurchaseOrderController::class, 'list_data'])->name('data');
+    });
+    
 });
 
 require __DIR__ . '/auth.php';
