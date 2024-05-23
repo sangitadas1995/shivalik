@@ -96,8 +96,8 @@ class PurchaseOrderController extends Controller
                 $subarray = [];
                 $subarray[] = $value->id;
                 $subarray[] = $value->purchase_order_no;
-                $subarray[] = Carbon::parse($value->purchase_order_date)->format('d/m/Y');
-                $subarray[] = Carbon::parse($value->exp_delivery_date)->format('d/m/Y');
+                $subarray[] = $value->purchase_order_date;
+                $subarray[] = $value->exp_delivery_date;
                 $subarray[] = $value->vendor?->company_name ?? null;
                 $subarray[] = 'INR '.$value->total_amount;
                 $subarray[] = $presentStatus;
