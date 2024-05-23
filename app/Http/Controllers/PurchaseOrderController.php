@@ -82,6 +82,17 @@ class PurchaseOrderController extends Controller
                     $presentStatus = '<span style="color:green">Received</span>';
                 }
 
+                if ($value->po_status == "cancelled") {
+                    $po_status = '<span style="color:red">Not Reeceived</span>';
+                }
+                if ($value->po_status == "completed") {
+                    $po_status = '<span style="color:yellow">Partial Received</span>';
+                }
+
+                if ($value->po_status == "active") {
+                    $po_status = '<span style="color:green">Active</span>';
+                }
+
                 $subarray = [];
                 $subarray[] = $value->id;
                 $subarray[] = $value->purchase_order_no;
@@ -90,7 +101,7 @@ class PurchaseOrderController extends Controller
                 $subarray[] = $value->vendor?->company_name ?? null;
                 $subarray[] = 'INR '.$value->total_amount;
                 $subarray[] = $presentStatus;
-                $subarray[] = ucfirst($value->po_status);
+                $subarray[] = $po_status;
                 $data[] = $subarray;
             }
         }
