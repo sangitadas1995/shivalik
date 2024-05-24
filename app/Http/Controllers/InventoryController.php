@@ -112,7 +112,7 @@ class InventoryController extends Controller
                 $subarray[] = $value->opening_stock." ".$value->unit_type?->measurement_unuit;
                 $subarray[] = $value->current_stock." ".$value->unit_type?->measurement_unuit;
                 $subarray[] = $value->low_stock." ".$value->unit_type?->measurement_unuit;
-                $subarray[] = '<div class="align-items-center d-flex dt-center"><a href="JavaScript:void(0);" title="Stock Out" class="stock_out" data-pvalue="' .$value->paper_type?->paper_name. '" data-paperid="' .$value->papertype_id. '" data-measurementunitid="' .$value->measurement_unit_id. '" data-inventoryid="' .$value->inventory_id. '"><img src="' . $stock_out_icon . '" /></a><a href="JavaScript:void(0);" title="Stock In" id="myStockIn" class="stock_in" data-pvalue="' .$value->paper_type?->paper_name. '" data-paperid="' .$value->papertype_id. '" data-measurementunitid="' .$value->measurement_unit_id. '" data-inventoryid="' .$value->inventory_id. '"><img src="' . $stock_in_icon . '" /></a><a href="'. $detailsLink .'" title="Stock In"><img src="' . $details_icon . '" /></a></div>';
+                $subarray[] = '<div class="align-items-center d-flex dt-center"><a href="JavaScript:void(0);" title="Stock Out" class="stock_out" data-pvalue="' .$value->paper_type?->paper_name. '" data-paperid="' .$value->papertype_id. '" data-measurementunitid="' .$value->measurement_unit_id. '" data-inventoryid="' .$value->id. '"><img src="' . $stock_out_icon . '" /></a><a href="JavaScript:void(0);" title="Stock In" id="myStockIn" class="stock_in" data-pvalue="' .$value->paper_type?->paper_name. '" data-paperid="' .$value->papertype_id. '" data-measurementunitid="' .$value->measurement_unit_id. '" data-inventoryid="' .$value->id. '"><img src="' . $stock_in_icon . '" /></a><a href="'. $detailsLink .'" title="Stock In"><img src="' . $details_icon . '" /></a></div>';
                 $data[] = $subarray;
             }
         }
@@ -545,13 +545,12 @@ class InventoryController extends Controller
     public function storeInventoryProductStock(Request $request){
         try
         {
+            //dd($request->all());
             DB::beginTransaction();
             $warehouse_get_id = $request->warehouse_get_id;
 
             $fetchUnits = $this->fetchUnits($request->paper_id);
             $measurement_name = $fetchUnits->unit_type?->measurement_unuit;
-
-            //dd($request->all());
 
             $inventory = new Inventory();
             $inventory->papertype_id        = $request->paper_id;
