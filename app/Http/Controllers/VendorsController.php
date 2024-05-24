@@ -34,13 +34,14 @@ use App\Models\User;
 use App\Models\AdminSettingTerms;
 use App\Models\Inventory;
 use App\Models\InventoryDetails;
+use App\Traits\InventoryTrait;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 //use Illuminate\Support\Facades\Auth;
 
 class VendorsController extends Controller
 {
-    use Validate, Helper, PaperTypeTrait;
+    use Validate, Helper, PaperTypeTrait, InventoryTrait;
     public function index()
     {
         return view('vendors.index');
@@ -1476,6 +1477,9 @@ class VendorsController extends Controller
 
             $inventoriesCount = Inventory::where('papertype_id', $request->product_id)->where('warehouse_id', $request->warehouse_ship_id)->get()->count();
 
+            $fetchUnits = $this->fetchUnits($request->product_id);
+            $measurement_name = $fetchUnits->unit_type?->measurement_unuit;
+
             if($inventoriesCount>0)
             {
                 $inventoriesDetails = Inventory::where('papertype_id', $request->product_id)->where('warehouse_id', $request->warehouse_ship_id)->first();
@@ -1493,8 +1497,9 @@ class VendorsController extends Controller
                 $invDetailsInsert->papertype_id = $request->product_id;
                 $invDetailsInsert->warehouse_id = $request->warehouse_ship_id;
                 $invDetailsInsert->stock_quantity = $request->qty_received;
-                $invDetailsInsert->current_stock_balance = $current_stock_balance;
-                $invDetailsInsert->narration = "Stock in ".$request->qty_received." paper as a automatic stock";
+                $invDetailsInsert->current_stock_balance = $current_stock;
+                $invDetailsInsert->inventory_type = 'automatic';
+                $invDetailsInsert->narration = "Stock in ".$request->qty_received." ".$measurement_name." paper as a automatic stock";
                 $invDetailsInsert->stockin_date = $stockin_date;
                 $invDetailsInsert->purchase_order_no = $purchase_order_no;
                 $invDetailsInsert->purchase_order_date = $purchase_order_date;
@@ -1514,7 +1519,6 @@ class VendorsController extends Controller
                 $automaticInventoriesInsert->current_stock = $request->qty_received;
                 $automaticInventoriesInsert->measurement_unit_id = $request->product_unit_id;
                 $automaticInventoriesInsert->low_stock = $low_stock;
-                $automaticInventoriesInsert->inventory_type = 'automatic';
                 $invSave = $automaticInventoriesInsert->save();
 
                 $invAutoId = $automaticInventoriesInsert->id;
@@ -1525,7 +1529,8 @@ class VendorsController extends Controller
                 $invDetailsInsert->warehouse_id = $request->warehouse_ship_id;
                 $invDetailsInsert->stock_quantity = $request->qty_received;
                 $invDetailsInsert->current_stock_balance = $request->qty_received;
-                $invDetailsInsert->narration = "Stock in ".$request->qty_received." paper as a automatic stock";
+                $invDetailsInsert->inventory_type = 'automatic';
+                $invDetailsInsert->narration = "Stock in ".$request->qty_received." ".$measurement_name." paper as a automatic stock";
                 $invDetailsInsert->stockin_date = $stockin_date;
                 $invDetailsInsert->purchase_order_no = $purchase_order_no;
                 $invDetailsInsert->purchase_order_date = $purchase_order_date;

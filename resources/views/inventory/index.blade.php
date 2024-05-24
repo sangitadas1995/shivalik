@@ -127,19 +127,7 @@
                                     <small class="text-danger error_opening_stock"></small>
                                 </div>
                             </div>
-                            <!-- <div class="col-md-6">
-                                 <div class="mb-3">
-                                    <label class="form-label"><span class="text-danger">*</span>Measurement Unit
-                                        :</label>
-                                    <select name="measurement_unit_id" id="measurement_unit_id" class="form-control">
-                                        <option value="">-- Select--</option>
-                                        <option value="1">Ream</option>
-                                        <option value="2">Bundle</option>
-                                        <option value="3">Carton</option>
-                                    </select>
-                                    <small class="text-danger error_measurement_unit_id"></small>
-                                </div> 
-                            </div> -->
+
                             <div class="col-md-4">
                                 <div class="mb-3">
                                     <label class="form-label">P.O No :</label>
@@ -219,6 +207,122 @@
         </div>
     </div>
 </div>
+
+{{-- Inventory manual Stock Out Modal --}}
+<div class="modal" tabindex="-1" id="inventory_manual_stockout">
+    <div class="modal-background-blur align-items-start overflow-auto">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Inventory Manual Stock out</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form action="" method="POST" id="manual_stock_out" enctype="multipart/form-data">
+                        @csrf
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="mb-3">
+                                    <label class="form-label"><b>Warehouse :</b> {{$warehouseDetails->company_name}}, {{$warehouseDetails->address}}</label>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label"><b>Product :</b> <span id="productvalout"></span></label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Stockout Date<span class="text-danger">*</span></label>
+                                    <input type="date" class="form-control" name="stockout_in_date" id="stockout_in_date"
+                                        value="" />
+                                    <small class="text-danger error_stock_in_date"></small>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label"><span class="text-danger">*</span>Stock Out Quantity:</label>
+                                    <input type="text" class="form-control" name="stock_qty" id="stock_qty" value="" />
+                                    <small class="text-danger error_opening_stock"></small>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label class="form-label">P.O No :</label>
+                                    <input type="text" class="form-control" name="purchase_order_no" id="purchase_order_no" value="" />
+                                    <small class="text-danger error_low_stock"></small>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label class="form-label">P.O Date<span class="text-danger">*</span></label>
+                                    <input type="date" class="form-control" name="purchaseout_order_date" id="purchaseout_order_date" value="" />
+                                    <small class="text-danger error_purchase_order_date"></small>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label class="form-label">P.O Amount<span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" name="purchase_order_amount" id="purchase_order_amount" value="" />
+                                    <small class="text-danger error_purchase_order_amount"></small>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Ordered By<span class="text-danger">*</span></label>
+                                    <select name="ordered_by" id="ordered_by" class="form-control">
+                                    <option value="">Select</option>
+                                    @if (!empty($users) && $users->isNotEmpty())
+                                    @foreach ($users as $us)
+                                    <option value="{{ $us->id }}" {{ $us->id == auth()->user()->id ? 'selected' : null }}>{{ $us->name }}</option>
+                                    @endforeach
+                                    @endif
+                                    </select>
+                                    <small class="text-danger error_order_by"></small>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Ordered Date<span class="text-danger">*</span></label>
+                                    <input type="date" class="form-control" name="ordersout_date" id="ordersout_date" value="" />
+                                    <small class="text-danger error_orders_date"></small>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Received Date<span class="text-danger">*</span></label>
+                                    <input type="date" class="form-control" name="receivedout_date" id="receivedout_date" value="" />
+                                    <small class="text-danger error_delivery_date"></small>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Attachment<span class="text-danger">*</span></label>
+                                    <input type="file" class="form-control" name="upload_file" id="upload_file" value="" />
+                                    <small class="text-danger error_upload_file"></small>
+                                </div>
+                            </div>
+
+                            <div class="text-end">
+                                <input type="hidden" name="warehouse_id" value="{{$warehouseDetails->id}}">
+                                <input type="hidden" name="vendor_id" value="{{$warehouseDetails->vendor_id}}">
+                                <input type="hidden" name="productout_id" id="productout_id">
+                                <input type="hidden" name="measurementout_unit_id" id="measurementout_unit_id">
+                                <input type="hidden" name="inventoryout_id" id="inventoryout_id">
+                                <button type="button" class="btn grey-primary reset_add_customer">Cancel</button>
+                                <button type="submit" class="btn black-btn">Save</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 @endsection
 
 @section('scripts')
@@ -247,14 +351,13 @@ $(document).ready(function () {
           dataType: 'json',
           success: function(response) {
             //alert(response.status);
-            if (response.status == 200) {
-                Swal.fire(
-                'Added!','Manual stock added successfully!','success');
-                $("#manual_stock_in")[0].reset();
+            if (response.status=="success") {
+                return Swal.fire('Success!', response.message, 'success').then((result) => {
+                if (result.isConfirmed) {
                 $("#inventory_manual_stockin").modal('hide');
-                setTimeout(function () { 
-                location.reload();
-                }, 3000);
+                setTimeout(function () { location.reload();}, 3000);
+                }
+                });
             }
             else{
                 Swal.fire('Error!', 'Something went wrong, please try again.', 'error');
@@ -264,7 +367,38 @@ $(document).ready(function () {
     });
 
 
-        let product_stock_list_table = $('#product_stock_list_table').DataTable({
+    $("#manual_stock_out").submit(function(e) {
+        e.preventDefault();
+        const fd = new FormData(this);
+        //alert(fd);
+
+        $.ajax({
+          url: "{{ route('inventory.store-product-manual-stock-out') }}",
+          method: 'post',
+          data: fd,
+          cache: false,
+          contentType: false,
+          processData: false,
+          dataType: 'json',
+          success: function(response) {
+            //alert(response.status);
+            if (response.status=="success") {
+                return Swal.fire('Success!', response.message, 'success').then((result) => {
+                if (result.isConfirmed) {
+                $("#inventory_manual_stockout").modal('hide');
+                setTimeout(function () { location.reload();}, 3000);
+                }
+                });
+            }
+            else{
+                Swal.fire('Error!', 'Something went wrong, please try again.', 'error');
+            }
+        }
+        });
+    });
+
+
+    let product_stock_list_table = $('#product_stock_list_table').DataTable({
           stateSave: true,
           processing: true,
           serverSide: true,
@@ -309,8 +443,27 @@ $(document).ready(function () {
         $("#product_id").val(product_id);
         $("#measurement_unit_id").val(measurement_unit_id);
         $("#inventory_id").val(inventory_id);
-        
         $('#inventory_manual_stockin').modal('show');
+    });
+
+
+    $(document).on('click', '.stock_out', function (e) {
+        e.preventDefault();
+        $('#stockout_in_date').val(new Date().toDateInputValue());
+        $('#purchaseout_order_date').val(new Date().toDateInputValue());
+        $('#ordersout_date').val(new Date().toDateInputValue());
+        $('#receivedout_date').val(new Date().toDateInputValue());
+        var product_name = $(this).data().pvalue;
+        //alert(product_name);
+        var product_id = $(this).data().paperid;
+        var measurement_unit_id = $(this).data().measurementunitid;
+        var inventory_id = $(this).data().inventoryid;
+        //alert(inventory_id);
+        $("#productvalout").html(product_name);
+        $("#productout_id").val(product_id);
+        $("#measurementout_unit_id").val(measurement_unit_id);
+        $("#inventoryout_id").val(inventory_id);
+        $('#inventory_manual_stockout').modal('show');
     });
 
     Date.prototype.toDateInputValue = (function () {

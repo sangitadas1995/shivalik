@@ -83,10 +83,10 @@ class PurchaseOrderController extends Controller
                 }
 
                 if ($value->po_status == "cancelled") {
-                    $po_status = '<span style="color:red">Not Reeceived</span>';
+                    $po_status = '<span style="color:red">Cancelled</span>';
                 }
                 if ($value->po_status == "completed") {
-                    $po_status = '<span style="color:#0f4ba3">Partial Received</span>';
+                    $po_status = '<span style="color:#0f4ba3">Completed</span>';
                 }
 
                 if ($value->po_status == "active") {

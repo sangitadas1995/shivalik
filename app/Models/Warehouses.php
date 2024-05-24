@@ -25,4 +25,9 @@ class Warehouses extends Model
     {
         return $this->belongsTo(Country::class, 'country_id');
     }
+
+    public function vendor_details(): BelongsTo
+    {
+        return $this->belongsTo(Vendor::class, 'vendor_id');
+    }
 }
