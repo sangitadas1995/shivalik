@@ -75,7 +75,7 @@
                 <span class="menu-icon">
                   <i class="ri-pie-chart-2-fill"></i>
                 </span>
-                <span class="menu-title">All Po List</span>
+                <span class="menu-title">Purchase Orders</span>
               </a>
             </li>
             <li class="menu-item {{ Route::is('papertype.index','papertype.add','papertype.edit') ? 'active' : null }}">

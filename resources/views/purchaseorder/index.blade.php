@@ -7,7 +7,7 @@
 <div class="page-name">
   <div class="row justify-content-between align-items-center">
     <div class="col-md-4">
-      <h2><i class="ri-arrow-left-line"></i> Purchase Order List</h2>
+      <h2><i class="ri-arrow-left-line"></i> Manage PO List of Vendors</h2>
     </div>
   </div>
 </div>

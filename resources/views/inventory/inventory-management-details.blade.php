@@ -44,7 +44,7 @@
                 Transaction Ledger for ({{$inventoryDetails->paper_type?->paper_name}})
             </p>
             <p class="subtableHeading">
-                Current Stock: 250
+                Current Stock: ({{$inventoryDetails->current_stock}})
             </p>
 
         </div>
@@ -61,55 +61,10 @@
                         <th class="naration-colum">Narration</th>
                         <th class="border-left-table-td">In</th>
                         <th>Out</th>
-                        <th>Current <br>Stock</th>
+                        <th>Balance</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <!-- <tr>
-                        <td>23.04.2024</td>
-                        <td>-</td>
-                        <td>XYZ123</td>
-                        <td>-</td>
-                        <td>-</td>
-                        <td class="naration-colum">Paper Delivered</td>
-                        <td class="border-left-table-td">300</td>
-                        <td>-</td>
-                        <td class="txt-green">250</td>
-                    </tr> -->
-<!--                     <tr>
-                        <td>22.04.2024</td>
-                        <td>PQR1234</td>
-                        <td>123489</td>
-                        <td>XYZ Company</td>
-                        <td>Bisal Shaw</td>
-                        <td class="naration-colum">Book Print</td>
-                        <td class="border-left-table-td">-</td>
-                        <td>350</td>
-                        <td class="txt-red">-50</td>
-                    </tr>
-                    <tr>
-                        <td>21.04.2024</td>
-                        <td>ABC1234</td>
-                        <td>123489</td>
-                        <td>XYZ Company</td>
-                        <td>Bisal Shaw</td>
-                        <td class="naration-colum">Cover Print</td>
-                        <td class="border-left-table-td">-</td>
-                        <td>2000</td>
-                        <td class="txt-green">300</td>
-                    </tr>
-                <tr>
-                    <td>20.04.2024</td>
-                    <td>-</td>
-                    <td>XYZ123</td>
-                    <td>-</td>
-                    <td>-</td>
-                    <td class="naration-colum">Opening Balance</td>
-                    <td class="border-left-table-td">500</td>
-                    <td>-</td>
-                    <td class="txt-green">500</td>
-                </tr> -->
-            </tbody>
+                <tbody></tbody>
         </table>
     </div>
 </div>
@@ -118,6 +73,7 @@
 @section('scripts')
 
 <script>
+var inventory_id = "<?php echo $inventory_id;?>";    
 var warehouseId = "<?php echo $warehouseDetails->id;?>";
 var paperId = "<?php echo $inventoryDetails->papertype_id;?>";
 
@@ -133,7 +89,7 @@ function invDetailsList(noofdays)
     $.ajax({
         type:'POST',
         url: "{{ route('inventory.productmanualstocklist-data') }}",
-        data:{warehouseId:warehouseId, paperId:paperId, noofdays:noofdays},
+        data:{inventory_id:inventory_id,warehouseId:warehouseId, paperId:paperId, noofdays:noofdays},
         dataType: 'json',
         success: function(response) {
             $('tbody').html(response.table_data);

@@ -166,6 +166,7 @@ Route::middleware('auth')->group(function () {
         Route::post('getmesurementunit', [InventoryController::class, 'getMesurementUnit'])->name('getmesurementunit');
 
         Route::post('store-product-manual-stock', [InventoryController::class, 'storeInventoryProductManualStock'])->name('store-product-manual-stock');
+        Route::post('store-product-manual-stock-out', [InventoryController::class, 'storeInventoryProductManualStockOut'])->name('store-product-manual-stock-out');
 
 
         Route::post('productmanualstocklist-data', [InventoryController::class, 'product_manual_stocklist_data'])->name('productmanualstocklist-data');
