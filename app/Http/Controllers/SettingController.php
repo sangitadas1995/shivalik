@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use App\Models\PoPaymentModes;
 use App\Models\AdminSettingTerms;
 use App\Models\PaymentTermsModel;
+use App\Models\PoUploadFileTypes;
 use Illuminate\Contracts\Encryption\DecryptException;
 
 class SettingController extends Controller
@@ -461,6 +462,34 @@ class SettingController extends Controller
         }
     }
 
+
+    /***** PO FACILATION *****/
+    public function poFacilitationSettings(Request $request){
+        $id = 1;
+        $poFacilitation = AdminSettingTerms::findOrFail($id);
+        return view('settings.adminPoFacilitationSettings.po-facilitation-settings',['po_facilitation'=>$poFacilitation]); 
+    }
+
+    public function updatePoFacilitation(Request $request){
+        $request->validate([
+            'po_facilitation_settings' => ['required'],
+        ]);
+        
+        try {
+            $poFacilitationUpdate = AdminSettingTerms::find($request->id);
+            $poFacilitationUpdate->po_facilitation_settings   = $request->po_facilitation_settings;
+            $update   = $poFacilitationUpdate->update();
+            if ($update) {
+                return redirect()->route('settings.po-facilitation-settings')->with('success', 'Admin Po Facilitation has been updated successfully.');
+            } else {
+                return redirect()->back()->with('fail', 'Failed to updated the Admin Po Facilitation.');
+            }
+        } catch (Exception $th) {
+            return redirect()->back()->with('fail', trans('messages.server_error'));
+        }
+    }
+
+
     /******* PaymentMthod ************///:
 
     public function paymentMethodList(){
@@ -586,6 +615,187 @@ class SettingController extends Controller
                 return redirect()->route('settings.payment-method-list')->with('success', 'Payment mode has been updated successfully.');
             } else {
                 return redirect()->back()->with('fail', 'Failed to updated the Admin settings terms and condition.');
+            }
+        } catch (Exception $th) {
+            return redirect()->back()->with('fail', trans('messages.server_error'));
+        }
+    }
+
+
+
+    public function createPaymentMethod(){
+        return view('settings.payment-method-list.create-payment-mode');
+    }
+
+    public function storePaymentMethod(Request $request)
+    {
+        $request->validate([
+            'payment_mode' => ['required'],
+        ]);
+
+        try {
+            $paymentModeInsert = new PoPaymentModes();
+            $paymentModeInsert->payment_mode = $request->payment_mode;
+            $save = $paymentModeInsert->save();
+
+            if ($save) {
+                return redirect()->route('settings.payment-method-list')->with('success', 'Payment method has been created successfully.');
+            } else {
+                return redirect()->back()->with('fail', 'Failed to create Payment method.');
+            }
+        } catch (Exception $th) {
+            return redirect()->back()->with('fail', trans('messages.server_error'));
+        }
+    }
+
+
+    public function uploadFileTypeList(){
+        return view('settings.upload-files-types.uploadFilesTypeList');
+    }
+
+    public function listUploadFileTypeAjax(Request $request){
+        $column = [
+            'id',
+            'po_file_type'
+        ];
+
+        $query = PoUploadFileTypes::where('id', '!=', '0');
+
+        if (isset($request->search['value'])) {
+            $query->where(function ($q) use ($request) {
+                $q->where('po_file_type', 'LIKE', "%" . $request->search['value'] . "%");
+            });
+        }
+
+        if (isset($request->order['0']['dir']) && ($request->order['0']['column'] != 0) && ($request->order['0']['column'] == 2)) {
+            $query->orderBy('po_file_type', $request->order['0']['dir']);
+        } else if (isset($request->order['0']['dir']) && ($request->order['0']['column'] != 0) && ($request->order['0']['column'] == 3)) {
+            $query->orderBy('status', $request->order['0']['dir']);
+        } else {
+            $query->orderBy('created_at', 'desc');
+        }
+
+        $number_filtered_row = $query->count();
+
+        if ($request->length != -1) {
+            $query->limit($request->length)->offset($request->start);
+        }
+
+        $result = $query->get();
+
+        $data = [];
+        if ($result->isNotEmpty()) {
+            //dd($result);
+            foreach ($result as $key => $value) {
+
+                $delete_icon = asset('images/lucide_view.png');
+                $edit_icon = asset('images/akar-icons_edit.png');
+
+                $inactive_icon =  asset('images/eva_lock-outline.png');
+                $active_icon =  asset('images/lock-open-right-outline.png');
+
+                if ($value->status == "A") {
+                    $status = '<a href="#" class="updateStatus" data-id ="' . $value->id . '" data-status="lock" title="Unlock"><img src="' . $active_icon . '" /></a>';
+                    $presentStatus = '<span style="color:green">Active</span>';
+                }
+                if ($value->status == "I") {
+                    $status = '<a href="#" class="updateStatus" data-id ="' . $value->id . '" data-status="unlock" title="Lock"><img src="' . $inactive_icon . '" /></a>';
+                    $presentStatus = '<span style="color:red">Inactive</span>';
+                }
+
+                $editLink = route('settings.edit-po-file-type', encrypt($value->id));
+                $subarray = [];
+                $subarray[] = ++$key . '.';
+                $subarray[] = $value->id;
+                $subarray[] = $value->po_file_type;
+                $subarray[] = $presentStatus;
+                $subarray[] = '<div class="align-items-center d-flex dt-center justify-content-center">
+                <a href="' . $editLink . '" title="Edit"><img src="' . $edit_icon . '" /></a>' . $status . '</div>';
+                $data[] = $subarray;
+            }
+        }
+
+        $count = PoUploadFileTypes::where('id', '!=', '0')->count();
+
+        $output = [
+            'draw' => intval($request->draw),
+            'recordsTotal' => $count,
+            'recordsFiltered' => $number_filtered_row,
+            'data' => $data
+        ];
+
+        return response()->json($output);
+    }
+
+    public function poFileTypeStatusUpdate(Request $request){
+        $request->validate([
+            'rowid' => ['required'],
+            'rowstatus' => ['required']
+        ]);
+
+        try {
+            $id = $request->rowid;
+            $status = $request->rowstatus == 'lock' ? 'I' : 'A';
+
+            $payment_status = PoUploadFileTypes::findOrFail($id);
+            $payment_status->status = $status;
+            $payment_status->update();
+            
+            return response()->json([
+                'message' => 'PO file type ' . $request->rowstatus . ' successfully.'
+            ]);
+        } catch (Exception $th) {
+            return response()->json([
+                'message' => trans('messages.server_error')
+            ], 500);
+        }
+    }
+
+    public function editPoFileType($id){
+        $id = decrypt($id);
+        $poFileTypes= PoUploadFileTypes::findOrFail($id);
+        return view('settings.upload-files-types.edit_po_file_type',['po_file_type'=>$poFileTypes]);
+    }
+
+    public function updatePoFileType(Request $request,$id){
+        $id = decrypt($id);
+        $request->validate([
+            'po_file_type' => ['required'],
+        ]);
+        
+        try {
+            $poFileTypeUpdate = PoUploadFileTypes::find($id);
+            $poFileTypeUpdate->po_file_type = $request->po_file_type;
+            $update   = $poFileTypeUpdate->update();
+            if ($update) {
+                return redirect()->route('settings.upload-file-type-list')->with('success', 'Po file type has been updated successfully.');
+            } else {
+                return redirect()->back()->with('fail', 'Failed to updated Po file type');
+            }
+        } catch (Exception $th) {
+            return redirect()->back()->with('fail', trans('messages.server_error'));
+        }
+    }
+
+    public function createPoFileType(){
+        return view('settings.upload-files-types.create_po_file_type');
+    }
+
+    public function storePoFileType(Request $request)
+    {
+        $request->validate([
+            'po_file_type' => ['required'],
+        ]);
+
+        try {
+            $poFileTypeInsert = new PoUploadFileTypes();
+            $poFileTypeInsert->po_file_type = $request->po_file_type;
+            $save = $poFileTypeInsert->save();
+
+            if ($save) {
+                return redirect()->route('settings.upload-file-type-list')->with('success', 'Po file type has been created successfully.');
+            } else {
+                return redirect()->back()->with('fail', 'Failed to create Po file type.');
             }
         } catch (Exception $th) {
             return redirect()->back()->with('fail', trans('messages.server_error'));

@@ -290,12 +290,27 @@ Route::middleware('auth')->group(function () {
 
         Route::get('admin-terms-settings', [SettingController::class, 'adminSettingTerms'])->name('admin-terms-settings');
         Route::post('update-admin-terms-condition', [SettingController::class, 'updateAdminSettingsTerms'])->name('update-admin-terms-condition');
+
+        Route::get('po-facilitation-settings', [SettingController::class, 'poFacilitationSettings'])->name('po-facilitation-settings');
+        Route::post('update-po-facilitation', [SettingController::class, 'updatePoFacilitation'])->name('update-po-facilitation');
         
         Route::get('payment-method-list', [SettingController::class, 'paymentMethodList'])->name('payment-method-list');
         Route::post('payment-method-list-ajax', [SettingController::class, 'listPaymentMethodAjax'])->name('payment-method-list-ajax');
         Route::post('update-payment-method-status', [SettingController::class, 'paymentMethodStatusUpdate'])->name('update-payment-method-status');
         Route::get('edit-payment-method/{id}', [SettingController::class, 'editPaymentMethod'])->name('edit-payment-method');
         Route::post('update-payment-method/{id}', [SettingController::class, 'updatePaymentMethod'])->name('update-payment-method');
+
+        Route::get('add-payment-method', [SettingController::class, 'createPaymentMethod'])->name('add-payment-method');
+        Route::post('store-payment-method', [SettingController::class, 'storePaymentMethod'])->name('store-payment-method');
+
+
+        Route::get('upload-file-type-list', [SettingController::class, 'uploadFileTypeList'])->name('upload-file-type-list');
+        Route::post('upload-file-type-list-ajax', [SettingController::class, 'listUploadFileTypeAjax'])->name('upload-file-type-list-ajax');
+        Route::post('update-po-file-type-status', [SettingController::class, 'poFileTypeStatusUpdate'])->name('update-po-file-type-status');
+        Route::get('edit-po-file-type/{id}', [SettingController::class, 'editPoFileType'])->name('edit-po-file-type');
+        Route::post('update-po-file-type/{id}', [SettingController::class, 'updatePoFileType'])->name('update-po-file-type');
+        Route::get('add-po-file-type', [SettingController::class, 'createPoFileType'])->name('add-po-file-type');
+        Route::post('store-po-file-type', [SettingController::class, 'storePoFileType'])->name('store-po-file-type');
     });
 
     Route::prefix('papertype')->name('papertype.')->group(function () {

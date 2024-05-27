@@ -255,7 +255,7 @@
                             <div class="col-md-12">
                                 <div class="mb-3">
                                     <label class="form-label">Write PO facilitation Text (Letter Footer): </label></br>
-                                    <textarea name="po_facilitation" id="po_facilitation" rows="5" cols="30" style="white-space: pre-line;width:100%;">{{$vendorPoDetails->po_facilitation}}</textarea>
+                                    <textarea name="po_facilitation" id="po_facilitation" rows="5" cols="30" style="white-space: pre-line;width:100%;">{{$vendorPoDetails->po_facilitation!="" ? $vendorPoDetails->po_facilitation : $adminSettings->po_facilitation_settings}}</textarea>
                                     <!-- <script>
                                     CKEDITOR.replace( 'po_facilitation' );
                                     </script> -->

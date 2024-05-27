@@ -819,7 +819,7 @@ class VendorsController extends Controller
 
     public function addPoCreation(Request $request)
     {
-        $termsAndCondition = AdminSettingTerms::findOrFail(1);
+        $adminSettings = AdminSettingTerms::findOrFail(1);
         $thanksAndRegards = array(
             "name" => auth()->user()->name,
             "mobile" => "Mobile:".auth()->user()->mobile,
@@ -854,7 +854,7 @@ class VendorsController extends Controller
         $rand = strtoupper(substr(uniqid(sha1(time())),0,4));
         $po_unique_no = $today . $rand;
 
-        $html = view('vendors.add-po-creation', ['vendor' => $vendor, 'paper_list' => $papers, 'warehousesList' => $warehousesList, 'po_unique_no' => $po_unique_no, 'profile' => $profile, 'paymentTerms' => $paymentTerms, 'thanksAndRegards' => $thanksAndRegards, 'termsAndCondition' => $termsAndCondition])->render();
+        $html = view('vendors.add-po-creation', ['vendor' => $vendor, 'paper_list' => $papers, 'warehousesList' => $warehousesList, 'po_unique_no' => $po_unique_no, 'profile' => $profile, 'paymentTerms' => $paymentTerms, 'thanksAndRegards' => $thanksAndRegards, 'adminSettings' => $adminSettings])->render();
         return response()->json($html);
     }
 
@@ -1062,7 +1062,7 @@ class VendorsController extends Controller
 
     public function editPoCreation(Request $request)
     {
-        $termsAndCondition = AdminSettingTerms::findOrFail(1);
+        $adminSettings = AdminSettingTerms::findOrFail(1);
         $thanksAndRegards = array(
             "name" => auth()->user()->name,
             "mobile" => "Mobile:".auth()->user()->mobile,
@@ -1100,7 +1100,7 @@ class VendorsController extends Controller
         $rand = strtoupper(substr(uniqid(sha1(time())),0,4));
         $po_unique_no = $today . $rand;
 
-        $html = view('vendors.edit-po-creation', ['vendor' => $vendor, 'paper_list' => $papers, 'warehousesList' => $warehousesList, 'vendorPoDetails' => $vendorPoDetails, 'paymentTerms' => $paymentTerms, 'thanksAndRegards' => $thanksAndRegards, 'termsAndCondition' => $termsAndCondition])->render();
+        $html = view('vendors.edit-po-creation', ['vendor' => $vendor, 'paper_list' => $papers, 'warehousesList' => $warehousesList, 'vendorPoDetails' => $vendorPoDetails, 'paymentTerms' => $paymentTerms, 'thanksAndRegards' => $thanksAndRegards, 'adminSettings' => $adminSettings])->render();
         return response()->json($html);
     }
 
