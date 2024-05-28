@@ -91,7 +91,7 @@
             <!-- sub-menu -->
 
             <li data-bs-toggle="collapse"
-              class="menu-item sub-menu {{ Route::is('settings.vendor.service-type.index','settings.vendor.service-type.add','settings.vendor.service-type.edit','settings.papersettings.paper_category_list', 'settings.papersettings.add_paper_category','settings.papersettings.edit_paper_category','settings.papersettings.add_paper_color','settings.papersettings.paper_color_list','settings.papersettings.edit_paper_color','settings.papersettings.paper_quality_list','settings.papersettings.add_paper_quality', 'settings.papersettings.edit_paper_quality','settings.papersettings.paper_thickness_list','settings.papersettings.add_paper_thickness', 'settings.papersettings.edit_paper_thickness','settings.papersettings.edit-paper-size','settings.papersettings.add-paper-size','settings.papersettings.paper-size','settings.papersettings.quantity-calculation','settings.papersettings.add-quantity','settings.papersettings.edit-paper-quantity','settings.papersettings.quantity-units','settings.papersettings.add-quantityunits','settings.papersettings.edit-quantityunits','settings.papersettings.size-units','settings.papersettings.add-sizeunits','settings.papersettings.edit-sizeunits','settings.edit-profile','settings.payment-terms-condition','settings.admin-terms-settings','settings.payment-method-list') ? 'open active' : null }}">
+              class="menu-item sub-menu {{ Route::is('settings.vendor.service-type.index','settings.vendor.service-type.add','settings.vendor.service-type.edit','settings.papersettings.paper_category_list', 'settings.papersettings.add_paper_category','settings.papersettings.edit_paper_category','settings.papersettings.add_paper_color','settings.papersettings.paper_color_list','settings.papersettings.edit_paper_color','settings.papersettings.paper_quality_list','settings.papersettings.add_paper_quality', 'settings.papersettings.edit_paper_quality','settings.papersettings.paper_thickness_list','settings.papersettings.add_paper_thickness', 'settings.papersettings.edit_paper_thickness','settings.papersettings.edit-paper-size','settings.papersettings.add-paper-size','settings.papersettings.paper-size','settings.papersettings.quantity-calculation','settings.papersettings.add-quantity','settings.papersettings.edit-paper-quantity','settings.papersettings.quantity-units','settings.papersettings.add-quantityunits','settings.papersettings.edit-quantityunits','settings.papersettings.size-units','settings.papersettings.add-sizeunits','settings.papersettings.edit-sizeunits','settings.edit-profile','settings.payment-terms-condition','settings.admin-terms-settings','settings.payment-method-list','settings.upload-file-type-list','settings.edit-po-file-type', 'settings.add-po-file-type') ? 'open active' : null }}">
               <a data-bs-toggle="collapse">
                 <span class="menu-icon">
                   <svg width="21" height="21" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -185,7 +185,7 @@
                            <li
                            class="menu-item {{ Route::is('settings.payment-terms-condition') ? 'active' : null }}">
                              <a href="{{ route('settings.payment-terms-condition') }}">
-                               <span class="menu-title">Payment Terms&Condition Settings</span>
+                               <span class="menu-title">Payment Terms & Condition Settings</span>
                              </a>
                            </li>
                            <li
@@ -198,8 +198,23 @@
                        </div>
                     </li>
 
-                  <li
-                  class="menu-item {{ Route::is('settings.edit-profile') ? 'active' : null }}">
+                  <li class="menu-item sub-menu {{ Route::is('settings.upload-file-type-list','settings.edit-po-file-type', 'settings.add-po-file-type') ? 'open active' : null }}">
+                    <a><span class="menu-title">PO File Type Settings</span></a>
+                       <div class="sub-menu-list" data-bs-toggle="collapse" data-popper-escaped=""
+                         data-popper-placement="right"
+                         style="left: 0px; top: 0px; margin-right: 0px; margin-left: 0px; box-sizing: border-box; display: none;">
+                         <ul>
+                           <li
+                             class="menu-item {{ Route::is('settings.upload-file-type-list','settings.edit-po-file-type', 'settings.add-po-file-type') ? 'active' : null }}">
+                             <a href="{{ route('settings.upload-file-type-list') }}">
+                               <span class="menu-title">PO File Type List</span>
+                             </a>
+                           </li>
+                         </ul>
+                       </div>
+                    </li>
+
+                  <li class="menu-item {{ Route::is('settings.edit-profile') ? 'active' : null }}">
                   <a href="{{ route('settings.edit-profile') }}">
                     <span class="menu-title">Admin Profile Settings</span>
                   </a>
@@ -208,7 +223,13 @@
                 <li
                 class="menu-item {{ Route::is('settings.admin-terms-settings') ? 'active' : null }}">
                 <a href="{{ route('settings.admin-terms-settings') }}">
-                  <span class="menu-title">Admin Terms&Condition Settings</span>
+                  <span class="menu-title">Admin Terms & Condition Settings</span>
+                </a>
+               </li>
+
+               <li class="menu-item {{ Route::is('settings.po-facilitation-settings') ? 'active' : null }}">
+                <a href="{{ route('settings.po-facilitation-settings') }}">
+                  <span class="menu-title">Admin Po Facilitation Settings</span>
                 </a>
                </li>
                 </ul>
