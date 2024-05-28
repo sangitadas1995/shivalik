@@ -492,11 +492,11 @@ class SettingController extends Controller
 
     /******* PaymentMthod ************///:
 
-    public function paymentMethodList(){
-        return view('settings.payment-method-list.paymentList');
+    public function paymentModeList(){
+        return view('settings.payment-mode-list.paymentList');
     }
 
-    public function listPaymentMethodAjax(Request $request){
+    public function listPaymentModeAjax(Request $request){
         $column = [
             'id',
             'payment_mode'
@@ -546,7 +546,7 @@ class SettingController extends Controller
                     $presentStatus = '<span style="color:red">Inactive</span>';
                 }
 
-                $editLink = route('settings.edit-payment-method', encrypt($value->id));
+                $editLink = route('settings.edit-payment-mode', encrypt($value->id));
                 $subarray = [];
                 $subarray[] = ++$key . '.';
                 $subarray[] = $value->id;
@@ -570,7 +570,7 @@ class SettingController extends Controller
         return response()->json($output);
     }
 
-    public function paymentMethodStatusUpdate(Request $request){
+    public function paymentModeStatusUpdate(Request $request){
        
         $request->validate([
             'rowid' => ['required'],
@@ -586,7 +586,7 @@ class SettingController extends Controller
             $payment_status->update();
             
             return response()->json([
-                'message' => 'payement method ' . $request->rowstatus . ' successfully.'
+                'message' => 'payement mode ' . $request->rowstatus . ' successfully.'
             ]);
         } catch (Exception $th) {
             return response()->json([
@@ -595,26 +595,26 @@ class SettingController extends Controller
         }
     }
 
-    public function editPaymentMethod($id){
+    public function editPaymentMode($id){
         $id     = decrypt($id);
         $paymentMode= PoPaymentModes::findOrFail($id);
-        return view('settings.payment-method-list.edit-payment-mode',['payment_mode'=>$paymentMode]);
+        return view('settings.payment-mode-list.edit-payment-mode',['payment_mode'=>$paymentMode]);
     }
 
-    public function updatePaymentMethod(Request $request,$id){
+    public function updatePaymentMode(Request $request,$id){
         $id = decrypt($id);
         $request->validate([
             'payment_mode' => ['required'],
         ]);
         
         try {
-            $adminTerms = PoPaymentModes::find($id);
-            $adminTerms->payment_mode    = $request->payment_mode;
-            $update   = $adminTerms->update();
+            $paymentModeUpdate = PoPaymentModes::find($id);
+            $paymentModeUpdate->payment_mode    = $request->payment_mode;
+            $update   = $paymentModeUpdate->update();
             if ($update) {
-                return redirect()->route('settings.payment-method-list')->with('success', 'Payment mode has been updated successfully.');
+                return redirect()->route('settings.payment-mode-list')->with('success', 'Payment mode has been updated successfully.');
             } else {
-                return redirect()->back()->with('fail', 'Failed to updated the Admin settings terms and condition.');
+                return redirect()->back()->with('fail', 'Failed to updated the payment mode.');
             }
         } catch (Exception $th) {
             return redirect()->back()->with('fail', trans('messages.server_error'));
@@ -622,12 +622,11 @@ class SettingController extends Controller
     }
 
 
-
-    public function createPaymentMethod(){
-        return view('settings.payment-method-list.create-payment-mode');
+    public function createPaymentMode(){
+        return view('settings.payment-mode-list.create-payment-mode');
     }
 
-    public function storePaymentMethod(Request $request)
+    public function storePaymentMode(Request $request)
     {
         $request->validate([
             'payment_mode' => ['required'],
@@ -639,9 +638,9 @@ class SettingController extends Controller
             $save = $paymentModeInsert->save();
 
             if ($save) {
-                return redirect()->route('settings.payment-method-list')->with('success', 'Payment method has been created successfully.');
+                return redirect()->route('settings.payment-mode-list')->with('success', 'Payment mode has been created successfully.');
             } else {
-                return redirect()->back()->with('fail', 'Failed to create Payment method.');
+                return redirect()->back()->with('fail', 'Failed to create Payment mode.');
             }
         } catch (Exception $th) {
             return redirect()->back()->with('fail', trans('messages.server_error'));

@@ -101,6 +101,9 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
+                    <div class="alert alert-danger print-error-msg" style="display:none">
+                        <ul></ul>
+                    </div>
                     <form action="" method="POST" id="manual_stock_in" enctype="multipart/form-data">
                         @csrf
                         <div class="row">
@@ -185,7 +188,7 @@
 
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label class="form-label">Attachment<span class="text-danger">*</span></label>
+                                    <label class="form-label">Attachment</label>
                                     <input type="file" class="form-control" name="upload_file" id="upload_file" value="" />
                                     <small class="text-danger error_upload_file"></small>
                                 </div>
@@ -218,6 +221,9 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
+                    <div class="alert alert-danger print-error-msg" style="display:none">
+                        <ul></ul>
+                    </div>
                     <form action="" method="POST" id="manual_stock_out" enctype="multipart/form-data">
                         @csrf
                         <div class="row">
@@ -301,7 +307,7 @@
 
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label class="form-label">Attachment<span class="text-danger">*</span></label>
+                                    <label class="form-label">Attachment</label>
                                     <input type="file" class="form-control" name="upload_file" id="upload_file" value="" />
                                     <small class="text-danger error_upload_file"></small>
                                 </div>
@@ -339,8 +345,6 @@ $(document).ready(function () {
     $("#manual_stock_in").submit(function(e) {
         e.preventDefault();
         const fd = new FormData(this);
-        //alert(fd);
-
         $.ajax({
           url: "{{ route('inventory.store-product-manual-stock') }}",
           method: 'post',
@@ -350,17 +354,23 @@ $(document).ready(function () {
           processData: false,
           dataType: 'json',
           success: function(response) {
-            //alert(response.status);
-            if (response.status=="success") {
-                return Swal.fire('Success!', response.message, 'success').then((result) => {
-                if (result.isConfirmed) {
-                $("#inventory_manual_stockin").modal('hide');
-                setTimeout(function () { location.reload();}, 3000);
+            if($.isEmptyObject(response.error))
+            {
+                if (response.status=="success") {
+                    return Swal.fire('Success!', response.message, 'success').then((result) => {
+                    if (result.isConfirmed) {
+                    $("#inventory_manual_stockin").modal('hide');
+                    setTimeout(function () { location.reload();}, 3000);
+                    }
+                    });
                 }
-                });
+                else{
+                    Swal.fire('Error!', 'Something went wrong, please try again.', 'error');
+                }
             }
-            else{
-                Swal.fire('Error!', 'Something went wrong, please try again.', 'error');
+            else
+            {
+                printErrorMsg(response.error);
             }
         }
         });
@@ -370,8 +380,6 @@ $(document).ready(function () {
     $("#manual_stock_out").submit(function(e) {
         e.preventDefault();
         const fd = new FormData(this);
-        //alert(fd);
-
         $.ajax({
           url: "{{ route('inventory.store-product-manual-stock-out') }}",
           method: 'post',
@@ -381,21 +389,36 @@ $(document).ready(function () {
           processData: false,
           dataType: 'json',
           success: function(response) {
-            //alert(response.status);
-            if (response.status=="success") {
-                return Swal.fire('Success!', response.message, 'success').then((result) => {
-                if (result.isConfirmed) {
-                $("#inventory_manual_stockout").modal('hide');
-                setTimeout(function () { location.reload();}, 3000);
+            if($.isEmptyObject(response.error))
+            {
+                if (response.status=="success") {
+                    return Swal.fire('Success!', response.message, 'success').then((result) => {
+                    if (result.isConfirmed) {
+                    $("#inventory_manual_stockout").modal('hide');
+                    setTimeout(function () { location.reload();}, 3000);
+                    }
+                    });
                 }
-                });
+                else{
+                    Swal.fire('Error!', 'Something went wrong, please try again.', 'error');
+                }
             }
-            else{
-                Swal.fire('Error!', 'Something went wrong, please try again.', 'error');
+            else
+            {
+                printErrorMsg(response.error);
             }
         }
         });
     });
+
+
+    function printErrorMsg (msg) {
+        $(".print-error-msg").find("ul").html('');
+        $(".print-error-msg").css('display','block');
+        $.each( msg, function( key, value ) {
+            $(".print-error-msg").find("ul").append('<li>'+value+'</li>');
+        });
+    }
 
 
     let product_stock_list_table = $('#product_stock_list_table').DataTable({

@@ -13,6 +13,11 @@
             <div class="parent-table">
                 <div class="child-table">
                     <div class="container">
+
+                        <div class="alert alert-danger print-error-msg" style="display:none">
+                        <ul></ul>
+                        </div>
+
                         <form action="" method="POST" id="create_po_forvendor" enctype="multipart/form-data">
                         @csrf
                         <div class="row">
@@ -74,7 +79,7 @@
 
                             <div class="col-md-4">
                                 <div class="mb-3">
-                                <label class="form-label">Ship To :
+                                <label class="form-label">Ship To<span class="text-danger">*</span> :
                                 <select name="warehouse_ship_id" id="warehouse_ship_id" class="form-select">
                                     <option value="">Select</option>
                                     @if (!empty($warehousesList))
@@ -153,12 +158,12 @@
                                         <input type="hidden" name="po_payable_amount" id="po_payable_amount" value="102">
                                         </td>
                                     </tr>
-                                <!-- <tr>
-                                    <td colspan="2">
-                                       <span id="number_to_word_final_amount" style="font-weight:bold"><strong>One Hundred  And Two    Only</strong></span> 
-                                       (<span class="pfi_currency_code_div">INR</span>)
-                                    </td>
-                                    </tr> -->
+                                    <tr>
+                                        <td colspan="2">
+                                        <span id="number_to_word_final_amount" style="font-weight:bold"><strong></strong></span> 
+                                        (INR)
+                                        </td>
+                                    </tr>
                                   </tbody>
                                </table>
                             </div>

@@ -69,7 +69,7 @@ class PurchaseOrderController extends Controller
                 $edit_icon = asset('images/akar-icons_edit.png');
                 $order_icon = asset('images/order.png');
                 $editLink = route('customers.edit', ['id' => encrypt($value->id)]);
-                $orderLink = route('orders.index', ['customer' => encrypt($value->id)]);
+                $previewLink = route('vendors.vendor-po-preview', ['id' => encrypt($value->id)]);
 
                 if ($value->delivery_status == "not_received") {
                     $presentStatus = '<span style="color:red">Not Reeceived</span>';
@@ -77,7 +77,6 @@ class PurchaseOrderController extends Controller
                 if ($value->delivery_status == "partial_received") {
                     $presentStatus = '<span style="color:yellow">Partial Received</span>';
                 }
-
                 if ($value->delivery_status == "received") {
                     $presentStatus = '<span style="color:green">Received</span>';
                 }
@@ -88,7 +87,6 @@ class PurchaseOrderController extends Controller
                 if ($value->po_status == "completed") {
                     $po_status = '<span style="color:#0f4ba3">Completed</span>';
                 }
-
                 if ($value->po_status == "active") {
                     $po_status = '<span style="color:green">Active</span>';
                 }
@@ -102,6 +100,7 @@ class PurchaseOrderController extends Controller
                 $subarray[] = 'INR '.$value->total_amount;
                 $subarray[] = $presentStatus;
                 $subarray[] = $po_status;
+                $subarray[] = '<div class="align-items-center d-flex dt-center"><a href="JavaScript:void(0)" class="text-primary edit_po_creation" title="Edit Vendor PO" data-id ="'.$value->id.'"><img src="'.$edit_icon.'" /></a>&nbsp;&nbsp;<a href="'.$previewLink.'" class="text-primary" target="_blank" title="View Vendor PO"><i class="fa fa-eye" aria-hidden="true"></i></a>&nbsp;&nbsp;<a href="JavaScript:void(0);" class="text-primary po_file_list_view" title="Upload Related Documents" data-id="'.$value->id.'"><i class="fa fa-upload" aria-hidden="true"></i></a>&nbsp;&nbsp;<a href="JavaScript:void(0)" class="text-primary view_po_details" title="Vendor PO details" data-id ="'.$value->id.'"><i class="fa fa-search-plus"></i></a></div>';
                 $data[] = $subarray;
             }
         }

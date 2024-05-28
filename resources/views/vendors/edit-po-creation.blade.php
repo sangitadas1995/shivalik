@@ -13,6 +13,9 @@
             <div class="parent-table">
                 <div class="child-table">
                     <div class="container">
+                        <div class="alert alert-danger print-error-msg" style="display:none">
+                        <ul></ul>
+                        </div>
                         <form action="" method="POST" id="update_po_forvendor" enctype="multipart/form-data">
                         @csrf
                         <div class="row">
@@ -70,7 +73,7 @@
 
                             <div class="col-md-4">
                                 <div class="mb-3">
-                                <label class="form-label">Ship To :
+                                <label class="form-label">Ship To<span class="text-danger">*</span> :
                                 <select name="warehouse_ship_id" id="warehouse_ship_id" class="form-select">
                                     <option value="">Select</option>
                                     @if (!empty($warehousesList))
@@ -121,7 +124,7 @@
                             <td style="text-align: center;"><input type="text" name="gst[]" id="gst_{{$poDetails?->product_id}}" value="{{$poDetails?->gst}}" style="width:60%;" onkeyup="changeGst({{$poDetails?->product_id}})" onblur="changeGst({{$poDetails?->product_id}})" onmouseleave="changeGst({{$poDetails?->product_id}})" onkeypress="return isNumberKey(event)"></td>
 
                             <td style="text-align: right;"><span id="rowTotCalPrice_{{$poDetails?->product_id}}">
-                            {{number_format((float)$poDetails?->net_amount, 2, '.', '')}}</span> <a href="javascript:void;" class="vd_product_remove" style="font-size: 14px; color: #d31b08;" id="{{$poDetails?->product_id}}" data-podetailsid ="{{$poDetails?->id}}" data-poid ="{{$poDetails?->purchase_order_id}}"><i class="fa fa-trash" aria-hidden="true"></i></a></td>
+                            {{number_format((float)$poDetails?->net_amount, 2, '.', '')}}</span> <a href="javascript:void();" class="vd_product_remove" style="font-size: 14px; color: #d31b08;" id="{{$poDetails?->product_id}}" data-podetailsid ="{{$poDetails?->id}}" data-poid ="{{$poDetails?->purchase_order_id}}"><i class="fa fa-trash" aria-hidden="true"></i></a></td>
 
                         </tr>
                         <?php $outputArr[]=$poDetails?->product_id;?>
@@ -182,12 +185,12 @@
                                         <input type="hidden" name="po_payable_amount" id="po_payable_amount" value="102">
                                         </td>
                                     </tr>
-                                <!-- <tr>
-                                    <td colspan="2">
-                                       <span id="number_to_word_final_amount" style="font-weight:bold"><strong>One Hundred  And Two    Only</strong></span> 
-                                       (<span class="pfi_currency_code_div">INR</span>)
-                                    </td>
-                                    </tr> -->
+                                    <tr>
+                                        <td colspan="2">
+                                           <span id="number_to_word_final_amount" style="font-weight:bold"><strong><script>showInWords({{$vendorPoDetails->total_amount}});</script></strong></span> 
+                                           (INR)
+                                        </td>
+                                    </tr>
                                   </tbody>
                                </table>
                             </div>
