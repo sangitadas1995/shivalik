@@ -590,147 +590,177 @@ class InventoryController extends Controller
 
 
     public function storeInventoryProductManualStock(Request $request){
-        //dd($request->all());
         try
         {
-            DB::beginTransaction();
-            if(!empty($request->upload_file))
+            $validator = Validator::make($request->all(), [
+                'stock_in_date' => 'required',
+                'stock_qty' => 'required',
+                'purchase_order_date' => 'required',
+                'purchase_order_amount' => 'required',
+                'ordered_by' => 'required',
+                'orders_date' => 'required',
+                'received_date' => 'required',
+            ]);
+            if ($validator->passes())
             {
-                $fileName = time().'.'.$request->upload_file->extension();  
-                $request->upload_file->move(public_path('images/stock'), $fileName);
-            }
-            else
-            {
-                $fileName = "";
-            }
+                DB::beginTransaction();
+                if(!empty($request->upload_file))
+                {
+                    $fileName = time().'.'.$request->upload_file->extension();  
+                    $request->upload_file->move(public_path('images/stock'), $fileName);
+                }
+                else
+                {
+                    $fileName = "";
+                }
             
-            $fetchUnits = $this->fetchUnits($request->product_id);
-            $measurement_name = $fetchUnits->unit_type?->measurement_unuit;
+                $fetchUnits = $this->fetchUnits($request->product_id);
+                $measurement_name = $fetchUnits->unit_type?->measurement_unuit;
 
-            $fetchInvs = $this->fetchInventortDetails($request->inventory_id);
-            $prev_current_stock = $fetchInvs->current_stock_balance;
-            $total_current_stock_balance = $prev_current_stock+$request->stock_qty;
+                $fetchInvs = $this->fetchInventortDetails($request->inventory_id);
+                $prev_current_stock = $fetchInvs->current_stock_balance;
+                $total_current_stock_balance = $prev_current_stock+$request->stock_qty;
 
-            $inventoriesDetails = Inventory::where('id', $request->inventory_id)->first();
-            $invAutoId = $inventoriesDetails->id;
-            $current_stock = ($inventoriesDetails->current_stock+$request->stock_qty);
-            $automaticInventoriesUpdate = Inventory::findOrFail($invAutoId);
-            $automaticInventoriesUpdate->current_stock = $current_stock;
-            $automaticInventoriesUpdate->update();
+                $inventoriesDetails = Inventory::where('id', $request->inventory_id)->first();
+                $invAutoId = $inventoriesDetails->id;
+                $current_stock = ($inventoriesDetails->current_stock+$request->stock_qty);
+                $automaticInventoriesUpdate = Inventory::findOrFail($invAutoId);
+                $automaticInventoriesUpdate->current_stock = $current_stock;
+                $automaticInventoriesUpdate->update();
 
-            $inventorydetails = new InventoryDetails();
-            $inventorydetails->inventory_id = $request->inventory_id;
-            $inventorydetails->papertype_id = $request->product_id;
-            $inventorydetails->warehouse_id = $request->warehouse_id;
-            $inventorydetails->stock_quantity = $request->stock_qty;
-            $inventorydetails->current_stock_balance = $current_stock;
-            $inventorydetails->inventory_type          = "manual";
-            $inventorydetails->stockin_date            = $request->stock_in_date;
-            $inventorydetails->purchase_order_no       = $request->purchase_order_no;
-            $inventorydetails->purchase_order_date     = $request->purchase_order_date;
-            $inventorydetails->purchase_order_amount   = $request->purchase_order_amount;
-            $inventorydetails->ordered_by              = $request->ordered_by;
-            $inventorydetails->orderd_date             = $request->orders_date;
-            $inventorydetails->received_date           = $request->received_date;
-            $inventorydetails->file                    = $fileName;
-            $inventorydetails->narration               = "Stock in ".$request->stock_qty." ".$measurement_name." paper as a manual stock";
-            $save = $inventorydetails->save();
+                $inventorydetails = new InventoryDetails();
+                $inventorydetails->inventory_id = $request->inventory_id;
+                $inventorydetails->papertype_id = $request->product_id;
+                $inventorydetails->warehouse_id = $request->warehouse_id;
+                $inventorydetails->stock_quantity = $request->stock_qty;
+                $inventorydetails->current_stock_balance = $current_stock;
+                $inventorydetails->inventory_type          = "manual";
+                $inventorydetails->stockin_date            = $request->stock_in_date;
+                $inventorydetails->purchase_order_no       = $request->purchase_order_no;
+                $inventorydetails->purchase_order_date     = $request->purchase_order_date;
+                $inventorydetails->purchase_order_amount   = $request->purchase_order_amount;
+                $inventorydetails->ordered_by              = $request->ordered_by;
+                $inventorydetails->orderd_date             = $request->orders_date;
+                $inventorydetails->received_date           = $request->received_date;
+                $inventorydetails->file                    = $fileName;
+                $inventorydetails->narration               = "Stock in ".$request->stock_qty." ".$measurement_name." paper as a manual stock";
+                $save = $inventorydetails->save();
 
-            DB::commit();
+                DB::commit();
 
-            if ($save)
-            {
-                return response()->json([
-                    'status' => "success",
-                    'message' => "Mannual stock has been added successfully"
-                ]);
+                if ($save)
+                {
+                    return response()->json([
+                        'status' => "success",
+                        'message' => "Mannual stock in has been done successfully"
+                    ]);
+                }
+                else
+                {
+                    return response()->json([
+                        'status' => "fail",
+                        'message' => "Failed to added mannual stock in"
+                    ]);
+                }
             }
             else
             {
-                return response()->json([
-                    'status' => "fail",
-                    'message' => "Failed to added mannual stock"
-                ]);
+                return response()->json(['error'=>$validator->errors()->all()]);
             }
         }catch (Exception $th){
             DB::rollBack();
             return response()->json([
                 'status' => "fail",
-                'message' => "Failed to added mannual stock"
+                'message' => "Failed to added mannual stock in"
             ]);
         }  
     }
 
 
     public function storeInventoryProductManualStockOut(Request $request){
-        //dd($request->all());
         try
         {
-            DB::beginTransaction();
-            if(!empty($request->upload_file))
+            $validator = Validator::make($request->all(), [
+                'stockout_in_date' => 'required',
+                'stock_qty' => 'required',
+                'purchaseout_order_date' => 'required',
+                'purchase_order_amount' => 'required',
+                'ordered_by' => 'required',
+                'ordersout_date' => 'required',
+                'receivedout_date' => 'required',
+            ]);
+            if ($validator->passes())
             {
-                $fileName = time().'.'.$request->upload_file->extension();  
-                $request->upload_file->move(public_path('images/stock'), $fileName);
+                DB::beginTransaction();
+                if(!empty($request->upload_file))
+                {
+                    $fileName = time().'.'.$request->upload_file->extension();  
+                    $request->upload_file->move(public_path('images/stock'), $fileName);
+                }
+                else
+                {
+                    $fileName = "";
+                }
+                
+                $fetchUnits = $this->fetchUnits($request->productout_id);
+                $measurement_name = $fetchUnits->unit_type?->measurement_unuit;
+
+                $fetchInvs = $this->fetchInventortDetails($request->inventoryout_id);
+                $prev_current_stock = $fetchInvs->current_stock_balance;
+                $total_current_stock_balance = $prev_current_stock+$request->stock_qty;
+
+                $inventoriesDetails = Inventory::where('id', $request->inventoryout_id)->first();
+                $invAutoId = $inventoriesDetails->id;
+                $current_stock = ($inventoriesDetails->current_stock-$request->stock_qty);
+                $automaticInventoriesUpdate = Inventory::findOrFail($invAutoId);
+                $automaticInventoriesUpdate->current_stock = $current_stock;
+                $automaticInventoriesUpdate->update();
+
+                $inventorydetails = new InventoryDetails();
+                $inventorydetails->inventory_id = $request->inventoryout_id;
+                $inventorydetails->papertype_id = $request->productout_id;
+                $inventorydetails->warehouse_id = $request->warehouse_id;
+                $inventorydetails->stock_quantity = $request->stock_qty;
+                $inventorydetails->current_stock_balance = $current_stock;
+                $inventorydetails->inventory_type          = "manual";
+                $inventorydetails->stock_type              = "debit";
+                $inventorydetails->stockin_date            = $request->stockout_in_date;
+                $inventorydetails->purchase_order_no       = $request->purchase_order_no;
+                $inventorydetails->purchase_order_date     = $request->purchaseout_order_date;
+                $inventorydetails->purchase_order_amount   = $request->purchase_order_amount;
+                $inventorydetails->ordered_by              = $request->ordered_by;
+                $inventorydetails->orderd_date             = $request->ordersout_date;
+                $inventorydetails->received_date           = $request->receivedout_date;
+                $inventorydetails->file                    = $fileName;
+                $inventorydetails->narration               = "Stock out ".$request->stock_qty." ".$measurement_name." paper as a manual stock";
+                $save = $inventorydetails->save();
+
+                DB::commit();
+
+                if ($save)
+                {
+                    return response()->json([
+                        'status' => "success",
+                        'message' => "Mannual stock out has been done successfully"
+                    ]);
+                }
+                else
+                {
+                    return response()->json([
+                        'status' => "fail",
+                        'message' => "Failed to added mannual stock out"
+                    ]);
+                }
             }
             else
             {
-                $fileName = "";
-            }
-            
-            $fetchUnits = $this->fetchUnits($request->productout_id);
-            $measurement_name = $fetchUnits->unit_type?->measurement_unuit;
-
-            $fetchInvs = $this->fetchInventortDetails($request->inventoryout_id);
-            $prev_current_stock = $fetchInvs->current_stock_balance;
-            $total_current_stock_balance = $prev_current_stock+$request->stock_qty;
-
-            $inventoriesDetails = Inventory::where('id', $request->inventoryout_id)->first();
-            $invAutoId = $inventoriesDetails->id;
-            $current_stock = ($inventoriesDetails->current_stock-$request->stock_qty);
-            $automaticInventoriesUpdate = Inventory::findOrFail($invAutoId);
-            $automaticInventoriesUpdate->current_stock = $current_stock;
-            $automaticInventoriesUpdate->update();
-
-            $inventorydetails = new InventoryDetails();
-            $inventorydetails->inventory_id = $request->inventoryout_id;
-            $inventorydetails->papertype_id = $request->productout_id;
-            $inventorydetails->warehouse_id = $request->warehouse_id;
-            $inventorydetails->stock_quantity = $request->stock_qty;
-            $inventorydetails->current_stock_balance = $current_stock;
-            $inventorydetails->inventory_type          = "manual";
-            $inventorydetails->stock_type              = "debit";
-            $inventorydetails->stockin_date            = $request->stockout_in_date;
-            $inventorydetails->purchase_order_no       = $request->purchase_order_no;
-            $inventorydetails->purchase_order_date     = $request->purchaseout_order_date;
-            $inventorydetails->purchase_order_amount   = $request->purchase_order_amount;
-            $inventorydetails->ordered_by              = $request->ordered_by;
-            $inventorydetails->orderd_date             = $request->ordersout_date;
-            $inventorydetails->received_date           = $request->receivedout_date;
-            $inventorydetails->file                    = $fileName;
-            $inventorydetails->narration               = "Stock out ".$request->stock_qty." ".$measurement_name." paper as a manual stock";
-            $save = $inventorydetails->save();
-
-            DB::commit();
-
-            if ($save)
-            {
-                return response()->json([
-                    'status' => "success",
-                    'message' => "Mannual stock has been added successfully"
-                ]);
-            }
-            else
-            {
-                return response()->json([
-                    'status' => "fail",
-                    'message' => "Failed to added mannual stock"
-                ]);
+                return response()->json(['error'=>$validator->errors()->all()]);
             }
         }catch (Exception $th){
             DB::rollBack();
             return response()->json([
                 'status' => "fail",
-                'message' => "Failed to added mannual stock"
+                'message' => "Failed to added mannual stock out"
             ]);
         }  
     }

@@ -294,14 +294,13 @@ Route::middleware('auth')->group(function () {
         Route::get('po-facilitation-settings', [SettingController::class, 'poFacilitationSettings'])->name('po-facilitation-settings');
         Route::post('update-po-facilitation', [SettingController::class, 'updatePoFacilitation'])->name('update-po-facilitation');
         
-        Route::get('payment-method-list', [SettingController::class, 'paymentMethodList'])->name('payment-method-list');
-        Route::post('payment-method-list-ajax', [SettingController::class, 'listPaymentMethodAjax'])->name('payment-method-list-ajax');
-        Route::post('update-payment-method-status', [SettingController::class, 'paymentMethodStatusUpdate'])->name('update-payment-method-status');
-        Route::get('edit-payment-method/{id}', [SettingController::class, 'editPaymentMethod'])->name('edit-payment-method');
-        Route::post('update-payment-method/{id}', [SettingController::class, 'updatePaymentMethod'])->name('update-payment-method');
-
-        Route::get('add-payment-method', [SettingController::class, 'createPaymentMethod'])->name('add-payment-method');
-        Route::post('store-payment-method', [SettingController::class, 'storePaymentMethod'])->name('store-payment-method');
+        Route::get('payment-mode-list', [SettingController::class, 'paymentModeList'])->name('payment-mode-list');
+        Route::post('payment-mode-list-ajax', [SettingController::class, 'listPaymentModeAjax'])->name('payment-mode-list-ajax');
+        Route::post('update-payment-mode-status', [SettingController::class, 'paymentModeStatusUpdate'])->name('update-payment-mode-status');
+        Route::get('edit-payment-mode/{id}', [SettingController::class, 'editPaymentMode'])->name('edit-payment-mode');
+        Route::post('update-payment-mode/{id}', [SettingController::class, 'updatePaymentMode'])->name('update-payment-mode');
+        Route::get('add-payment-mode', [SettingController::class, 'createPaymentMode'])->name('add-payment-mode');
+        Route::post('store-payment-mode', [SettingController::class, 'storePaymentMode'])->name('store-payment-mode');
 
 
         Route::get('upload-file-type-list', [SettingController::class, 'uploadFileTypeList'])->name('upload-file-type-list');

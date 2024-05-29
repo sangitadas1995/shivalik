@@ -921,7 +921,7 @@ class VendorsController extends Controller
 
                 $total_calculation=($total_calculation+$calculation);
                 
-                $remove_link = '<a href="javascript:void;" class="vd_product_remove" style="font-size: 14px; color: #d31b08;" data-calculation="'. $calculation .'" id="'. $value->id .'"><i class="fa fa-trash" aria-hidden="true"></i></a>';
+                $remove_link = '<a href="javascript:void();" class="vd_product_remove" style="font-size: 14px; color: #d31b08;" data-calculation="'. $calculation .'" id="'. $value->id .'"><i class="fa fa-trash" aria-hidden="true"></i></a>';
 
                 $output .= '
                 <tr id="row'.$value->id.'">
@@ -956,75 +956,88 @@ class VendorsController extends Controller
 
     public function storePoOfVendor(Request $request){
         try {
-            DB::beginTransaction();
-            $PoCreate = new VendorPurchaseOrders();
-            $PoCreate->purchase_order_no = $request->purchase_order_no;
-            $PoCreate->purchase_order_date = $request->purchase_order_date;
-            $PoCreate->exp_delivery_date = $request->exp_delivery_date;
-            $PoCreate->vendor_quotation_no = $request->vendor_quotation_no;
-            $PoCreate->vendor_quotation_date = $request->vendor_quotation_date;
-            $PoCreate->order_by = $request->order_by;
-            $PoCreate->vendor_id = $request->vendor_id;
-            $PoCreate->vendor_order_details = $request->vendor_order_details;
-            $PoCreate->warehouse_ship_id = $request->warehouse_ship_id;
-            $PoCreate->warehouse_ship_details = $request->warehouse_ship_details;
-            $PoCreate->total_amount = round($request->product_total_amt);
-            $PoCreate->vendor_bank_details = $request->vendor_bank_details;
+            $validator = Validator::make($request->all(), [
+                'purchase_order_no' => 'required',
+                'purchase_order_date' => 'required',
+                'exp_delivery_date' => 'required',
+                'warehouse_ship_id' => 'required',
+            ]);
 
-            $PoCreate->po_payment_terms = $request->po_payment_terms;
-            if($request->po_payment_terms=="2")
+            if ($validator->passes()) 
             {
-                $PoCreate->po_payment_credit_days = $request->po_payment_credit_days;
-            }
+                DB::beginTransaction();
+                $PoCreate = new VendorPurchaseOrders();
+                $PoCreate->purchase_order_no = $request->purchase_order_no;
+                $PoCreate->purchase_order_date = $request->purchase_order_date;
+                $PoCreate->exp_delivery_date = $request->exp_delivery_date;
+                $PoCreate->vendor_quotation_no = $request->vendor_quotation_no;
+                $PoCreate->vendor_quotation_date = $request->vendor_quotation_date;
+                $PoCreate->order_by = $request->order_by;
+                $PoCreate->vendor_id = $request->vendor_id;
+                $PoCreate->vendor_order_details = $request->vendor_order_details;
+                $PoCreate->warehouse_ship_id = $request->warehouse_ship_id;
+                $PoCreate->warehouse_ship_details = $request->warehouse_ship_details;
+                $PoCreate->total_amount = round($request->product_total_amt);
+                $PoCreate->vendor_bank_details = $request->vendor_bank_details;
 
-            $PoCreate->terms_conditions = $request->terms_conditions;
-            $PoCreate->additional_note = $request->additional_note;
-            $PoCreate->po_facilitation = $request->po_facilitation;
-            $PoCreate->thanksyou_notes = $request->thanksyou_notes;
-            
-            $save = $PoCreate->save();
-            $last_po_insert_id = $PoCreate->id;
-
-            if ($last_po_insert_id != "") {
-                if(is_countable($request->po_product_id) && count($request->po_product_id)>0)
+                $PoCreate->po_payment_terms = $request->po_payment_terms;
+                if($request->po_payment_terms=="2")
                 {
-                    for ($i=0; $i < count($request->po_product_id); $i++) { 
-                        $po_product_id = $request->po_product_id[$i];
-                        $po_product_purchase_price = $request->purchase_price[$i];
-                        $po_product_order_qty = $request->order_qty[$i];
-                        $po_product_discount = $request->discount[$i];
-                        $po_product_gst = $request->gst[$i];
-                        $po_product_row_price = $request->current_row_price[$i];
-                        //echo $po_product_id."</br>";
+                    $PoCreate->po_payment_credit_days = $request->po_payment_credit_days;
+                }
 
-                        $PoDetailsCreate = new VendorPurchaseOrderDetails();
-                        $PoDetailsCreate->purchase_order_id = $last_po_insert_id;
-                        $PoDetailsCreate->product_id = $po_product_id;
-                        $PoDetailsCreate->purchase_price = $po_product_purchase_price;
-                        $PoDetailsCreate->order_qty = $po_product_order_qty;
-                        $PoDetailsCreate->discount = $po_product_discount;
-                        $PoDetailsCreate->gst = $po_product_gst;
-                        $PoDetailsCreate->net_amount = $po_product_row_price;
-                        $PoDetailsCreate->save();
+                $PoCreate->terms_conditions = $request->terms_conditions;
+                $PoCreate->additional_note = $request->additional_note;
+                $PoCreate->po_facilitation = $request->po_facilitation;
+                $PoCreate->thanksyou_notes = $request->thanksyou_notes;
+                
+                $save = $PoCreate->save();
+                $last_po_insert_id = $PoCreate->id;
+
+                if ($last_po_insert_id != "") {
+                    if(is_countable($request->po_product_id) && count($request->po_product_id)>0)
+                    {
+                        for ($i=0; $i < count($request->po_product_id); $i++) { 
+                            $po_product_id = $request->po_product_id[$i];
+                            $po_product_purchase_price = $request->purchase_price[$i];
+                            $po_product_order_qty = $request->order_qty[$i];
+                            $po_product_discount = $request->discount[$i];
+                            $po_product_gst = $request->gst[$i];
+                            $po_product_row_price = $request->current_row_price[$i];
+                            //echo $po_product_id."</br>";
+
+                            $PoDetailsCreate = new VendorPurchaseOrderDetails();
+                            $PoDetailsCreate->purchase_order_id = $last_po_insert_id;
+                            $PoDetailsCreate->product_id = $po_product_id;
+                            $PoDetailsCreate->purchase_price = $po_product_purchase_price;
+                            $PoDetailsCreate->order_qty = $po_product_order_qty;
+                            $PoDetailsCreate->discount = $po_product_discount;
+                            $PoDetailsCreate->gst = $po_product_gst;
+                            $PoDetailsCreate->net_amount = $po_product_row_price;
+                            $PoDetailsCreate->save();
+                        }
                     }
                 }
-            }
-            DB::commit();
+                DB::commit();
 
-            if ($save) {
-                return response()->json([
-                    'status' => "success",
-                    'message' => "PO has been created successfully"
-                ]);
-            } else {
-                return response()->json([
-                    'status' => "fail",
-                    'message' => "Failed to create the vendor"
-                ]);
+                if ($save) {
+                    return response()->json([
+                        'status' => "success",
+                        'message' => "PO has been created successfully"
+                    ]);
+                } else {
+                    return response()->json([
+                        'status' => "fail",
+                        'message' => "Failed to create the vendor"
+                    ]);
+                }
+            }
+            else
+            {
+                return response()->json(['error'=>$validator->errors()->all()]);
             }
         } catch (Exception $th) {
             DB::rollBack();
-            /* dd($th); */
              return response()->json([
                 'status' => "fail",
                 'message' => "Failed to create the vendor"
@@ -1054,7 +1067,6 @@ class VendorsController extends Controller
     public function vendor_po_preview($id){
         $id = decrypt($id);
         $vendorPoPreviewDetails = VendorPurchaseOrders::with('po_product_details','payment_terms')->where('id', $id)->first();
-        //dd($vendorPoPreviewDetails);
         return view('vendors.vendor-po-preview', [
             'vendorPoPreviewDetails' => $vendorPoPreviewDetails
         ]);
@@ -1104,7 +1116,6 @@ class VendorsController extends Controller
         return response()->json($html);
     }
 
-
     public function deletePoDetails(Request $request){
         //dd($request->po_id);
         try {
@@ -1140,78 +1151,89 @@ class VendorsController extends Controller
         }
     }
 
-
     public function updatePoOfVendor(Request $request){
-        //dd($request->all());
         try {
-            DB::beginTransaction();
-
-            $vendor_purchased_id = $request->vendor_purchased_id;
-            $vendorPoDetailsCount = VendorPurchaseOrderDetails::where('purchase_order_id', $vendor_purchased_id)->get()->count();
-            if($vendorPoDetailsCount>0)
+            $validator = Validator::make($request->all(), [
+                'purchase_order_no' => 'required',
+                'purchase_order_date' => 'required',
+                'exp_delivery_date' => 'required',
+                'warehouse_ship_id' => 'required',
+            ]);
+            if ($validator->passes())
             {
-                VendorPurchaseOrderDetails::where('purchase_order_id', $vendor_purchased_id)->delete();
-            }
+                DB::beginTransaction();
 
-            $PoUpdate = VendorPurchaseOrders::findOrFail($vendor_purchased_id);
-            $PoUpdate->purchase_order_no = $request->purchase_order_no;
-            $PoUpdate->purchase_order_date = $request->purchase_order_date;
-            $PoUpdate->exp_delivery_date = $request->exp_delivery_date;
-            $PoUpdate->vendor_quotation_no = $request->vendor_quotation_no;
-            $PoUpdate->vendor_quotation_date = $request->vendor_quotation_date;
-            $PoUpdate->order_by = $request->order_by;
-            $PoUpdate->vendor_id = $request->vendor_id;
-            $PoUpdate->vendor_order_details = $request->vendor_order_details;
-            $PoUpdate->warehouse_ship_id = $request->warehouse_ship_id;
-            $PoUpdate->warehouse_ship_details = $request->warehouse_ship_details;
-            $PoUpdate->total_amount = round($request->product_total_amt);
-            $PoUpdate->vendor_bank_details = $request->vendor_bank_details;
-            $PoUpdate->po_payment_terms = $request->po_payment_terms;
-            if($request->po_payment_terms=="2")
-            {
-                $PoUpdate->po_payment_credit_days = $request->po_payment_credit_days;
-            }
+                $vendor_purchased_id = $request->vendor_purchased_id;
+                $vendorPoDetailsCount = VendorPurchaseOrderDetails::where('purchase_order_id', $vendor_purchased_id)->get()->count();
+                if($vendorPoDetailsCount>0)
+                {
+                    VendorPurchaseOrderDetails::where('purchase_order_id', $vendor_purchased_id)->delete();
+                }
 
-            $PoUpdate->terms_conditions = $request->terms_conditions;
-            $PoUpdate->additional_note = $request->additional_note;
-            $PoUpdate->po_facilitation = $request->po_facilitation;
-            $PoUpdate->thanksyou_notes = $request->thanksyou_notes;
-            $update = $PoUpdate->update();
+                $PoUpdate = VendorPurchaseOrders::findOrFail($vendor_purchased_id);
+                $PoUpdate->purchase_order_no = $request->purchase_order_no;
+                $PoUpdate->purchase_order_date = $request->purchase_order_date;
+                $PoUpdate->exp_delivery_date = $request->exp_delivery_date;
+                $PoUpdate->vendor_quotation_no = $request->vendor_quotation_no;
+                $PoUpdate->vendor_quotation_date = $request->vendor_quotation_date;
+                $PoUpdate->order_by = $request->order_by;
+                $PoUpdate->vendor_id = $request->vendor_id;
+                $PoUpdate->vendor_order_details = $request->vendor_order_details;
+                $PoUpdate->warehouse_ship_id = $request->warehouse_ship_id;
+                $PoUpdate->warehouse_ship_details = $request->warehouse_ship_details;
+                $PoUpdate->total_amount = round($request->product_total_amt);
+                $PoUpdate->vendor_bank_details = $request->vendor_bank_details;
+                $PoUpdate->po_payment_terms = $request->po_payment_terms;
+                if($request->po_payment_terms=="2")
+                {
+                    $PoUpdate->po_payment_credit_days = $request->po_payment_credit_days;
+                }
 
-            if(is_countable($request->po_product_id) && count($request->po_product_id)>0)
-            {
-                for ($i=0; $i < count($request->po_product_id); $i++) { 
-                    $po_product_id = $request->po_product_id[$i];
-                    $po_product_purchase_price = $request->purchase_price[$i];
-                    $po_product_order_qty = $request->order_qty[$i];
-                    $po_product_discount = $request->discount[$i];
-                    $po_product_gst = $request->gst[$i];
-                    $po_product_row_price = $request->current_row_price[$i];
-                    //echo $po_product_id."</br>";
+                $PoUpdate->terms_conditions = $request->terms_conditions;
+                $PoUpdate->additional_note = $request->additional_note;
+                $PoUpdate->po_facilitation = $request->po_facilitation;
+                $PoUpdate->thanksyou_notes = $request->thanksyou_notes;
+                $update = $PoUpdate->update();
 
-                    $PoDetailsCreate = new VendorPurchaseOrderDetails();
-                    $PoDetailsCreate->purchase_order_id = $vendor_purchased_id;
-                    $PoDetailsCreate->product_id = $po_product_id;
-                    $PoDetailsCreate->purchase_price = $po_product_purchase_price;
-                    $PoDetailsCreate->order_qty = $po_product_order_qty;
-                    $PoDetailsCreate->discount = $po_product_discount;
-                    $PoDetailsCreate->gst = $po_product_gst;
-                    $PoDetailsCreate->net_amount = $po_product_row_price;
-                    $PoDetailsCreate->save();
+                if(is_countable($request->po_product_id) && count($request->po_product_id)>0)
+                {
+                    for ($i=0; $i < count($request->po_product_id); $i++) { 
+                        $po_product_id = $request->po_product_id[$i];
+                        $po_product_purchase_price = $request->purchase_price[$i];
+                        $po_product_order_qty = $request->order_qty[$i];
+                        $po_product_discount = $request->discount[$i];
+                        $po_product_gst = $request->gst[$i];
+                        $po_product_row_price = $request->current_row_price[$i];
+                        //echo $po_product_id."</br>";
+
+                        $PoDetailsCreate = new VendorPurchaseOrderDetails();
+                        $PoDetailsCreate->purchase_order_id = $vendor_purchased_id;
+                        $PoDetailsCreate->product_id = $po_product_id;
+                        $PoDetailsCreate->purchase_price = $po_product_purchase_price;
+                        $PoDetailsCreate->order_qty = $po_product_order_qty;
+                        $PoDetailsCreate->discount = $po_product_discount;
+                        $PoDetailsCreate->gst = $po_product_gst;
+                        $PoDetailsCreate->net_amount = $po_product_row_price;
+                        $PoDetailsCreate->save();
+                    }
+                }
+                DB::commit();
+
+                if ($update) {
+                    return response()->json([
+                        'status' => "success",
+                        'message' => "PO has been updated successfully"
+                    ]);
+                } else {
+                    return response()->json([
+                        'status' => "fail",
+                        'message' => "Failed to update the po"
+                    ]);
                 }
             }
-            DB::commit();
-
-            if ($update) {
-                return response()->json([
-                    'status' => "success",
-                    'message' => "PO has been updated successfully"
-                ]);
-            } else {
-                return response()->json([
-                    'status' => "fail",
-                    'message' => "Failed to update the po"
-                ]);
+            else
+            {
+                return response()->json(['error'=>$validator->errors()->all()]);
             }
         } catch (Exception $th) {
             DB::rollBack();
@@ -1455,8 +1477,6 @@ class VendorsController extends Controller
 
 
     public function addPoItemDelivery(Request $request){
-        //dd($request->all());
-
         try {
             DB::beginTransaction();
             $pd_delivery_track_insert = new PoProductsDeliveryQtyTrackers();
@@ -1504,7 +1524,7 @@ class VendorsController extends Controller
                 $invDetailsInsert->purchase_order_no = $purchase_order_no;
                 $invDetailsInsert->purchase_order_date = $purchase_order_date;
                 $invDetailsInsert->purchase_order_amount = $purchase_order_amount;
-                $invDetailsInsert->ordered_by = $ordered_by;
+                $invDetailsInsert->ordered_by = auth()->user()->id;
                 $invDetailsInsert->orderd_date = $orderd_date;
                 $invDetailsInsert->received_date = $received_date;
                 $invDetailsInsert->save();
@@ -1515,10 +1535,10 @@ class VendorsController extends Controller
                 $automaticInventoriesInsert = new Inventory();
                 $automaticInventoriesInsert->papertype_id = $request->product_id;
                 $automaticInventoriesInsert->warehouse_id = $request->warehouse_ship_id;
-                $automaticInventoriesInsert->opening_stock = $request->qty_received;
+                $automaticInventoriesInsert->opening_stock = 0;
                 $automaticInventoriesInsert->current_stock = $request->qty_received;
                 $automaticInventoriesInsert->measurement_unit_id = $request->product_unit_id;
-                $automaticInventoriesInsert->low_stock = $low_stock;
+                $automaticInventoriesInsert->low_stock = 0;
                 $invSave = $automaticInventoriesInsert->save();
 
                 $invAutoId = $automaticInventoriesInsert->id;
@@ -1535,7 +1555,7 @@ class VendorsController extends Controller
                 $invDetailsInsert->purchase_order_no = $purchase_order_no;
                 $invDetailsInsert->purchase_order_date = $purchase_order_date;
                 $invDetailsInsert->purchase_order_amount = $purchase_order_amount;
-                $invDetailsInsert->ordered_by = $ordered_by;
+                $invDetailsInsert->ordered_by = auth()->user()->id;
                 $invDetailsInsert->orderd_date = $orderd_date;
                 $invDetailsInsert->received_date = $received_date;
                 $invDetailsInsert->save();
