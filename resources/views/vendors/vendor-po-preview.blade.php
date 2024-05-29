@@ -290,11 +290,12 @@
     </div>
     @endif
 
-
+    @if (!empty($vendorPoPreviewDetails->po_facilitation))
     <div style="width:100%; height:auto; display: inline-block; margin: 20px 0; font-weight: 400; font-size:12px; color:#242424;font-family: century-gothic;">
-    Test footer</div>    
+    {{$vendorPoPreviewDetails->po_facilitation}}</div>
+    @endif    
 
-
+    @if (!empty($vendorPoPreviewDetails->thanksyou_notes))
     <div class="head-invoice" style="width:100%; height:auto; display: inline-block; margin: 0 0 15px 0;">
         <table colspan="0" rowspan="0" style="width:100%;">
         <tbody>
@@ -303,13 +304,14 @@
                     <div style="width:250px; height:auto; display: inline-block; margin: 0; text-align:center;">
                             
                             <div style="width:100%; height:auto; display: inline-block; margin: 0; white-space:nowrap; font-size: 14px; font-weight:400;color: #000;font-family: century-gothic;">Thanks &amp; Regards</div>
-                            <div style="width:100%; height:auto; display: inline-block; margin: 0; white-space:nowrap; font-size: 14px;color: #000;font-family: century-gothic;">Admin 1<br>Mobile:9903573357<br>Email:sumit.mehro@gmail.com</div>
+                            <div style="width:100%; height:auto; display: inline-block; margin: 0; white-space:nowrap; font-size: 14px;color: #000;font-family: century-gothic;">{{$vendorPoPreviewDetails->thanksyou_notes}}</div>
                     </div>
                 </td>
                 </tr>
         </tbody>
         </table>        
     </div>
+    @endif
 </div>
 
 </div>

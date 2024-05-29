@@ -61,7 +61,7 @@
                             <div class="col-md-4">
                                 <div class="mb-3">
                                 <label class="form-label">Order By :</label></br>
-                                <textarea name="order_by" id="order_by" rows="5" cols="30" style="white-space: pre-line;width: 100%;">@php echo $profile->company_name."\n"."Mobile No: ".$profile->mobile_no."\n"."Email: ".$profile->email."\n".$profile->address."\n"."GST: ".$profile->gst_no; @endphp</textarea>
+                                <textarea name="order_by" id="order_by" rows="5" cols="30" style="white-space: pre-line;width: 100%;">@php echo $profile->contact_person."\n".$profile->company_name."\n".$profile->address."\n"."Email: ".$profile->email."\n"."Mobile No: ".$profile->mobile_no."\n"."GST: ".$profile->gst_no; @endphp</textarea>
 
                                 <!-- <script>
                                     CKEDITOR.replace( 'order_by' );
@@ -73,7 +73,7 @@
                                 <div class="mb-3">
                                 <label class="form-label">Order To :</label></br>
                                 <input type="hidden" class="form-control" name="vendor_id" id="vendor_id" value="{{$vendor->id}}" />
-                                <textarea name="vendor_order_details" id="vendor_order_details" rows="5" cols="30" style="white-space: pre-line;width: 100%;">@php echo $vendor->company_name."\n".$vendor->address."\n"."Email: ".$vendor->email."\n"."Mobile: ".$vendor->mobile_no."\n"."GST: ".$vendor->gst_no;@endphp</textarea>
+                                <textarea name="vendor_order_details" id="vendor_order_details" rows="5" cols="30" style="white-space: pre-line;width: 100%;">@php echo $vendor->contact_person."\n".$vendor->company_name."\n".$vendor->address.", ".$vendor?->city->city_name.", ".$vendor?->state->state_name.", ".$vendor?->country->country_name."\n"."Email: ".$vendor->email."\n"."Mobile: ".$vendor->mobile_no."\n"."GST: ".$vendor->gst_no;@endphp</textarea>
                                 </div>
                             </div>
 

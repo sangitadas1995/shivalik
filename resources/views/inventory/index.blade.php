@@ -200,7 +200,7 @@
                                 <input type="hidden" name="product_id" id="product_id">
                                 <input type="hidden" name="measurement_unit_id" id="measurement_unit_id">
                                 <input type="hidden" name="inventory_id" id="inventory_id">
-                                <button type="button" class="btn grey-primary reset_add_customer">Cancel</button>
+                                <button type="reset" class="btn grey-primary reset_add_customer">Cancel</button>
                                 <button type="submit" class="btn black-btn">Save</button>
                             </div>
                         </div>
@@ -319,7 +319,7 @@
                                 <input type="hidden" name="productout_id" id="productout_id">
                                 <input type="hidden" name="measurementout_unit_id" id="measurementout_unit_id">
                                 <input type="hidden" name="inventoryout_id" id="inventoryout_id">
-                                <button type="button" class="btn grey-primary reset_add_customer">Cancel</button>
+                                <button type="reset" class="btn grey-primary reset_add_customer">Cancel</button>
                                 <button type="submit" class="btn black-btn">Save</button>
                             </div>
                         </div>

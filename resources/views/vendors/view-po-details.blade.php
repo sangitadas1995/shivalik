@@ -1,3 +1,29 @@
+<style>
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+/*  background-color: #333333;*/
+}
+
+li {
+  float: left;
+}
+
+li a {
+  display: block;
+  color: black;
+  text-align: center;
+  padding: 16px;
+  text-decoration: none;
+}
+
+li a:hover {
+  background-color: #111111;
+}
+</style>
+
 <div class="customer-details-popup">
     <div class="popup-content" style="width:90%;">
         <h4>
@@ -91,9 +117,12 @@
             <div class="grey-order-bg">
                 <div class="top-order-bg">
                     <h4>Vendor's Details</h4>
-                    <strong>{{$vendor->company_name}}</strong><br>{{$vendor->contact_person}}<br>Mobile: {{$vendor->mobile_no}}<br>                    
-                    Email: {{$vendor->email}}<br>                    
-                    Location: {{$vendor->address}}<br> 
+                    <strong>{{$vendor->company_name}}</strong><br>
+                    {{$vendor->contact_person}}<br>                                        
+                    Location: {{$vendor->address.", ".$vendor?->city->city_name.", ".$vendor?->state->state_name.", ".$vendor?->country->country_name}}<br>
+                    Email: {{$vendor->email}}<br>
+                    Mobile: {{$vendor->mobile_no}}<br>
+                    GST: {{$vendor->gst_no}}<br>
                 </div>
             </div>
         </div>
