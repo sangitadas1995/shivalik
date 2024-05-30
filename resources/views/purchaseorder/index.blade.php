@@ -156,6 +156,17 @@
           return data;
         }
       },
+
+      "fnRowCallback": function(nRow, aData, iDisplayIndex, iDisplayIndexFull) {
+      if (aData[7] == "Cancelled") {
+        $('td', nRow).css('background-color', '#f0c54c');
+        $(nRow).find('td:eq(6)').css({'color' : 'red', 'font-weight' : 'bold'});
+      } 
+      else if (aData[7] == "Completed") {
+        $('td', nRow).css('background-color', '#d0f0c0');
+        $(nRow).find('td:eq(6)').css({'color' : '#000', 'font-weight' : 'bold'});
+      }
+    },
       columnDefs: [{
         target: [0],
         searchable: false,
@@ -306,8 +317,6 @@ $(document).on( "change", "#payment_date",function( event, ui ) {
             $('#poListModal').modal('hide');
             var __e = $(this);
             var rowid = __e.data('id');
-            //alert(__e);
-            //alert(rowid);
             if (rowid) {
             $.ajax({
                 type: "post",
@@ -320,6 +329,7 @@ $(document).on( "change", "#payment_date",function( event, ui ) {
                     $('.render_po_details').html(response);
                     $('#poDetailsOfVendor').modal('show');
                     fn_show_po_amount_details(rowid);
+                    fn_show_po_upload_doc_list(rowid);
                 }
             });
             }
@@ -816,6 +826,7 @@ $(document).on('click', '.edit_po_creation', function (e) {
                 success: function (response) {
                     $('.render_view_payment_ledger').html(response);
                     $('#viewPaymentLedgerModal').modal('show');
+                    fn_show_po_payment_ledger_list(rowid);
                 }
             });
         }
@@ -860,9 +871,14 @@ $(document).on('click', '.edit_po_creation', function (e) {
                 {
                     return Swal.fire('Success!', response.message, 'success').then((result) => {
                       if (result.isConfirmed) {
-                       $('#viewPaymentLedgerModal').modal('hide');
+                       //$('#viewPaymentLedgerModal').modal('hide');
                        fn_show_po_amount_details(purchase_order_id);
-                       //window.location.reload();
+                       fn_show_po_payment_ledger_list(purchase_order_id);
+
+                       $("#payment_date").val('');
+                       $("#payment_amount").val('');
+                       $("#payment_mode_id").val('');
+                       $("#narration").val('');
                       }
                     });
                 }
@@ -964,6 +980,7 @@ $(document).on('click', '.edit_po_creation', function (e) {
                             $('.error_po_file_type_title').html('');
                             $('.error_po_file').html('');
                             fn_get_po_file_upload_list_view(po_id);
+                            fn_show_po_upload_doc_list(po_id);
                           }
                         });
                     }
@@ -1006,6 +1023,7 @@ $(document).on('click', '.edit_po_creation', function (e) {
                 return Swal.fire('Success!', response.message, 'success').then((result) => {
                 if (result.isConfirmed) {
                     fn_get_po_file_upload_list_view(po_id);
+                    fn_show_po_upload_doc_list(po_id);
                 }
                 });
             }
@@ -1034,7 +1052,6 @@ $(document).on('click', '.edit_po_creation', function (e) {
         });
     }
 
-
     function fn_show_po_amount_details(rowid)
     {
         $.ajax({
@@ -1046,6 +1063,36 @@ $(document).on('click', '.edit_po_creation', function (e) {
             dataType: "json",
             success: function (response) {
                 $('#showPoAmtDetails').html(response.table_data);
+            }
+        });
+    }
+
+    function fn_show_po_upload_doc_list(rowid)
+    {
+        $.ajax({
+            type: "post",
+            url: "{{ route('vendors.show-po-upload-doc-list') }}",
+            data: {
+            rowid
+            },
+            dataType: "json",
+            success: function (response) {
+                $('#showPoUploadDocList').html(response.table_data);
+            }
+        });
+    }
+
+    function fn_show_po_payment_ledger_list(rowid)
+    {
+        $.ajax({
+            type: "post",
+            url: "{{ route('vendors.show-po-payment-ledger-list') }}",
+            data: {
+            rowid
+            },
+            dataType: "json",
+            success: function (response) {
+                $('#payment_legder_content').html(response.table_data);
             }
         });
     }
@@ -1320,8 +1367,9 @@ $(document).on('click', '.edit_po_creation', function (e) {
             {
                 return Swal.fire('Success!', response.message, 'success').then((result) => {
                 if (result.isConfirmed) {
-                    $('#viewPaymentLedgerModal').modal('hide');
+                    //$('#viewPaymentLedgerModal').modal('hide');
                     fn_show_po_amount_details(purchase_order_id);
+                    fn_show_po_payment_ledger_list(purchase_order_id);
                 }
                 });
             }
@@ -1334,7 +1382,6 @@ $(document).on('click', '.edit_po_creation', function (e) {
         }
         });  
     });
-
 
 
 function changePqty(id)
@@ -1483,7 +1530,6 @@ function totalCalculation()
     $("#product_total_gst").val(parseFloat(totGst).toFixed(2));
     $('#total_pd_gst').html(parseFloat(totGst).toFixed(2));
 }
-
 
 function isNumberKey(evt){
     var charCode = (evt.which) ? evt.which : evt.keyCode;

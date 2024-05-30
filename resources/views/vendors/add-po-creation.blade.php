@@ -252,7 +252,7 @@
 
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <input type="checkbox" name="vd_declaration" class="vd_declaration" value="">
+                                    <input type="checkbox" name="vd_declaration" class="vd_declaration" value="1">
                                     <label class="form-label">Vendors's Declaration</label></br>
                                 </div>
                             </div>
