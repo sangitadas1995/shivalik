@@ -88,36 +88,7 @@
                                         <th class="text-center pay-action">Balance</th>
                                     </tr>
                                 </thead>
-                                <tbody id="payment_legder_content">
-                                <tr>
-                                    <td>{{date("d-M-Y",strtotime($vendorPoDetails->purchase_order_date))}}<br></td> 
-                                    <td>N/A</td>         
-                                    <td>N/A</td>                   
-                                    <td class="text-center"><span class="minus">{{$vendorPoDetails->total_amount !="" ? number_format(round($vendorPoDetails->total_amount),2) : 'N/A'}}</span></td>
-                                    <td class="text-center">0</td>          
-                                    <td class="text-center pay-action">{{$vendorPoDetails->total_amount !="" ? number_format(round($vendorPoDetails->total_amount),2) : 'N/A'}}</td>
-                                </tr>
-                                @php $sumtot = 0; @endphp
-                                @if (isset($vendorPoDetails?->po_payment_received_by_vendors) && count($vendorPoDetails?->po_payment_received_by_vendors) > 0)
-                                @foreach ($vendorPoDetails?->po_payment_received_by_vendors as $vp)
-                                @php 
-                                $sumtot += $vp->payment_amount;
-                                $balance = ($vendorPoDetails->total_amount - $sumtot);
-                                @endphp
-                                <tr>
-                                    <td>{{date("d-M-Y",strtotime($vp->payment_date))}}</td> 
-                                    <td>{{$vp?->payment_mode_name->payment_mode}}</td>
-                                    <td>{{$vp->narration}}</td>
-                                    <td class="text-center">0</td>               
-                                    <td class="text-center"><span class="plus">{{$vp->payment_amount}}</span></td> 
-                                    <td class="text-center pay-action">
-                                    {{$balance}}
-                                    <a href="JavaScript:void(0);" class="del_payment_ledger" id="{{$vp->id}}"  title="Delete" style="color:red"><i class="fa fa-trash"></i></a>
-                                    </td>
-                                </tr>
-                                @endforeach
-                                @endif
-                                </tbody>
+                                <tbody id="payment_legder_content"></tbody>
                             </table>
                         </div>
                     </div>

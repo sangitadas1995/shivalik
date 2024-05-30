@@ -37,6 +37,7 @@ use App\Models\InventoryDetails;
 use App\Traits\InventoryTrait;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Response;
 
 //use PDF;
 //use Illuminate\Support\Facades\Auth;
@@ -992,6 +993,7 @@ class VendorsController extends Controller
                 $PoCreate->additional_note = $request->additional_note;
                 $PoCreate->po_facilitation = $request->po_facilitation;
                 $PoCreate->thanksyou_notes = $request->thanksyou_notes;
+                $PoCreate->vendors_declaration = $request->vd_declaration;
                 
                 $save = $PoCreate->save();
                 $last_po_insert_id = $PoCreate->id;
@@ -1154,6 +1156,7 @@ class VendorsController extends Controller
     }
 
     public function updatePoOfVendor(Request $request){
+        //dd($request);
         try {
             $validator = Validator::make($request->all(), [
                 'purchase_order_no' => 'required',
@@ -1195,6 +1198,14 @@ class VendorsController extends Controller
                 $PoUpdate->additional_note = $request->additional_note;
                 $PoUpdate->po_facilitation = $request->po_facilitation;
                 $PoUpdate->thanksyou_notes = $request->thanksyou_notes;
+                if($request->vd_declaration!="")
+                {
+                    $PoUpdate->vendors_declaration = "1";
+                }
+                else
+                {
+                    $PoUpdate->vendors_declaration = "0";
+                }
                 $update = $PoUpdate->update();
 
                 if(is_countable($request->po_product_id) && count($request->po_product_id)>0)
@@ -1777,7 +1788,7 @@ class VendorsController extends Controller
         $poUploadDocumentsList = PoUploadDocuments::where('purchase_order_id', $request->rowid)->where('status', 'A')->get();
         foreach($poUploadDocumentsList as $podoclist)
         {
-            $output .='<tr><td style="text-align: center;width: 60%;">'.$podoclist->po_file_type_title.'</td><td style="text-align: center;width: 60%;">'.$podoclist->po_file_extension.'</td><td style="text-align: center;width: 60%;"><a href="'.asset('images/po_uploads/'.$podoclist->po_file).'" target="_blank" class="lead_stage_edit icon-btn btn-secondary text-gray"><i class="fa fa-download" aria-hidden="true"></i></a> &nbsp;<a href="JavaScript:void(0);" class="po_upload_file_delete icon-btn btn-alert text-danger" id="'.$podoclist->id.'" data-po-id="'.$podoclist->purchase_order_id.'" style="color:red"><i class="fa fa-trash" aria-hidden="true"></i></a></td></tr>';
+            $output .='<tr><td style="text-align: center;width: 60%;">'.$podoclist->po_file_type_title.'</td><td style="text-align: center;width: 60%;">'.$podoclist->po_file_extension.'</td><td style="text-align: center;width: 60%;"><a href="'.route('vendors.po-download-file', encrypt($podoclist->id)).'"  class="lead_stage_edit icon-btn btn-secondary text-gray"><i class="fa fa-download" aria-hidden="true"></i></a> &nbsp;<a href="JavaScript:void(0);" class="po_upload_file_delete icon-btn btn-alert text-danger" id="'.$podoclist->id.'" data-po-id="'.$podoclist->purchase_order_id.'" style="color:red"><i class="fa fa-trash" aria-hidden="true"></i></a></td></tr>';
         }
 
         $output .='</tbody></table>';
@@ -1869,5 +1880,58 @@ class VendorsController extends Controller
             'table_data'  => $output
             );
             echo json_encode($data);
+    }
+
+
+    public function showPoUploadDocList(Request $request){
+        $vendorPoDocList = PoUploadDocuments::where('purchase_order_id', $request->rowid)->where('status', 'A')->get();
+
+        $output = "";
+        foreach($vendorPoDocList as $vdoclist)
+        {
+            $output .= '<li><a href="'.route('vendors.po-download-file', encrypt($vdoclist->id)).'" class="text-primary">'.$vdoclist->po_file_type_title.'</a></li>';
+        }
+
+        $output .= '<li><a href="JavaScript:void(0)" class="text-primary view_payment_ledger" data-id="'.$request->rowid.'">Payment Ledger</a></li>';
+
+        $data = array(
+        'table_data'  => $output
+        );
+        echo json_encode($data);
+    }
+
+
+    public function poDownloadFile($id){
+        $id = decrypt($id);  
+        $imgName = PoUploadDocuments::where("id", $id)->first();
+        $file =  public_path()."/images/po_uploads/".$imgName->po_file;
+        $headers = array('Content-Type: application/pdf',);
+        return Response::download($file, $imgName->po_file,$headers);
+    }
+
+
+
+    public function showPoPaymentLedgerList(Request $request){
+        $po_id = $request->rowid;
+        $vendorPoDetails = VendorPurchaseOrders::with('po_product_details','po_payment_received_by_vendors','payment_terms')->where('id', $po_id)->first();
+
+        $output = "";
+        $output .= '<tr><td>'.date("d-M-Y",strtotime($vendorPoDetails->purchase_order_date)).'</td><td>N/A</td><td>N/A</td><td class="text-center"><span class="minus">'.($vendorPoDetails->total_amount !="" ? number_format(round($vendorPoDetails->total_amount),2) : "N/A").'</span></td><td class="text-center">0</td><td class="text-center pay-action">'.($vendorPoDetails->total_amount !="" ? number_format(round($vendorPoDetails->total_amount),2) : "N/A").'</td></tr>';
+
+        if (isset($vendorPoDetails?->po_payment_received_by_vendors) && count($vendorPoDetails?->po_payment_received_by_vendors) > 0)
+        {
+            $sumtot = 0;
+            foreach($vendorPoDetails?->po_payment_received_by_vendors as $vp)
+            {
+                $sumtot += $vp->payment_amount;
+                $balance = ($vendorPoDetails->total_amount - $sumtot);
+                $output .= '<tr><td>'.date("d-M-Y",strtotime($vp->payment_date)).'</td><td>'.$vp?->payment_mode_name->payment_mode.'</td><td>'.$vp->narration.'</td><td class="text-center">0</td><td class="text-center"><span class="plus">'.$vp->payment_amount.'</span></td><td class="text-center pay-action">'.$balance.' <a href="JavaScript:void(0);" class="del_payment_ledger" id="'.$vp->id.'"  title="Delete" style="color:red"><i class="fa fa-trash"></i></a></td></tr>';
+            }
+        }
+
+        $data = array(
+            'table_data'  => $output
+        );
+        echo json_encode($data);
     }
 }

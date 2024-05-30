@@ -126,9 +126,12 @@ Route::middleware('auth')->group(function () {
         Route::post('po-documents-list', [VendorsController::class, 'poDocumentsList'])->name('po-documents-list');
         Route::post('delete-po-documents', [VendorsController::class, 'deletePoDocuments'])->name('delete-po-documents');
 
-
         Route::post('show-po-amount-details', [VendorsController::class, 'showPoAmountDetails'])->name('show-po-amount-details');
+        Route::post('show-po-upload-doc-list', [VendorsController::class, 'showPoUploadDocList'])->name('show-po-upload-doc-list');
+        Route::get('po-download-file/{id}', [VendorsController::class, 'poDownloadFile'])->name('po-download-file');
 
+
+        Route::post('show-po-payment-ledger-list', [VendorsController::class, 'showPoPaymentLedgerList'])->name('show-po-payment-ledger-list');
 
 
 
