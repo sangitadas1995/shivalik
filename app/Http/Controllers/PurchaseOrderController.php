@@ -71,6 +71,13 @@ class PurchaseOrderController extends Controller
                 $editLink = route('customers.edit', ['id' => encrypt($value->id)]);
                 $previewLink = route('vendors.vendor-po-preview', ['id' => encrypt($value->id)]);
 
+                if ($value->po_status != "cancelled") {
+                $editHref = '<a href="JavaScript:void(0)" class="text-primary edit_po_creation" title="Edit Vendor PO" data-id ="'.$value->id.'"><img src="'.$edit_icon.'" /></a>&nbsp;&nbsp;';
+                }
+                else{
+                    $editHref = '&nbsp;&nbsp;';
+                }
+
                 if ($value->delivery_status == "not_received") {
                     $presentStatus = '<span style="color:red">Not Reeceived</span>';
                 }
@@ -100,7 +107,7 @@ class PurchaseOrderController extends Controller
                 $subarray[] = 'INR '.$value->total_amount;
                 $subarray[] = $presentStatus;
                 $subarray[] = $po_status;
-                $subarray[] = '<div class="align-items-center d-flex dt-center"><a href="JavaScript:void(0)" class="text-primary edit_po_creation" title="Edit Vendor PO" data-id ="'.$value->id.'"><img src="'.$edit_icon.'" /></a>&nbsp;&nbsp;<a href="'.$previewLink.'" class="text-primary" target="_blank" title="View Vendor PO"><i class="fa fa-eye" aria-hidden="true"></i></a>&nbsp;&nbsp;<a href="JavaScript:void(0);" class="text-primary po_file_list_view" title="Upload Related Documents" data-id="'.$value->id.'"><i class="fa fa-upload" aria-hidden="true"></i></a>&nbsp;&nbsp;<a href="JavaScript:void(0)" class="text-primary view_po_details" title="Vendor PO details" data-id ="'.$value->id.'"><i class="fa fa-search-plus"></i></a></div>';
+                $subarray[] = '<div class="align-items-center d-flex dt-center">'.$editHref.'<a href="'.$previewLink.'" class="text-primary" target="_blank" title="View Vendor PO"><i class="fa fa-eye" aria-hidden="true"></i></a>&nbsp;&nbsp;<a href="JavaScript:void(0);" class="text-primary po_file_list_view" title="Upload Related Documents" data-id="'.$value->id.'"><i class="fa fa-upload" aria-hidden="true"></i></a>&nbsp;&nbsp;<a href="JavaScript:void(0)" class="text-primary view_po_details" title="Vendor PO details" data-id ="'.$value->id.'"><i class="fa fa-search-plus"></i></a></div>';
                 $data[] = $subarray;
             }
         }

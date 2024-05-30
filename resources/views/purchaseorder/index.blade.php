@@ -638,8 +638,9 @@ $(document).on('click', '.edit_po_creation', function (e) {
                     {
                         return Swal.fire('Success!', response.message, 'success').then((result) => {
                           if (result.isConfirmed) {
-                           $('#poStatusChangeModal').modal('hide');
-                           $('.po_status_change').html(po_status);
+                           //$('#poStatusChangeModal').modal('hide');
+                           //$('.po_status_change').html(po_status);
+                            location.reload();
                           }
                         });
                     }
@@ -710,8 +711,9 @@ $(document).on('click', '.edit_po_creation', function (e) {
                     {
                         return Swal.fire('Success!', response.message, 'success').then((result) => {
                           if (result.isConfirmed) {
-                           $('#poDeliveryStatusChangeModal').modal('hide');
-                           $('.po_delivery_status_change').html(podvstat);
+                           //$('#poDeliveryStatusChangeModal').modal('hide');
+                           //$('.po_delivery_status_change').html(podvstat);
+                            location.reload();
                           }
                         });
                     }

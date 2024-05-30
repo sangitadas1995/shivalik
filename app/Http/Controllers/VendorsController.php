@@ -37,6 +37,8 @@ use App\Models\InventoryDetails;
 use App\Traits\InventoryTrait;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+
+//use PDF;
 //use Illuminate\Support\Facades\Auth;
 
 class VendorsController extends Controller
@@ -822,11 +824,11 @@ class VendorsController extends Controller
         $adminSettings = AdminSettingTerms::findOrFail(1);
         $thanksAndRegards = array(
             "name" => auth()->user()->name,
-            "mobile" => "Mobile:".auth()->user()->mobile,
-            "email" => "Email:".auth()->user()->email
+            "email" => "Email: ".auth()->user()->email,
+            "mobile" => "Mobile: ".auth()->user()->mobile
         );
 
-        $vendor = Vendor::with('vendortype')->findOrFail($request->rowid);
+        $vendor = Vendor::with('vendortype','city','state','country')->findOrFail($request->rowid);
         $warehousesList = Warehouses::where('warehouse_type', 'printing')->get();
         $profile = Profile::where('status', 'A')->first();
         $paymentTerms = PaymentTermsModel::where('status', 'A')->get();
@@ -950,7 +952,7 @@ class VendorsController extends Controller
 
     public function getVendorAddress(Request $request){
         $vendor = Warehouses::with('country','state','city')->where(['id' => $request->vendor_id])->first();
-        $data = array('vendors'  => "Company Name: ".$vendor->company_name."\n"."Contact Person: ".$vendor->contact_person."\n"."Mobile No: ".$vendor->mobile_no."\n"."Email: ".$vendor->email."\n"."Company Address: ".$vendor->address.", ".$vendor->city?->city_name.", ".$vendor->state?->state_name.", ".$vendor->country?->country_name."\n"."GST: ".$vendor->gst);
+        $data = array('vendors'  => $vendor->contact_person."\n".$vendor->company_name."\n".$vendor->address.", ".$vendor->city?->city_name.", ".$vendor->state?->state_name.", ".$vendor->country?->country_name."\n"."Email: ".$vendor->email."\n"."Mobile No: ".$vendor->mobile_no."\n"."GST: ".$vendor->gst);
         echo json_encode($data);
     }
 
@@ -1220,6 +1222,17 @@ class VendorsController extends Controller
                 DB::commit();
 
                 if ($update) {
+
+                    // $vendorPoPreviewDetails = VendorPurchaseOrders::with('po_product_details','payment_terms')->where('id', $vendor_purchased_id)->first();
+                    // dd($vendorPoPreviewDetails);
+
+                    // $data = [
+                    //     'title' => 'Welcome to ItSolutionStuff.com',
+                    //     'date' => date('m/d/Y')
+                    // ]; 
+                    // $pdf = PDF::loadView('vendors.vendor-po-pdf', $data);
+                    // $pdf->save(public_path()."/po_pdf/".$request->purchase_order_no."PO.pdf");
+
                     return response()->json([
                         'status' => "success",
                         'message' => "PO has been updated successfully"
