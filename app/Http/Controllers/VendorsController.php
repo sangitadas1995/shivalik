@@ -924,15 +924,15 @@ class VendorsController extends Controller
 
                 $total_calculation=($total_calculation+$calculation);
                 
-                $remove_link = '<a href="javascript:void();" class="vd_product_remove" style="font-size: 14px; color: #d31b08;" data-calculation="'. $calculation .'" id="'. $value->id .'"><i class="fa fa-trash" aria-hidden="true"></i></a>';
+                $remove_link = '<a href="javascript:void(0)" class="vd_product_remove" style="font-size: 14px; color: #d31b08;" data-calculation="'. $calculation .'" id="'. $value->id .'"><i class="fa fa-trash" aria-hidden="true"></i></a>';
 
                 $output .= '
                 <tr id="row'.$value->id.'">
                 <td style="text-align: center;">'.$value->paper_name.'<input type="hidden" name="po_product_id[]" id="po_product_id_'.$value->id.'" value="'.$value->id.'"><input type="hidden" name="current_row_price[]" id="current_row_price_'.$value->id.'" value="'.$calculation.'"><input type="hidden" name="current_row_gross_price[]" id="current_row_gross_price_'.$value->id.'" value="'.$finalArr[$value->id]["purchase_price"].'"><input type="hidden" name="current_row_discount[]" id="current_row_discount_'.$value->id.'" value=""><input type="hidden" name="current_row_gst[]" id="current_row_gst_'.$value->id.'" value="'.$gross_price_gst.'"></td>
-                <td style="text-align: center;"><input type="text" name="purchase_price[]" id="purchase_price_'.$value->id.'" value="'.$finalArr[$value->id]["purchase_price"].'" style="width:60%;" onkeyup="changePrice('.$value->id.')" onblur="changePrice('.$value->id.')" onmouseleave="changePrice('.$value->id.')" onkeypress="return isNumberFloatKey(event)"> /'. strtolower($value->unit_type?->measurement_unuit).'</td>
-                <td style="text-align: center;"><input type="text" name="order_qty[]" id="order_qty_'.$value->id.'" value="1" style="width:60%;" onkeyup="changePqty('.$value->id.')" onmouseleave="changePqty('.$value->id.')" onblur="changePqty('.$value->id.')" onkeypress="return isNumberKey(event)"></td>
-                <td style="text-align: center;"><input type="text" name="discount[]" id="discount_'.$value->id.'" value="0" style="width:60%;" onkeyup="changeDisc('.$value->id.')" onblur="changeDisc('.$value->id.')" onmouseleave="changeDisc('.$value->id.')" onkeypress="return isNumberKey(event)"></td>
-                <td style="text-align: center;"><input type="text" name="gst[]" id="gst_'.$value->id.'" value="18" style="width:60%;" onkeyup="changeGst('.$value->id.')" onblur="changeGst('.$value->id.')" onmouseleave="changeGst('.$value->id.')" onkeypress="return isNumberKey(event)"></td>
+                <td style="text-align: center;" class="align-items-center d-flex gap-2"><input type="text" name="purchase_price[]" id="purchase_price_'.$value->id.'" value="'.$finalArr[$value->id]["purchase_price"].'" style="width:60%;" data-type = "product" onkeyup="changePrice('.$value->id.')" onmouseleave="changePrice('.$value->id.')" onblur="changePrice('.$value->id.')" onkeypress="return isNumberFloatKey(event)" class="form-control"> /'. strtolower($value->unit_type?->measurement_unuit).'</td>
+                <td style="text-align: center;"><input type="text" name="order_qty[]" id="order_qty_'.$value->id.'" value="1" style="width:60%;" onkeyup="changePqty('.$value->id.')" onmouseleave="changePqty('.$value->id.')" onblur="changePqty('.$value->id.')" onkeypress="return isNumberKey(event)" class="form-control"></td>
+                <td style="text-align: center;"><input type="text" name="discount[]" id="discount_'.$value->id.'" value="0" style="width:60%;" onkeyup="changeDisc('.$value->id.')" onblur="changeDisc('.$value->id.')" onmouseleave="changeDisc('.$value->id.')" onkeypress="return isNumberKey(event)" class="form-control"></td>
+                <td style="text-align: center;"><input type="text" name="gst[]" id="gst_'.$value->id.'" value="18" style="width:60%;" onkeyup="changeGst('.$value->id.')" onblur="changeGst('.$value->id.')" onmouseleave="changeGst('.$value->id.')" onkeypress="return isNumberKey(event)" class="form-control"></td>
                 <td style="text-align: right;"><span id="rowTotCalPrice_'.$value->id.'">'.number_format((float)$calculation, 2, '.', '').'</span> '.$remove_link.'</td>
                 </tr>';
 
@@ -958,12 +958,14 @@ class VendorsController extends Controller
     }
 
     public function storePoOfVendor(Request $request){
+        //dd($request->all());
         try {
             $validator = Validator::make($request->all(), [
                 'purchase_order_no' => 'required',
                 'purchase_order_date' => 'required',
                 'exp_delivery_date' => 'required',
                 'warehouse_ship_id' => 'required',
+                'po_additional_item_name.*' => 'required',
             ]);
 
             if ($validator->passes()) 
@@ -993,7 +995,14 @@ class VendorsController extends Controller
                 $PoCreate->additional_note = $request->additional_note;
                 $PoCreate->po_facilitation = $request->po_facilitation;
                 $PoCreate->thanksyou_notes = $request->thanksyou_notes;
-                $PoCreate->vendors_declaration = $request->vd_declaration;
+                if($request->vd_declaration!="")
+                {
+                    $PoCreate->vendors_declaration = "1";
+                }
+                else
+                {
+                    $PoCreate->vendors_declaration = "0";
+                }
                 
                 $save = $PoCreate->save();
                 $last_po_insert_id = $PoCreate->id;
@@ -1008,7 +1017,6 @@ class VendorsController extends Controller
                             $po_product_discount = $request->discount[$i];
                             $po_product_gst = $request->gst[$i];
                             $po_product_row_price = $request->current_row_price[$i];
-                            //echo $po_product_id."</br>";
 
                             $PoDetailsCreate = new VendorPurchaseOrderDetails();
                             $PoDetailsCreate->purchase_order_id = $last_po_insert_id;
@@ -1021,10 +1029,47 @@ class VendorsController extends Controller
                             $PoDetailsCreate->save();
                         }
                     }
+
+                    if(is_countable($request->po_additional_item_name) && count($request->po_additional_item_name)>0)
+                    {
+                        for ($j=0; $j < count($request->po_additional_item_name); $j++) { 
+                            $po_product_id = 0;
+                            $po_additional_item_name = $request->po_additional_item_name[$j];
+                            $item_purchase_price = $request->item_purchase_price[$j];
+                            $item_order_qty = $request->item_order_qty[$j];
+                            $item_discount = $request->item_discount[$j];
+                            $item_gst = $request->item_gst[$j];
+                            $current_item_row_price = $request->current_item_row_price[$j];
+
+                            $PoItemDetailsCreate = new VendorPurchaseOrderDetails();
+                            $PoItemDetailsCreate->purchase_order_id = $last_po_insert_id;
+                            $PoItemDetailsCreate->additional_item_name = $po_additional_item_name;
+                            $PoItemDetailsCreate->product_id = $po_product_id;
+                            $PoItemDetailsCreate->purchase_price = $item_purchase_price;
+                            $PoItemDetailsCreate->order_qty = $item_order_qty;
+                            $PoItemDetailsCreate->discount = $item_discount;
+                            $PoItemDetailsCreate->gst = $item_gst;
+                            $PoItemDetailsCreate->net_amount = $current_item_row_price;
+                            $PoItemDetailsCreate->save();
+                        }
+                    }
                 }
                 DB::commit();
 
                 if ($save) {
+                    /* Start to generate vendor PO pdf*/
+                    // $vendorPoPreviewDetails = VendorPurchaseOrders::with('po_product_details','payment_terms')->where('id', $last_po_insert_id)->first();
+                    // $data = [
+                    //     'vendorPoPreviewDetails' => $vendorPoPreviewDetails
+                    // ];
+                    // $pdf = PDF::loadView('vendors.vendor-po-pdf', $data)->setPaper('a4', 'landscape');
+                    // $pdf->save(public_path()."/po_pdf/".$request->purchase_order_no."PO.pdf");
+                    /* End to generate vendor PO pdf*/
+
+                    // $PoUpdate = VendorPurchaseOrders::findOrFail($vendorPoPreviewDetails->id);
+                    // $PoUpdate->po_pdf_invoice = $request->purchase_order_no."PO.pdf";
+                    // $update = $PoUpdate->update();
+
                     return response()->json([
                         'status' => "success",
                         'message' => "PO has been created successfully"
@@ -1032,7 +1077,7 @@ class VendorsController extends Controller
                 } else {
                     return response()->json([
                         'status' => "fail",
-                        'message' => "Failed to create the vendor"
+                        'message' => "Failed to create the PO"
                     ]);
                 }
             }
@@ -1044,7 +1089,7 @@ class VendorsController extends Controller
             DB::rollBack();
              return response()->json([
                 'status' => "fail",
-                'message' => "Failed to create the vendor"
+                'message' => "Failed to create the PO"
             ]);
         }
     }
@@ -1121,7 +1166,6 @@ class VendorsController extends Controller
     }
 
     public function deletePoDetails(Request $request){
-        //dd($request->po_id);
         try {
             $purchase_order_id = $request->po_id;
             $purchase_order_details_id = $request->po_details_id;
@@ -1163,6 +1207,7 @@ class VendorsController extends Controller
                 'purchase_order_date' => 'required',
                 'exp_delivery_date' => 'required',
                 'warehouse_ship_id' => 'required',
+                'po_additional_item_name.*' => 'required',
             ]);
             if ($validator->passes())
             {
@@ -1217,7 +1262,6 @@ class VendorsController extends Controller
                         $po_product_discount = $request->discount[$i];
                         $po_product_gst = $request->gst[$i];
                         $po_product_row_price = $request->current_row_price[$i];
-                        //echo $po_product_id."</br>";
 
                         $PoDetailsCreate = new VendorPurchaseOrderDetails();
                         $PoDetailsCreate->purchase_order_id = $vendor_purchased_id;
@@ -1230,19 +1274,45 @@ class VendorsController extends Controller
                         $PoDetailsCreate->save();
                     }
                 }
+
+                if(is_countable($request->po_additional_item_name) && count($request->po_additional_item_name)>0)
+                {
+                    for ($j=0; $j < count($request->po_additional_item_name); $j++) { 
+                        $po_product_id = 0;
+                        $po_additional_item_name = $request->po_additional_item_name[$j];
+                        $item_purchase_price = $request->item_purchase_price[$j];
+                        $item_order_qty = $request->item_order_qty[$j];
+                        $item_discount = $request->item_discount[$j];
+                        $item_gst = $request->item_gst[$j];
+                        $current_item_row_price = $request->current_item_row_price[$j];
+
+                        $PoItemDetailsCreate = new VendorPurchaseOrderDetails();
+                        $PoItemDetailsCreate->purchase_order_id = $vendor_purchased_id;
+                        $PoItemDetailsCreate->additional_item_name = $po_additional_item_name;
+                        $PoItemDetailsCreate->product_id = $po_product_id;
+                        $PoItemDetailsCreate->purchase_price = $item_purchase_price;
+                        $PoItemDetailsCreate->order_qty = $item_order_qty;
+                        $PoItemDetailsCreate->discount = $item_discount;
+                        $PoItemDetailsCreate->gst = $item_gst;
+                        $PoItemDetailsCreate->net_amount = $current_item_row_price;
+                        $PoItemDetailsCreate->save();
+                    }
+                }
                 DB::commit();
 
                 if ($update) {
-
+                    /* Start to generate vendor PO pdf*/
                     // $vendorPoPreviewDetails = VendorPurchaseOrders::with('po_product_details','payment_terms')->where('id', $vendor_purchased_id)->first();
-                    // dd($vendorPoPreviewDetails);
-
                     // $data = [
-                    //     'title' => 'Welcome to ItSolutionStuff.com',
-                    //     'date' => date('m/d/Y')
-                    // ]; 
-                    // $pdf = PDF::loadView('vendors.vendor-po-pdf', $data);
+                    //     'vendorPoPreviewDetails' => $vendorPoPreviewDetails
+                    // ];
+                    // $pdf = PDF::loadView('vendors.vendor-po-pdf', $data)->setPaper('a4', 'landscape');
                     // $pdf->save(public_path()."/po_pdf/".$request->purchase_order_no."PO.pdf");
+                    /* End to generate vendor PO pdf*/
+
+                    // $PoPdfUpdate = VendorPurchaseOrders::findOrFail($vendorPoPreviewDetails->id);
+                    // $PoPdfUpdate->po_pdf_invoice = $request->purchase_order_no."PO.pdf";
+                    // $PoPdfUpdate->update();
 
                     return response()->json([
                         'status' => "success",
@@ -1269,22 +1339,28 @@ class VendorsController extends Controller
         }
     }
 
-
     public function previewPoOfVendor(Request $request){
+        //dd($request->all());
         $allRqest = $request->all();
         $product_id = $request->po_product_id;
+        $po_additional_item_name = $request->po_additional_item_name;
 
         $po_payment_terms = $request->po_payment_terms;
         $poPaymentTermsDetails = PaymentTermsModel::where('id', $po_payment_terms)->first();
 
-        $po_product_arr = array();
+        $po_product_arr1 = array();
+        $po_product_arr2 = array();
         $po_calculation_arr = array();
+        $tot_net_amt1 = 0;
+        $tot_gross_amt1 = 0;
+        $tot_disc1 = 0;
+        $tot_gst1 = 0;
+        $tot_net_amt2 = 0;
+        $tot_gross_amt2 = 0;
+        $tot_disc2 = 0;
+        $tot_gst2 = 0;
         if(is_countable($product_id) && count($product_id)>0)
         {
-            $tot_net_amt = 0;
-            $tot_gross_amt = 0;
-            $tot_disc = 0;
-            $tot_gst = 0;
             for ($i=0; $i < count($product_id); $i++) { 
                 $product_name = $this->getPaperNameById($product_id[$i])->paper_name;
                 $purchase_price = $request->purchase_price[$i];
@@ -1293,8 +1369,8 @@ class VendorsController extends Controller
                 $gst = $request->gst[$i];
                 $current_row_price = $request->current_row_price[$i];
                 $current_row_gross_price = $request->current_row_gross_price[$i];
-
-                $po_product_arr[] = array('product_id' => $product_id[$i], 
+            
+                $po_product_arr1[] = array('product_id' => $product_id[$i], 
                     'product_name' => $product_name,
                     'purchase_price' => $purchase_price,
                     'order_qty' => $order_qty,
@@ -1304,21 +1380,51 @@ class VendorsController extends Controller
                     'current_row_gross_price' => $current_row_gross_price
                 );
 
-                $tot_net_amt += $current_row_price;
-                $tot_gross_amt += ($purchase_price*$order_qty);
-                $tot_disc += (($purchase_price*$order_qty)*$discount/100);
-                $tot_gst += (($purchase_price*$order_qty)-(($purchase_price*$order_qty*$discount)/100))*$gst/100;
+                $tot_net_amt1 += $current_row_price;
+                $tot_gross_amt1 += ($purchase_price*$order_qty);
+                $tot_disc1 += (($purchase_price*$order_qty)*$discount/100);
+                $tot_gst1 += (($purchase_price*$order_qty)-(($purchase_price*$order_qty*$discount)/100))*$gst/100;
             }
-
-            $po_calculation_arr[] = array('tot_net_amt' => $tot_net_amt, 
-                'tot_gross_amt' => $tot_gross_amt,
-                'tot_disc' => $tot_disc,
-                'tot_gst' => $tot_gst);
         }
-        $html = view('vendors.preview-po-of-vendor', ['allRqest' => $allRqest, 'po_product_arr' => $po_product_arr, 'po_calculation_arr' => $po_calculation_arr, 'poPaymentTermsDetails' =>$poPaymentTermsDetails])->render();
+        if(is_countable($po_additional_item_name) && count($po_additional_item_name)>0)
+        {
+            for ($j=0; $j < count($po_additional_item_name); $j++) { 
+                $product_name = $po_additional_item_name[$j];
+                $purchase_price = $request->item_purchase_price[$j];
+                $order_qty = $request->item_order_qty[$j];
+                $discount = $request->item_discount[$j];
+                $gst = $request->item_gst[$j];
+                $current_row_price = $request->current_item_row_price[$j];
+                $current_row_gross_price = $request->current_item_row_gross_price[$j];
+            
+                $po_product_arr2[] = array('product_id' => 0, 
+                    'product_name' => $product_name,
+                    'purchase_price' => $purchase_price,
+                    'order_qty' => $order_qty,
+                    'discount' => $discount,
+                    'gst' => $gst,
+                    'current_row_price' => $current_row_price,
+                    'current_row_gross_price' => $current_row_gross_price
+                );
+
+                $tot_net_amt2 += $current_row_price;
+                $tot_gross_amt2 += ($purchase_price*$order_qty);
+                $tot_disc2 += (($purchase_price*$order_qty)*$discount/100);
+                $tot_gst2 += (($purchase_price*$order_qty)-(($purchase_price*$order_qty*$discount)/100))*$gst/100;
+            }
+        }
+
+        $output = array_merge($po_product_arr1, $po_product_arr2);
+
+        $po_calculation_arr[] = array('tot_net_amt' => ($tot_net_amt1+$tot_net_amt2), 
+            'tot_gross_amt' => ($tot_gross_amt1+$tot_gross_amt2),
+            'tot_disc' => ($tot_disc1+$tot_disc2),
+            'tot_gst' => ($tot_gst1+$tot_gst2)
+        );
+
+        $html = view('vendors.preview-po-of-vendor', ['allRqest' => $allRqest, 'po_product_arr' => $output, 'po_calculation_arr' => $po_calculation_arr, 'poPaymentTermsDetails' =>$poPaymentTermsDetails])->render();
         return response()->json($html);
     }
-
 
     public function viewPoDetails(Request $request){
         $vendorPoDetails = VendorPurchaseOrders::with('po_product_details','payment_terms')->where('id', $request->rowid)->first();
@@ -1669,26 +1775,7 @@ class VendorsController extends Controller
         }
     }
 
-    public function showPmtRcvByVendor(Request $request){
-        //dd($request->all());
-
-        $vendorPoDetails = VendorPurchaseOrders::where('id', $request->po_id)->get();
-        //dd($vendorPoDetails);
-
-        //$html = view('vendors.show-payment-ledge-list', ['vendorPoDetails' => $vendorPoDetails])->render();
-        //return response()->json($html);
-        $output="";
-
-                $output .= '<tr><td style="text-align: center;">hhhhh123</td></tr>';
-
-        $data = array(
-            'table_data'  => $output
-        );
-        echo json_encode($data);
-    }
-
     public function deletePoPaymentRcvByVendors(Request $request){
-        //dd($request->po_id);
         try {
             $id = $request->id;
             $po_payment_rcv_update = PoPaymentReceivedByVendors::findOrFail($id);
@@ -1828,7 +1915,6 @@ class VendorsController extends Controller
         }
     }
 
-
     public function showPoAmountDetails(Request $request){
         $vendorPoDetails = VendorPurchaseOrders::with('po_product_details','payment_terms')->where('id', $request->rowid)->first();
 
@@ -1882,11 +1968,13 @@ class VendorsController extends Controller
             echo json_encode($data);
     }
 
-
     public function showPoUploadDocList(Request $request){
         $vendorPoDocList = PoUploadDocuments::where('purchase_order_id', $request->rowid)->where('status', 'A')->get();
 
         $output = "";
+
+        $output .= '<li><a href="'.route('vendors.po-download-invoice', encrypt($request->rowid)).'" class="text-primary">Payment Ledger</a></li>';
+
         foreach($vendorPoDocList as $vdoclist)
         {
             $output .= '<li><a href="'.route('vendors.po-download-file', encrypt($vdoclist->id)).'" class="text-primary">'.$vdoclist->po_file_type_title.'</a></li>';
@@ -1900,7 +1988,6 @@ class VendorsController extends Controller
         echo json_encode($data);
     }
 
-
     public function poDownloadFile($id){
         $id = decrypt($id);  
         $imgName = PoUploadDocuments::where("id", $id)->first();
@@ -1908,8 +1995,6 @@ class VendorsController extends Controller
         $headers = array('Content-Type: application/pdf',);
         return Response::download($file, $imgName->po_file,$headers);
     }
-
-
 
     public function showPoPaymentLedgerList(Request $request){
         $po_id = $request->rowid;
@@ -1928,6 +2013,31 @@ class VendorsController extends Controller
                 $output .= '<tr><td>'.date("d-M-Y",strtotime($vp->payment_date)).'</td><td>'.$vp?->payment_mode_name->payment_mode.'</td><td>'.$vp->narration.'</td><td class="text-center">0</td><td class="text-center"><span class="plus">'.$vp->payment_amount.'</span></td><td class="text-center pay-action">'.$balance.' <a href="JavaScript:void(0);" class="del_payment_ledger" id="'.$vp->id.'"  title="Delete" style="color:red"><i class="fa fa-trash"></i></a></td></tr>';
             }
         }
+
+        $data = array(
+            'table_data'  => $output
+        );
+        echo json_encode($data);
+    }
+
+    public function poDownloadInvoice($id){
+        $id = decrypt($id);  
+        $pdfName = VendorPurchaseOrders::where("id", $id)->first();
+        $pdfFile = public_path()."/po_pdf/".$pdfName->po_pdf_invoice;
+        $headers = array('Content-Type: application/pdf',);
+        return Response::download($pdfFile, $pdfName->po_pdf_invoice,$headers);
+    }
+
+
+    public function poAdditionalItemAddList(Request $request){
+        //dd($request->all());
+
+        $autoId = $request->kc;
+
+        $remove_link = '<a href="javascript:void(0)" class="vd_additional_item_remove" style="font-size: 14px; color: #d31b08;" data-calculation="" id="'. $autoId .'"><i class="fa fa-trash" aria-hidden="true"></i></a>';
+
+        $output = '<tr id="rowitem'.$autoId.'"><td style="text-align: center;"><input type="text" name="po_additional_item_name[]" id="po_additional_item_name_'.$autoId.'" class="form-control"><input type="hidden" name="po_product_idd[]" id="po_product_idd_'.$autoId.'" value="0"><input type="hidden" name="current_item_row_price[]" id="current_item_row_price_'.$autoId.'" value=""><input type="hidden" name="current_item_row_gross_price[]" id="current_item_row_gross_price_'.$autoId.'" value=""><input type="hidden" name="current_item_row_discount[]" id="current_item_row_discount_'.$autoId.'" value=""><input type="hidden" name="current_item_row_gst[]" id="current_item_row_gst_'.$autoId.'" value=""></td><td style="text-align: center;"><input type="text" name="item_purchase_price[]" id="item_purchase_price_'.$autoId.'" value="0" data-type = "item" style="width:60%;" onkeyup="changeItemPrice('.$autoId.')" onmouseleave="changeItemPrice('.$autoId.')" onblur="changeItemPrice('.$autoId.')" onkeypress="return isNumberFloatKey(event)" class="form-control"></td><td style="text-align: center;"><input type="text" name="item_order_qty[]" id="item_order_qty_'.$autoId.'" value="1" style="width:60%;" onkeyup="changeItemQty('.$autoId.')" onmouseleave="changeItemQty('.$autoId.')" onblur="changeItemQty('.$autoId.')" onkeypress="return isNumberKey(event)" class="form-control"></td><td style="text-align: center;"><input type="text" name="item_discount[]" id="item_discount_'.$autoId.'" value="0" style="width:60%;" onkeyup="changeItemDisc('.$autoId.')" onblur="changeItemDisc('.$autoId.')" onmouseleave="changeItemDisc('.$autoId.')" onkeypress="return isNumberKey(event)" class="form-control" onchange="handleChange(this);"></td><td style="text-align: center;"><input type="text" name="item_gst[]" id="item_gst_'.$autoId.'" value="18" style="width:60%;" onkeyup="changeItemGst('.$autoId.')" onblur="changeItemGst('.$autoId.')" onmouseleave="changeItemGst('.$autoId.')" onkeypress="return isNumberKey(event)" class="form-control"></td><td style="text-align: right;"><span id="rowTotCalItemPrice_'.$autoId.'">0.00</span> '.$remove_link.'</td>
+        </tr>';
 
         $data = array(
             'table_data'  => $output
