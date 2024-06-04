@@ -21,34 +21,34 @@
                         <form action="" method="POST" id="create_po_forvendor" enctype="multipart/form-data">
                         @csrf
                         <div class="row">
-                            <div class="col-md-2">
+                            <div class="col-md-4 col-xl-2">
                                 <div class="mb-3">
                                 <label class="form-label">PO No<span class="text-danger">*</span> :</label>
                                 <input type="text" class="form-control" name="purchase_order_no" id="purchase_order_no" value="{{ $po_unique_no }}" style="width:100%" />
                                 <small class="text-danger error_purchased_order_no"></small>
                                 </div>
                             </div>
-                            <div class="col-md-2">
+                            <div class="col-md-4 col-xl-2">
                                 <div class="mb-3">
                                   <label class="form-label">PO Date<span class="text-danger">*</span> :</label>
                                   <input type="date" class="form-control" name="purchase_order_date" id="purchase_order_date" value="<?php echo date('Y-m-d'); ?>" />
                                   <small class="text-danger error_purchased_order_date"></small>
                                 </div>
                             </div>
-                            <div class="col-md-2">
+                            <div class="col-md-4 col-xl-2">
                                 <div class="mb-3">
                                   <label class="form-label">Exp. Delivery Date<span class="text-danger">*</span> :</label>
                                   <input type="date" class="form-control" name="exp_delivery_date" id="exp_delivery_date" />
                                   <small class="text-danger error_delivery_date"></small>
                                 </div>
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-md-6 col-xl-3">
                                 <div class="mb-3">
                                 <label class="form-label">Vendor Quotation No :</label>
                                 <input type="text" class="form-control" name="vendor_quotation_no" id="vendor_quotation_no" value="" />
                                 </div>
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-md-6 col-xl-3">
                                 <div class="mb-3">
                                   <label class="form-label">Vendor Quotation Date :</label>
                                   <input type="date" class="form-control" name="vendor_quotation_date" id="vendor_quotation_date" />
@@ -61,7 +61,7 @@
                             <div class="col-md-4">
                                 <div class="mb-3">
                                 <label class="form-label">Order By :</label></br>
-                                <textarea name="order_by" id="order_by" rows="5" cols="30" style="white-space: pre-line;width: 100%;">@php echo $profile->contact_person."\n".$profile->company_name."\n".$profile->address."\n"."Email: ".$profile->email."\n"."Mobile No: ".$profile->mobile_no."\n"."GST: ".$profile->gst_no; @endphp</textarea>
+                                <textarea class="form-control form-text" name="order_by" id="order_by" rows="5" cols="30" style="white-space: pre-line;width: 100%;">@php echo $profile->contact_person."\n".$profile->company_name."\n".$profile->address."\n"."Email: ".$profile->email."\n"."Mobile No: ".$profile->mobile_no."\n"."GST: ".$profile->gst_no; @endphp</textarea>
 
                                 <!-- <script>
                                     CKEDITOR.replace( 'order_by' );
@@ -73,13 +73,13 @@
                                 <div class="mb-3">
                                 <label class="form-label">Order To :</label></br>
                                 <input type="hidden" class="form-control" name="vendor_id" id="vendor_id" value="{{$vendor->id}}" />
-                                <textarea name="vendor_order_details" id="vendor_order_details" rows="5" cols="30" style="white-space: pre-line;width: 100%;">@php echo $vendor->contact_person."\n".$vendor->company_name."\n".$vendor->address.", ".$vendor?->city->city_name.", ".$vendor?->state->state_name.", ".$vendor?->country->country_name."\n"."Email: ".$vendor->email."\n"."Mobile: ".$vendor->mobile_no."\n"."GST: ".$vendor->gst_no;@endphp</textarea>
+                                <textarea class="form-control form-text" class="form-control form-text" name="vendor_order_details" id="vendor_order_details" rows="5" cols="30" style="white-space: pre-line;width: 100%;">@php echo $vendor->contact_person."\n".$vendor->company_name."\n".$vendor->address.", ".$vendor?->city->city_name.", ".$vendor?->state->state_name.", ".$vendor?->country->country_name."\n"."Email: ".$vendor->email."\n"."Mobile: ".$vendor->mobile_no."\n"."GST: ".$vendor->gst_no;@endphp</textarea>
                                 </div>
                             </div>
 
                             <div class="col-md-4">
                                 <div class="mb-3">
-                                <label class="form-label">Ship To<span class="text-danger">*</span> :
+                                <label class="form-label">Ship To<span class="text-danger">*</span> :</label>
                                 <select name="warehouse_ship_id" id="warehouse_ship_id" class="form-select">
                                     <option value="">Select</option>
                                     @if (!empty($warehousesList))
@@ -88,8 +88,8 @@
                                     @endforeach
                                     @endif
                                 </select>
-                                </label>
-                                <textarea name="warehouse_ship_details" id="warehouse_ship_details" rows="3" cols="30" style="white-space: pre-line;"></textarea>
+                                
+                                <textarea class="form-control form-text" name="warehouse_ship_details" id="warehouse_ship_details" rows="3" cols="30" style="white-space: pre-line;"></textarea>
                                 </div>
                             </div>    
                         </div>
@@ -108,6 +108,8 @@
                         <th style="text-align: right; width: 17%;">Net Amount(INR)</th>
                         </tr>
                         </thead>
+                        <tbody id="dynamic_additional_field">
+                        </tbody>
                         <tbody id="dynamic_field">
                         </tbody>
                         </table>
@@ -123,12 +125,15 @@
 
                         <div class="row">
                             <div class="col-md-6">
+                                <input type="hidden" name="item_hidden_ids" id="item_hidden_ids">
                                 <input type="hidden" name="product_hidden_ids" id="product_hidden_ids">
                                 <input type="hidden" name="product_total_amt" id="product_total_amt" value="0">
                                 <input type="hidden" name="product_gross_total_amt" id="product_gross_total_amt" value="0">
                                 <input type="hidden" name="product_total_discount" id="product_total_discount" value="0">
                                 <input type="hidden" name="product_total_gst" id="product_total_gst" value="0">
                                 <h4 class="text-primary"><a href="#" class="add_product_to_po" style="font-size: 14px; color: #0954de;" data-id ="{{ $vendor->id }}"><i class="fa fa-plus" aria-hidden="true"></i>&nbsp;Add Product </a></h4>
+
+                                <h4 class="text-primary"><a href="JavaScript:void(0);" id="add_new_row_po" style="font-size: 14px; color: #0954de;"><i class="fa fa-plus" aria-hidden="true"></i>&nbsp;Add New Row</a></h4>
                             </div>
 
                             <div class="col-md-6">
@@ -175,7 +180,7 @@
                             <div class="col-md-6">
                                 <div class="mb-3">
                                 <label class="form-label">Vendor's Bank Details :</label></br>
-                                <textarea name="vendor_bank_details" id="vendor_bank_details" rows="5" cols="30" style="white-space: pre-line;width:100%;">{{$vendor->bank_details}}</textarea>
+                                <textarea class="form-control form-text" name="vendor_bank_details" id="vendor_bank_details" rows="3" cols="30" style="white-space: pre-line;width:100%;">{{$vendor->bank_details}}</textarea>
                                 </div>
                             </div>
                         </div>
@@ -206,47 +211,42 @@
 
 
                         <div class="row">
-                            <div class="col-md-12">
+                            <div class="col-md-6">
                                 <div class="mb-3">
                                 <label class="form-label">Terms & Conditions/Comments :</label></br>
-                                <textarea name="terms_conditions" id="terms_conditions" rows="5" cols="30" style="white-space: pre-line;width:100%;">{{$adminSettings->admin_terms_condition}}</textarea>
+                                <textarea class="form-control form-text" name="terms_conditions" id="terms_conditions" rows="3" cols="30" style="white-space: pre-line;width:100%;">{{$adminSettings->admin_terms_condition}}</textarea>
                                 <!-- <script>
                                     CKEDITOR.replace( 'terms_conditions' );
                                 </script> -->
                                 </div>
                             </div>
-                        </div>
+                        
 
-                        <div class="row">
-                            <div class="col-md-12">
+                        
+                            <div class="col-md-6">
                                 <div class="mb-3">
                                 <label class="form-label">Additional Note :</label></br>
-                                <textarea name="additional_note" id="additional_note" rows="5" cols="30" style="white-space: pre-line;width:100%;"></textarea>
+                                <textarea class="form-control form-text" name="additional_note" id="additional_note" rows="3" cols="30" style="white-space: pre-line;width:100%;"></textarea>
                                 <!-- <script>
                                     CKEDITOR.replace( 'additional_note' );
                                 </script> -->
                                 </div>
                             </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-md-12">
+                        
+                            <div class="col-md-6">
                                 <div class="mb-3">
                                     <label class="form-label">Write PO facilitation Text (Letter Footer): </label></br>
-                                    <textarea name="po_facilitation" id="po_facilitation" rows="5" cols="30" style="white-space: pre-line;width:100%;">{{$adminSettings->po_facilitation_settings}}</textarea>
+                                    <textarea class="form-control form-text" name="po_facilitation" id="po_facilitation" rows="3" cols="30" style="white-space: pre-line;width:100%;">{{$adminSettings->po_facilitation_settings}}</textarea>
                                     <!-- <script>
                                     CKEDITOR.replace( 'po_facilitation' );
                                     </script> -->
                                 </div>
                             </div>
-                        </div>
-
-
-                        <div class="row">
+                        
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label class="form-label">Thanks & Regards: </label></br>
-                                    <textarea name="thanksyou_notes" id="thanksyou_notes" rows="5" cols="30" style="white-space: pre-line;width:100%;">@php echo $thanksAndRegards['name']."\n".$thanksAndRegards['mobile']."\n".$thanksAndRegards['email'];@endphp</textarea>
+                                    <textarea class="form-control form-text" name="thanksyou_notes" id="thanksyou_notes" rows="3" cols="30" style="white-space: pre-line;width:100%;">@php echo $thanksAndRegards['name']."\n".$thanksAndRegards['mobile']."\n".$thanksAndRegards['email'];@endphp</textarea>
                                 </div>
                             </div>
 
@@ -258,25 +258,21 @@
                             </div>
                         </div>
 
-                <div class="row">
-                    <div class="col-md-4">
-                        <div class="mb-3">
-                        <a href="JavaScript:void(0);" class="btn btn-primary txt-upper pro-form-preview-bt poPreviewBeforeSubmit"><i class="fa fa fa-eye" aria-hidden="true"></i> Preview</a>
-                        </div>
-                    </div>
 
-                    <div class="col-md-4">
-                        <div class="mb-3">
-                        <button type="button" class="btn btn-primary txt-upper pro-form-preview-bt savePoGenerate"><i class="fa fa-paper-plane" aria-hidden="true"></i> Save &amp; Send</button>
-                        </div>
-                    </div>
 
-                    <div class="col-md-4">
-                        <div class="mb-3">
-                        <button type="button" class="btn btn-primary txt-upper pro-form-preview-bt savePoGenerate"><i class="fa fa-floppy-o" aria-hidden="true"></i> Save &amp; Close</button>
-                        </div>
-                    </div>            
-                </div>
+                        <div class="d-flex justify-content-end gap-3">
+                            <div class="mb-3">
+                            <a href="JavaScript:void(0);" class="btn btn-primary txt-upper pro-form-preview-bt poPreviewBeforeSubmit"><i class="fa fa fa-eye" aria-hidden="true"></i> Preview</a>
+                            </div>
+
+                            <div class="mb-3">
+                            <button type="button" class="btn btn-primary txt-upper pro-form-preview-bt savePoGenerate"><i class="fa fa-paper-plane" aria-hidden="true"></i> Save &amp; Send</button>
+                            </div>
+
+                            <div class="mb-3">
+                            <button type="button" class="btn btn-primary txt-upper pro-form-preview-bt savePoGenerate"><i class="fa fa-floppy-o" aria-hidden="true"></i> Save &amp; Close</button>
+                            </div>           
+                        </div>    
 
                 </form>
 

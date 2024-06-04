@@ -116,7 +116,6 @@ Route::middleware('auth')->group(function () {
 
         Route::post('view-payment-ledger', [VendorsController::class, 'viewPaymentLedger'])->name('view-payment-ledger');
         Route::post('store-pmt-rcv-by-vendor', [VendorsController::class, 'storePmtRcvByVendor'])->name('store-pmt-rcv-by-vendor');
-        Route::post('show-pmt-rcv-by-vendor', [VendorsController::class, 'showPmtRcvByVendor'])->name('show-pmt-rcv-by-vendor');
 
         Route::post('delete-po-payment-rcv-by-vendors', [VendorsController::class, 'deletePoPaymentRcvByVendors'])->name('delete-po-payment-rcv-by-vendors');
         Route::post('po-file-list', [VendorsController::class, 'poFileList'])->name('po-file-list');
@@ -132,6 +131,10 @@ Route::middleware('auth')->group(function () {
 
 
         Route::post('show-po-payment-ledger-list', [VendorsController::class, 'showPoPaymentLedgerList'])->name('show-po-payment-ledger-list');
+        Route::get('po-download-invoice/{id}', [VendorsController::class, 'poDownloadInvoice'])->name('po-download-invoice');
+
+
+        Route::post('po-additional-item-add-list', [VendorsController::class, 'poAdditionalItemAddList'])->name('po-additional-item-add-list');
 
 
 

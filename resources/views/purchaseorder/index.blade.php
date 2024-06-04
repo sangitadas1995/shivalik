@@ -466,25 +466,6 @@ $(document).on( "change", "#payment_date",function( event, ui ) {
     });
     });
 
-
-function showPaymentLedger(po_id)
-{
-  $.ajax({
-      type: "post",
-      url: "{{ route('vendors.show-pmt-rcv-by-vendor') }}",
-      data: {
-          po_id
-      },
-      dataType: "json",
-      success: function (response) {
-          //alert(response.table_data);
-          console.log(response.table_data);
-          alert($('#x123').html());
-          //$('#viewPaymentLedgerModal').modal('show');
-      }
-  });
-}
-
 $(document).on('change', '.paper_id', function (e) {
     e.preventDefault();
     var checked_paper_id = false;
@@ -1168,6 +1149,126 @@ $(document).on('click', '.edit_po_creation', function (e) {
         }
     });
 
+    //var kc=0;
+    var kc;
+    $(document).on('click', '#add_new_row_po', function (e) {
+
+        var item_hidden_ids = $("#item_hidden_ids").val();
+        var item_arrs = item_hidden_ids.split(",");
+
+        if(item_arrs.length>0)
+        {
+            kc=item_arrs.length;
+        }
+        else
+        {
+            kc=0;
+        }
+        
+        kc++;
+
+        e.preventDefault();
+        var vendor_id = $("#vendor_id").val();
+        var product_total_amt=$("#product_total_amt").val();
+        $("#item_hidden_ids").val(function() {
+            return this.value + "," + kc;
+        });
+
+        $.ajax({
+            type: "post",
+            url: "{{ route('vendors.po-additional-item-add-list') }}",
+            data: {
+                kc:kc,product_total_amt:product_total_amt
+            },
+            dataType: "json",
+            success: function (response) {
+                $('#dynamic_additional_field').append(response.table_data);
+            }
+        });
+    });
+
+    $(document).on('click', '.vd_additional_item_remove', function(){
+        Swal.fire({
+            icon: "warning",
+            text: `Are you sure?`,
+            showDenyButton: false,
+            showCancelButton: true,
+            confirmButtonText: "Yes delete, it?",
+            cancelButtonText: "No",
+            cancelButtonColor: "crimson",
+          }).then((result) => {
+            if (result.isConfirmed) {
+
+        var id = $(this).attr("id");
+        //alert(id);
+        var po_id = $(this).data("poid");
+        var po_details_id = $(this).data("podetailsid");
+        //alert(po_id +" "+ po_details_id);
+
+        var item_hidden_ids = $("#item_hidden_ids").val();
+        var item_arrs = item_hidden_ids.split(",");
+
+        var row_gross_price = $("#current_item_row_gross_price_"+id).val();
+        var product_gross_total_amt = parseFloat($("#product_gross_total_amt").val());
+        var pd_gross_tot_amt = product_gross_total_amt-row_gross_price;
+        $("#product_gross_total_amt").val(pd_gross_tot_amt);
+        $('#total_pd_gross_price').html(pd_gross_tot_amt.toFixed(2));
+
+        var row_discount = $("#current_item_row_discount_"+id).val();
+        var product_total_discount = parseFloat($("#product_total_discount").val());
+        var pd_tot_discount = product_total_discount-row_discount;
+        $("#product_total_discount").val(pd_tot_discount);
+        $('#total_pd_discount').html(pd_tot_discount.toFixed(2));
+
+        var row_gst = $("#current_item_row_gst_"+id).val();
+        var product_total_gst = parseFloat($("#product_total_gst").val());
+        var pd_tot_gst = product_total_gst-row_gst;
+        $("#product_total_gst").val(pd_tot_gst.toFixed(2));
+        $('#total_pd_gst').html(pd_tot_gst.toFixed(2));
+
+        var calculation = $("#current_item_row_price_"+id).val();
+        //alert(calculation);
+
+        var product_total_amt = parseFloat($("#product_total_amt").val());
+        var sm = product_total_amt-calculation;
+        $("#product_total_amt").val(sm);
+        $('#total_calculation').html(sm.toFixed(2));
+        var smRound = Math.round(sm).toFixed(2);
+        $('#grand_total_round_off').html(smRound);
+        showInWords(smRound);
+
+        var item_ids = new Array();
+        item_arrs.splice($.inArray(id, item_arrs), 1);
+        item_ids.push(item_arrs);
+
+        //console.log(paper_ids);
+        var string = item_ids.toString();
+
+        $("#item_hidden_ids").val(string);
+
+        $.ajax({
+        url: "{{ route('vendors.delete-po-details') }}",
+        method: 'POST',
+        data: {product_id:id,po_id:po_id,po_details_id:po_details_id},
+        dataType: 'json',
+        success: function(response) {
+            if(response.status=="success")
+            {
+                totalCalculation();
+            }
+        },
+        error: function(xhr, status, error) {
+            return Swal.fire('Error!', 'Something went wrong, Plese try again.', 'error');
+        }
+        });
+
+
+        $('#rowitem'+id+'').remove();
+
+        }
+        });  
+    });
+
     $(document).on('click', '.vd_product_remove', function(){
         Swal.fire({
             icon: "warning",
@@ -1249,7 +1350,6 @@ $(document).on('click', '.edit_po_creation', function (e) {
         }
         });  
     });
-
 
     $(document).on('click', '.po_item_delete', function(){  
         Swal.fire({
@@ -1500,35 +1600,171 @@ function changeGst(id)
     totalCalculation();
 }
 
+
+function changeItemPrice(id)
+{
+    var purchase_price = $("#item_purchase_price_"+id).val();
+    var order_qty = $("#item_order_qty_"+id).val();
+    var discount = $("#item_discount_"+id).val();
+    var gst = $("#item_gst_"+id).val();
+
+    var rowPurchasePrice = (purchase_price*order_qty)+((purchase_price*order_qty)*gst/100);
+    if(discount!="0")
+    {
+        var rowPrice = (rowPurchasePrice-(rowPurchasePrice*discount/100));
+    }
+    else
+    {
+        var rowPrice = rowPurchasePrice;
+    }
+
+    var row_gross_price = (purchase_price*order_qty);
+    var row_price_disc = ((purchase_price*order_qty)*discount)/100;
+    var row_price_gst = ((purchase_price*order_qty) - ((purchase_price*order_qty)*discount/100))*gst/100;
+    $("#rowTotCalItemPrice_"+id).html(rowPrice.toFixed(2));
+    $("#current_item_row_price_"+id).val(rowPrice);
+    $("#current_item_row_gross_price_"+id).val(row_gross_price);
+    $("#current_item_row_discount_"+id).val(row_price_disc);
+    $("#current_item_row_gst_"+id).val(row_price_gst);
+
+    totalCalculation();
+}
+
+function changeItemQty(id)
+{
+    var purchase_price = $("#item_purchase_price_"+id).val();
+    var order_qty = $("#item_order_qty_"+id).val();
+    var discount = $("#item_discount_"+id).val();
+    var gst = $("#item_gst_"+id).val();
+
+    var rowPurchasePrice = (purchase_price*order_qty)+((purchase_price*order_qty)*gst/100);
+    if(discount!="0")
+    {
+        var rowPrice = (rowPurchasePrice-(rowPurchasePrice*discount/100));
+    }
+    else
+    {
+        var rowPrice = rowPurchasePrice;
+    }
+
+    var row_gross_price = (purchase_price*order_qty);
+    var row_price_disc = ((purchase_price*order_qty)*discount)/100;
+    var row_price_gst = ((purchase_price*order_qty) - ((purchase_price*order_qty)*discount/100))*gst/100;
+    $("#rowTotCalItemPrice_"+id).html(rowPrice.toFixed(2));
+    $("#current_item_row_price_"+id).val(rowPrice);
+    $("#current_item_row_gross_price_"+id).val(row_gross_price);
+    $("#current_item_row_discount_"+id).val(row_price_disc);
+    $("#current_item_row_gst_"+id).val(row_price_gst);
+
+    totalCalculation();
+}
+
+function changeItemDisc(id)
+{
+    var purchase_price = $("#item_purchase_price_"+id).val();
+    var order_qty = $("#item_order_qty_"+id).val();
+    var discount = $("#item_discount_"+id).val();
+    var gst = $("#item_gst_"+id).val();
+
+    var rowPurchasePrice = (purchase_price*order_qty)+((purchase_price*order_qty)*gst/100);
+    if(discount!="0")
+    {
+        var rowPrice = (rowPurchasePrice-(rowPurchasePrice*discount/100));
+    }
+    else
+    {
+        var rowPrice = rowPurchasePrice;
+    }
+
+    var row_gross_price = (purchase_price*order_qty);
+    var row_price_disc = ((purchase_price*order_qty)*discount)/100;
+    var row_price_gst = ((purchase_price*order_qty) - ((purchase_price*order_qty)*discount/100))*gst/100;
+    $("#rowTotCalItemPrice_"+id).html(rowPrice.toFixed(2));
+    $("#current_item_row_price_"+id).val(rowPrice);
+    $("#current_item_row_gross_price_"+id).val(row_gross_price);
+    $("#current_item_row_discount_"+id).val(row_price_disc);
+    $("#current_item_row_gst_"+id).val(row_price_gst);
+
+    totalCalculation();
+}
+
+function changeItemGst(id)
+{
+    var purchase_price = $("#item_purchase_price_"+id).val();
+    var order_qty = $("#item_order_qty_"+id).val();
+    var discount = $("#item_discount_"+id).val();
+    var gst = $("#item_gst_"+id).val();
+
+    var rowPurchasePrice = (purchase_price*order_qty)+((purchase_price*order_qty)*gst/100);
+    if(discount!="0")
+    {
+        var rowPrice = (rowPurchasePrice-(rowPurchasePrice*discount/100));
+    }
+    else
+    {
+        var rowPrice = rowPurchasePrice;
+    }
+
+    var row_gross_price = (purchase_price*order_qty);
+    var row_price_disc = ((purchase_price*order_qty)*discount)/100;
+    var row_price_gst = ((purchase_price*order_qty) - ((purchase_price*order_qty)*discount/100))*gst/100;
+    $("#rowTotCalItemPrice_"+id).html(rowPrice.toFixed(2));
+    $("#current_item_row_price_"+id).val(rowPrice);
+    $("#current_item_row_gross_price_"+id).val(row_gross_price);
+    $("#current_item_row_discount_"+id).val(row_price_disc);
+    $("#current_item_row_gst_"+id).val(row_price_gst);
+
+    totalCalculation();
+}
+
 function totalCalculation()
 {
     var product_hidden_ids = $("#product_hidden_ids").val();
     var product_arrs = product_hidden_ids.split(",");
-    var sum = 0;
-    var grossSum = 0;
-    var totDisc = 0;
-    var totGst = 0;
+    var productSum = 0;
+    var productGrossSum = 0;
+    var productTotDisc = 0;
+    var productTotGst = 0;
 
     $(product_arrs).each(function(key, val){
-        sum += parseFloat($("#current_row_price_"+val).val()) || 0;
-        grossSum += parseFloat($("#current_row_gross_price_"+val).val()) || 0;
-        totDisc += parseFloat($("#current_row_discount_"+val).val()) || 0;
-        totGst += parseFloat($("#current_row_gst_"+val).val()) || 0;
+        productSum += parseFloat($("#current_row_price_"+val).val()) || 0;
+        productGrossSum += parseFloat($("#current_row_gross_price_"+val).val()) || 0;
+        productTotDisc += parseFloat($("#current_row_discount_"+val).val()) || 0;
+        productTotGst += parseFloat($("#current_row_gst_"+val).val()) || 0;
     });
 
-    var smRound = Math.round(sum).toFixed(2);
+    var item_hidden_ids = $("#item_hidden_ids").val();
+    var item_arrs = item_hidden_ids.split(",");
+    var itemSum = 0;
+    var itemGrossSum = 0;
+    var itemTotDisc = 0;
+    var itemTotGst = 0;
 
-    $("#product_total_amt").val(parseFloat(sum).toFixed(2));
-    $('#total_calculation').html(parseFloat(sum).toFixed(2));
+    $(item_arrs).each(function(key, val){
+        itemSum += parseFloat($("#current_item_row_price_"+val).val()) || 0;
+        itemGrossSum += parseFloat($("#current_item_row_gross_price_"+val).val()) || 0;
+        itemTotDisc += parseFloat($("#current_item_row_discount_"+val).val()) || 0;
+        itemTotGst += parseFloat($("#current_item_row_gst_"+val).val()) || 0;
+    });
+
+    var sumTotal = parseFloat(productSum)+parseFloat(itemSum);
+    var sumTotalGross = parseFloat(productGrossSum)+parseFloat(itemGrossSum);
+    var sumTotalDisc = parseFloat(productTotDisc)+parseFloat(itemTotDisc);
+    var sumTotalGst = parseFloat(productTotGst)+parseFloat(itemTotGst);
+    var smRound = Math.round(sumTotal).toFixed(2);
+    //console.log(sumTotal);
+
+    $("#product_total_amt").val(parseFloat(sumTotal).toFixed(2));
+    $('#total_calculation').html(parseFloat(sumTotal).toFixed(2));
     $('#grand_total_round_off').html(smRound);
     showInWords(smRound);
 
-    $("#product_gross_total_amt").val(parseFloat(grossSum).toFixed(2));
-    $('#total_pd_gross_price').html(parseFloat(grossSum).toFixed(2));
-    $("#product_total_discount").val(parseFloat(totDisc).toFixed(2));
-    $('#total_pd_discount').html(parseFloat(totDisc).toFixed(2));
-    $("#product_total_gst").val(parseFloat(totGst).toFixed(2));
-    $('#total_pd_gst').html(parseFloat(totGst).toFixed(2));
+    $("#product_gross_total_amt").val(parseFloat(sumTotalGross).toFixed(2));
+    $('#total_pd_gross_price').html(parseFloat(sumTotalGross).toFixed(2));
+    $("#product_total_discount").val(parseFloat(sumTotalDisc).toFixed(2));
+    $('#total_pd_discount').html(parseFloat(sumTotalDisc).toFixed(2));
+    $("#product_total_gst").val(parseFloat(sumTotalGst).toFixed(2));
+    $('#total_pd_gst').html(parseFloat(sumTotalGst).toFixed(2));
 }
 
 function isNumberKey(evt){

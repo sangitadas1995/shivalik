@@ -14,7 +14,7 @@
                                 <tr>
                                     <td style="width: 100%; height: auto; display: inline-block;padding: 15px 0; border-bottom: #000000 1px dashed;">
                                         <h2 style="font-size:15px; color:#000000;margin: 0 0 5px 0; font-weight: 700;font-family: century-gothic; display: inline-block;"><b>BUYER:</b></h2>
-                                        <div style="font-size:15px; color:#000;margin: 0 0 10px 0;  width: 100%; display:inline-block;font-family: century-gothic;">{{$vendorPoPreviewDetails->order_by}}</div>
+                                        <div style="font-size:15px; color:#000;margin: 0 0 10px 0;  width: 100%; display:inline-block;font-family: century-gothic;">{{html_entity_decode($vendorPoPreviewDetails->order_by)}}</div>
                                     </td>
                                 </tr>
                             </tbody>
@@ -110,18 +110,18 @@
                 </tr>
             </thead>
             <tbody>
+                <?php $tot_net_amt = 0 ?>
+                <?php $tot_gross_amt = 0 ?>
+                <?php $tot_disc = 0 ?>
+                <?php $tot_gst = 0 ?>
+                @if (isset($vendorPoPreviewDetails->po_product_details) && count($vendorPoPreviewDetails->po_product_details) > 0) 
+                @foreach ($vendorPoPreviewDetails->po_product_details as $poDetails)
                 <tr>
-                    <?php $tot_net_amt = 0 ?>
-                    <?php $tot_gross_amt = 0 ?>
-                    <?php $tot_disc = 0 ?>
-                    <?php $tot_gst = 0 ?>
-                    @if (isset($vendorPoPreviewDetails->po_product_details) && count($vendorPoPreviewDetails->po_product_details) > 0) 
-                    @foreach ($vendorPoPreviewDetails->po_product_details as $poDetails)
                     <td style="box-sizing: border-box; padding: 10px; border-right: #969696 1px solid; vertical-align: middle; background: #FFF; border-left:#888888 1px solid; border-bottom:#888888 1px solid;">
                     <strong style="font-size:15px; color:#000;margin: 0; width: 100%; display:inline-block;font-family: century-gothic;"><b>{{$poDetails?->id}}</b></strong>
                     </td>
                     <td style="box-sizing: border-box; padding: 10px; border-right: #969696 1px solid; vertical-align: middle; background: #FFF; border-left:#888888 1px solid; border-bottom:#888888 1px solid;text-alignl:left;">
-                    <div style="font-size:15px; color:#000;margin: 0; width: 100%; display:inline-block;font-family: century-gothic;">{{$poDetails?->paper_type?->paper_name}}</div>
+                    <div style="font-size:15px; color:#000;margin: 0; width: 100%; display:inline-block;font-family: century-gothic;">{{$poDetails?->product_id!="0" ? $poDetails?->paper_type?->paper_name : $poDetails?->additional_item_name}}</div>
                     </td>
                     <td style="box-sizing: border-box; padding: 10px; border-right: #969696 1px solid; vertical-align: middle; background: #FFF; border-left:#888888 1px solid; border-bottom:#888888 1px solid; text-align:center">
                     <strong style="font-size:15px; color:#000;margin: 0; font-weight:700; width: 100%; display:inline-block;font-family: century-gothic;"><b>{{$poDetails?->purchase_price}}</b></strong>
@@ -149,8 +149,7 @@
                 <td colspan="7" style="text-align: center;width:100%;">No record found</td>
                 </tr>
                 @endif
-
-                            
+        
                 <tr>                    
                     <td style="box-sizing: border-box; padding: 10px; border-right: #969696 1px solid; vertical-align: middle; background: #FFF; border-left:#888888 1px solid; border-bottom:#888888 1px solid;text-align:right" colspan="6">
                         <strong style="font-size:15px; color:#000;margin: 0; font-weight:700; width: 100%; display:inline-block;font-family: century-gothic;"><b>Total Net Amount:</b></strong>
@@ -172,8 +171,7 @@
                         <strong style="font-size:15px; color:#000;margin: 0; font-weight:700; width: 100%; display:inline-block;margin-bottom: 5px;font-family: century-gothic;"><b>{{number_format($tot_gst,2)}}</b></strong>                                
                     </td>
                 </tr>
-                    
-                                    
+                                 
                 <tr>                    
                     <td style="box-sizing: border-box; padding: 10px; border-right: #969696 1px solid; vertical-align: middle; background: #FFF; border-left:#888888 1px solid; border-bottom:#888888 1px solid;text-align:right" colspan="6">
                         <strong style="font-size:15px; color:#000;margin: 0; font-weight:700; width: 100%; display:inline-block;font-family: century-gothic;"><b>Payable amount (Round Off):</b></strong>
@@ -192,7 +190,6 @@
             </tbody>
         </table>
     </div>
-
 
     @if (!empty($vendorPoPreviewDetails->po_payment_terms))
     <div class="head-invoice" style="width:100%; height:auto; display: inline-block; margin: 0 0 15px 0;">
@@ -224,7 +221,6 @@
         </table>
     </div>
     @endif
-
 
     @if (!empty($vendorPoPreviewDetails->terms_conditions))
     <div class="head-invoice" style="width:100%; height:auto; display: inline-block; margin: 0 0 15px 0;">
@@ -267,7 +263,6 @@
         </table>
     </div>
     @endif
-
 
     @if (!empty($vendorPoPreviewDetails->vendor_bank_details))
     <div class="head-invoice" style="width:100%; height:auto; display: inline-block; margin: 0 0 15px 0;">
