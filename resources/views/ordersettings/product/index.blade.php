@@ -1,17 +1,17 @@
 @extends('layouts.app')
-@section('title', 'Paper Setting')
+@section('title', 'Product Setting')
 @push('extra_css')
 @endpush
 @section('content')
     <div class="page-name">
         <div class="row justify-content-between align-items-center">
             <div class="col-md-4">
-                <h2><i class="ri-arrow-left-line"></i> Paper Category</h2>
+                <h2><i class="ri-arrow-left-line"></i> Products</h2>
             </div>
             <div class="col-md-6">
                 <div class="text-end mb-4">
-                    <a href="{{ route('settings.papersettings.add_paper_category') }}" class="btn primary-btn"><img
-                            src="{{ asset('images/add-accoun-1t.png') }}" /> Add Paper Category</a>
+                    <a href="" class="btn primary-btn"><img src="{{ asset('images/add-accoun-1t.png') }}" /> Add
+                        product</a>
                 </div>
             </div>
         </div>
@@ -23,7 +23,7 @@
     </div>
     <div class="row">
         <div class="table-responsive table-sec mb-4">
-            <table class="table table-striped" id="papercat_list_table">
+            <table class="table table-striped" id="product_list_table">
                 <thead>
                     <tr>
                         <th>Row ID</th>
@@ -50,7 +50,7 @@
                 }
             });
 
-            let papercat_list_table = $('#papercat_list_table').DataTable({
+            let product_list_table = $('#product_list_table').DataTable({
                 stateSave: true,
                 processing: true,
                 serverSide: true,

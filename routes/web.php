@@ -9,6 +9,7 @@ use App\Http\Controllers\SettingController;
 use App\Http\Controllers\VendorsController;
 use App\Http\Controllers\CustomersController;
 use App\Http\Controllers\InventoryController;
+use App\Http\Controllers\OrderSettingsController;
 use App\Http\Controllers\PaperTypeController;
 use App\Http\Controllers\PaperSettingController;
 use App\Http\Controllers\PurchaseOrderController;
@@ -301,7 +302,7 @@ Route::middleware('auth')->group(function () {
 
         Route::get('po-facilitation-settings', [SettingController::class, 'poFacilitationSettings'])->name('po-facilitation-settings');
         Route::post('update-po-facilitation', [SettingController::class, 'updatePoFacilitation'])->name('update-po-facilitation');
-        
+
         Route::get('payment-mode-list', [SettingController::class, 'paymentModeList'])->name('payment-mode-list');
         Route::post('payment-mode-list-ajax', [SettingController::class, 'listPaymentModeAjax'])->name('payment-mode-list-ajax');
         Route::post('update-payment-mode-status', [SettingController::class, 'paymentModeStatusUpdate'])->name('update-payment-mode-status');
@@ -318,6 +319,12 @@ Route::middleware('auth')->group(function () {
         Route::post('update-po-file-type/{id}', [SettingController::class, 'updatePoFileType'])->name('update-po-file-type');
         Route::get('add-po-file-type', [SettingController::class, 'createPoFileType'])->name('add-po-file-type');
         Route::post('store-po-file-type', [SettingController::class, 'storePoFileType'])->name('store-po-file-type');
+
+        Route::prefix('order')->name('order.')->group(function () {
+            Route::prefix('product')->name('product.')->group(function () {
+                Route::get('/', [OrderSettingsController::class, 'index'])->name('index');
+            });
+        });
     });
 
     Route::prefix('papertype')->name('papertype.')->group(function () {
@@ -337,11 +344,11 @@ Route::middleware('auth')->group(function () {
         Route::post('get-no-of-sheet-by-unitid', [PaperTypeController::class, 'get_no_of_sheet_by_unitid'])->name('get-no-of-sheet-by-unitid');
     });
 
+
     Route::prefix('purchaseorder')->name('purchaseorder.')->group(function () {
         Route::get('/', [PurchaseOrderController::class, 'puchaseOrderList'])->name('index');
         Route::post('list-data', [PurchaseOrderController::class, 'list_data'])->name('data');
     });
-    
 });
 
 require __DIR__ . '/auth.php';
