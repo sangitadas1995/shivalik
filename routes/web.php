@@ -177,6 +177,8 @@ Route::middleware('auth')->group(function () {
 
         Route::post('productmanualstocklist-data', [InventoryController::class, 'product_manual_stocklist_data'])->name('productmanualstocklist-data');
 
+        Route::post('download-inv-transaction', [InventoryController::class, 'downloadInvTransaction'])->name('download-inv-transaction');
+
 
         Route::prefix('warehouse')->name('warehouse.')->group(function () {
             Route::get('add', [InventoryController::class, 'create'])->name('add');

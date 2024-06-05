@@ -1838,3 +1838,12 @@ table tr td:last-child .d-flex {
 textarea.form-control{
   height: auto;
 }
+
+#purchase_order_tble_wrapper th,
+#purchase_order_tble_wrapper td{
+  min-width: 120px;
+}
+
+.vis-hide{
+  visibility: hidden;
+}

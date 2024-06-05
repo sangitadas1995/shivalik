@@ -181,11 +181,11 @@
                     </td>
                 </tr>
 
-            <!-- <tr>
-                    <td colspan="6" style="box-sizing: border-box; padding: 10px;  vertical-align: middle; background: #FFF; border-bottom:#888888 1px solid;text-align:right;padding-right:34px">
-                        <strong style="font-size:12px; color:#000;margin: 0; font-weight:700; width: 100%; display:inline-block;font-family: century-gothic;"><b>Two Hundred  And Ninety Five Only</b></strong>
+                <tr>
+                    <td colspan="6" style="box-sizing: border-box; padding: 10px; border-right: #969696 1px solid; vertical-align: middle; background: #FFF; border-bottom:#888888 1px solid;text-align:center;">
+                        <strong style="font-size:15px; color:#000;margin: 0; font-weight:700; width: 100%; display:inline-block;font-family: century-gothic;"><b>{{$totalAmountInWords}}</b></strong>
                     </td>
-                </tr> -->
+                </tr>
                 
             </tbody>
         </table>

@@ -20,9 +20,22 @@
                 <div class="d-flex align-items-center gap-3">
                     <div class="col-auto">
                         <div class="text-end ">
-                            <a href="#" class="btn primary-btn w-auto d-flex align-items-center gap-2">
+                            <!-- <a href="#" class="btn primary-btn w-auto d-flex align-items-center gap-2">
                                 <img src="{{ asset('images/csv-icon.png') }}">
-                                Download</a>
+                                Download</a> -->
+
+                            <form action="{{ route('inventory.download-inv-transaction') }}" method="POST" id="update_po_forvendor" enctype="multipart/form-data">
+                            @csrf
+                            <input type="hidden" name="inventory_id" id="inventory_id" value="{{$inventory_id}}">
+                            <input type="hidden" name="warehouseId" id="warehouseId" value="{{$warehouseDetails->id}}">
+                            <input type="hidden" name="paperId" id="paperId" value="{{$inventoryDetails->papertype_id}}">
+                            <input type="hidden" name="no_of_days" id="no_of_days" value="">
+
+                            <button type="submit" class="btn primary-btn w-auto d-flex align-items-center gap-2"><img src="{{ asset('images/csv-icon.png') }}">
+                                Download</button>
+                            </form>
+
+
                         </div>
                     </div>
                     <div class="col-auto">
@@ -81,6 +94,7 @@ invDetailsList(7);
 function invDetailsList(noofdays)
 {
     //alert(noofdays);
+    $("#no_of_days").val(noofdays);
     $.ajaxSetup({
     headers: {
         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')

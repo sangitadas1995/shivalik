@@ -80,7 +80,7 @@ class PurchaseOrderController extends Controller
                 }
 
                 if ($value->delivery_status == "not_received") {
-                    $presentStatus = '<span style="color:red">Not Reeceived</span>';
+                    $presentStatus = '<span style="color:red">Not Received</span>';
                 }
                 if ($value->delivery_status == "partial_received") {
                     $presentStatus = '<span style="color:yellow">Partial Received</span>';
@@ -105,7 +105,7 @@ class PurchaseOrderController extends Controller
                 $subarray[] = $value->purchase_order_date;
                 $subarray[] = $value->exp_delivery_date;
                 $subarray[] = $value->vendor?->company_name ?? null;
-                $subarray[] = 'INR '.$value->total_amount;
+                $subarray[] = 'INR '.number_format($value->total_amount,2);
                 $subarray[] = $presentStatus;
                 $subarray[] = $po_status;
                 $subarray[] = '<div class="align-items-center d-flex dt-center">'.$editHref.'<a href="'.$previewLink.'" class="text-primary" target="_blank" title="View Vendor PO"><i class="fa fa-eye" aria-hidden="true"></i></a>&nbsp;&nbsp;<a href="'.$downloadVendorPoLink.'" class="text-primary" target="_blank" title="Download Vendor PO"><i class="fa fa-file-pdf" aria-hidden="true"></i></a>&nbsp;&nbsp;<a href="JavaScript:void(0);" class="text-primary po_file_list_view" title="Upload Related Documents" data-id="'.$value->id.'"><i class="fa fa-upload" aria-hidden="true"></i></a>&nbsp;&nbsp;<a href="JavaScript:void(0)" class="text-primary view_po_details" title="Vendor PO details" data-id ="'.$value->id.'"><i class="fa fa-search-plus"></i></a></div>';

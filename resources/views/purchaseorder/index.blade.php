@@ -183,9 +183,6 @@
     });
 });
 
-
-
-
 var dateControler = {
     currentDate : null
 }
@@ -265,6 +262,7 @@ $(document).on( "change", "#payment_date",function( event, ui ) {
                         return Swal.fire('Success!', response.message, 'success').then((result) => {
                           if (result.isConfirmed) {
                            $('#editPoCreationModal').modal('hide');
+                           location.reload(true);
                           }
                         });
                     }
@@ -337,7 +335,6 @@ $(document).on( "change", "#payment_date",function( event, ui ) {
 
         $(document).on('change', '#warehouse_ship_id', function () {
           let vendor_id = this.value;
-          //alert(vendor_id);
           if (vendor_id) {
             $.ajax({
               url: "{{ route('vendors.get-vendor-address') }}",
@@ -345,8 +342,6 @@ $(document).on( "change", "#payment_date",function( event, ui ) {
               dataType: "json",
               data: { vendor_id },
               success: function (response) {
-                //console.log(response);
-                //alert(response.vendors);
                 $("#warehouse_ship_details").val(response.vendors);
               },
               error: function (xhr, ajaxOptions, thrownError) {
@@ -354,6 +349,9 @@ $(document).on( "change", "#payment_date",function( event, ui ) {
               }
             });
           }
+        else{
+            $("#warehouse_ship_details").val('');
+        }
         });
 
         $(document).on('change', '#po_payment_terms', function () {
@@ -1187,169 +1185,167 @@ $(document).on('click', '.edit_po_creation', function (e) {
         });
     });
 
-    $(document).on('click', '.vd_additional_item_remove', function(){
-        Swal.fire({
-            icon: "warning",
-            text: `Are you sure?`,
-            showDenyButton: false,
-            showCancelButton: true,
-            confirmButtonText: "Yes delete, it?",
-            cancelButtonText: "No",
-            cancelButtonColor: "crimson",
-          }).then((result) => {
-            if (result.isConfirmed) {
+$(document).on('click', '.vd_additional_item_remove', function(){
+    Swal.fire({
+        icon: "warning",
+        text: `Are you sure?`,
+        showDenyButton: false,
+        showCancelButton: true,
+        confirmButtonText: "Yes delete, it?",
+        cancelButtonText: "No",
+        cancelButtonColor: "crimson",
+      }).then((result) => {
+        if (result.isConfirmed) {
 
-        var id = $(this).attr("id");
-        //alert(id);
-        var po_id = $(this).data("poid");
-        var po_details_id = $(this).data("podetailsid");
-        //alert(po_id +" "+ po_details_id);
+    var id = $(this).attr("id");
+    //alert(id);
+    var po_id = $(this).data("poid");
+    var po_details_id = $(this).data("podetailsid");
 
-        var item_hidden_ids = $("#item_hidden_ids").val();
-        var item_arrs = item_hidden_ids.split(",");
+    var item_hidden_ids = $("#item_hidden_ids").val();
+    var item_arrs = item_hidden_ids.split(",");
 
-        var row_gross_price = $("#current_item_row_gross_price_"+id).val();
-        var product_gross_total_amt = parseFloat($("#product_gross_total_amt").val());
-        var pd_gross_tot_amt = product_gross_total_amt-row_gross_price;
-        $("#product_gross_total_amt").val(pd_gross_tot_amt);
-        $('#total_pd_gross_price').html(pd_gross_tot_amt.toFixed(2));
+    var row_gross_price = $("#current_item_row_gross_price_"+id).val();
+    var product_gross_total_amt = parseFloat($("#product_gross_total_amt").val());
+    var pd_gross_tot_amt = product_gross_total_amt-row_gross_price;
+    $("#product_gross_total_amt").val(pd_gross_tot_amt);
+    $('#total_pd_gross_price').html(pd_gross_tot_amt.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
 
-        var row_discount = $("#current_item_row_discount_"+id).val();
-        var product_total_discount = parseFloat($("#product_total_discount").val());
-        var pd_tot_discount = product_total_discount-row_discount;
-        $("#product_total_discount").val(pd_tot_discount);
-        $('#total_pd_discount').html(pd_tot_discount.toFixed(2));
+    var row_discount = $("#current_item_row_discount_"+id).val();
+    var product_total_discount = parseFloat($("#product_total_discount").val());
+    var pd_tot_discount = product_total_discount-row_discount;
+    $("#product_total_discount").val(pd_tot_discount);
+    $('#total_pd_discount').html(pd_tot_discount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
 
-        var row_gst = $("#current_item_row_gst_"+id).val();
-        var product_total_gst = parseFloat($("#product_total_gst").val());
-        var pd_tot_gst = product_total_gst-row_gst;
-        $("#product_total_gst").val(pd_tot_gst.toFixed(2));
-        $('#total_pd_gst').html(pd_tot_gst.toFixed(2));
+    var row_gst = $("#current_item_row_gst_"+id).val();
+    var product_total_gst = parseFloat($("#product_total_gst").val());
+    var pd_tot_gst = product_total_gst-row_gst;
+    $("#product_total_gst").val(pd_tot_gst.toFixed(2));
+    $('#total_pd_gst').html(pd_tot_gst.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
 
-        var calculation = $("#current_item_row_price_"+id).val();
-        //alert(calculation);
+    var calculation = $("#current_item_row_price_"+id).val();
+    //alert(calculation);
 
-        var product_total_amt = parseFloat($("#product_total_amt").val());
-        var sm = product_total_amt-calculation;
-        $("#product_total_amt").val(sm);
-        $('#total_calculation').html(sm.toFixed(2));
-        var smRound = Math.round(sm).toFixed(2);
-        $('#grand_total_round_off').html(smRound);
-        showInWords(smRound);
+    var product_total_amt = parseFloat($("#product_total_amt").val());
+    var sm = product_total_amt-calculation;
+    $("#product_total_amt").val(sm);
+    $('#total_calculation').html(sm.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
+    var smRound = Math.round(sm);
+    $('#grand_total_round_off').html(smRound.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
+    showInWords(smRound);
 
-        var item_ids = new Array();
-        item_arrs.splice($.inArray(id, item_arrs), 1);
-        item_ids.push(item_arrs);
+    var item_ids = new Array();
+    item_arrs.splice($.inArray(id, item_arrs), 1);
+    item_ids.push(item_arrs);
 
-        //console.log(paper_ids);
-        var string = item_ids.toString();
+    //console.log(paper_ids);
+    var string = item_ids.toString();
 
-        $("#item_hidden_ids").val(string);
+    $("#item_hidden_ids").val(string);
 
-        $.ajax({
-        url: "{{ route('vendors.delete-po-details') }}",
-        method: 'POST',
-        data: {product_id:id,po_id:po_id,po_details_id:po_details_id},
-        dataType: 'json',
-        success: function(response) {
-            if(response.status=="success")
-            {
-                totalCalculation();
-            }
-        },
-        error: function(xhr, status, error) {
-            return Swal.fire('Error!', 'Something went wrong, Plese try again.', 'error');
+    $.ajax({
+    url: "{{ route('vendors.delete-po-details') }}",
+    method: 'POST',
+    data: {product_id:id,po_id:po_id,po_details_id:po_details_id},
+    dataType: 'json',
+    success: function(response) {
+        if(response.status=="success")
+        {
+            totalCalculation();
         }
-        });
-
-
-        $('#rowitem'+id+'').remove();
-
-        }
-        });  
+    },
+    error: function(xhr, status, error) {
+        return Swal.fire('Error!', 'Something went wrong, Plese try again.', 'error');
+    }
     });
 
-    $(document).on('click', '.vd_product_remove', function(){
-        Swal.fire({
-            icon: "warning",
-            text: `Are you sure?`,
-            showDenyButton: false,
-            showCancelButton: true,
-            confirmButtonText: "Yes delete, it?",
-            cancelButtonText: "No",
-            cancelButtonColor: "crimson",
-          }).then((result) => {
-            if (result.isConfirmed) {
+
+    $('#rowitem'+id+'').remove();
+
+    }
+    });  
+});
+
+$(document).on('click', '.vd_product_remove', function(){
+    Swal.fire({
+        icon: "warning",
+        text: `Are you sure?`,
+        showDenyButton: false,
+        showCancelButton: true,
+        confirmButtonText: "Yes delete, it?",
+        cancelButtonText: "No",
+        cancelButtonColor: "crimson",
+      }).then((result) => {
+        if (result.isConfirmed) {
 
 
-        var product_id = $(this).attr("id");
-        var po_id = $(this).data("poid");
-        var po_details_id = $(this).data("podetailsid");
-        //alert(po_id +" "+ po_details_id);
+    var product_id = $(this).attr("id");
+    var po_id = $(this).data("poid");
+    var po_details_id = $(this).data("podetailsid");
+    //alert(po_id +" "+ po_details_id);
 
-        var product_hidden_ids = $("#product_hidden_ids").val();
-        var product_arrs = product_hidden_ids.split(",");
+    var product_hidden_ids = $("#product_hidden_ids").val();
+    var product_arrs = product_hidden_ids.split(",");
 
-        var row_gross_price = $("#current_row_gross_price_"+product_id).val();
-        var product_gross_total_amt = parseFloat($("#product_gross_total_amt").val());
-        var pd_gross_tot_amt = product_gross_total_amt-row_gross_price;
-        $("#product_gross_total_amt").val(pd_gross_tot_amt);
-        $('#total_pd_gross_price').html(pd_gross_tot_amt.toFixed(2));
+    var row_gross_price = $("#current_row_gross_price_"+product_id).val();
+    var product_gross_total_amt = parseFloat($("#product_gross_total_amt").val());
+    var pd_gross_tot_amt = product_gross_total_amt-row_gross_price;
+    $("#product_gross_total_amt").val(pd_gross_tot_amt);
+    $('#total_pd_gross_price').html(pd_gross_tot_amt.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
 
-        var row_discount = $("#current_row_discount_"+product_id).val();
-        var product_total_discount = parseFloat($("#product_total_discount").val());
-        var pd_tot_discount = product_total_discount-row_discount;
-        $("#product_total_discount").val(pd_tot_discount);
-        $('#total_pd_discount').html(pd_tot_discount.toFixed(2));
+    var row_discount = $("#current_row_discount_"+product_id).val();
+    var product_total_discount = parseFloat($("#product_total_discount").val());
+    var pd_tot_discount = product_total_discount-row_discount;
+    $("#product_total_discount").val(pd_tot_discount);
+    $('#total_pd_discount').html(pd_tot_discount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
 
-        var row_gst = $("#current_row_gst_"+product_id).val();
-        var product_total_gst = parseFloat($("#product_total_gst").val());
-        var pd_tot_gst = product_total_gst-row_gst;
-        $("#product_total_gst").val(pd_tot_gst.toFixed(2));
-        $('#total_pd_gst').html(pd_tot_gst.toFixed(2));
+    var row_gst = $("#current_row_gst_"+product_id).val();
+    var product_total_gst = parseFloat($("#product_total_gst").val());
+    var pd_tot_gst = product_total_gst-row_gst;
+    $("#product_total_gst").val(pd_tot_gst.toFixed(2));
+    $('#total_pd_gst').html(pd_tot_gst.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
 
-        var calculation = $("#current_row_price_"+product_id).val();
-        //alert(calculation);
+    var calculation = $("#current_row_price_"+product_id).val();
+    //alert(calculation);
 
-        var product_total_amt = parseFloat($("#product_total_amt").val());
-        var sm = product_total_amt-calculation;
-        $("#product_total_amt").val(sm);
-        $('#total_calculation').html(sm.toFixed(2));
-        var smRound = Math.round(sm).toFixed(2);
-        $('#grand_total_round_off').html(smRound);
-        showInWords(smRound);
+    var product_total_amt = parseFloat($("#product_total_amt").val());
+    var sm = product_total_amt-calculation;
+    $("#product_total_amt").val(sm);
+    $('#total_calculation').html(sm.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
+    var smRound = Math.round(sm);
+    $('#grand_total_round_off').html(smRound.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
+    showInWords(smRound);
 
-        var paper_ids = new Array();
-        product_arrs.splice($.inArray(product_id, product_arrs), 1);
-        paper_ids.push(product_arrs);
+    var paper_ids = new Array();
+    product_arrs.splice($.inArray(product_id, product_arrs), 1);
+    paper_ids.push(product_arrs);
 
-        //console.log(paper_ids);
-        var string = paper_ids.toString();
+    //console.log(paper_ids);
+    var string = paper_ids.toString();
 
-        $("#product_hidden_ids").val(string);
+    $("#product_hidden_ids").val(string);
 
-        $.ajax({
-        url: "{{ route('vendors.delete-po-details') }}",
-        method: 'POST',
-        data: {product_id:product_id,po_id:po_id,po_details_id:po_details_id},
-        dataType: 'json',
-        success: function(response) {
-            if(response.status=="success")
-            {
-                totalCalculation();
-            }
-        },
-        error: function(xhr, status, error) {
-            return Swal.fire('Error!', 'Something went wrong, Plese try again.', 'error');
+    $.ajax({
+    url: "{{ route('vendors.delete-po-details') }}",
+    method: 'POST',
+    data: {product_id:product_id,po_id:po_id,po_details_id:po_details_id},
+    dataType: 'json',
+    success: function(response) {
+        if(response.status=="success")
+        {
+            totalCalculation();
         }
-        });
-
-
-        $('#row'+product_id+'').remove();
-
-        }
-        });  
+    },
+    error: function(xhr, status, error) {
+        return Swal.fire('Error!', 'Something went wrong, Plese try again.', 'error');
+    }
     });
+
+    $('#row'+product_id+'').remove();
+
+    }
+    });  
+});
 
     $(document).on('click', '.po_item_delete', function(){  
         Swal.fire({
@@ -1504,7 +1500,8 @@ function changePqty(id)
     var row_gross_price = (purchase_price*order_qty);
     var row_price_disc = ((purchase_price*order_qty)*discount)/100;
     var row_price_gst = ((purchase_price*order_qty) - ((purchase_price*order_qty)*discount/100))*gst/100;
-    $("#rowTotCalPrice_"+id).html(rowPrice.toFixed(2));
+
+    $("#rowTotCalPrice_"+id).html(rowPrice.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
     $("#current_row_price_"+id).val(rowPrice);
     $("#current_row_gross_price_"+id).val(row_gross_price);
     $("#current_row_discount_"+id).val(row_price_disc);
@@ -1515,6 +1512,8 @@ function changePqty(id)
 
 function changePrice(id)
 {
+    var type = $("#purchase_price_"+id).data("type");
+    //alert(type);
     var purchase_price = $("#purchase_price_"+id).val();
     var order_qty = $("#order_qty_"+id).val();
     var discount = $("#discount_"+id).val();
@@ -1533,7 +1532,7 @@ function changePrice(id)
     var row_gross_price = (purchase_price*order_qty);
     var row_price_disc = ((purchase_price*order_qty)*discount)/100;
     var row_price_gst = ((purchase_price*order_qty) - ((purchase_price*order_qty)*discount/100))*gst/100;
-    $("#rowTotCalPrice_"+id).html(rowPrice.toFixed(2));
+    $("#rowTotCalPrice_"+id).html(rowPrice.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
     $("#current_row_price_"+id).val(rowPrice);
     $("#current_row_gross_price_"+id).val(row_gross_price);
     $("#current_row_discount_"+id).val(row_price_disc);
@@ -1562,7 +1561,7 @@ function changeDisc(id)
     var row_gross_price = (purchase_price*order_qty);
     var row_price_disc = ((purchase_price*order_qty)*discount)/100;
     var row_price_gst = ((purchase_price*order_qty) - ((purchase_price*order_qty)*discount/100))*gst/100;
-    $("#rowTotCalPrice_"+id).html(rowPrice.toFixed(2));
+    $("#rowTotCalPrice_"+id).html(rowPrice.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
     $("#current_row_price_"+id).val(rowPrice);
     $("#current_row_gross_price_"+id).val(row_gross_price);
     $("#current_row_discount_"+id).val(row_price_disc);
@@ -1591,7 +1590,7 @@ function changeGst(id)
     var row_gross_price = (purchase_price*order_qty);
     var row_price_disc = ((purchase_price*order_qty)*discount)/100;
     var row_price_gst = ((purchase_price*order_qty) - ((purchase_price*order_qty)*discount/100))*gst/100;
-    $("#rowTotCalPrice_"+id).html(rowPrice.toFixed(2));
+    $("#rowTotCalPrice_"+id).html(rowPrice.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
     $("#current_row_price_"+id).val(rowPrice);
     $("#current_row_gross_price_"+id).val(row_gross_price);
     $("#current_row_discount_"+id).val(row_price_disc);
@@ -1599,7 +1598,6 @@ function changeGst(id)
 
     totalCalculation();
 }
-
 
 function changeItemPrice(id)
 {
@@ -1621,7 +1619,8 @@ function changeItemPrice(id)
     var row_gross_price = (purchase_price*order_qty);
     var row_price_disc = ((purchase_price*order_qty)*discount)/100;
     var row_price_gst = ((purchase_price*order_qty) - ((purchase_price*order_qty)*discount/100))*gst/100;
-    $("#rowTotCalItemPrice_"+id).html(rowPrice.toFixed(2));
+
+    $("#rowTotCalItemPrice_"+id).html(rowPrice.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
     $("#current_item_row_price_"+id).val(rowPrice);
     $("#current_item_row_gross_price_"+id).val(row_gross_price);
     $("#current_item_row_discount_"+id).val(row_price_disc);
@@ -1650,7 +1649,8 @@ function changeItemQty(id)
     var row_gross_price = (purchase_price*order_qty);
     var row_price_disc = ((purchase_price*order_qty)*discount)/100;
     var row_price_gst = ((purchase_price*order_qty) - ((purchase_price*order_qty)*discount/100))*gst/100;
-    $("#rowTotCalItemPrice_"+id).html(rowPrice.toFixed(2));
+
+    $("#rowTotCalItemPrice_"+id).html(rowPrice.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
     $("#current_item_row_price_"+id).val(rowPrice);
     $("#current_item_row_gross_price_"+id).val(row_gross_price);
     $("#current_item_row_discount_"+id).val(row_price_disc);
@@ -1679,7 +1679,7 @@ function changeItemDisc(id)
     var row_gross_price = (purchase_price*order_qty);
     var row_price_disc = ((purchase_price*order_qty)*discount)/100;
     var row_price_gst = ((purchase_price*order_qty) - ((purchase_price*order_qty)*discount/100))*gst/100;
-    $("#rowTotCalItemPrice_"+id).html(rowPrice.toFixed(2));
+    $("#rowTotCalItemPrice_"+id).html(rowPrice.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
     $("#current_item_row_price_"+id).val(rowPrice);
     $("#current_item_row_gross_price_"+id).val(row_gross_price);
     $("#current_item_row_discount_"+id).val(row_price_disc);
@@ -1708,7 +1708,7 @@ function changeItemGst(id)
     var row_gross_price = (purchase_price*order_qty);
     var row_price_disc = ((purchase_price*order_qty)*discount)/100;
     var row_price_gst = ((purchase_price*order_qty) - ((purchase_price*order_qty)*discount/100))*gst/100;
-    $("#rowTotCalItemPrice_"+id).html(rowPrice.toFixed(2));
+    $("#rowTotCalItemPrice_"+id).html(rowPrice.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
     $("#current_item_row_price_"+id).val(rowPrice);
     $("#current_item_row_gross_price_"+id).val(row_gross_price);
     $("#current_item_row_discount_"+id).val(row_price_disc);
@@ -1751,20 +1751,20 @@ function totalCalculation()
     var sumTotalGross = parseFloat(productGrossSum)+parseFloat(itemGrossSum);
     var sumTotalDisc = parseFloat(productTotDisc)+parseFloat(itemTotDisc);
     var sumTotalGst = parseFloat(productTotGst)+parseFloat(itemTotGst);
-    var smRound = Math.round(sumTotal).toFixed(2);
+    var smRound = Math.round(sumTotal);
     //console.log(sumTotal);
 
     $("#product_total_amt").val(parseFloat(sumTotal).toFixed(2));
-    $('#total_calculation').html(parseFloat(sumTotal).toFixed(2));
-    $('#grand_total_round_off').html(smRound);
+    $('#total_calculation').html(sumTotal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
+    $('#grand_total_round_off').html(smRound.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
     showInWords(smRound);
 
     $("#product_gross_total_amt").val(parseFloat(sumTotalGross).toFixed(2));
-    $('#total_pd_gross_price').html(parseFloat(sumTotalGross).toFixed(2));
+    $('#total_pd_gross_price').html(sumTotalGross.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
     $("#product_total_discount").val(parseFloat(sumTotalDisc).toFixed(2));
-    $('#total_pd_discount').html(parseFloat(sumTotalDisc).toFixed(2));
+    $('#total_pd_discount').html(sumTotalDisc.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
     $("#product_total_gst").val(parseFloat(sumTotalGst).toFixed(2));
-    $('#total_pd_gst').html(parseFloat(sumTotalGst).toFixed(2));
+    $('#total_pd_gst').html(sumTotalGst.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
 }
 
 function isNumberKey(evt){
@@ -1813,8 +1813,11 @@ function inWords (num) {
 
 function showInWords(num)
 {
-    var changeToWords = inWords(parseInt(num));
-    $('#number_to_word_final_amount').html(upperCaseWords(changeToWords));
+    if(num!="")
+    {
+        var changeToWords = inWords(parseInt(num));
+        $('#number_to_word_final_amount').html(upperCaseWords(changeToWords));
+    }
 }
 
 function upperCaseWords(str) {

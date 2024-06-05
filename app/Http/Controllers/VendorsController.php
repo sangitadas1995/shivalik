@@ -929,10 +929,10 @@ class VendorsController extends Controller
                 $output .= '
                 <tr id="row'.$value->id.'">
                 <td style="text-align: center;">'.$value->paper_name.'<input type="hidden" name="po_product_id[]" id="po_product_id_'.$value->id.'" value="'.$value->id.'"><input type="hidden" name="current_row_price[]" id="current_row_price_'.$value->id.'" value="'.$calculation.'"><input type="hidden" name="current_row_gross_price[]" id="current_row_gross_price_'.$value->id.'" value="'.$finalArr[$value->id]["purchase_price"].'"><input type="hidden" name="current_row_discount[]" id="current_row_discount_'.$value->id.'" value=""><input type="hidden" name="current_row_gst[]" id="current_row_gst_'.$value->id.'" value="'.$gross_price_gst.'"></td>
-                <td style="text-align: center;" class="align-items-center d-flex gap-2"><input type="text" name="purchase_price[]" id="purchase_price_'.$value->id.'" value="'.$finalArr[$value->id]["purchase_price"].'" style="width:60%;" data-type = "product" onkeyup="changePrice('.$value->id.')" onmouseleave="changePrice('.$value->id.')" onblur="changePrice('.$value->id.')" onkeypress="return isNumberFloatKey(event)" class="form-control"> /'. strtolower($value->unit_type?->measurement_unuit).'</td>
-                <td style="text-align: center;"><input type="text" name="order_qty[]" id="order_qty_'.$value->id.'" value="1" style="width:60%;" onkeyup="changePqty('.$value->id.')" onmouseleave="changePqty('.$value->id.')" onblur="changePqty('.$value->id.')" onkeypress="return isNumberKey(event)" class="form-control"></td>
-                <td style="text-align: center;"><input type="text" name="discount[]" id="discount_'.$value->id.'" value="0" style="width:60%;" onkeyup="changeDisc('.$value->id.')" onblur="changeDisc('.$value->id.')" onmouseleave="changeDisc('.$value->id.')" onkeypress="return isNumberKey(event)" class="form-control"></td>
-                <td style="text-align: center;"><input type="text" name="gst[]" id="gst_'.$value->id.'" value="18" style="width:60%;" onkeyup="changeGst('.$value->id.')" onblur="changeGst('.$value->id.')" onmouseleave="changeGst('.$value->id.')" onkeypress="return isNumberKey(event)" class="form-control"></td>
+                <td style="text-align: center;" class="align-items-center d-flex gap-2"><div class="d-flex justify-content-center align-items-center gap-2"><input type="text" name="purchase_price[]" id="purchase_price_'.$value->id.'" value="'.$finalArr[$value->id]["purchase_price"].'" style="width:60%;" data-type = "product" onkeyup="changePrice('.$value->id.')" onmouseleave="changePrice('.$value->id.')" onblur="changePrice('.$value->id.')" onkeypress="return isNumberFloatKey(event)" class="form-control"> /'. strtolower($value->unit_type?->measurement_unuit).'</div></td>
+                <td style="text-align: center;"><div class="d-flex justify-content-center"><input type="text" name="order_qty[]" id="order_qty_'.$value->id.'" value="1" style="width:60%;" onkeyup="changePqty('.$value->id.')" onmouseleave="changePqty('.$value->id.')" onblur="changePqty('.$value->id.')" onkeypress="return isNumberKey(event)" class="form-control"></div></td>
+                <td style="text-align: center;"><div class="d-flex justify-content-center"><input type="text" name="discount[]" id="discount_'.$value->id.'" value="0" style="width:60%;" onkeyup="changeDisc('.$value->id.')" onblur="changeDisc('.$value->id.')" onmouseleave="changeDisc('.$value->id.')" onkeypress="return isNumberKey(event)" class="form-control"></div></td>
+                <td style="text-align: center;"><div class="d-flex justify-content-center"><input type="text" name="gst[]" id="gst_'.$value->id.'" value="18" style="width:60%;" onkeyup="changeGst('.$value->id.')" onblur="changeGst('.$value->id.')" onmouseleave="changeGst('.$value->id.')" onkeypress="return isNumberKey(event)" class="form-control"></div></td>
                 <td style="text-align: right;"><span id="rowTotCalPrice_'.$value->id.'">'.number_format((float)$calculation, 2, '.', '').'</span> '.$remove_link.'</td>
                 </tr>';
 
@@ -1116,8 +1116,12 @@ class VendorsController extends Controller
     public function vendor_po_preview($id){
         $id = decrypt($id);
         $vendorPoPreviewDetails = VendorPurchaseOrders::with('po_product_details','payment_terms')->where('id', $id)->first();
+
+        $totalAmountInWords = $this->numberToWords($vendorPoPreviewDetails->total_amount);
+
         return view('vendors.vendor-po-preview', [
-            'vendorPoPreviewDetails' => $vendorPoPreviewDetails
+            'vendorPoPreviewDetails' => $vendorPoPreviewDetails,
+            'totalAmountInWords' => $totalAmountInWords,
         ]);
     }
 
@@ -1416,7 +1420,11 @@ class VendorsController extends Controller
 
         $output = array_merge($po_product_arr1, $po_product_arr2);
 
-        $po_calculation_arr[] = array('tot_net_amt' => ($tot_net_amt1+$tot_net_amt2), 
+        $totalSumNetAmt = ($tot_net_amt1+$tot_net_amt2);
+        $totalAmountInWords = $this->numberToWords($totalSumNetAmt);
+
+        $po_calculation_arr[] = array('tot_net_amt' => $totalSumNetAmt,
+            'totalAmountInWords' => $totalAmountInWords, 
             'tot_gross_amt' => ($tot_gross_amt1+$tot_gross_amt2),
             'tot_disc' => ($tot_disc1+$tot_disc2),
             'tot_gst' => ($tot_gst1+$tot_gst2)
@@ -1530,7 +1538,7 @@ class VendorsController extends Controller
         $warehouse_ship_id = $vendorPos->warehouse_ship_id;
         //echo $warehouse_ship_id;exit;
 
-        $vendorPoDetails = VendorPurchaseOrderDetails::with('paper_type')->where('purchase_order_id', $po_id)->get();
+        $vendorPoDetails = VendorPurchaseOrderDetails::with('paper_type')->where('purchase_order_id', $po_id)->where('product_id','!=', '0')->get();
         //dd($vendorPoDetails);
 
         $po_details_arr = array();
@@ -2036,7 +2044,7 @@ class VendorsController extends Controller
 
         $remove_link = '<a href="javascript:void(0)" class="vd_additional_item_remove" style="font-size: 14px; color: #d31b08;" data-calculation="" id="'. $autoId .'"><i class="fa fa-trash" aria-hidden="true"></i></a>';
 
-        $output = '<tr id="rowitem'.$autoId.'"><td style="text-align: center;"><input type="text" name="po_additional_item_name[]" id="po_additional_item_name_'.$autoId.'" class="form-control"><input type="hidden" name="po_product_idd[]" id="po_product_idd_'.$autoId.'" value="0"><input type="hidden" name="current_item_row_price[]" id="current_item_row_price_'.$autoId.'" value=""><input type="hidden" name="current_item_row_gross_price[]" id="current_item_row_gross_price_'.$autoId.'" value=""><input type="hidden" name="current_item_row_discount[]" id="current_item_row_discount_'.$autoId.'" value=""><input type="hidden" name="current_item_row_gst[]" id="current_item_row_gst_'.$autoId.'" value=""></td><td style="text-align: center;"><input type="text" name="item_purchase_price[]" id="item_purchase_price_'.$autoId.'" value="0" data-type = "item" style="width:60%;" onkeyup="changeItemPrice('.$autoId.')" onmouseleave="changeItemPrice('.$autoId.')" onblur="changeItemPrice('.$autoId.')" onkeypress="return isNumberFloatKey(event)" class="form-control"></td><td style="text-align: center;"><input type="text" name="item_order_qty[]" id="item_order_qty_'.$autoId.'" value="1" style="width:60%;" onkeyup="changeItemQty('.$autoId.')" onmouseleave="changeItemQty('.$autoId.')" onblur="changeItemQty('.$autoId.')" onkeypress="return isNumberKey(event)" class="form-control"></td><td style="text-align: center;"><input type="text" name="item_discount[]" id="item_discount_'.$autoId.'" value="0" style="width:60%;" onkeyup="changeItemDisc('.$autoId.')" onblur="changeItemDisc('.$autoId.')" onmouseleave="changeItemDisc('.$autoId.')" onkeypress="return isNumberKey(event)" class="form-control" onchange="handleChange(this);"></td><td style="text-align: center;"><input type="text" name="item_gst[]" id="item_gst_'.$autoId.'" value="18" style="width:60%;" onkeyup="changeItemGst('.$autoId.')" onblur="changeItemGst('.$autoId.')" onmouseleave="changeItemGst('.$autoId.')" onkeypress="return isNumberKey(event)" class="form-control"></td><td style="text-align: right;"><span id="rowTotCalItemPrice_'.$autoId.'">0.00</span> '.$remove_link.'</td>
+        $output = '<tr id="rowitem'.$autoId.'"><td style="text-align: center;"><div class="d-flex justify-content-center"><input type="text" name="po_additional_item_name[]" id="po_additional_item_name_'.$autoId.'" class="form-control"><input type="hidden" name="po_product_idd[]" id="po_product_idd_'.$autoId.'" value="0"><input type="hidden" name="current_item_row_price[]" id="current_item_row_price_'.$autoId.'" value=""><input type="hidden" name="current_item_row_gross_price[]" id="current_item_row_gross_price_'.$autoId.'" value=""><input type="hidden" name="current_item_row_discount[]" id="current_item_row_discount_'.$autoId.'" value=""><input type="hidden" name="current_item_row_gst[]" id="current_item_row_gst_'.$autoId.'" value=""></div></td><td><div class="d-flex justify-content-center"><input type="text" name="item_purchase_price[]" id="item_purchase_price_'.$autoId.'" value="0" data-type = "item" style="width:60%;" onkeyup="changeItemPrice('.$autoId.')" onmouseleave="changeItemPrice('.$autoId.')" onblur="changeItemPrice('.$autoId.')" onkeypress="return isNumberFloatKey(event)" class="form-control"></div></td><td><div class="d-flex justify-content-center"><input type="text" name="item_order_qty[]" id="item_order_qty_'.$autoId.'" value="1" style="width:60%;" onkeyup="changeItemQty('.$autoId.')" onmouseleave="changeItemQty('.$autoId.')" onblur="changeItemQty('.$autoId.')" onkeypress="return isNumberKey(event)" class="form-control"></div></td><td><div class="d-flex justify-content-center"><input type="text" name="item_discount[]" id="item_discount_'.$autoId.'" value="0" style="width:60%;" onkeyup="changeItemDisc('.$autoId.')" onblur="changeItemDisc('.$autoId.')" onmouseleave="changeItemDisc('.$autoId.')" onkeypress="return isNumberKey(event)" class="form-control" onchange="handleChange(this);"></div></td><td><div class="d-flex justify-content-center"><input type="text" name="item_gst[]" id="item_gst_'.$autoId.'" value="18" style="width:60%;" onkeyup="changeItemGst('.$autoId.')" onblur="changeItemGst('.$autoId.')" onmouseleave="changeItemGst('.$autoId.')" onkeypress="return isNumberKey(event)" class="form-control"></div></td><td style="text-align: right;"><span id="rowTotCalItemPrice_'.$autoId.'">0.00</span> '.$remove_link.'</td>
         </tr>';
 
         $data = array(
