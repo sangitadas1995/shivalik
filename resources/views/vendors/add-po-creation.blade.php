@@ -79,9 +79,9 @@
 
                             <div class="col-md-4">
                                 <div class="mb-3">
-                                <label class="form-label">Ship To<span class="text-danger">*</span> :</label>
+                                <label class="form-label vis-hide">Ship To<span class="text-danger">*</span> :</label>
                                 <select name="warehouse_ship_id" id="warehouse_ship_id" class="form-select">
-                                    <option value="">Select</option>
+                                    <option value="">Ship To</option>
                                     @if (!empty($warehousesList))
                                     @foreach ($warehousesList as $wh)
                                     <option value="{{ $wh->id }}">{{ $wh->company_name }}</option>
@@ -154,8 +154,7 @@
                                     <tr>
                                         <td>Total Tax</td>
                                         <td><span id="total_pd_gst">0.00</span></td>
-                                    </tr>
-                                                            
+                                    </tr>                     
                                     <tr>
                                         <td>Payable amount (Round Off)</td>
                                         <td>

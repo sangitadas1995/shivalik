@@ -18,6 +18,7 @@ use App\Traits\InventoryTrait;
 use Illuminate\Support\Facades\DB;
 use App\Traits\QuantityCalculationTrait;
 use Illuminate\Support\Facades\Validator;
+use Response;
 
 class InventoryController extends Controller
 {
@@ -301,15 +302,16 @@ class InventoryController extends Controller
                 $warehouse_type = ($value->warehouse_type == 'others_warehouse') ? 'Others Warehouse' : 'Printing Warehouse';
 
                 $view_inventory_icon = asset('images/inventoryIcon-3.png');
-                $viewInventoryLink = route('inventory.index', ['id' => encrypt($value->id)]);
 
                 if ($value->status == "A")
                 {
                     $status = '<a href="#" class="updateStatus" data-id ="' . $value->id . '" data-status="lock" title="Unlock"><img src="' . $unlock_icon . '" /></a>';
+                    $viewInventoryLink = '<a href="' . route('inventory.index', ['id' => encrypt($value->id)]) . '" title="View Inventory"><img src="' . $view_inventory_icon . '" /></a>';
                 }
                 if ($value->status == "I")
                 {
                     $status = '<a href="#" class="updateStatus" data-id ="' . $value->id . '" data-status="unlock" title="Lock"><img src="' . $lock_icon . '" /></a>';
+                    $viewInventoryLink = '';
                 }
 
                 $subarray = [];
@@ -324,7 +326,7 @@ class InventoryController extends Controller
                 $subarray[] = '<div class="d-flex align-items-center">
                 <a href="#" class="view_warehouse_details" title="View Details" data-id ="' . $value->id . '"><img src="' . $view_icon . '" /></a>
                 <a href="' . $editLink . '" title="Edit"><img src="' . $edit_icon . '" /></a>' .
-                    $status . '<a href="' . $viewInventoryLink . '" title="View Inventory"><img src="' . $view_inventory_icon . '" /></a></div>';
+                    $status . $viewInventoryLink. '</div>';
                 $data[] = $subarray;
             }
         }
@@ -835,6 +837,11 @@ class InventoryController extends Controller
             }
             $output .= '</tr>';
             }
+        } else {
+            $output .= '
+            <tr>
+            <td colspan="9" style="text-align:center;">No record found</td>
+            </tr>';
         }
 
         $data = array(
@@ -843,4 +850,56 @@ class InventoryController extends Controller
         echo json_encode($data);
     }
 
+
+
+    public function downloadInvTransaction(Request $request){
+        $data = $request->all();
+        $inventory_id = $data["inventory_id"];
+        $warehouseId = $data["warehouseId"];
+        $paperId = $data["paperId"];
+        $noofdays = $data["no_of_days"];
+
+        $warhouse_details = Warehouses::with('vendor_details')->where('id', $warehouseId)->first();
+
+        $inventoryDetails_calculation = InventoryDetails::where([
+            'inventory_id' => $inventory_id,
+            'warehouse_id' => $warehouseId,
+            'papertype_id' => $paperId
+        ])->where('created_at', '>=', now()->subDays($noofdays))
+        ->orderBy('id', 'desc')
+        ->get();
+
+        $csvFileName = 'invTransactionList.csv';
+
+        $headers = [
+            'Content-Type' => 'text/csv; charset=ISO-8859-1',
+            'Content-Disposition' => "attachment; filename=\"$csvFileName\"",
+            'Pragma' => 'no-cache',
+            'Cache-Control' => 'must-revalidate, post-check=0, pre-check=0',
+            'Expires' => '0',
+        ];
+
+        $handle = fopen('php://output', 'w');
+        fputcsv($handle, ['Date', 'Order ID', 'P.O. Id/Shipment Id', 'Vendor Name', 'Job Assigned', 'Narration', 'Stock In', 'Stock Out', 'Balance']); // Add more headers as needed
+        if ($inventoryDetails_calculation->isNotEmpty()) {
+            foreach ($inventoryDetails_calculation as $key => $value) {
+                if($value->stock_type=="credit")
+                {
+                    $stock_in = $value->stock_quantity;
+                    $stock_out = 0;
+                    $stock_balance = $value->current_stock_balance;
+                }
+                if($value->stock_type=="debit")
+                {
+                    $stock_in = 0;
+                    $stock_out = $value->stock_quantity;
+                    $stock_balance = $value->current_stock_balance;
+                }
+                fputcsv($handle, [Carbon::parse($value->created_at)->format('d.m.Y'), 'NIL', utf8_encode($value->purchase_order_no), $warhouse_details?->vendor_details->company_name, $value?->user?->name, $value->narration, $stock_in, $stock_out, $stock_balance]); // Add more fields as needed
+            }
+        }
+        fclose($handle);
+
+        return Response::make('', 200, $headers);
+    }
 }

@@ -10,8 +10,6 @@
             </svg>
         </button> 
 
-
-
         <div class="main-invoice" style="width:800px; height:auto; display: block; margin: 20px auto 0; background:#FFF:">
             <div class="head-invoice" style="width:100%; height:auto; display: inline-block; padding: 10px; box-sizing: border-box; text-align:center; font-size:16px; font-weight:500;background: #000; color: #FFF;font-family: century-gothic;">
 
@@ -92,15 +90,10 @@
         </table>
     </div>
 
-
-
     <div class="head-invoice" style="width:100%; height:auto; display: inline-block; margin: 20px 0; font-weight: 400;">
         <table style="width:100%; border-collapse: collapse; border:#888888 1px solid;">
             <thead>
                 <tr>
-                    <!-- <th style="box-sizing: border-box; padding: 10px; border-right: #969696 1px solid; vertical-align: top; background: #d6d6d6; border-left:#888888 1px solid; border-bottom:#888888 1px solid;">
-                        <span style="font-size:15px; color:#000;margin: 0; font-weight:400; width: 100%;font-family: century-gothic;"><b>Sl.</b></span>
-                    </th> -->
                     <th style="box-sizing: border-box; padding: 10px; border-right: #969696 1px solid; vertical-align: top; background: #d6d6d6; border-left:#888888 1px solid; border-bottom:#888888 1px solid; text-align:left;">
                         <strong style="font-size:15px; color:#000;margin: 0; font-weight:400; width: 100%; display:inline-block;white-space: nowrap;font-family: century-gothic; text-align: left;"><b>Product Details</b></strong>
                     </th>
@@ -126,13 +119,13 @@
                 </tr>
             </thead>
             <tbody>
+                <?php $tot_net_amt = 0 ?>
+                <?php $tot_gross_amt = 0 ?>
+                <?php $tot_disc = 0 ?>
+                <?php $tot_gst = 0 ?>
+                @if (isset($po_product_arr) && count($po_product_arr) > 0) 
+                @foreach ($po_product_arr as $poDetails)
                 <tr>
-                    <?php $tot_net_amt = 0 ?>
-                    <?php $tot_gross_amt = 0 ?>
-                    <?php $tot_disc = 0 ?>
-                    <?php $tot_gst = 0 ?>
-                    @if (isset($po_product_arr) && count($po_product_arr) > 0) 
-                    @foreach ($po_product_arr as $poDetails)
                     <td style="box-sizing: border-box; padding: 10px; border-right: #969696 1px solid; vertical-align: middle; background: #FFF; border-left:#888888 1px solid; border-bottom:#888888 1px solid;text-alignl:left;">
                     <div style="font-size:15px; color:#000;margin: 0; width: 100%; display:inline-block;font-family: century-gothic;">{{$poDetails['product_name']}}</div>
                     </td>
@@ -152,7 +145,6 @@
                     <strong style="font-size:15px; color:#000;margin: 0; font-weight:700; width: 100%; display:inline-block;font-family: century-gothic;"><b>{{number_format($poDetails['current_row_price'],2)}}</b></strong>
                     </td>
                 </tr>
-               
                 @endforeach
                 @else
                 <tr>
@@ -179,8 +171,7 @@
                     <td style="box-sizing: border-box; padding: 10px; border-right: #969696 1px solid; vertical-align: middle; background: #FFF; border-bottom:#888888 1px solid;text-align:center">
                         <strong style="font-size:15px; color:#000;margin: 0; font-weight:700; width: 100%; display:inline-block;margin-bottom: 5px;font-family: century-gothic;"><b>{{number_format($po_calculation_arr[0]['tot_gross_amt'],2)}}</b></strong><br>
                         <strong style="font-size:15px; color:#000;margin: 0; font-weight:700; width: 100%; display:inline-block;margin-bottom: 5px;font-family: century-gothic;"><b>{{number_format($po_calculation_arr[0]['tot_disc'],2)}}</b></strong>
-                        <strong style="font-size:15px; color:#000;margin: 0; font-weight:700; width: 100%; display:inline-block;margin-bottom: 5px;font-family: century-gothic;"><b>{{number_format($po_calculation_arr[0]['tot_gst'],2)}}</b></strong>                                
-                    </td>
+                        <strong style="font-size:15px; color:#000;margin: 0; font-weight:700; width: 100%; display:inline-block;margin-bottom: 5px;font-family: century-gothic;"><b>{{number_format($po_calculation_arr[0]['tot_gst'],2)}}</b></strong></td>
                 </tr>
                     
                                     
@@ -192,11 +183,16 @@
                         <strong style="font-size:15px; color:#000;margin: 0; font-weight:700; width: 100%; display:inline-block;font-family: century-gothic;"><b>{{number_format(round($po_calculation_arr[0]['tot_net_amt']),2)}}</b></strong>
                     </td>
                 </tr>
+
+                <tr>
+                    <td colspan="6" style="box-sizing: border-box; padding: 10px; border-right: #969696 1px solid; vertical-align: middle; background: #FFF; border-bottom:#888888 1px solid;text-align:center;">
+                        <strong style="font-size:15px; color:#000;margin: 0; font-weight:700; width: 100%; display:inline-block;font-family: century-gothic;"><b>{{$po_calculation_arr[0]['totalAmountInWords']}}</b></strong>
+                    </td>
+                </tr>
                  @endif
             </tbody>
         </table>
     </div>
-
 
     @if (!empty($allRqest['po_payment_terms']))
     <div class="head-invoice" style="width:100%; height:auto; display: inline-block; margin: 0 0 15px 0;">
@@ -228,8 +224,6 @@
         </table>
     </div>
     @endif
-
-
 
     @if (!empty($allRqest['terms_conditions']))
     <div class="head-invoice" style="width:100%; height:auto; display: inline-block; margin: 0 0 15px 0;">
@@ -293,5 +287,28 @@
         </table>
     </div>
     @endif
+
+    @if (!empty($allRqest['po_facilitation']))
+    <div style="width:100%; height:auto; display: inline-block; margin: 20px 0; font-weight: 400; font-size:12px; color:#242424;font-family: century-gothic;">
+    {{$allRqest['po_facilitation']}}</div>
+    @endif
+
+    @if (!empty($allRqest['thanksyou_notes']))
+    <div class="head-invoice" style="width:100%; height:auto; display: inline-block; margin: 0 0 15px 0;">
+        <table colspan="0" rowspan="0" style="width:100%;">
+        <tbody>
+            <tr>
+                <td width="50%" style="">
+                    <div style="width:250px; height:auto; display: inline-block; margin: 0; text-align:center;">
+                            
+                            <div style="width:100%; height:auto; display: inline-block; margin: 0; white-space:nowrap; font-size: 14px; font-weight:400;color: #000;font-family: century-gothic;">Thanks &amp; Regards</div>
+                            <div style="width:100%; height:auto; display: inline-block; margin: 0; white-space:nowrap; font-size: 14px;color: #000;font-family: century-gothic;">{{$allRqest['thanksyou_notes']}}</div>
+                    </div>
+                </td>
+                </tr>
+        </tbody>
+        </table>        
+    </div>
+    @endif 
   </div>
 </div>

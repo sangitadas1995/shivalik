@@ -73,9 +73,9 @@
 
                             <div class="col-md-4">
                                 <div class="mb-3">
-                                <label class="form-label">Ship To<span class="text-danger">*</span> :</label>
+                                <label class="form-label vis-hide">Ship To<span class="text-danger">*</span> :</label>
                                 <select name="warehouse_ship_id" id="warehouse_ship_id" class="form-select">
-                                    <option value="">Select</option>
+                                    <option value="">Ship To</option>
                                     @if (!empty($warehousesList))
                                     @foreach ($warehousesList as $wh)
                                     <option value="{{ $wh->id }}" {{ $vendorPoDetails->warehouse_ship_id == $wh->id ? 'selected' : null }}>{{ $wh->company_name }}</option>
@@ -115,14 +115,14 @@
                         @if($poItemDetails?->product_id=="0")
 
                         <tr id="rowitem{{$itemCnt}}">
-                            <td style="text-align: center;"><input type="text" name="po_additional_item_name[]" id="po_additional_item_name_{{$itemCnt}}" value="{{$poItemDetails?->additional_item_name}}" class="form-control"><input type="hidden" name="po_product_idd[]" id="po_product_idd_{{$itemCnt}}" value="0"><input type="hidden" name="current_item_row_price[]" id="current_item_row_price_{{$itemCnt}}" value="{{$poItemDetails?->net_amount}}"><input type="hidden" name="current_item_row_gross_price[]" id="current_item_row_gross_price_{{$itemCnt}}" value="{{$poItemDetails?->purchase_price*$poItemDetails?->order_qty}}"><input type="hidden" name="current_item_row_discount[]" id="current_item_row_discount_{{$itemCnt}}" value="{{(($poItemDetails?->purchase_price*$poItemDetails?->order_qty)*$poItemDetails?->discount/100)}}"><input type="hidden" name="current_item_row_gst[]" id="current_item_row_gst_{{$itemCnt}}" value="{{(($poItemDetails?->purchase_price*$poItemDetails?->order_qty)-(($poItemDetails?->purchase_price*$poItemDetails?->order_qty*$poItemDetails?->discount)/100))*$poItemDetails?->gst/100}}"></td>
-                            <td style="text-align: center;"><input type="text" name="item_purchase_price[]" id="item_purchase_price_{{$itemCnt}}" value="{{$poItemDetails?->purchase_price}}" style="width:60%;" onkeyup="changeItemPrice({{$itemCnt}})" onmouseleave="changeItemPrice({{$itemCnt}})" onblur="changeItemPrice({{$itemCnt}})" onkeypress="return isNumberFloatKey(event)" class="form-control"></td>
-                            <td style="text-align: center;"><input type="text" name="item_order_qty[]" id="item_order_qty_{{$itemCnt}}" value="{{$poItemDetails?->order_qty}}" style="width:60%;" onkeyup="changeItemQty({{$itemCnt}})" onmouseleave="changeItemQty({{$itemCnt}})" onblur="changeItemQty({{$itemCnt}})" onkeypress="return isNumberKey(event)" class="form-control"></td>
-                            <td style="text-align: center;"><input type="text" name="item_discount[]" id="item_discount_{{$itemCnt}}" value="{{$poItemDetails?->discount}}" style="width:60%;" onkeyup="changeItemDisc({{$itemCnt}})" onblur="changeItemDisc({{$itemCnt}})" onmouseleave="changeItemDisc({{$itemCnt}})" onkeypress="return isNumberKey(event)" class="form-control"></td>
-                            <td style="text-align: center;"><input type="text" name="item_gst[]" id="item_gst_{{$itemCnt}}" value="{{$poItemDetails?->gst}}" style="width:60%;" onkeyup="changeItemGst({{$itemCnt}})" onblur="changeItemGst({{$itemCnt}})" onmouseleave="changeItemGst({{$itemCnt}})" onkeypress="return isNumberKey(event)" class="form-control"></td>
+                            <td style="text-align: center;"><div class="d-flex justify-content-center"><input type="text" name="po_additional_item_name[]" id="po_additional_item_name_{{$itemCnt}}" value="{{$poItemDetails?->additional_item_name}}" class="form-control"><input type="hidden" name="po_product_idd[]" id="po_product_idd_{{$itemCnt}}" value="0"><input type="hidden" name="current_item_row_price[]" id="current_item_row_price_{{$itemCnt}}" value="{{$poItemDetails?->net_amount}}"><input type="hidden" name="current_item_row_gross_price[]" id="current_item_row_gross_price_{{$itemCnt}}" value="{{$poItemDetails?->purchase_price*$poItemDetails?->order_qty}}"><input type="hidden" name="current_item_row_discount[]" id="current_item_row_discount_{{$itemCnt}}" value="{{(($poItemDetails?->purchase_price*$poItemDetails?->order_qty)*$poItemDetails?->discount/100)}}"><input type="hidden" name="current_item_row_gst[]" id="current_item_row_gst_{{$itemCnt}}" value="{{(($poItemDetails?->purchase_price*$poItemDetails?->order_qty)-(($poItemDetails?->purchase_price*$poItemDetails?->order_qty*$poItemDetails?->discount)/100))*$poItemDetails?->gst/100}}"></div></td>
+                            <td style="text-align: center;"><div class="d-flex justify-content-center"><input type="text" name="item_purchase_price[]" id="item_purchase_price_{{$itemCnt}}" value="{{$poItemDetails?->purchase_price}}" style="width:60%;" onkeyup="changeItemPrice({{$itemCnt}})" onmouseleave="changeItemPrice({{$itemCnt}})" onblur="changeItemPrice({{$itemCnt}})" onkeypress="return isNumberFloatKey(event)" class="form-control"></div></td>
+                            <td style="text-align: center;"><div class="d-flex justify-content-center"><input type="text" name="item_order_qty[]" id="item_order_qty_{{$itemCnt}}" value="{{$poItemDetails?->order_qty}}" style="width:60%;" onkeyup="changeItemQty({{$itemCnt}})" onmouseleave="changeItemQty({{$itemCnt}})" onblur="changeItemQty({{$itemCnt}})" onkeypress="return isNumberKey(event)" class="form-control"></div></td>
+                            <td style="text-align: center;"><div class="d-flex justify-content-center"><input type="text" name="item_discount[]" id="item_discount_{{$itemCnt}}" value="{{$poItemDetails?->discount}}" style="width:60%;" onkeyup="changeItemDisc({{$itemCnt}})" onblur="changeItemDisc({{$itemCnt}})" onmouseleave="changeItemDisc({{$itemCnt}})" onkeypress="return isNumberKey(event)" class="form-control"></div></td>
+                            <td style="text-align: center;"><div class="d-flex justify-content-center"><input type="text" name="item_gst[]" id="item_gst_{{$itemCnt}}" value="{{$poItemDetails?->gst}}" style="width:60%;" onkeyup="changeItemGst({{$itemCnt}})" onblur="changeItemGst({{$itemCnt}})" onmouseleave="changeItemGst({{$itemCnt}})" onkeypress="return isNumberKey(event)" class="form-control"></div></td>
 
                             <td style="text-align: right;"><span id="rowTotCalItemPrice_{{$itemCnt}}">
-                            {{number_format((float)$poItemDetails?->net_amount, 2, '.', '')}}</span><a href="javascript:void(1)" class="vd_additional_item_remove" style="font-size: 14px; color: #d31b08;" id="{{$itemCnt}}" data-podetailsid ="{{$poItemDetails?->id}}" data-poid ="{{$poItemDetails?->purchase_order_id}}"><i class="fa fa-trash" aria-hidden="true"></i></a></td>
+                            {{number_format($poItemDetails?->net_amount,2)}}</span><a href="javascript:void(1)" class="vd_additional_item_remove" style="font-size: 14px; color: #d31b08;" id="{{$itemCnt}}" data-podetailsid ="{{$poItemDetails?->id}}" data-poid ="{{$poItemDetails?->purchase_order_id}}"><i class="fa fa-trash" aria-hidden="true"></i></a></td>
                         </tr>
 
                         <?php $itemOutputArr[] = $itemCnt;?>
@@ -134,11 +134,7 @@
 
                         @endif
                         @endforeach
-                        <?php 
-                        //print_r($itemOutputArr);exit;
-                        // if(is_countable($outputItemArr) && count($outputItemArr)>0){
-                        //     $outputItemString=implode(",",$outputItemArr);
-                        // }
+                        <?php
                         $outputItemString=implode(",",$itemOutputArr);
                         ?>
                         @endif    
@@ -156,16 +152,16 @@
                         <tr id="row{{$poDetails?->product_id}}">
                             <td style="text-align: center;">{{$poDetails?->paper_type?->paper_name}}<input type="hidden" name="po_product_id[]" id="po_product_id_{{$poDetails?->product_id}}" value="{{$poDetails?->product_id}}"><input type="hidden" name="current_row_price[]" id="current_row_price_{{$poDetails?->product_id}}" value="{{$poDetails?->net_amount}}"><input type="hidden" name="current_row_gross_price[]" id="current_row_gross_price_{{$poDetails?->product_id}}" value="{{$poDetails?->purchase_price*$poDetails?->order_qty}}"><input type="hidden" name="current_row_discount[]" id="current_row_discount_{{$poDetails?->product_id}}" value="{{(($poDetails?->purchase_price*$poDetails?->order_qty)*$poDetails?->discount/100)}}"><input type="hidden" name="current_row_gst[]" id="current_row_gst_{{$poDetails?->product_id}}" value="{{(($poDetails?->purchase_price*$poDetails?->order_qty)-(($poDetails?->purchase_price*$poDetails?->order_qty*$poDetails?->discount)/100))*$poDetails?->gst/100}}"></td>
 
-                            <td style="text-align: center;" class="align-items-center d-flex gap-2"><input type="text" name="purchase_price[]" id="purchase_price_{{$poDetails?->product_id}}" value="{{$poDetails?->purchase_price}}" style="width:60%;" onkeyup="changePrice({{$poDetails?->product_id}})" onblur="changePrice({{$poDetails?->product_id}})" onmouseleave="changePrice({{$poDetails?->product_id}})" onkeypress="return isNumberFloatKey(event)" class="form-control"> / {{strtolower($poDetails?->paper_type?->unit_type?->measurement_unuit)}}</td>
+                            <td style="text-align: center;" class="align-items-center d-flex gap-2"><div class="d-flex justify-content-center align-items-center gap-2"><input type="text" name="purchase_price[]" id="purchase_price_{{$poDetails?->product_id}}" value="{{$poDetails?->purchase_price}}" style="width:60%;" onkeyup="changePrice({{$poDetails?->product_id}})" onblur="changePrice({{$poDetails?->product_id}})" onmouseleave="changePrice({{$poDetails?->product_id}})" onkeypress="return isNumberFloatKey(event)" class="form-control"> / {{strtolower($poDetails?->paper_type?->unit_type?->measurement_unuit)}}</div></td>
 
-                            <td style="text-align: center;"><input type="text" name="order_qty[]" id="order_qty_{{$poDetails?->product_id}}" value="{{$poDetails?->order_qty}}" style="width:60%;" onkeyup="changePqty({{$poDetails?->product_id}})" onblur="changePqty({{$poDetails?->product_id}})" onmouseleave="changePqty({{$poDetails?->product_id}})" onkeypress="return isNumberKey(event)" class="form-control"></td>
+                            <td style="text-align: center;"><div class="d-flex justify-content-center align-items-center gap-2"><input type="text" name="order_qty[]" id="order_qty_{{$poDetails?->product_id}}" value="{{$poDetails?->order_qty}}" style="width:60%;" onkeyup="changePqty({{$poDetails?->product_id}})" onblur="changePqty({{$poDetails?->product_id}})" onmouseleave="changePqty({{$poDetails?->product_id}})" onkeypress="return isNumberKey(event)" class="form-control"></div></td>
 
-                            <td style="text-align: center;"><input type="text" name="discount[]" id="discount_{{$poDetails?->product_id}}" value="{{$poDetails?->discount}}" style="width:60%;" onkeyup="changeDisc({{$poDetails?->product_id}})" onblur="changeDisc({{$poDetails?->product_id}})" onmouseleave="changeDisc({{$poDetails?->product_id}})" onkeypress="return isNumberKey(event)" class="form-control"></td>
+                            <td style="text-align: center;"><div class="d-flex justify-content-center align-items-center gap-2"><input type="text" name="discount[]" id="discount_{{$poDetails?->product_id}}" value="{{$poDetails?->discount}}" style="width:60%;" onkeyup="changeDisc({{$poDetails?->product_id}})" onblur="changeDisc({{$poDetails?->product_id}})" onmouseleave="changeDisc({{$poDetails?->product_id}})" onkeypress="return isNumberKey(event)" class="form-control"></div></td>
 
-                            <td style="text-align: center;"><input type="text" name="gst[]" id="gst_{{$poDetails?->product_id}}" value="{{$poDetails?->gst}}" style="width:60%;" onkeyup="changeGst({{$poDetails?->product_id}})" onblur="changeGst({{$poDetails?->product_id}})" onmouseleave="changeGst({{$poDetails?->product_id}})" onkeypress="return isNumberKey(event)" class="form-control"></td>
+                            <td style="text-align: center;"><div class="d-flex justify-content-center align-items-center gap-2"><input type="text" name="gst[]" id="gst_{{$poDetails?->product_id}}" value="{{$poDetails?->gst}}" style="width:60%;" onkeyup="changeGst({{$poDetails?->product_id}})" onblur="changeGst({{$poDetails?->product_id}})" onmouseleave="changeGst({{$poDetails?->product_id}})" onkeypress="return isNumberKey(event)" class="form-control"></div></td>
 
                             <td style="text-align: right;"><span id="rowTotCalPrice_{{$poDetails?->product_id}}">
-                            {{number_format((float)$poDetails?->net_amount, 2, '.', '')}}</span><a href="javascript:void(1)" class="vd_product_remove" style="font-size: 14px; color: #d31b08;" id="{{$poDetails?->product_id}}" data-podetailsid ="{{$poDetails?->id}}" data-poid ="{{$poDetails?->purchase_order_id}}"><i class="fa fa-trash" aria-hidden="true"></i></a></td>
+                            {{number_format($poDetails?->net_amount,2)}}</span><a href="javascript:void(1)" class="vd_product_remove" style="font-size: 14px; color: #d31b08;" id="{{$poDetails?->product_id}}" data-podetailsid ="{{$poDetails?->id}}" data-poid ="{{$poDetails?->purchase_order_id}}"><i class="fa fa-trash" aria-hidden="true"></i></a></td>
                         </tr>
 
                         <?php $outputArr[]=$poDetails?->product_id;?>
@@ -189,7 +185,7 @@
                         <table class="table table-striped">
                         <tr>
                             <td colspan="5" style="text-align:right;font-weight:bold;font-size: 20px;">Total Net Amount</td>
-                            <td colspan="1" style="text-align:right;font-weight:bold;font-size: 20px;"><span id="total_calculation">{{$totalNetAmt!="" ? number_format($totalNetAmt, 2, '.', '') : "0.00"}}</span> INR</td>
+                            <td colspan="1" style="text-align:right;font-weight:bold;font-size: 20px;"><span id="total_calculation">{{$totalNetAmt!="" ? number_format($totalNetAmt,2) : "0.00"}}</span> INR</td>
                         </tr>
                         </table>
                         </div>
@@ -219,21 +215,21 @@
                                     </tr>
                                     <tr>
                                         <td>Total Gross Amount</td>
-                                        <td><span id="total_pd_gross_price">{{$totalGrossAmt!="" ? number_format($totalGrossAmt, 2, '.', '') : "0.00"}}</span></td>
+                                        <td><span id="total_pd_gross_price">{{$totalGrossAmt!="" ? number_format($totalGrossAmt,2) : "0.00"}}</span></td>
                                     </tr>
                                     <tr>
                                         <td>Total Discount</td>
-                                        <td><span id="total_pd_discount">{{$totalDiscAmt!="" ? number_format($totalDiscAmt, 2, '.', '') : "0.00"}}</span></td>
+                                        <td><span id="total_pd_discount">{{$totalDiscAmt!="" ? number_format($totalDiscAmt,2) : "0.00"}}</span></td>
                                     </tr>
                                     <tr>
                                         <td>Total Tax</td>
-                                        <td><span id="total_pd_gst">{{$totalGstAmt!="" ? number_format($totalGstAmt, 2, '.', '') : "0.00"}}</span></td>
+                                        <td><span id="total_pd_gst">{{$totalGstAmt!="" ? number_format($totalGstAmt,2) : "0.00"}}</span></td>
                                     </tr>
-                                                            
+                                                           
                                     <tr>
                                         <td>Payable amount (Round Off)</td>
                                         <td>
-                                        <span id="grand_total_round_off">{{number_format(round($vendorPoDetails->total_amount),2)}}</span>
+                                        <span id="grand_total_round_off">{{number_format($vendorPoDetails->total_amount,2)}}</span>
                                         <input type="hidden" name="po_payable_amount" id="po_payable_amount" value="102">
                                         </td>
                                     </tr>
