@@ -461,6 +461,12 @@ $(document).on('click', '.view_service_tagging_details', function (e) {
 });
 
 
+$(document).on('click', '.paperTagModalCls', function (e) {
+    e.preventDefault();
+    $('#tagPaperListModal').modal('hide');
+});
+
+
 $(document).on('click', '.view_po_list', function (e) {
     e.preventDefault();
     let __di = $(this);

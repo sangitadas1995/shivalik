@@ -458,7 +458,11 @@ class VendorsController extends Controller
 
                 if ($service_types_id !== null) {
                     foreach ($service_types_id as $item) {
-                        $res_service[] = $item->paper_id;
+                        $chkStatus = $this->getPaperStatusCheck($item->paper_id);
+                        if($chkStatus==1)
+                        {
+                            $res_service[] = $item->paper_id;
+                        }
                     }
                 } 
                 $service_types_count = count($res_service);
@@ -806,13 +810,17 @@ class VendorsController extends Controller
         if (!empty($vendor->service_type_ids)) {
             $service_types = json_decode($vendor->service_type_ids);
             foreach ($service_types as $item) {
-                $paperName = $this->getPaperNameById($item->paper_id);
-                $finalArr[] = [
-                    'paper_id' => $item->paper_id,
-                    'paper_name' => $paperName->paper_name,
-                    'purchase_price' => $item->purchase_price,
-                    'paper_unit' => $paperName?->unit_type->measurement_unuit
-                ];
+                $chkStatus = $this->getPaperStatusCheck($item->paper_id);
+                if($chkStatus == 1)
+                {
+                    $paperName = $this->getPaperNameById($item->paper_id);
+                    $finalArr[] = [
+                        'paper_id' => $item->paper_id,
+                        'paper_name' => $paperName->paper_name,
+                        'purchase_price' => $item->purchase_price,
+                        'paper_unit' => $paperName?->unit_type->measurement_unuit
+                    ];
+                }
             }
         } 
         $html = view('vendors.tagged-paper-list', ['vendor' => $vendor,'paper_list'=>$finalArr])->render();
@@ -873,11 +881,15 @@ class VendorsController extends Controller
                 $paperName = $this->getPaperNameById($item->paper_id);
                 if (!in_array($item->paper_id, $product_hidden_ids))
                 {
-                    $finalArr[] = [
-                        'paper_id' => $item->paper_id,
-                        'paper_name' => $paperName->paper_name,
-                        'purchase_price' => $item->purchase_price
-                    ];
+                    $chkStatus = $this->getPaperStatusCheck($item->paper_id);
+                    if($chkStatus == 1)
+                    {
+                        $finalArr[] = [
+                            'paper_id' => $item->paper_id,
+                            'paper_name' => $paperName->paper_name,
+                            'purchase_price' => $item->purchase_price
+                        ];
+                    }
                 }
             }
         } 
@@ -963,9 +975,13 @@ class VendorsController extends Controller
             $validator = Validator::make($request->all(), [
                 'purchase_order_no' => 'required',
                 'purchase_order_date' => 'required',
-                'exp_delivery_date' => 'required',
+                'exp_delivery_date' => 'required|after_or_equal:purchase_order_date',
                 'warehouse_ship_id' => 'required',
                 'po_additional_item_name.*' => 'required',
+                'discount.*' => 'integer|max:100',
+                'gst.*' => 'integer|max:100',
+                'item_discount.*' => 'integer|max:100',
+                'item_gst.*' => 'integer|max:100',
             ]);
 
             if ($validator->passes()) 
@@ -1209,9 +1225,13 @@ class VendorsController extends Controller
             $validator = Validator::make($request->all(), [
                 'purchase_order_no' => 'required',
                 'purchase_order_date' => 'required',
-                'exp_delivery_date' => 'required',
+                'exp_delivery_date' => 'required|after_or_equal:purchase_order_date',
                 'warehouse_ship_id' => 'required',
                 'po_additional_item_name.*' => 'required',
+                'discount.*' => 'integer|max:100',
+                'gst.*' => 'integer|max:100',
+                'item_discount.*' => 'integer|max:100',
+                'item_gst.*' => 'integer|max:100',
             ]);
             if ($validator->passes())
             {
@@ -1981,7 +2001,7 @@ class VendorsController extends Controller
 
         $output = "";
 
-        $output .= '<li><a href="'.route('vendors.po-download-invoice', encrypt($request->rowid)).'" class="text-primary">Payment Ledger</a></li>';
+        $output .= '<li><a href="'.route('vendors.po-download-invoice', encrypt($request->rowid)).'" class="text-primary">Vendor Purchase Order</a></li>';
 
         foreach($vendorPoDocList as $vdoclist)
         {

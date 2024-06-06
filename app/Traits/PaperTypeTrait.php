@@ -79,4 +79,13 @@ trait PaperTypeTrait
 
         return $paper_name;
     }
+
+    public function getPaperStatusCheck($id)
+    {
+        $cnt = PaperTypes::where([
+            'id' => $id,
+            'status' => 'A'
+        ])->count();
+        return $cnt;
+    }
 }
