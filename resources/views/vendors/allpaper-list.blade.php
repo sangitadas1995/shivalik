@@ -51,7 +51,7 @@
                                     </table>
                                 </div>
                                 <div class="text-end">
-                                    <button type="button" class="btn grey-primary reset_add_vendor">Cancel</button>
+                                    <!-- <button type="button" class="btn grey-primary reset_add_vendor">Cancel</button> -->
                                     <button type="submit" class="btn black-btn paper_assign_to_vendor"
                                         style="display: none; float:right;margin-left: 9px;">Save</button>
                                 </div>

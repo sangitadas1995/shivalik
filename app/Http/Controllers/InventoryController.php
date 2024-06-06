@@ -798,7 +798,7 @@ class InventoryController extends Controller
             'inventory_id' => $inventory_id,
             'warehouse_id' => $warehouseId,
             'papertype_id' => $paperId
-        ])->where('created_at', '>=', now()->subDays($noofdays))
+        ])->whereDate('created_at', '>', now()->subDays($noofdays))
         ->orderBy('id', 'desc')
         ->get();
 
@@ -865,7 +865,7 @@ class InventoryController extends Controller
             'inventory_id' => $inventory_id,
             'warehouse_id' => $warehouseId,
             'papertype_id' => $paperId
-        ])->where('created_at', '>=', now()->subDays($noofdays))
+        ])->whereDate('created_at', '>', now()->subDays($noofdays))
         ->orderBy('id', 'desc')
         ->get();
 

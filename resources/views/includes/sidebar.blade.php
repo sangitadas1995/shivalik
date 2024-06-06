@@ -3,9 +3,9 @@
 
         <div class="sidebar-layout">
             <div class="sidebar-header">
-                <span class="logo-span-big"><img src="{{ asset('images/logo1.png') }}" class="w-100" /></span>
-                <span class="logo-span-small"><img src="{{ asset('images/shivalikh-logo-remove-name.png') }}"
-                        class="w-100" /></span>
+                <span class="logo-span-big"><a href="{{ route('dashboard') }}"><img src="{{ asset('images/logo1.png') }}" class="w-100" /></a></span>
+                <span class="logo-span-small"><a href="{{ route('dashboard') }}"><img src="{{ asset('images/shivalikh-logo-remove-name.png') }}"
+                        class="w-100" /></a></span>
             </div>
             <div class="sidebar-content">
                 <div class="ul-box top-squar-links hover-clone-div">
